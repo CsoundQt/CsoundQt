@@ -79,10 +79,10 @@
 </CsOptions>
 <CsInstruments>
 
-sr = 48000
-ksmps = 64
+sr     = 48000
+ksmps  = 64
 nchnls = 2
-0dbfs = 32768
+0dbfs  = 32768
 
 maxalloc 1, 16  ; Adjust maxalloc according to your system
 massign 0, 10
@@ -648,7 +648,7 @@ instr 10  ; FM synth
   midinoteoncps p4, p5
 
   icps   = init(p4)
-  iveloc = init(((p5/127)*11000)+4000)
+  iveloc init (((p5/127)*11000)+4000)
 
   mididefault i(gkalgo), p6
   mididefault i(gkfeedback), p7
@@ -659,7 +659,7 @@ instr 10  ; FM synth
   mididefault i(gkrat1), p12
   mididefault i(gklvl1), p13
 
-  acps1 = init(icps*-p12)
+  acps1 init icps*-p12
   ifn1  = init(gisine)
 
   mididefault i(gkatt2), p14
@@ -669,7 +669,7 @@ instr 10  ; FM synth
   mididefault i(gkrat2), p18
   mididefault i(gklvl2), p19
 
-  acps2 = init(icps*-p18)
+  acps2 init icps*-p18
   ifn2  = init(gisine)
 
   mididefault i(gkatt3), p20
@@ -679,7 +679,7 @@ instr 10  ; FM synth
   mididefault i(gkrat3), p24
   mididefault i(gklvl3), p25
 
-  acps3 = init(icps*-p24)
+  acps3 init icps*-p24
   ifn3  = init(gisine)
 
   mididefault i(gkatt4), p26
@@ -689,7 +689,7 @@ instr 10  ; FM synth
   mididefault i(gkrat4), p30
   mididefault i(gklvl4), p31
 
-  acps4 = init(icps*-p30)
+  acps4 init icps*-p30
   ifn4  = init(gisine)
 
   mididefault i(gkatt5), p32
@@ -699,7 +699,7 @@ instr 10  ; FM synth
   mididefault i(gkrat5), p36
   mididefault i(gklvl5), p37
 
-  acps5 = init(icps*-p36)
+  acps5 init icps * -p36
   ifn5  = init(gisine)
 
   mididefault i(gkatt6), p38
@@ -709,7 +709,7 @@ instr 10  ; FM synth
   mididefault i(gkrat6), p42
   mididefault i(gklvl6), p43
 
-  acps6 = init(icps*-p42)
+  acps6 init icps * -p42
   ifn6  = init(gisine)
 
   kamp = init(iveloc)
@@ -1122,17 +1122,17 @@ instr 18  ; Play note
   kveloc = chnget("midiveloc")
   iveloc = i(kveloc)
 
-  Sevent1 = sprintf("i 10 0 %f %f %i %i %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f ", \)
-  idur, ifreq, iveloc, ialgo, ifeedback, \
+  Sevent1 = sprintf("i 10 0 %f %f %i %i %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f ", 
+    idur, ifreq, iveloc, ialgo, ifeedback, \
     iatt1, idec1, isus1, irel1, irat1, ilvl1, \
     iatt2, idec2, isus2, irel2, irat2, ilvl2, \
     iatt3, idec3, isus3, irel3, irat3, ilvl3, \
-    iatt4, idec4, isus4, irel4, irat4, ilvl4
+    iatt4, idec4, isus4, irel4, irat4, ilvl4)
 
-  Sevent2 = sprintf("%f %f %f %f %f %f %f %f %f %f %f %f %i %i %i %i %i %i \n", \)
+  Sevent2 = sprintf("%f %f %f %f %f %f %f %f %f %f %f %f %i %i %i %i %i %i \n", 
   iatt5, idec5, isus5, irel5, irat5, ilvl5, \
     iatt6, idec6, isus6, irel6, irat6, ilvl6, \
-    iinv1, iinv2, iinv3, iinv4, iinv5, iinv6
+    iinv1, iinv2, iinv3, iinv4, iinv5, iinv6)
   Sevent = strcat(Sevent1, Sevent2)
   scoreline_i Sevent
 endin
@@ -1158,6 +1158,8 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
     </EventPanel>
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -1167,11 +1169,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
  <height>462</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>239</r>
-  <g>239</g>
-  <b>239</b>
- </bgcolor>
+ <bgcolor mode="background">#efefef</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>44</x>
@@ -1190,24 +1188,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>219</r>
-   <g>203</g>
-   <b>161</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#dbcba1</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -1230,24 +1215,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1267,7 +1239,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.49835068</value>
+  <value>0.21698327</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1291,24 +1263,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1331,24 +1290,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1368,7 +1314,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
-  <value>0.10133688</value>
+  <value>0.16582647</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1392,24 +1338,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1429,7 +1362,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.70705181</value>
+  <value>0.74140414</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1453,24 +1386,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1490,7 +1410,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>3.00000000</maximum>
-  <value>2.94571319</value>
+  <value>2.66326694</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1514,24 +1434,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>219</r>
-   <g>203</g>
-   <b>161</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#dbcba1</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -1554,24 +1461,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1591,7 +1485,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.65454272</value>
+  <value>0.24182803</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1615,24 +1509,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1655,24 +1536,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1692,7 +1560,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
-  <value>0.07781593</value>
+  <value>0.02004766</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1716,24 +1584,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1753,7 +1608,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.54908940</value>
+  <value>0.12498155</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1777,24 +1632,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1814,7 +1656,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>3.00000000</maximum>
-  <value>1.22813765</value>
+  <value>0.74860992</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1838,24 +1680,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>219</r>
-   <g>203</g>
-   <b>161</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#dbcba1</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -1878,24 +1707,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>219</r>
-   <g>203</g>
-   <b>161</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#dbcba1</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -1918,24 +1734,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1955,7 +1758,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.29235475</value>
+  <value>0.34202097</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1979,24 +1782,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2019,24 +1809,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2056,7 +1833,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
-  <value>0.49564779</value>
+  <value>0.46112283</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2080,24 +1857,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2117,7 +1881,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.38982629</value>
+  <value>0.67780418</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2141,24 +1905,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2178,7 +1929,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>3.00000000</maximum>
-  <value>1.42357425</value>
+  <value>0.25643428</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2202,24 +1953,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2239,7 +1977,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.35719278</value>
+  <value>0.93400859</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2263,24 +2001,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2303,24 +2028,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2340,7 +2052,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
-  <value>0.01545678</value>
+  <value>0.28134413</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2364,24 +2076,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2401,7 +2100,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.01406065</value>
+  <value>0.90745098</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2425,24 +2124,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2462,7 +2148,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>3.00000000</maximum>
-  <value>1.39722600</value>
+  <value>1.27172353</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2486,24 +2172,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>219</r>
-   <g>203</g>
-   <b>161</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#dbcba1</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -2526,24 +2199,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>219</r>
-   <g>203</g>
-   <b>161</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#dbcba1</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -2566,24 +2226,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2603,7 +2250,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.53913566</value>
+  <value>0.98010226</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2627,24 +2274,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2667,24 +2301,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2704,7 +2325,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
-  <value>0.33241980</value>
+  <value>0.30135058</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2728,24 +2349,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2765,7 +2373,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.28283300</value>
+  <value>0.30782862</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2789,24 +2397,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2826,7 +2421,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>3.00000000</maximum>
-  <value>2.52905209</value>
+  <value>2.36860201</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2850,24 +2445,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2887,7 +2469,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.68009821</value>
+  <value>0.62638406</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2911,24 +2493,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2951,24 +2520,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2988,7 +2544,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
-  <value>0.03844963</value>
+  <value>0.44128801</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3012,24 +2568,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3049,7 +2592,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.05965799</value>
+  <value>0.32775526</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3073,24 +2616,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3110,7 +2640,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>3.00000000</maximum>
-  <value>2.02723173</value>
+  <value>1.62262833</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3134,24 +2664,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>219</r>
-   <g>203</g>
-   <b>161</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#dbcba1</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -3174,24 +2691,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3211,7 +2715,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99475863</value>
+  <value>0.48583641</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3233,21 +2737,13 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0</minimum>
   <maximum>6</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.5</value>
+  <value>3.5</value>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3267,24 +2763,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3312,12 +2795,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -3343,24 +2823,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>219</r>
-   <g>203</g>
-   <b>161</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#dbcba1</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -3388,12 +2855,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -3419,24 +2883,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3457,21 +2908,13 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>230</r>
-   <g>230</g>
-   <b>230</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e6e6e6</bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0</minimum>
   <maximum>6</maximum>
   <randomizable group="0">false</randomizable>
-  <value>2</value>
+  <value>5</value>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>OP2_Lev</objectName>
@@ -3488,7 +2931,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.19704068</value>
+  <value>0.30729793</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3512,24 +2955,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3552,24 +2982,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>219</r>
-   <g>203</g>
-   <b>161</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#dbcba1</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -3592,24 +3009,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>219</r>
-   <g>203</g>
-   <b>161</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#dbcba1</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -3632,24 +3036,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>219</r>
-   <g>203</g>
-   <b>161</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#dbcba1</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -3672,24 +3063,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>219</r>
-   <g>203</g>
-   <b>161</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#dbcba1</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -3712,24 +3090,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3749,7 +3114,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.26691155</value>
+  <value>0.75315615</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3771,21 +3136,13 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>230</r>
-   <g>230</g>
-   <b>230</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e6e6e6</bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0</minimum>
   <maximum>6</maximum>
   <randomizable group="0">false</randomizable>
-  <value>2</value>
+  <value>3.5</value>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3805,24 +3162,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3850,12 +3194,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -3881,24 +3222,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3918,7 +3246,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.54287818</value>
+  <value>0.20706991</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3940,21 +3268,13 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>230</r>
-   <g>230</g>
-   <b>230</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e6e6e6</bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0</minimum>
   <maximum>6</maximum>
   <randomizable group="0">false</randomizable>
-  <value>2</value>
+  <value>1</value>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3974,24 +3294,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -4019,12 +3326,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -4050,24 +3354,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -4087,7 +3378,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.98748860</value>
+  <value>0.65421299</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -4109,21 +3400,13 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>230</r>
-   <g>230</g>
-   <b>230</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e6e6e6</bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0</minimum>
   <maximum>6</maximum>
   <randomizable group="0">false</randomizable>
-  <value>2.5</value>
+  <value>0.5</value>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -4143,24 +3426,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -4188,12 +3458,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -4219,24 +3486,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -4256,7 +3510,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.39838231</value>
+  <value>0.08608178</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -4278,21 +3532,13 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>230</r>
-   <g>230</g>
-   <b>230</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e6e6e6</bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0</minimum>
   <maximum>6</maximum>
   <randomizable group="0">false</randomizable>
-  <value>5.5</value>
+  <value>2</value>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -4312,24 +3558,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -4357,12 +3590,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -4388,24 +3618,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>22</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>219</r>
-   <g>203</g>
-   <b>161</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#dbcba1</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -4433,12 +3650,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -4469,12 +3683,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -4505,12 +3716,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -4541,12 +3749,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -4577,12 +3782,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -4613,12 +3815,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -4649,12 +3848,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -4685,12 +3881,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -4716,24 +3909,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>219</r>
-   <g>203</g>
-   <b>161</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#dbcba1</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>true</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -4756,24 +3936,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>24</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>219</r>
-   <g>203</g>
-   <b>161</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#dbcba1</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -4796,24 +3963,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>20</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>255</r>
-   <g>255</g>
-   <b>127</b>
-  </color>
-  <bgcolor mode="background">
-   <r>230</r>
-   <g>50</g>
-   <b>50</b>
-  </bgcolor>
-  <bordercolor>
-   <r>230</r>
-   <g>50</g>
-   <b>50</b>
-  </bordercolor>
+  <color>#ffff7f</color>
+  <bgcolor mode="background">#e63232</bgcolor>
+  <bordercolor>#e63232</bordercolor>
   <bordermode>true</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -4836,24 +3990,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>24</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>219</r>
-   <g>203</g>
-   <b>161</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#dbcba1</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -4876,24 +4017,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>24</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>219</r>
-   <g>203</g>
-   <b>161</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#dbcba1</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
@@ -4913,7 +4041,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.19296116</value>
+  <value>0.15272034</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -4935,21 +4063,13 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>230</r>
-   <g>230</g>
-   <b>230</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e6e6e6</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
   <maximum>32</maximum>
   <randomizable group="0">false</randomizable>
-  <value>13</value>
+  <value>17</value>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -4969,24 +4089,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>11</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -5009,24 +4116,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>11</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -5207,7 +4301,7 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>28</selectedIndex>
+  <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -5233,12 +4327,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -5269,12 +4360,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -5298,25 +4386,13 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <value>60.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>5.00000000</minimum>
   <maximum>100.00000000</maximum>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>2</borderwidth>
@@ -5339,25 +4415,13 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <value>83.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>5.00000000</minimum>
   <maximum>100.00000000</maximum>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>2</borderwidth>
@@ -5382,24 +4446,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -5422,24 +4473,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -5467,12 +4505,9 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -5496,25 +4531,13 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <value>1.18000000</value>
   <resolution>0.01000000</resolution>
   <minimum>0.00000000</minimum>
   <maximum>9.00000000</maximum>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>2</borderwidth>
@@ -5539,24 +4562,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -5579,24 +4589,11 @@ i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>

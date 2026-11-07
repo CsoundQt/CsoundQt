@@ -377,6 +377,10 @@ e
 
 </CsScore>
 </CsoundSynthesizer>
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -386,11 +390,7 @@ e
  <height>563</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>239</r>
-  <g>239</g>
-  <b>239</b>
- </bgcolor>
+ <bgcolor mode="background">#efefef</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
@@ -398,7 +398,9 @@ e
   <width>55</width>
   <height>25</height>
   <uuid>{e207fe11-0cdd-444e-930d-29bf13c11fb2}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -407,17 +409,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -429,23 +425,17 @@ e
   <width>48</width>
   <height>25</height>
   <uuid>{69bad91e-0026-4238-862e-12c143685397}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>center</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
   <maximum>2048</maximum>
@@ -459,7 +449,9 @@ e
   <width>11</width>
   <height>25</height>
   <uuid>{dac04e90-40e6-4165-b183-03b8f10511e3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -468,17 +460,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -490,23 +476,17 @@ e
   <width>48</width>
   <height>25</height>
   <uuid>{ef99bd92-1c6f-45f9-a32a-303c366b3332}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>center</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
   <maximum>2048</maximum>
@@ -520,23 +500,17 @@ e
   <width>48</width>
   <height>25</height>
   <uuid>{aabc2b30-dc79-43af-88df-b977177aa58e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>center</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
   <maximum>2048</maximum>
@@ -550,7 +524,9 @@ e
   <width>11</width>
   <height>25</height>
   <uuid>{c3be46e9-f371-406a-ac25-0e0e07ac5c5f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -559,17 +535,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -581,23 +551,17 @@ e
   <width>48</width>
   <height>25</height>
   <uuid>{c32d5493-922d-4709-9f5a-56985fbb0475}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>center</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
   <maximum>2048</maximum>
@@ -611,7 +575,9 @@ e
   <width>55</width>
   <height>25</height>
   <uuid>{e92844b5-0073-4da6-8d9b-991e8b0b0499}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -620,17 +586,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -642,23 +602,17 @@ e
   <width>48</width>
   <height>25</height>
   <uuid>{af1ed01f-25bf-4565-85f8-0448d63214d8}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>center</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
   <maximum>2048</maximum>
@@ -672,7 +626,9 @@ e
   <width>11</width>
   <height>25</height>
   <uuid>{07939aa1-6316-462f-8be9-976d94429e3a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -681,17 +637,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -703,28 +653,22 @@ e
   <width>48</width>
   <height>25</height>
   <uuid>{8e26cac5-5faa-410e-b2c2-1342978a5366}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>center</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
   <maximum>2048</maximum>
   <randomizable group="0">false</randomizable>
-  <value>4</value>
+  <value>5</value>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -733,7 +677,9 @@ e
   <width>55</width>
   <height>25</height>
   <uuid>{4df54217-074b-4984-b37d-2f9c0bfeadcc}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -742,17 +688,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -764,7 +704,9 @@ e
   <width>55</width>
   <height>25</height>
   <uuid>{0ee4b373-0ead-405e-8333-c73008d4fd11}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -773,17 +715,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -795,23 +731,17 @@ e
   <width>48</width>
   <height>25</height>
   <uuid>{09f87a96-555a-445a-82bd-478afb7abfb5}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>center</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
   <maximum>2048</maximum>
@@ -825,7 +755,9 @@ e
   <width>11</width>
   <height>25</height>
   <uuid>{f216eb31-db8e-4ec4-be43-5c9f0c1aa2a0}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -834,17 +766,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -856,23 +782,17 @@ e
   <width>48</width>
   <height>25</height>
   <uuid>{756d7d97-b16b-4877-a1a2-1a4f05a4753f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>center</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
   <maximum>2048</maximum>
@@ -886,7 +806,9 @@ e
   <width>100</width>
   <height>30</height>
   <uuid>{2f45e5ba-8d31-47a1-abfd-284ee246c74d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -900,12 +822,9 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -920,7 +839,9 @@ e
   <width>100</width>
   <height>30</height>
   <uuid>{8cfc7c9f-c14b-4e0a-969e-8c73d0e76eca}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -934,12 +855,9 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -954,28 +872,22 @@ e
   <width>120</width>
   <height>25</height>
   <uuid>{983d831d-92f7-4f17-9b74-9dab7db7059f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>1</minimum>
   <maximum>20000</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0</value>
+  <value>392.006</value>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -984,7 +896,9 @@ e
   <width>65</width>
   <height>25</height>
   <uuid>{3505dfd5-a0ec-404f-8e71-ec9c3e53e7a6}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -993,17 +907,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1015,7 +923,9 @@ e
   <width>114</width>
   <height>30</height>
   <uuid>{5a9958a4-4a24-4c2e-8a93-9c900fc8b294}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1071,7 +981,7 @@ e
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>4</selectedIndex>
+  <selectedIndex>6</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -1081,7 +991,9 @@ e
   <width>55</width>
   <height>25</height>
   <uuid>{d2a792b5-5a54-4a15-894b-ff3ddf0d8dbf}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1090,17 +1002,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1112,7 +1018,9 @@ e
   <width>67</width>
   <height>25</height>
   <uuid>{2438c973-bcba-42b8-88c3-7adcaed53eb1}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1121,17 +1029,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1143,23 +1045,17 @@ e
   <width>35</width>
   <height>25</height>
   <uuid>{c398c0c6-f76b-464f-a86c-51e15765a9dd}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>-6</minimum>
   <maximum>6</maximum>
@@ -1173,23 +1069,17 @@ e
   <width>35</width>
   <height>25</height>
   <uuid>{051c6d7f-a070-42a6-8a8e-710d1439c9f5}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>-6</minimum>
   <maximum>6</maximum>
@@ -1203,23 +1093,17 @@ e
   <width>35</width>
   <height>25</height>
   <uuid>{4e4f3e61-cb8d-49bd-94e4-92f77b8dda9f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>-6</minimum>
   <maximum>6</maximum>
@@ -1233,23 +1117,17 @@ e
   <width>35</width>
   <height>25</height>
   <uuid>{7185c5c5-613c-4002-ad91-7d7351bf3e43}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>-6</minimum>
   <maximum>6</maximum>
@@ -1263,7 +1141,9 @@ e
   <width>50</width>
   <height>25</height>
   <uuid>{32c98c25-6b0c-44ae-8aab-66b7991a0c3c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1272,17 +1152,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1294,7 +1168,9 @@ e
   <width>35</width>
   <height>25</height>
   <uuid>{b6aa167a-e0fb-495a-82bf-45a5ef1fabee}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1303,17 +1179,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1325,7 +1195,9 @@ e
   <width>60</width>
   <height>25</height>
   <uuid>{f0263ce2-9501-41a2-b3ab-203447d7ec93}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1334,17 +1206,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1356,7 +1222,9 @@ e
   <width>70</width>
   <height>25</height>
   <uuid>{4e5e56dd-ef75-421b-9168-48c7a3c2f396}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1365,17 +1233,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1387,22 +1249,21 @@ e
   <width>80</width>
   <height>80</height>
   <uuid>{0764d8d5-22a9-489d-8ae5-4e19e0567038}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.55000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>220</r>
-   <g>135</g>
-   <b>48</b>
-  </color>
+  <color>#dc8730</color>
   <textcolor>#492d10</textcolor>
   <border>0</border>
   <borderColor>#492d10</borderColor>
@@ -1417,22 +1278,21 @@ e
   <width>80</width>
   <height>80</height>
   <uuid>{77d49f7c-db91-404a-bede-14601a37da3d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.93000000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.96750000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>220</r>
-   <g>135</g>
-   <b>48</b>
-  </color>
+  <color>#dc8730</color>
   <textcolor>#492d10</textcolor>
   <border>0</border>
   <borderColor>#492d10</borderColor>
@@ -1447,7 +1307,9 @@ e
   <width>130</width>
   <height>30</height>
   <uuid>{f20e492d-a935-480f-b37f-8bce3552de37}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1456,22 +1318,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -1483,7 +1334,9 @@ e
   <width>42</width>
   <height>26</height>
   <uuid>{69b5965f-ef1f-449f-9e76-0f2c7ba86ae5}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1492,17 +1345,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1514,27 +1361,22 @@ e
   <width>80</width>
   <height>25</height>
   <uuid>{bbaf98ce-16fe-4bea-82db-1aa7909b40bd}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <color>
-   <r>50</r>
-   <g>230</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="background">
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <value>0.93000001</value>
+  <color>#32e632</color>
+  <bgcolor mode="background">#343434</bgcolor>
+  <value>0.96750000</value>
   <resolution>0.00100000</resolution>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -1548,27 +1390,22 @@ e
   <width>80</width>
   <height>25</height>
   <uuid>{78afa9a1-f836-4547-8d80-81486db02073}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <color>
-   <r>50</r>
-   <g>230</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="background">
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
+  <color>#32e632</color>
+  <bgcolor mode="background">#343434</bgcolor>
   <value>0.55000000</value>
   <resolution>0.01000000</resolution>
   <minimum>0.00000000</minimum>
   <maximum>5.00000000</maximum>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -1582,13 +1419,15 @@ e
   <width>120</width>
   <height>25</height>
   <uuid>{4e72262c-67a7-4b25-b963-2cbae66d3ebd}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.51666667</value>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1601,7 +1440,9 @@ e
   <width>46</width>
   <height>27</height>
   <uuid>{f703a53a-5a85-4f19-8c0d-6d391fde0794}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1610,17 +1451,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1632,7 +1467,9 @@ e
   <width>120</width>
   <height>25</height>
   <uuid>{5973dd8b-43a5-4e78-9fa9-19ff5ea90107}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1651,13 +1488,15 @@ e
   <width>130</width>
   <height>25</height>
   <uuid>{5d4975a8-7006-449c-8c23-6d3b3dfa80f7}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.87692308</value>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1670,7 +1509,9 @@ e
   <width>102</width>
   <height>30</height>
   <uuid>{72bb78eb-c17b-444d-ab8c-458b1edf0e7d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1679,22 +1520,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -1706,7 +1536,9 @@ e
   <width>60</width>
   <height>30</height>
   <uuid>{53253bed-f55d-4864-ab60-d4b0906df846}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1715,22 +1547,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>2</borderwidth>
@@ -1742,7 +1563,9 @@ e
   <width>270</width>
   <height>25</height>
   <uuid>{6c37ef1c-719c-4f0b-915d-c8bb75376e39}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1751,17 +1574,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>11</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </color>
-  <bgcolor mode="background">
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#e0e0e0</color>
+  <bgcolor mode="background">#343434</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1773,23 +1590,17 @@ e
   <width>90</width>
   <height>25</height>
   <uuid>{f82caad1-7fd6-447a-98af-1416902075f6}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.01000000</resolution>
   <minimum>0</minimum>
   <maximum>1</maximum>
@@ -1803,23 +1614,17 @@ e
   <width>95</width>
   <height>25</height>
   <uuid>{e8c0a39e-2286-4754-bcd1-e6799ba36fa2}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0</minimum>
   <maximum>50</maximum>
@@ -1833,7 +1638,9 @@ e
   <width>60</width>
   <height>25</height>
   <uuid>{8e757ace-4ed5-4de8-b95f-c9fcba0f68d9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1842,17 +1649,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1864,27 +1665,22 @@ e
   <width>80</width>
   <height>25</height>
   <uuid>{50511459-bbcd-4f22-8b93-4eb9cea421d9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <color>
-   <r>50</r>
-   <g>230</g>
-   <b>50</b>
-  </color>
-  <bgcolor mode="background">
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
+  <color>#32e632</color>
+  <bgcolor mode="background">#343434</bgcolor>
   <value>0.53000000</value>
   <resolution>0.01000000</resolution>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -1898,22 +1694,21 @@ e
   <width>80</width>
   <height>80</height>
   <uuid>{0740fcea-a7ec-4b55-b483-daf2f0f87e40}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.53000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>220</r>
-   <g>135</g>
-   <b>48</b>
-  </color>
+  <color>#dc8730</color>
   <textcolor>#492d10</textcolor>
   <border>0</border>
   <borderColor>#492d10</borderColor>
@@ -1928,7 +1723,9 @@ e
   <width>70</width>
   <height>25</height>
   <uuid>{3ab28aff-4bce-4d36-ba26-65c92ebe6b8e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -1937,17 +1734,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1959,28 +1750,22 @@ e
   <width>40</width>
   <height>25</height>
   <uuid>{f234e643-9206-45d2-90cc-21903a1a0b08}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>4</minimum>
   <maximum>9</maximum>
   <randomizable group="0">false</randomizable>
-  <value>6</value>
+  <value>8</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>base_pch_frac</objectName>
@@ -1989,23 +1774,17 @@ e
   <width>40</width>
   <height>25</height>
   <uuid>{53ac49f4-196e-48d5-817c-dac614e8d692}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
   <maximum>11</maximum>
@@ -2019,7 +1798,9 @@ e
   <width>59</width>
   <height>25</height>
   <uuid>{0f0d344d-e4ed-48c9-a710-9b2e2d5533c4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2095,7 +1876,9 @@ e
   <width>20</width>
   <height>20</height>
   <uuid>{e14b7297-ea7c-42dd-9a08-e62468e528ad}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2103,6 +1886,14 @@ e
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <color>#0c0c0c</color>
+  <borderColor>#525252</borderColor>
+  <textColor>#dfdfdf</textColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
+  <padding>0</padding>
+  <checkstyle>x</checkstyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2111,7 +1902,9 @@ e
   <width>67</width>
   <height>25</height>
   <uuid>{05a8ce7a-1422-45f1-846a-93ef4493186f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2120,17 +1913,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2142,7 +1929,9 @@ e
   <width>11</width>
   <height>25</height>
   <uuid>{1e42d19e-eb6d-48ef-a29a-3392d8b898c3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2151,17 +1940,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>13</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2173,7 +1956,9 @@ e
   <width>82</width>
   <height>26</height>
   <uuid>{2dcc0403-16c4-45e2-9427-3b5b46f1e84b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2185,14 +1970,11 @@ e
   <eventLine>i 3.3 0 -1 3</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -2207,7 +1989,9 @@ e
   <width>82</width>
   <height>26</height>
   <uuid>{92247f2b-7cb0-4ba8-bc03-03361e1a10bd}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2219,14 +2003,11 @@ e
   <eventLine>i 3.4 0 -1 4</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -2241,7 +2022,9 @@ e
   <width>82</width>
   <height>26</height>
   <uuid>{11e96f5c-80dd-4079-b41d-d64a0a0eeaf4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2253,14 +2036,11 @@ e
   <eventLine>i 3.2 0 -1 2</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -2275,7 +2055,9 @@ e
   <width>82</width>
   <height>26</height>
   <uuid>{0597468a-539e-46ff-ac9e-d27938ee4929}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2287,14 +2069,11 @@ e
   <eventLine>i 3.1 0 -1 1</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>

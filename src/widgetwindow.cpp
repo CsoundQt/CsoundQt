@@ -25,6 +25,7 @@
 #include "csoundengine.h"
 #include "csoundqt.h"
 #include "documentpage.h"
+#include "documentview.h"
 #include "midihandler.h"
 #include "options.h"
 #include "themedicons.h"
@@ -32,11 +33,13 @@
 
 #include <QAction>
 #include <QCloseEvent>
+#include <QDockWidget>
 #include <QFileInfo>
 #include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QScrollArea>
+#include <QTimer>
 #include <QToolBar>
 
 WidgetWindow::WidgetWindow(CsoundQt *mainWindow, const QString &fileName,
@@ -50,9 +53,66 @@ WidgetWindow::WidgetWindow(CsoundQt *mainWindow, const QString &fileName,
                               mainWindow->m_midiLearn);
     m_page->setFileName(fileName);
     m_page->setReadOnly(readOnly);
-    // The console is not shown in a widget-only document; make it a child so
-    // it is destroyed with this window instead of leaking as a top-level widget.
-    m_page->getConsole()->setParent(this);
+    // The editor is not used in a widget-only document, but its view is still a
+    // child of this window; hide it so showing the window does not show it.
+    m_page->getView()->hide();
+
+    // Csound messages go to the document's own console. Put it in a proper
+    // bottom dock (hidden initially) instead of leaving it as an unmanaged child
+    // that would overlap the toolbar, as happened on macOS.
+    m_consoleDock = new QDockWidget(tr("Console"), this);
+    m_consoleDock->setObjectName("widgetWindowConsole");
+    m_page->getConsole()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_consoleDock->setWidget(m_page->getConsole());
+    // No title bar while docked (the toolbar already has the toggle button).
+    // The console's own context menu offers Float/Dock Panel; when floating,
+    // restore the native title bar so the window can be moved.
+    auto *emptyTitleBar = new QWidget(m_consoleDock);
+    emptyTitleBar->setFixedHeight(0);
+    m_consoleDock->setTitleBarWidget(emptyTitleBar);
+    connect(m_consoleDock, &QDockWidget::topLevelChanged, this,
+            [this, emptyTitleBar](bool floating) {
+        m_consoleDock->setTitleBarWidget(floating ? nullptr : emptyTitleBar);
+        if (floating) {
+            if (m_consoleExtraHeight > 0) {
+                resize(width(), qMax(minimumHeight(),
+                                     height() - m_consoleExtraHeight));
+                m_consoleExtraHeight = 0;
+            }
+            m_consoleDock->resize(m_consoleDock->width(), 140);
+        } else if (m_consoleDock->isVisible() && m_consoleExtraHeight == 0) {
+            m_consoleExtraHeight = 140;
+            resize(width(), height() + m_consoleExtraHeight);
+            QTimer::singleShot(0, this, [this]() {
+                resizeDocks({m_consoleDock}, {m_consoleExtraHeight}, Qt::Vertical);
+            });
+        }
+    });
+    addDockWidget(Qt::BottomDockWidgetArea, m_consoleDock);
+    connect(m_consoleDock, &QDockWidget::visibilityChanged, this, [this](bool visible) {
+        if (visible) {
+            if (m_consoleDock->isFloating()) {
+                m_consoleDock->resize(m_consoleDock->width(), 140);
+                return;
+            }
+            // The window is normally sized exactly to the widget panel. Grow
+            // it by the console height so showing the console does not shrink
+            // the panel or introduce scroll bars.
+            if (m_consoleExtraHeight == 0) {
+                m_consoleExtraHeight = 140;
+                resize(width(), height() + m_consoleExtraHeight);
+            }
+            QTimer::singleShot(0, this, [this]() {
+                resizeDocks({m_consoleDock}, {m_consoleExtraHeight}, Qt::Vertical);
+            });
+        } else if (m_consoleExtraHeight > 0) {
+            // Give the space back when the console is hidden again.
+            resize(width(), qMax(minimumHeight(),
+                                 height() - m_consoleExtraHeight));
+            m_consoleExtraHeight = 0;
+        }
+    });
+    m_consoleDock->hide();
     mainWindow->setCurrentOptionsForPage(m_page);
     QString textCopy = text;
     m_page->loadTextString(textCopy);
@@ -93,10 +153,13 @@ WidgetWindow::WidgetWindow(CsoundQt *mainWindow, const QString &fileName,
     };
     m_runAction = new QAction(themedIcon("media-play.png"),
                               tr("Run Csound"), this);
+    m_runAction->setCheckable(true);
     m_pauseAction = new QAction(themedIcon("media-pause.png"),
                                 tr("Pause"), this);
     m_stopAction = new QAction(themedIcon("media-stop.png"),
                                tr("Stop"), this);
+    connect(m_page, &DocumentPage::stopSignal, this,
+            [this]() { setPlaying(false); });
     connect(m_runAction, &QAction::triggered, this, &WidgetWindow::play);
     connect(m_pauseAction, &QAction::triggered, this, &WidgetWindow::pause);
     connect(m_stopAction, &QAction::triggered, this, &WidgetWindow::stop);
@@ -110,6 +173,12 @@ WidgetWindow::WidgetWindow(CsoundQt *mainWindow, const QString &fileName,
     controlMenu->addAction(m_pauseAction);
     controlMenu->addAction(m_stopAction);
 
+    m_consoleAction = m_consoleDock->toggleViewAction();
+    m_consoleAction->setIcon(themedIcon("terminal.png"));
+    m_consoleAction->setIconText(tr("Console"));
+    QMenu *viewMenu = menuBar()->addMenu(tr("View"));
+    viewMenu->addAction(m_consoleAction);
+
     m_toolBar = addToolBar(tr("Performance"));
     m_toolBar->setObjectName("widgetWindowToolBar");
     // Fusion (and some other styles) draw a bright 1px border along the bottom
@@ -121,8 +190,17 @@ WidgetWindow::WidgetWindow(CsoundQt *mainWindow, const QString &fileName,
     m_toolBar->addAction(m_runAction);
     m_toolBar->addAction(m_pauseAction);
     m_toolBar->addAction(m_stopAction);
+    m_toolBar->addSeparator();
+    m_toolBar->addAction(m_consoleAction);
     setToolbarIconSize(m_mainWindow->m_options->toolbarIconSize);
     applyPaletteToChrome();
+
+    m_toggleToolbarAction = new QAction(tr("Toggle Toolbar"), this);
+    m_toggleToolbarAction->setCheckable(true);
+    m_toggleToolbarAction->setChecked(true);
+    connect(m_toggleToolbarAction, &QAction::toggled,
+            m_toolBar, &QToolBar::setVisible);
+    viewMenu->addAction(m_toggleToolbarAction);
 
     if (layout != nullptr) {
         QSize content = layout->size();
@@ -130,7 +208,10 @@ WidgetWindow::WidgetWindow(CsoundQt *mainWindow, const QString &fileName,
             content = layout->sizeHint();
         const int chrome = menuBar()->sizeHint().height()
                 + m_toolBar->sizeHint().height();
-        resize(content.expandedTo(QSize(220, 140)) + QSize(0, chrome));
+        // A little breathing room: the widget layout's own size is exact, but
+        // the window needs a few pixels for its frame/edges.
+        resize(content.expandedTo(QSize(220, 140))
+               + QSize(10, chrome + 10));
         const QRect outer = layout->getOuterGeometry();
         if (outer.x() >= 0 && outer.y() >= 0)
             move(outer.x(), outer.y());
@@ -165,9 +246,15 @@ void WidgetWindow::showWidgets()
     activateWindow();
 }
 
+void WidgetWindow::setPlaying(bool playing)
+{
+    if (m_runAction != nullptr)
+        m_runAction->setChecked(playing);
+}
+
 void WidgetWindow::play()
 {
-    m_mainWindow->playDetached(m_page);
+    setPlaying(m_mainWindow->playDetached(m_page));
 }
 
 void WidgetWindow::pause()
@@ -178,6 +265,7 @@ void WidgetWindow::pause()
 void WidgetWindow::stop()
 {
     m_mainWindow->stopDetached(m_page);
+    setPlaying(false);
 }
 
 void WidgetWindow::render()
@@ -206,6 +294,8 @@ void WidgetWindow::applyTheme()
         m_pauseAction->setIcon(themedIcon("media-pause.png"));
     if (m_stopAction != nullptr)
         m_stopAction->setIcon(themedIcon("media-stop.png"));
+    if (m_consoleAction != nullptr)
+        m_consoleAction->setIcon(themedIcon("terminal.png"));
     if (m_toolBar != nullptr)
         m_toolBar->update();
 }

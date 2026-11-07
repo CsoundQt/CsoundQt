@@ -27,6 +27,7 @@
 class CsoundQt;
 class DocumentPage;
 class QAction;
+class QDockWidget;
 class QScrollArea;
 class QToolBar;
 class WidgetLayout;
@@ -46,6 +47,7 @@ public:
     DocumentPage *page() const { return m_page; }
     QString fileName() const { return m_fileName; }
     void showWidgets();
+    void setPlaying(bool playing);
     // Keep the detached window's toolbar in sync with the application settings.
     void setToolbarIconSize(int size);
     void applyTheme();
@@ -69,7 +71,11 @@ private:
     DocumentPage *m_page = nullptr;
     QString m_fileName;
     QScrollArea *m_scrollArea = nullptr;
+    QDockWidget *m_consoleDock = nullptr;
+    int m_consoleExtraHeight = 0; // window height added while the console is docked
     QToolBar *m_toolBar = nullptr;
+    QAction *m_consoleAction = nullptr;
+    QAction *m_toggleToolbarAction = nullptr;
     QAction *m_runAction = nullptr;
     QAction *m_pauseAction = nullptr;
     QAction *m_stopAction = nullptr;

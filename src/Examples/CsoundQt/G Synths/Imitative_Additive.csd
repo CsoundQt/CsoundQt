@@ -1,7 +1,9 @@
 <CsoundSynthesizer>
 <CsOptions>
---midi-key   = 4 --midi-velocity-amp = 5 -m128
---env:SSDIR+= ../../SourceMaterials
+--midi-key=4 
+--midi-velocity-amp=5 
+-m128
+--env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
 /***Imitative Additive Synthesis***/
@@ -835,6 +837,12 @@ i 1 0 36000
 
 
 
+
+
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -844,11 +852,7 @@ i 1 0 36000
  <height>659</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>239</r>
-  <g>239</g>
-  <b>239</b>
- </bgcolor>
+ <bgcolor mode="background">#efefef</bgcolor>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
   <x>874</x>
@@ -858,6 +862,7 @@ i 1 0 36000
   <uuid>{202c13fc-5d88-4826-a232-0e263bb5b119}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -871,12 +876,9 @@ i 1 0 36000
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>false</flatStyle>
-  <color>
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
-  </color>
+  <color>#aaaa7f</color>
   <pressedColor/>
   <borderColor>#717155</borderColor>
   <textColor>#000000</textColor>
@@ -893,6 +895,7 @@ i 1 0 36000
   <uuid>{fe6e4eec-d24b-4130-ac47-0509d6087482}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -901,22 +904,11 @@ i 1 0 36000
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>20</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -930,6 +922,7 @@ i 1 0 36000
   <uuid>{ef6762d2-df69-49d4-b2de-79768f36a0e9}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -938,22 +931,11 @@ i 1 0 36000
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>20</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -967,6 +949,7 @@ i 1 0 36000
   <uuid>{3cfa2bba-4cba-4506-8dd0-a2cf8cba83cc}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -975,22 +958,11 @@ i 1 0 36000
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>20</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1004,6 +976,7 @@ i 1 0 36000
   <uuid>{cd6f814b-6ee2-4dae-aca2-e003f0930179}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1012,22 +985,11 @@ i 1 0 36000
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>20</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1041,6 +1003,7 @@ i 1 0 36000
   <uuid>{651e302b-ea78-4453-8d18-a8df59faf558}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1049,22 +1012,11 @@ i 1 0 36000
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1078,6 +1030,7 @@ i 1 0 36000
   <uuid>{ad09a76a-5d31-4cc9-a269-5668506ed9cb}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1086,22 +1039,11 @@ i 1 0 36000
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>20</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1115,6 +1057,7 @@ i 1 0 36000
   <uuid>{732add43-b213-4020-acb2-56175ca913dc}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1123,22 +1066,11 @@ i 1 0 36000
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>20</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1152,6 +1084,7 @@ i 1 0 36000
   <uuid>{9705422d-67f5-4b92-b66a-cdadf1801e9f}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1160,22 +1093,11 @@ i 1 0 36000
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>40</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1189,6 +1111,7 @@ i 1 0 36000
   <uuid>{d56a8527-e63b-4d47-9cfc-2f4d90bdcb24}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1206,22 +1129,11 @@ When the "Print current values" button is activated, the analyzed partials are s
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>65</r>
-   <g>65</g>
-   <b>65</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#414141</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1235,63 +1147,20 @@ When the "Print current values" button is activated, the analyzed partials are s
   <uuid>{104a6eb1-9c4e-4dc2-85c7-a27518fe09b3}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>File 'bell.aiff' at position 0.156075 seconds:
-01) amp = 0.157462, freq = 883.870605, bin = 21
-02) amp = 0.146633, freq = 884.567993, bin = 20
-03) amp = 0.135147, freq = 476.610565, bin = 11
-04) amp = 0.131553, freq = 372.406586, bin = 9
-05) amp = 0.118698, freq = 366.300812, bin = 8
-06) amp = 0.086246, freq = 84.113129, bin = 2
-07) amp = 0.085053, freq = 501.003845, bin = 10
-08) amp = 0.083320, freq = 2447.225098, bin = 57
-09) amp = 0.079914, freq = 51.505806, bin = 1
-10) amp = 0.079458, freq = 594.384155, bin = 14
-11) amp = 0.068787, freq = 484.265411, bin = 12
-12) amp = 0.063580, freq = 116.272369, bin = 3
-13) amp = 0.057279, freq = 2442.896240, bin = 56
-14) amp = 0.056479, freq = 307.501007, bin = 7
-15) amp = 0.055476, freq = 255.095337, bin = 6
-16) amp = 0.055435, freq = 225.735062, bin = 5
-17) amp = 0.050937, freq = 584.701050, bin = 13
-18) amp = 0.046534, freq = 1213.459473, bin = 28
-19) amp = 0.042123, freq = 1588.513184, bin = 37
-20) amp = 0.035536, freq = 876.142334, bin = 22
-21) amp = 0.035124, freq = 584.020447, bin = 15
-22) amp = 0.033349, freq = 2453.455811, bin = 58
-23) amp = 0.030820, freq = 1217.297241, bin = 29
-24) amp = 0.025115, freq = 255.966904, bin = 4
-25) amp = 0.023024, freq = 1589.229858, bin = 36
-26) amp = 0.021252, freq = 1603.028198, bin = 38
-27) amp = 0.017921, freq = 733.842896, bin = 19
-28) amp = 0.014162, freq = 1993.371704, bin = 46
-29) amp = 0.013220, freq = 960.022034, bin = 23
-30) amp = 0.013042, freq = 1211.234375, bin = 27
-31) amp = 0.010606, freq = 2003.215576, bin = 47
-32) amp = 0.010236, freq = 3102.525391, bin = 72
-</label>
+  <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
-  <color>
-   <r>65</r>
-   <g>65</g>
-   <b>65</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <color>#414141</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1305,6 +1174,7 @@ When the "Print current values" button is activated, the analyzed partials are s
   <uuid>{404b0422-2cbd-4c4a-9433-a4e9c805789c}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1313,22 +1183,11 @@ When the "Print current values" button is activated, the analyzed partials are s
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>20</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1342,6 +1201,7 @@ When the "Print current values" button is activated, the analyzed partials are s
   <uuid>{aea96bd2-66c8-46ed-ba64-42a9b473cfbc}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1350,25 +1210,18 @@ When the "Print current values" button is activated, the analyzed partials are s
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.25549939</xValue>
-  <yValue>0.25549939</yValue>
+  <xValue>1.03169281</xValue>
+  <yValue>1.03169281</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
   <borderColor>#32e632</borderColor>
-  <color>
-   <r>45</r>
-   <g>208</g>
-   <b>45</b>
-  </color>
+  <color>#2dd02d</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
+  <bgcolor>#343434</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -1380,6 +1233,7 @@ When the "Print current values" button is activated, the analyzed partials are s
   <uuid>{714f538d-b15d-450f-8243-f731e47cec08}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1392,21 +1246,14 @@ When the "Print current values" button is activated, the analyzed partials are s
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
   <borderColor>#32e632</borderColor>
-  <color>
-   <r>230</r>
-   <g>50</g>
-   <b>50</b>
-  </color>
+  <color>#e63232</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
+  <bgcolor>#343434</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
@@ -1418,6 +1265,7 @@ When the "Print current values" button is activated, the analyzed partials are s
   <uuid>{a2a3113b-ea7c-4113-8aa5-22318f22d899}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1438,6 +1286,7 @@ When the "Print current values" button is activated, the analyzed partials are s
   <uuid>{dacdf18f-bde4-4a64-8973-9285e8c73e68}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1452,12 +1301,9 @@ Snapshot!</text>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>false</flatStyle>
-  <color>
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
-  </color>
+  <color>#aaaa7f</color>
   <pressedColor/>
   <borderColor>#717155</borderColor>
   <textColor>#000000</textColor>
@@ -1474,6 +1320,7 @@ Snapshot!</text>
   <uuid>{5db562b3-eb02-48d2-9792-3c725a677612}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1482,22 +1329,11 @@ Snapshot!</text>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1511,6 +1347,7 @@ Snapshot!</text>
   <uuid>{c2700f76-0407-44bb-9c6a-6440205a419f}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1522,14 +1359,11 @@ Snapshot!</text>
   <eventLine/>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>false</flatStyle>
-  <color>
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
-  </color>
+  <color>#aaaa7f</color>
   <pressedColor/>
   <borderColor>#717155</borderColor>
   <textColor>#000000</textColor>
@@ -1546,6 +1380,7 @@ Snapshot!</text>
   <uuid>{4f1cac68-9cfe-4663-8847-2319835a203e}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1559,12 +1394,9 @@ Snapshot!</text>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>false</flatStyle>
-  <color>
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
-  </color>
+  <color>#aaaa7f</color>
   <pressedColor/>
   <borderColor>#717155</borderColor>
   <textColor>#000000</textColor>
@@ -1581,6 +1413,7 @@ Snapshot!</text>
   <uuid>{e8dc513b-db58-4aaf-97ba-50df3ef532da}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1589,22 +1422,11 @@ Snapshot!</text>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1618,22 +1440,15 @@ Snapshot!</text>
   <uuid>{fd2c2663-b818-4bc2-9e3c-933480540979}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
   <maximum>1e+12</maximum>
@@ -1649,6 +1464,7 @@ Snapshot!</text>
   <uuid>{0ee3a50b-51d8-4bc9-813e-f0d565c01f96}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1657,22 +1473,11 @@ Snapshot!</text>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1686,22 +1491,15 @@ Snapshot!</text>
   <uuid>{ccb65c55-41fe-46ef-a983-94752dc3b1d5}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
   <maximum>1e+12</maximum>
@@ -1717,6 +1515,7 @@ Snapshot!</text>
   <uuid>{216588f6-fc24-4a02-8159-df22c0689436}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1730,12 +1529,9 @@ Snapshot!</text>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>false</flatStyle>
-  <color>
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
-  </color>
+  <color>#aaaa7f</color>
   <pressedColor/>
   <borderColor>#717155</borderColor>
   <textColor>#000000</textColor>
@@ -1752,6 +1548,7 @@ Snapshot!</text>
   <uuid>{96551f1f-2888-4e8b-92a5-fe5f40650b1b}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1764,22 +1561,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1793,6 +1579,7 @@ L = Live Input,
   <uuid>{c546d668-bca5-4c14-a13d-d18c5b844efe}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1806,12 +1593,9 @@ L = Live Input,
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>false</flatStyle>
-  <color>
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
-  </color>
+  <color>#aaaa7f</color>
   <pressedColor/>
   <borderColor>#717155</borderColor>
   <textColor>#000000</textColor>
@@ -1828,6 +1612,7 @@ L = Live Input,
   <uuid>{1d2f4673-864c-4aa6-a813-6f4b73fe536e}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1841,12 +1626,9 @@ L = Live Input,
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>false</flatStyle>
-  <color>
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
-  </color>
+  <color>#aaaa7f</color>
   <pressedColor/>
   <borderColor>#717155</borderColor>
   <textColor>#000000</textColor>
@@ -1863,6 +1645,7 @@ L = Live Input,
   <uuid>{8cbb0d66-be77-44fb-9fea-1c2d42f85655}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1871,22 +1654,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>20</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -1900,31 +1672,20 @@ L = Live Input,
   <uuid>{fe1e66fe-4105-4aed-9c04-e06ef3c95aa2}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>fox.wav|bell.aiff|BratscheMono.wav|Wood.wav</label>
+  <label>Wood.wav</label>
   <instant>true</instant>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>239</r>
-   <g>239</g>
-   <b>239</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#bebebe</bgcolor>
   <background>nobackground</background>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>0</borderradius>
   <borderwidth>0</borderwidth>
@@ -1938,12 +1699,13 @@ L = Live Input,
   <uuid>{7e9d3773-29f5-4906-91f7-3e35e562dfa6}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>fox.wav|bell.aiff|BratscheMono.wav|Wood.wav</stringvalue>
+  <stringvalue>/home/em/dev/forks/CsoundQt/src/Examples/SourceMaterials/Wood.wav</stringvalue>
   <text>Select Files</text>
   <image>/</image>
   <eventLine/>
@@ -1951,12 +1713,9 @@ L = Live Input,
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>false</flatStyle>
-  <color>
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
-  </color>
+  <color>#aaaa7f</color>
   <pressedColor/>
   <borderColor>#717155</borderColor>
   <textColor>#000000</textColor>
@@ -1973,6 +1732,7 @@ L = Live Input,
   <uuid>{a8250334-53f7-4e66-aa18-2b9be5ff9466}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -1981,25 +1741,18 @@ L = Live Input,
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.69719168</xValue>
-  <yValue>0.69719168</yValue>
+  <xValue>0.69719200</xValue>
+  <yValue>0.69719200</yValue>
   <type>line</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
   <borderColor>#32e632</borderColor>
-  <color>
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </color>
+  <color>#e0e0e0</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
+  <bgcolor>#343434</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -2011,6 +1764,7 @@ L = Live Input,
   <uuid>{47aae0f0-46ca-4f1b-a3ba-5923cc3fb761}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2019,22 +1773,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2048,30 +1791,20 @@ L = Live Input,
   <uuid>{87aa8561-e21a-4634-9693-ad2680b9d547}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.156</label>
+  <label>0.065</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2085,10 +1818,11 @@ L = Live Input,
   <uuid>{193d6210-1914-4ba1-b1b3-6f813a1eecbb}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <value>0</value>
+  <value>-1</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomx>1.00000000</zoomx>
@@ -2114,31 +1848,21 @@ L = Live Input,
   <uuid>{b7f9aafe-e4c4-4837-aacf-13c309c3899d}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <label>File selected:
-'bell.aiff'</label>
+'Wood.wav'</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
-  <color>
-   <r>248</r>
-   <g>248</g>
-   <b>54</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <color>#f8f836</color>
+  <bgcolor mode="nobackground">#343434</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2152,6 +1876,7 @@ L = Live Input,
   <uuid>{e05fc469-2f58-410b-9806-dc9cb7655d4b}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -2160,22 +1885,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2189,6 +1903,7 @@ L = Live Input,
   <uuid>{2a973632-d5ee-4246-ae9f-4db7349afc29}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2197,22 +1912,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2226,6 +1930,7 @@ L = Live Input,
   <uuid>{7b71257f-6fef-494d-a260-98647d7ffc68}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2239,12 +1944,9 @@ L = Live Input,
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>false</flatStyle>
-  <color>
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
-  </color>
+  <color>#aaaa7f</color>
   <pressedColor/>
   <borderColor>#717155</borderColor>
   <textColor>#000000</textColor>
@@ -2261,6 +1963,7 @@ L = Live Input,
   <uuid>{c453cf7a-dbdd-4bc9-9c96-37d7e39c3a30}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2269,22 +1972,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2298,6 +1990,7 @@ L = Live Input,
   <uuid>{5bbf7fad-0c36-4780-a07d-a60f81d40d90}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2311,12 +2004,9 @@ L = Live Input,
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>false</flatStyle>
-  <color>
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
-  </color>
+  <color>#aaaa7f</color>
   <pressedColor/>
   <borderColor>#717155</borderColor>
   <textColor>#000000</textColor>
@@ -2333,6 +2023,7 @@ L = Live Input,
   <uuid>{d574f198-bfad-40b6-b163-c4046e3878bf}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2341,22 +2032,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2370,6 +2050,7 @@ L = Live Input,
   <uuid>{709af31e-5c0e-483f-a8e6-d0a51351680e}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2383,12 +2064,9 @@ L = Live Input,
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>false</flatStyle>
-  <color>
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
-  </color>
+  <color>#aaaa7f</color>
   <pressedColor/>
   <borderColor>#717155</borderColor>
   <textColor>#000000</textColor>
@@ -2405,6 +2083,7 @@ L = Live Input,
   <uuid>{33968315-e837-4af4-bdf2-98480bf44c91}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2418,12 +2097,9 @@ L = Live Input,
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>false</flatStyle>
-  <color>
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
-  </color>
+  <color>#aaaa7f</color>
   <pressedColor/>
   <borderColor>#717155</borderColor>
   <textColor>#000000</textColor>
@@ -2440,6 +2116,7 @@ L = Live Input,
   <uuid>{109e08e0-b1c7-4c4f-a2a2-18469fd6a4bb}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2453,12 +2130,9 @@ L = Live Input,
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>false</flatStyle>
-  <color>
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
-  </color>
+  <color>#aaaa7f</color>
   <pressedColor/>
   <borderColor>#717155</borderColor>
   <textColor>#000000</textColor>
@@ -2475,6 +2149,7 @@ L = Live Input,
   <uuid>{6d4111e8-cd9f-4140-9d7f-8dfb008c6564}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2488,12 +2163,9 @@ L = Live Input,
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>false</flatStyle>
-  <color>
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
-  </color>
+  <color>#aaaa7f</color>
   <pressedColor/>
   <borderColor>#717155</borderColor>
   <textColor>#000000</textColor>
@@ -2510,6 +2182,7 @@ L = Live Input,
   <uuid>{7980b3f7-f6bc-4798-8a65-f58642700fb3}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2523,12 +2196,9 @@ L = Live Input,
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>false</flatStyle>
-  <color>
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
-  </color>
+  <color>#aaaa7f</color>
   <pressedColor/>
   <borderColor>#717155</borderColor>
   <textColor>#000000</textColor>
@@ -2545,6 +2215,7 @@ L = Live Input,
   <uuid>{dfa0444b-a225-47a5-a1db-3ac7e63f8034}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2553,25 +2224,18 @@ L = Live Input,
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>-inf</xValue>
-  <yValue>-inf</yValue>
+  <xValue>0.45264807</xValue>
+  <yValue>0.45264807</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
   <borderColor>#32e632</borderColor>
-  <color>
-   <r>45</r>
-   <g>208</g>
-   <b>45</b>
-  </color>
+  <color>#2dd02d</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
+  <bgcolor>#343434</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -2583,6 +2247,7 @@ L = Live Input,
   <uuid>{02c1d76c-5c5d-4a11-93b4-21dc54706c90}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2595,21 +2260,14 @@ L = Live Input,
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
   <borderColor>#32e632</borderColor>
-  <color>
-   <r>230</r>
-   <g>50</g>
-   <b>50</b>
-  </color>
+  <color>#e63232</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
+  <bgcolor>#343434</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
@@ -2621,6 +2279,7 @@ L = Live Input,
   <uuid>{d0dd7c29-31c8-4847-bb6c-7707ff1f3570}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2641,6 +2300,7 @@ L = Live Input,
   <uuid>{2918f563-dce4-45c5-96e8-07df0b671f27}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2649,22 +2309,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2678,6 +2327,7 @@ L = Live Input,
   <uuid>{b609249e-e278-4c26-9182-01086a1f20e3}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2686,22 +2336,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2715,22 +2354,15 @@ L = Live Input,
   <uuid>{22a49672-685f-4628-8c6f-6fe2e09a6a9c}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.10000000</resolution>
   <minimum>0.1</minimum>
   <maximum>1</maximum>
@@ -2746,6 +2378,7 @@ L = Live Input,
   <uuid>{599be8ec-f1b9-434a-b229-1f693270447d}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2754,22 +2387,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2783,22 +2405,15 @@ L = Live Input,
   <uuid>{caec7ed3-498b-4458-ac4e-57fac52c4df9}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
   <maximum>64</maximum>
@@ -2814,6 +2429,7 @@ L = Live Input,
   <uuid>{38e30cb8-9e88-4dc9-8d09-b30f75c2e0c4}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2827,12 +2443,9 @@ L = Live Input,
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>false</flatStyle>
-  <color>
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
-  </color>
+  <color>#aaaa7f</color>
   <pressedColor/>
   <borderColor>#717155</borderColor>
   <textColor>#000000</textColor>
@@ -2849,6 +2462,7 @@ L = Live Input,
   <uuid>{5da20281-4647-40b9-8499-ee43eff43519}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2857,22 +2471,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2886,22 +2489,15 @@ L = Live Input,
   <uuid>{f7598ae6-c54e-438f-94c2-b29d932ee539}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.01000000</resolution>
   <minimum>-1</minimum>
   <maximum>1</maximum>
@@ -2917,6 +2513,7 @@ L = Live Input,
   <uuid>{f8579654-8952-4866-a7cf-c0d757108732}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -2930,12 +2527,9 @@ L = Live Input,
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>false</flatStyle>
-  <color>
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
-  </color>
+  <color>#aaaa7f</color>
   <pressedColor/>
   <borderColor>#717155</borderColor>
   <textColor>#000000</textColor>
@@ -2952,22 +2546,15 @@ L = Live Input,
   <uuid>{19be0852-85d9-4ae7-8506-e9b0d40d6dda}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
   <maximum>32</maximum>
@@ -2983,22 +2570,15 @@ L = Live Input,
   <uuid>{68269bfd-79e9-4749-a934-2187c48d3734}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
   <maximum>127</maximum>
@@ -3014,6 +2594,7 @@ L = Live Input,
   <uuid>{05fccea2-ecb7-4fdc-ae15-062016397ad8}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3022,22 +2603,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3051,22 +2621,15 @@ L = Live Input,
   <uuid>{b16b9f6e-73f5-4c22-83a7-c47d8f0a68da}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
   <maximum>200</maximum>
@@ -3082,6 +2645,7 @@ L = Live Input,
   <uuid>{e35d6aaa-3dcb-4e83-882d-0d51db0d867e}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3090,22 +2654,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3119,6 +2672,7 @@ L = Live Input,
   <uuid>{c4d885cd-a6ac-413a-b148-b8c7c11d3537}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3127,22 +2681,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3156,22 +2699,15 @@ L = Live Input,
   <uuid>{5b84e7d0-0c82-45e2-aca9-f2d1f982970a}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
   <maximum>31</maximum>
@@ -3187,6 +2723,7 @@ L = Live Input,
   <uuid>{b4cef0ea-2ef0-4c9d-ade1-702aea738fd8}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3195,22 +2732,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3224,22 +2750,15 @@ L = Live Input,
   <uuid>{d09928e9-5e05-4ba0-bd7d-94f92a0630d4}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
   <maximum>200</maximum>
@@ -3255,6 +2774,7 @@ L = Live Input,
   <uuid>{8b426732-b781-4659-a813-de60b04656ac}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3263,22 +2783,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3292,22 +2801,15 @@ L = Live Input,
   <uuid>{34535596-8d50-43f6-908c-58a524740c90}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
   <maximum>200</maximum>
@@ -3323,6 +2825,7 @@ L = Live Input,
   <uuid>{32f46896-8772-4e3c-b3d6-730806ad9ca4}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3331,22 +2834,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3360,22 +2852,15 @@ L = Live Input,
   <uuid>{f20eb136-d9d2-4559-9fbc-6c44e6864afa}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
   <maximum>200</maximum>
@@ -3391,6 +2876,7 @@ L = Live Input,
   <uuid>{40a78d4c-b76c-4fa9-a75a-8baa76abcea9}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3399,22 +2885,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3428,22 +2903,15 @@ L = Live Input,
   <uuid>{10a57f16-265b-4774-a0d6-26c3c629bf77}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.10000000</resolution>
   <minimum>0.1</minimum>
   <maximum>2000</maximum>
@@ -3459,6 +2927,7 @@ L = Live Input,
   <uuid>{ffe891f4-df20-436c-b300-6ab71182168d}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3467,22 +2936,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3496,6 +2954,7 @@ L = Live Input,
   <uuid>{c00e9cc5-61b3-4190-ab37-a0227e181716}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3508,21 +2967,14 @@ L = Live Input,
   <yValue>0.01755682</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
   <borderColor>#32e632</borderColor>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
+  <color>#e7ac32</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>42</r>
-   <g>46</g>
-   <b>50</b>
-  </bgcolor>
+  <bgcolor>#2a2e32</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -3534,6 +2986,7 @@ L = Live Input,
   <uuid>{a2de8382-412c-4b27-a075-1ae824b85ff3}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3546,21 +2999,14 @@ L = Live Input,
   <yValue>0.27840909</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
   <borderColor>#32e632</borderColor>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
+  <color>#e7ac32</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>42</r>
-   <g>46</g>
-   <b>50</b>
-  </bgcolor>
+  <bgcolor>#2a2e32</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -3572,6 +3018,7 @@ L = Live Input,
   <uuid>{fb32d182-7973-4205-aa3e-eca37b202fc7}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3584,21 +3031,14 @@ L = Live Input,
   <yValue>0.51136364</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
   <borderColor>#32e632</borderColor>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
+  <color>#e7ac32</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>42</r>
-   <g>46</g>
-   <b>50</b>
-  </bgcolor>
+  <bgcolor>#2a2e32</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
@@ -3610,6 +3050,7 @@ L = Live Input,
   <uuid>{d1e99338-5f53-426a-8a8f-9124b39a69b9}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3622,21 +3063,14 @@ L = Live Input,
   <yValue>0.73863636</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
+  <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
   <borderColor>#32e632</borderColor>
-  <color>
-   <r>231</r>
-   <g>172</g>
-   <b>50</b>
-  </color>
+  <color>#e7ac32</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>42</r>
-   <g>46</g>
-   <b>50</b>
-  </bgcolor>
+  <bgcolor>#2a2e32</bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
@@ -3648,6 +3082,7 @@ L = Live Input,
   <uuid>{f887d4bf-9249-4736-84e6-71ae3883aae4}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3657,21 +3092,10 @@ L = Live Input,
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3685,6 +3109,7 @@ L = Live Input,
   <uuid>{406da2a0-8ba4-40c0-91a4-09184aba8654}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3694,21 +3119,10 @@ L = Live Input,
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3722,6 +3136,7 @@ L = Live Input,
   <uuid>{0b43ed62-96ca-47f4-8056-a8459f7e4ece}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3731,21 +3146,10 @@ L = Live Input,
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3759,6 +3163,7 @@ L = Live Input,
   <uuid>{5439df97-f182-4a18-ac2e-60995d097127}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3768,21 +3173,10 @@ L = Live Input,
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3796,6 +3190,7 @@ L = Live Input,
   <uuid>{da37e1dc-1232-49cb-a919-4218bd97460a}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3804,22 +3199,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3833,6 +3217,7 @@ L = Live Input,
   <uuid>{e3ad5e24-3b8f-4013-a0d8-a1fac6cb0133}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3841,22 +3226,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3870,6 +3244,7 @@ L = Live Input,
   <uuid>{4364c297-c8a3-472b-a4f8-14dbc6c5d226}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3878,22 +3253,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3907,6 +3271,7 @@ L = Live Input,
   <uuid>{f3d92b16-98c4-4c99-98f2-483a79a2314f}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3915,22 +3280,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3944,6 +3298,7 @@ L = Live Input,
   <uuid>{6fdc67be-6b4e-4f62-99ab-fa4ed69aff12}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3952,22 +3307,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3981,6 +3325,7 @@ L = Live Input,
   <uuid>{79f6ce72-902a-4ba6-a0df-fd33b6169a3f}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -3994,12 +3339,9 @@ L = Live Input,
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>false</flatStyle>
-  <color>
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
-  </color>
+  <color>#aaaa7f</color>
   <pressedColor/>
   <borderColor>#717155</borderColor>
   <textColor>#000000</textColor>
@@ -4016,22 +3358,15 @@ L = Live Input,
   <uuid>{ddedf240-0604-49f7-9f8c-880d31f26d17}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.10000000</resolution>
   <minimum>0</minimum>
   <maximum>0.99</maximum>
@@ -4047,22 +3382,15 @@ L = Live Input,
   <uuid>{b73dfa9b-7dfb-488c-ab7f-be3d165a31b4}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.10000000</resolution>
   <minimum>0.1</minimum>
   <maximum>0.99</maximum>
@@ -4078,6 +3406,7 @@ L = Live Input,
   <uuid>{e4f92c35-0043-4eea-9560-7c55018f479e}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -4087,21 +3416,10 @@ L = Live Input,
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -4115,22 +3433,15 @@ L = Live Input,
   <uuid>{de3cf7d9-8cc9-47f9-a205-ef243a143424}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00000100</resolution>
   <minimum>0</minimum>
   <maximum>1</maximum>
@@ -4146,6 +3457,7 @@ L = Live Input,
   <uuid>{141519e4-0af6-4486-895a-b8cc5e5e0462}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -4154,22 +3466,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -4183,6 +3484,7 @@ L = Live Input,
   <uuid>{b8f46405-6cc4-4b7d-a2da-13890ad2864c}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -4191,22 +3493,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>30</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -4220,6 +3511,7 @@ L = Live Input,
   <uuid>{998837f8-1449-4aa2-b0c7-66677e5ba65b}</uuid>
   <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
@@ -4233,22 +3525,11 @@ L = Live Input,
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>

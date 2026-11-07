@@ -1,4 +1,5 @@
 
+
 /*
 	Copyright (C) 2008, 2009 Andres Cabrera
 	mantaraya36@gmail.com
@@ -94,7 +95,7 @@
 #define DEFAULT_WAVEPLAYER_EXECUTABLE ""
 #endif
 
-#define CSQT_DEFAULT_TEMPLATE "<CsoundSynthesizer>\n<CsOptions>\n-odac\n</CsOptions>\n<CsInstruments>\n\nsr = 44100\nksmps = 64\nnchnls = 2\n0dbfs = 1\n\n\n</CsInstruments>\n<CsScore>\n\n</CsScore>\n</CsoundSynthesizer>"
+#define CSQT_DEFAULT_TEMPLATE "<CsoundSynthesizer>\n<CsOptions>\n</CsOptions>\n<CsInstruments>\n\nsr     = 44100\nksmps  = 64\nnchnls = 2\n0dbfs  = 1\n\n\n</CsInstruments>\n<CsScore>\n\n</CsScore>\n</CsoundSynthesizer>"
 
 #define QDEBUG qDebug() << __FUNCTION__ << ":"
 

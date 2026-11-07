@@ -7,10 +7,10 @@
 ; Make sure CsOptions are not ignored in the preferences,
 ; Otherwise Realtime MIDI input will not work.
 
-sr = 44100
-ksmps = 64
+sr     = 44100
+ksmps  = 64
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
 
 instr 1
@@ -355,6 +355,8 @@ e
 
 
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="381" y="517" width="655" height="346" visible="false" loopStart="0" loopEnd="0">i 1 0 1 440 100 </EventPanel>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -364,11 +366,7 @@ e
  <height>648</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>239</r>
-  <g>239</g>
-  <b>239</b>
- </bgcolor>
+ <bgcolor mode="background">#efefef</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>22</x>
@@ -387,24 +385,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>40</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>176</r>
-   <g>174</g>
-   <b>127</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#b0ae7f</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>8</borderradius>
   <borderwidth>0</borderwidth>
@@ -427,24 +412,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>51</r>
-   <g>167</g>
-   <b>125</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#33a77d</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -467,24 +439,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>51</r>
-   <g>167</g>
-   <b>125</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#33a77d</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -507,24 +466,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>51</r>
-   <g>167</g>
-   <b>125</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#33a77d</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -650,16 +596,8 @@ e
   <alignment>left</alignment>
   <font>Noto Sans</font>
   <fontsize>8</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
@@ -684,24 +622,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>51</r>
-   <g>167</g>
-   <b>125</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#33a77d</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -827,16 +752,8 @@ e
   <alignment>left</alignment>
   <font>Noto Sans</font>
   <fontsize>8</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
@@ -861,24 +778,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -901,24 +805,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -941,24 +832,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -981,24 +859,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1021,24 +886,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1061,24 +913,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1101,24 +940,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1141,24 +967,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1181,24 +994,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1221,24 +1021,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1261,24 +1048,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1301,24 +1075,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1341,24 +1102,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>51</r>
-   <g>167</g>
-   <b>125</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#33a77d</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1381,24 +1129,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>51</r>
-   <g>167</g>
-   <b>125</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#33a77d</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1421,24 +1156,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>51</r>
-   <g>167</g>
-   <b>125</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#33a77d</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1461,24 +1183,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>51</r>
-   <g>167</g>
-   <b>125</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#33a77d</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -1501,24 +1210,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>51</r>
-   <g>167</g>
-   <b>125</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#33a77d</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -1560,16 +1256,8 @@ e
   <alignment>left</alignment>
   <font>Noto Sans</font>
   <fontsize>8</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
@@ -1678,24 +1366,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>51</r>
-   <g>167</g>
-   <b>125</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#33a77d</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -1737,16 +1412,8 @@ e
   <alignment>left</alignment>
   <font>Noto Sans</font>
   <fontsize>8</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
@@ -1855,24 +1522,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>51</r>
-   <g>167</g>
-   <b>125</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#33a77d</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -1914,16 +1568,8 @@ e
   <alignment>left</alignment>
   <font>Noto Sans</font>
   <fontsize>8</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
@@ -2032,24 +1678,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2072,24 +1705,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2112,24 +1732,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2152,24 +1759,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2192,24 +1786,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2232,24 +1813,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2272,24 +1840,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2312,24 +1867,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2352,24 +1894,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2392,24 +1921,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2432,24 +1948,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2472,24 +1975,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2512,24 +2002,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2552,24 +2029,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2592,24 +2056,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2632,24 +2083,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2672,24 +2110,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2712,24 +2137,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2752,24 +2164,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>51</r>
-   <g>167</g>
-   <b>125</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#33a77d</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -2792,24 +2191,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>51</r>
-   <g>167</g>
-   <b>125</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#33a77d</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -2935,16 +2321,8 @@ e
   <alignment>left</alignment>
   <font>Noto Sans</font>
   <fontsize>8</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
@@ -2969,24 +2347,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3009,24 +2374,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3049,24 +2401,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3089,24 +2428,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3129,24 +2455,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3169,24 +2482,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3209,24 +2509,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>51</r>
-   <g>167</g>
-   <b>125</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#33a77d</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -3268,16 +2555,8 @@ e
   <alignment>left</alignment>
   <font>Noto Sans</font>
   <fontsize>8</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
@@ -3386,24 +2665,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3426,24 +2692,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3466,24 +2719,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3506,24 +2746,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3546,24 +2773,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3586,24 +2800,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3626,24 +2827,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>62</r>
-   <g>165</g>
-   <b>167</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#3ea5a7</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
@@ -3671,12 +2859,9 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -3707,12 +2892,9 @@ e
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -3736,16 +2918,8 @@ e
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
   <maximum>8</maximum>
@@ -3772,21 +2946,9 @@ e
   <fontsize>14</fontsize>
   <precision>3</precision>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
@@ -3809,24 +2971,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -3849,24 +2998,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>51</r>
-   <g>167</g>
-   <b>125</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#33a77d</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -3889,24 +3025,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>51</r>
-   <g>167</g>
-   <b>125</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#33a77d</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -3929,24 +3052,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>8</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>51</r>
-   <g>167</g>
-   <b>125</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#33a77d</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -3972,11 +3082,7 @@ e
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>220</r>
-   <g>135</g>
-   <b>48</b>
-  </color>
+  <color>#dc8730</color>
   <textcolor>#492d10</textcolor>
   <border>0</border>
   <borderColor>#492d10</borderColor>
@@ -4002,864 +3108,17 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
-<preset name="Default" number="0" >
-<value id="{a4d4c497-04d4-4b7d-ad51-0f8832cb64bf}" mode="1" >0.60793877</value>
-<value id="{b418386f-afe6-4d3c-b8d6-c6c96885e9ab}" mode="1" >0.87604076</value>
-<value id="{f2ac6272-b33d-44fc-bb1e-fe52087e3a2b}" mode="1" >0.68532342</value>
-<value id="{8052b29d-d6ae-4249-b9cd-1788a2faf77c}" mode="1" >0.87491655</value>
-<value id="{3efde0c1-5828-4875-a997-174989989aa9}" mode="1" >0.24683115</value>
-<value id="{fa34129e-d983-460c-bd0e-89fb3e798bcb}" mode="1" >3.00000000</value>
-<value id="{17b249bd-27ed-44c7-9bac-a847a81165e3}" mode="1" >0.71242875</value>
-<value id="{cba3fee2-d2a5-41b2-8842-34be212fa82a}" mode="1" >1.51931179</value>
-<value id="{f0305ec9-814b-4107-a9b5-55a5a13f0118}" mode="1" >0.76090300</value>
-<value id="{9f495b69-cdca-43c7-bc92-f26d9995caed}" mode="1" >0.27295068</value>
-<value id="{3f29a847-8cf1-4076-9a69-e88b5360a810}" mode="1" >0.61171556</value>
-<value id="{2ea377f7-6c31-4556-8e26-e47d9b6c000a}" mode="1" >0.20000000</value>
-<value id="{a6a5a56d-13c6-4c09-b6e8-74086df6e352}" mode="1" >0.82246149</value>
-<value id="{dde869a9-5d2a-454c-bff8-b8d407d19e87}" mode="1" >1.00000000</value>
-<value id="{623cf6cd-548c-4212-ac65-a4761cfb5b7f}" mode="1" >1.93253195</value>
-<value id="{833bd2f5-fae9-441b-82ad-9117ffd29877}" mode="1" >0.21393649</value>
-<value id="{d520e71a-b3e2-46d4-b0c6-688085fe5742}" mode="1" >0.91956383</value>
-<value id="{ced1a494-71e9-4bc0-9973-a872920a4473}" mode="1" >1.47231400</value>
-<value id="{16c48afd-7c15-4e07-beee-ce56c7b61c80}" mode="1" >0.41843128</value>
-<value id="{e1aa96cf-3e30-4ad2-93ec-1494a0d60079}" mode="1" >2.00000000</value>
-<value id="{1a074887-a3a3-43ee-8de2-34b8e6a7a5a5}" mode="1" >0.25791028</value>
-<value id="{e1352cbc-9c2a-4650-8957-fb055156903b}" mode="1" >0.32575035</value>
-<value id="{3f7ea94f-e14d-4b53-8bbd-53563d0c23c1}" mode="1" >0.26118517</value>
-<value id="{9c657ab3-a738-40e2-92ae-b1128863fd78}" mode="1" >1.78432512</value>
-<value id="{56e321a8-c542-420c-a494-e759e36ea78a}" mode="1" >0.02822053</value>
-<value id="{77ce606f-b1c5-4911-bf36-79ea1b8f50ef}" mode="1" >1.00000000</value>
-<value id="{fec79e7f-6c43-482f-9fff-cedfc13eaea7}" mode="1" >1.85546792</value>
-<value id="{964db287-6df1-4fa8-baba-1e387d1fac12}" mode="1" >1.85546792</value>
-<value id="{7844fda3-a049-4ec6-885f-cba693b160c9}" mode="1" >1.00000000</value>
-<value id="{37d2f1f5-7da1-460a-a8a0-9d70e19e7da0}" mode="1" >0.80882120</value>
-<value id="{1713b2f6-0778-43b4-b81a-725331e94260}" mode="1" >0.88287294</value>
-<value id="{608ebd5c-d7b3-4c9a-8075-2204844bc42c}" mode="1" >1.85216427</value>
-<value id="{5f20cb6a-ad07-4210-aaa1-a0ee628ee2d4}" mode="1" >0.12375984</value>
-<value id="{dc16cdf0-7371-4027-bac0-7d26d9d21433}" mode="1" >0.01545162</value>
-<value id="{c211de7a-2f05-44f9-b09f-51523639dd8e}" mode="1" >1.01258862</value>
-<value id="{da8941a6-25be-42bd-9fc4-eb3bf5e4e6e1}" mode="1" >0.50000000</value>
-<value id="{8ade719c-f9d9-4348-91cc-a50077821391}" mode="1" >0.61456019</value>
-<value id="{aaa01bed-d7bb-4690-a71e-1ae6f64afc5a}" mode="1" >4.00000000</value>
-<value id="{21c7e2af-f1a0-41c0-be87-b103ea56c714}" mode="1" >1.79552197</value>
-<value id="{32c4cf2e-a76a-46b1-89bf-a4e4d2924309}" mode="1" >0.56583136</value>
-<value id="{b52b40e8-cd42-4060-8d22-cf0c9e0859f9}" mode="1" >0.70409799</value>
-<value id="{e9d2c154-945a-4024-b053-8e4c510f5ba3}" mode="1" >0.91626638</value>
-<value id="{72d91f82-8446-4985-8a6c-7617db96ad59}" mode="4" >0</value>
-<value id="{beca3791-f6ef-4ca6-8b17-b074357951d5}" mode="4" >0</value>
-</preset>
-<preset name="Fairy Dust" number="1" >
-<value id="{a4d4c497-04d4-4b7d-ad51-0f8832cb64bf}" mode="1" >0.60793877</value>
-<value id="{b418386f-afe6-4d3c-b8d6-c6c96885e9ab}" mode="1" >0.87604076</value>
-<value id="{f2ac6272-b33d-44fc-bb1e-fe52087e3a2b}" mode="1" >0.68532342</value>
-<value id="{8052b29d-d6ae-4249-b9cd-1788a2faf77c}" mode="1" >0.87491655</value>
-<value id="{3efde0c1-5828-4875-a997-174989989aa9}" mode="1" >0.24683115</value>
-<value id="{fa34129e-d983-460c-bd0e-89fb3e798bcb}" mode="1" >3.61637497</value>
-<value id="{17b249bd-27ed-44c7-9bac-a847a81165e3}" mode="1" >0.71242875</value>
-<value id="{cba3fee2-d2a5-41b2-8842-34be212fa82a}" mode="1" >1.51931179</value>
-<value id="{f0305ec9-814b-4107-a9b5-55a5a13f0118}" mode="1" >0.76090300</value>
-<value id="{9f495b69-cdca-43c7-bc92-f26d9995caed}" mode="1" >0.27295068</value>
-<value id="{3f29a847-8cf1-4076-9a69-e88b5360a810}" mode="1" >0.61171556</value>
-<value id="{2ea377f7-6c31-4556-8e26-e47d9b6c000a}" mode="1" >0.17211232</value>
-<value id="{a6a5a56d-13c6-4c09-b6e8-74086df6e352}" mode="1" >0.82246149</value>
-<value id="{dde869a9-5d2a-454c-bff8-b8d407d19e87}" mode="1" >2.73157001</value>
-<value id="{623cf6cd-548c-4212-ac65-a4761cfb5b7f}" mode="1" >1.93253195</value>
-<value id="{833bd2f5-fae9-441b-82ad-9117ffd29877}" mode="1" >0.21393649</value>
-<value id="{d520e71a-b3e2-46d4-b0c6-688085fe5742}" mode="1" >0.91956383</value>
-<value id="{ced1a494-71e9-4bc0-9973-a872920a4473}" mode="1" >1.47231400</value>
-<value id="{16c48afd-7c15-4e07-beee-ce56c7b61c80}" mode="1" >0.41843128</value>
-<value id="{e1aa96cf-3e30-4ad2-93ec-1494a0d60079}" mode="1" >4.45120955</value>
-<value id="{1a074887-a3a3-43ee-8de2-34b8e6a7a5a5}" mode="1" >0.25791028</value>
-<value id="{e1352cbc-9c2a-4650-8957-fb055156903b}" mode="1" >0.32575035</value>
-<value id="{3f7ea94f-e14d-4b53-8bbd-53563d0c23c1}" mode="1" >0.26118517</value>
-<value id="{9c657ab3-a738-40e2-92ae-b1128863fd78}" mode="1" >1.78432512</value>
-<value id="{56e321a8-c542-420c-a494-e759e36ea78a}" mode="1" >0.02822053</value>
-<value id="{77ce606f-b1c5-4911-bf36-79ea1b8f50ef}" mode="1" >3.40845633</value>
-<value id="{fec79e7f-6c43-482f-9fff-cedfc13eaea7}" mode="1" >1.85546792</value>
-<value id="{964db287-6df1-4fa8-baba-1e387d1fac12}" mode="1" >1.85546792</value>
-<value id="{7844fda3-a049-4ec6-885f-cba693b160c9}" mode="1" >1.00000000</value>
-<value id="{37d2f1f5-7da1-460a-a8a0-9d70e19e7da0}" mode="1" >0.80882120</value>
-<value id="{1713b2f6-0778-43b4-b81a-725331e94260}" mode="1" >0.88287294</value>
-<value id="{608ebd5c-d7b3-4c9a-8075-2204844bc42c}" mode="1" >1.85216427</value>
-<value id="{5f20cb6a-ad07-4210-aaa1-a0ee628ee2d4}" mode="1" >0.12375984</value>
-<value id="{dc16cdf0-7371-4027-bac0-7d26d9d21433}" mode="1" >0.01545162</value>
-<value id="{c211de7a-2f05-44f9-b09f-51523639dd8e}" mode="1" >1.01258862</value>
-<value id="{da8941a6-25be-42bd-9fc4-eb3bf5e4e6e1}" mode="1" >1.81891644</value>
-<value id="{8ade719c-f9d9-4348-91cc-a50077821391}" mode="1" >0.61456019</value>
-<value id="{aaa01bed-d7bb-4690-a71e-1ae6f64afc5a}" mode="1" >5.21777058</value>
-<value id="{21c7e2af-f1a0-41c0-be87-b103ea56c714}" mode="1" >1.79552197</value>
-<value id="{32c4cf2e-a76a-46b1-89bf-a4e4d2924309}" mode="1" >0.56583136</value>
-<value id="{b52b40e8-cd42-4060-8d22-cf0c9e0859f9}" mode="1" >0.70409799</value>
-<value id="{e9d2c154-945a-4024-b053-8e4c510f5ba3}" mode="1" >0.91626638</value>
-<value id="{72d91f82-8446-4985-8a6c-7617db96ad59}" mode="4" >0</value>
-<value id="{beca3791-f6ef-4ca6-8b17-b074357951d5}" mode="4" >0</value>
-</preset>
-<preset name="Shock" number="2" >
-<value id="{a4d4c497-04d4-4b7d-ad51-0f8832cb64bf}" mode="1" >0.09924940</value>
-<value id="{b418386f-afe6-4d3c-b8d6-c6c96885e9ab}" mode="1" >0.99000067</value>
-<value id="{f2ac6272-b33d-44fc-bb1e-fe52087e3a2b}" mode="1" >0.32000083</value>
-<value id="{8052b29d-d6ae-4249-b9cd-1788a2faf77c}" mode="1" >0.06253843</value>
-<value id="{3efde0c1-5828-4875-a997-174989989aa9}" mode="1" >0.97072107</value>
-<value id="{fa34129e-d983-460c-bd0e-89fb3e798bcb}" mode="1" >1.00000000</value>
-<value id="{17b249bd-27ed-44c7-9bac-a847a81165e3}" mode="1" >0.54646546</value>
-<value id="{cba3fee2-d2a5-41b2-8842-34be212fa82a}" mode="1" >1.13128877</value>
-<value id="{f0305ec9-814b-4107-a9b5-55a5a13f0118}" mode="1" >0.13656585</value>
-<value id="{9f495b69-cdca-43c7-bc92-f26d9995caed}" mode="1" >0.34610736</value>
-<value id="{3f29a847-8cf1-4076-9a69-e88b5360a810}" mode="1" >1.85934544</value>
-<value id="{2ea377f7-6c31-4556-8e26-e47d9b6c000a}" mode="1" >2.00000000</value>
-<value id="{a6a5a56d-13c6-4c09-b6e8-74086df6e352}" mode="1" >0.99779081</value>
-<value id="{dde869a9-5d2a-454c-bff8-b8d407d19e87}" mode="1" >0.33333334</value>
-<value id="{623cf6cd-548c-4212-ac65-a4761cfb5b7f}" mode="1" >0.00000100</value>
-<value id="{833bd2f5-fae9-441b-82ad-9117ffd29877}" mode="1" >0.44000077</value>
-<value id="{d520e71a-b3e2-46d4-b0c6-688085fe5742}" mode="1" >0.36350498</value>
-<value id="{ced1a494-71e9-4bc0-9973-a872920a4473}" mode="1" >1.70886242</value>
-<value id="{16c48afd-7c15-4e07-beee-ce56c7b61c80}" mode="1" >0.82670689</value>
-<value id="{e1aa96cf-3e30-4ad2-93ec-1494a0d60079}" mode="1" >1.00000000</value>
-<value id="{1a074887-a3a3-43ee-8de2-34b8e6a7a5a5}" mode="1" >0.00000100</value>
-<value id="{e1352cbc-9c2a-4650-8957-fb055156903b}" mode="1" >1.00000048</value>
-<value id="{3f7ea94f-e14d-4b53-8bbd-53563d0c23c1}" mode="1" >0.34000000</value>
-<value id="{9c657ab3-a738-40e2-92ae-b1128863fd78}" mode="1" >0.60559916</value>
-<value id="{56e321a8-c542-420c-a494-e759e36ea78a}" mode="1" >0.41786775</value>
-<value id="{77ce606f-b1c5-4911-bf36-79ea1b8f50ef}" mode="1" >0.25000000</value>
-<value id="{fec79e7f-6c43-482f-9fff-cedfc13eaea7}" mode="1" >0.69873726</value>
-<value id="{964db287-6df1-4fa8-baba-1e387d1fac12}" mode="1" >0.00000100</value>
-<value id="{7844fda3-a049-4ec6-885f-cba693b160c9}" mode="1" >0.69873726</value>
-<value id="{37d2f1f5-7da1-460a-a8a0-9d70e19e7da0}" mode="1" >1.42871964</value>
-<value id="{1713b2f6-0778-43b4-b81a-725331e94260}" mode="1" >0.52680331</value>
-<value id="{608ebd5c-d7b3-4c9a-8075-2204844bc42c}" mode="1" >1.08000064</value>
-<value id="{5f20cb6a-ad07-4210-aaa1-a0ee628ee2d4}" mode="1" >0.00000100</value>
-<value id="{dc16cdf0-7371-4027-bac0-7d26d9d21433}" mode="1" >0.12058064</value>
-<value id="{c211de7a-2f05-44f9-b09f-51523639dd8e}" mode="1" >1.48647273</value>
-<value id="{da8941a6-25be-42bd-9fc4-eb3bf5e4e6e1}" mode="1" >2.00000000</value>
-<value id="{8ade719c-f9d9-4348-91cc-a50077821391}" mode="1" >0.10895189</value>
-<value id="{aaa01bed-d7bb-4690-a71e-1ae6f64afc5a}" mode="1" >1.00000000</value>
-<value id="{21c7e2af-f1a0-41c0-be87-b103ea56c714}" mode="1" >0.00000100</value>
-<value id="{32c4cf2e-a76a-46b1-89bf-a4e4d2924309}" mode="1" >0.91890037</value>
-<value id="{b52b40e8-cd42-4060-8d22-cf0c9e0859f9}" mode="1" >0.31571576</value>
-<value id="{e9d2c154-945a-4024-b053-8e4c510f5ba3}" mode="1" >0.06035645</value>
-<value id="{72d91f82-8446-4985-8a6c-7617db96ad59}" mode="4" >0</value>
-<value id="{beca3791-f6ef-4ca6-8b17-b074357951d5}" mode="4" >0</value>
-<value id="{2edd913b-e4ed-497b-95a1-b45578fdcea6}" mode="1" >2.00000000</value>
-<value id="{df2a583c-d11a-4e3f-8f22-c20c945ad4b9}" mode="1" >0.00000000</value>
-<value id="{df2a583c-d11a-4e3f-8f22-c20c945ad4b9}" mode="4" >Shock</value>
-</preset>
-<preset name="Wobbly Bass" number="3" >
-<value id="{a4d4c497-04d4-4b7d-ad51-0f8832cb64bf}" mode="1" >0.35183150</value>
-<value id="{b418386f-afe6-4d3c-b8d6-c6c96885e9ab}" mode="1" >1.16110826</value>
-<value id="{f2ac6272-b33d-44fc-bb1e-fe52087e3a2b}" mode="1" >0.05349947</value>
-<value id="{8052b29d-d6ae-4249-b9cd-1788a2faf77c}" mode="1" >0.49104589</value>
-<value id="{3efde0c1-5828-4875-a997-174989989aa9}" mode="1" >1.94538844</value>
-<value id="{fa34129e-d983-460c-bd0e-89fb3e798bcb}" mode="1" >1.00000000</value>
-<value id="{17b249bd-27ed-44c7-9bac-a847a81165e3}" mode="1" >0.58744889</value>
-<value id="{cba3fee2-d2a5-41b2-8842-34be212fa82a}" mode="1" >0.88966805</value>
-<value id="{f0305ec9-814b-4107-a9b5-55a5a13f0118}" mode="1" >0.22458993</value>
-<value id="{9f495b69-cdca-43c7-bc92-f26d9995caed}" mode="1" >0.92106187</value>
-<value id="{3f29a847-8cf1-4076-9a69-e88b5360a810}" mode="1" >1.16434824</value>
-<value id="{2ea377f7-6c31-4556-8e26-e47d9b6c000a}" mode="1" >2.00000000</value>
-<value id="{a6a5a56d-13c6-4c09-b6e8-74086df6e352}" mode="1" >0.84130728</value>
-<value id="{dde869a9-5d2a-454c-bff8-b8d407d19e87}" mode="1" >2.00000000</value>
-<value id="{623cf6cd-548c-4212-ac65-a4761cfb5b7f}" mode="1" >0.26269972</value>
-<value id="{833bd2f5-fae9-441b-82ad-9117ffd29877}" mode="1" >0.40164155</value>
-<value id="{d520e71a-b3e2-46d4-b0c6-688085fe5742}" mode="1" >0.02464281</value>
-<value id="{ced1a494-71e9-4bc0-9973-a872920a4473}" mode="1" >0.82045412</value>
-<value id="{16c48afd-7c15-4e07-beee-ce56c7b61c80}" mode="1" >0.65424937</value>
-<value id="{e1aa96cf-3e30-4ad2-93ec-1494a0d60079}" mode="1" >4.00000000</value>
-<value id="{1a074887-a3a3-43ee-8de2-34b8e6a7a5a5}" mode="1" >0.03000099</value>
-<value id="{e1352cbc-9c2a-4650-8957-fb055156903b}" mode="1" >0.26000088</value>
-<value id="{3f7ea94f-e14d-4b53-8bbd-53563d0c23c1}" mode="1" >0.52906078</value>
-<value id="{9c657ab3-a738-40e2-92ae-b1128863fd78}" mode="1" >1.66721201</value>
-<value id="{56e321a8-c542-420c-a494-e759e36ea78a}" mode="1" >0.47983685</value>
-<value id="{77ce606f-b1c5-4911-bf36-79ea1b8f50ef}" mode="1" >0.50000000</value>
-<value id="{fec79e7f-6c43-482f-9fff-cedfc13eaea7}" mode="1" >0.76768428</value>
-<value id="{964db287-6df1-4fa8-baba-1e387d1fac12}" mode="1" >0.76768428</value>
-<value id="{7844fda3-a049-4ec6-885f-cba693b160c9}" mode="1" >0.76768428</value>
-<value id="{37d2f1f5-7da1-460a-a8a0-9d70e19e7da0}" mode="1" >1.12945914</value>
-<value id="{1713b2f6-0778-43b4-b81a-725331e94260}" mode="1" >0.24956867</value>
-<value id="{608ebd5c-d7b3-4c9a-8075-2204844bc42c}" mode="1" >1.23290610</value>
-<value id="{5f20cb6a-ad07-4210-aaa1-a0ee628ee2d4}" mode="1" >0.48934624</value>
-<value id="{dc16cdf0-7371-4027-bac0-7d26d9d21433}" mode="1" >0.55785310</value>
-<value id="{c211de7a-2f05-44f9-b09f-51523639dd8e}" mode="1" >0.01865082</value>
-<value id="{da8941a6-25be-42bd-9fc4-eb3bf5e4e6e1}" mode="1" >5.00000000</value>
-<value id="{8ade719c-f9d9-4348-91cc-a50077821391}" mode="1" >0.34645078</value>
-<value id="{aaa01bed-d7bb-4690-a71e-1ae6f64afc5a}" mode="1" >5.00000000</value>
-<value id="{21c7e2af-f1a0-41c0-be87-b103ea56c714}" mode="1" >0.24000092</value>
-<value id="{32c4cf2e-a76a-46b1-89bf-a4e4d2924309}" mode="1" >0.26000088</value>
-<value id="{b52b40e8-cd42-4060-8d22-cf0c9e0859f9}" mode="1" >0.34000000</value>
-<value id="{e9d2c154-945a-4024-b053-8e4c510f5ba3}" mode="1" >0.57990128</value>
-<value id="{72d91f82-8446-4985-8a6c-7617db96ad59}" mode="4" >0</value>
-<value id="{beca3791-f6ef-4ca6-8b17-b074357951d5}" mode="4" >0</value>
-</preset>
-<preset name="Outer Space" number="4" >
-<value id="{a4d4c497-04d4-4b7d-ad51-0f8832cb64bf}" mode="1" >0.52880144</value>
-<value id="{b418386f-afe6-4d3c-b8d6-c6c96885e9ab}" mode="1" >1.92315161</value>
-<value id="{f2ac6272-b33d-44fc-bb1e-fe52087e3a2b}" mode="1" >0.40721342</value>
-<value id="{8052b29d-d6ae-4249-b9cd-1788a2faf77c}" mode="1" >0.51781482</value>
-<value id="{3efde0c1-5828-4875-a997-174989989aa9}" mode="1" >1.48892212</value>
-<value id="{fa34129e-d983-460c-bd0e-89fb3e798bcb}" mode="1" >1.00000000</value>
-<value id="{17b249bd-27ed-44c7-9bac-a847a81165e3}" mode="1" >0.09598406</value>
-<value id="{cba3fee2-d2a5-41b2-8842-34be212fa82a}" mode="1" >1.14999413</value>
-<value id="{f0305ec9-814b-4107-a9b5-55a5a13f0118}" mode="1" >0.78067654</value>
-<value id="{9f495b69-cdca-43c7-bc92-f26d9995caed}" mode="1" >0.80435246</value>
-<value id="{3f29a847-8cf1-4076-9a69-e88b5360a810}" mode="1" >1.88658834</value>
-<value id="{2ea377f7-6c31-4556-8e26-e47d9b6c000a}" mode="1" >4.00000000</value>
-<value id="{a6a5a56d-13c6-4c09-b6e8-74086df6e352}" mode="1" >0.52892101</value>
-<value id="{dde869a9-5d2a-454c-bff8-b8d407d19e87}" mode="1" >5.00000000</value>
-<value id="{623cf6cd-548c-4212-ac65-a4761cfb5b7f}" mode="1" >0.57236409</value>
-<value id="{833bd2f5-fae9-441b-82ad-9117ffd29877}" mode="1" >0.02315990</value>
-<value id="{d520e71a-b3e2-46d4-b0c6-688085fe5742}" mode="1" >0.83943599</value>
-<value id="{ced1a494-71e9-4bc0-9973-a872920a4473}" mode="1" >0.25039724</value>
-<value id="{16c48afd-7c15-4e07-beee-ce56c7b61c80}" mode="1" >0.33299038</value>
-<value id="{e1aa96cf-3e30-4ad2-93ec-1494a0d60079}" mode="1" >0.50000000</value>
-<value id="{1a074887-a3a3-43ee-8de2-34b8e6a7a5a5}" mode="1" >0.43360656</value>
-<value id="{e1352cbc-9c2a-4650-8957-fb055156903b}" mode="1" >0.44469181</value>
-<value id="{3f7ea94f-e14d-4b53-8bbd-53563d0c23c1}" mode="1" >0.40249717</value>
-<value id="{9c657ab3-a738-40e2-92ae-b1128863fd78}" mode="1" >1.95878458</value>
-<value id="{56e321a8-c542-420c-a494-e759e36ea78a}" mode="1" >0.23041101</value>
-<value id="{77ce606f-b1c5-4911-bf36-79ea1b8f50ef}" mode="1" >5.00000000</value>
-<value id="{fec79e7f-6c43-482f-9fff-cedfc13eaea7}" mode="1" >1.32098460</value>
-<value id="{964db287-6df1-4fa8-baba-1e387d1fac12}" mode="1" >1.32098460</value>
-<value id="{7844fda3-a049-4ec6-885f-cba693b160c9}" mode="1" >1.00000000</value>
-<value id="{37d2f1f5-7da1-460a-a8a0-9d70e19e7da0}" mode="1" >1.64780557</value>
-<value id="{1713b2f6-0778-43b4-b81a-725331e94260}" mode="1" >0.41363844</value>
-<value id="{608ebd5c-d7b3-4c9a-8075-2204844bc42c}" mode="1" >0.26922104</value>
-<value id="{5f20cb6a-ad07-4210-aaa1-a0ee628ee2d4}" mode="1" >0.72871375</value>
-<value id="{dc16cdf0-7371-4027-bac0-7d26d9d21433}" mode="1" >0.76807946</value>
-<value id="{c211de7a-2f05-44f9-b09f-51523639dd8e}" mode="1" >1.28383279</value>
-<value id="{da8941a6-25be-42bd-9fc4-eb3bf5e4e6e1}" mode="1" >0.20000000</value>
-<value id="{8ade719c-f9d9-4348-91cc-a50077821391}" mode="1" >0.36287013</value>
-<value id="{aaa01bed-d7bb-4690-a71e-1ae6f64afc5a}" mode="1" >5.00000000</value>
-<value id="{21c7e2af-f1a0-41c0-be87-b103ea56c714}" mode="1" >0.97215766</value>
-<value id="{32c4cf2e-a76a-46b1-89bf-a4e4d2924309}" mode="1" >0.49834982</value>
-<value id="{b52b40e8-cd42-4060-8d22-cf0c9e0859f9}" mode="1" >0.89931619</value>
-<value id="{e9d2c154-945a-4024-b053-8e4c510f5ba3}" mode="1" >1.38783407</value>
-<value id="{72d91f82-8446-4985-8a6c-7617db96ad59}" mode="4" >0</value>
-<value id="{beca3791-f6ef-4ca6-8b17-b074357951d5}" mode="4" >0</value>
-</preset>
-<preset name="Gong" number="5" >
-<value id="{a4d4c497-04d4-4b7d-ad51-0f8832cb64bf}" mode="1" >0.09924940</value>
-<value id="{b418386f-afe6-4d3c-b8d6-c6c96885e9ab}" mode="1" >0.01480771</value>
-<value id="{f2ac6272-b33d-44fc-bb1e-fe52087e3a2b}" mode="1" >0.05123077</value>
-<value id="{8052b29d-d6ae-4249-b9cd-1788a2faf77c}" mode="1" >1.00000000</value>
-<value id="{3efde0c1-5828-4875-a997-174989989aa9}" mode="1" >0.97072107</value>
-<value id="{fa34129e-d983-460c-bd0e-89fb3e798bcb}" mode="1" >1.00000000</value>
-<value id="{17b249bd-27ed-44c7-9bac-a847a81165e3}" mode="1" >0.54646546</value>
-<value id="{cba3fee2-d2a5-41b2-8842-34be212fa82a}" mode="1" >1.13128877</value>
-<value id="{f0305ec9-814b-4107-a9b5-55a5a13f0118}" mode="1" >0.13656585</value>
-<value id="{9f495b69-cdca-43c7-bc92-f26d9995caed}" mode="1" >0.63000000</value>
-<value id="{3f29a847-8cf1-4076-9a69-e88b5360a810}" mode="1" >1.85934544</value>
-<value id="{2ea377f7-6c31-4556-8e26-e47d9b6c000a}" mode="1" >2.00000000</value>
-<value id="{a6a5a56d-13c6-4c09-b6e8-74086df6e352}" mode="1" >0.99779081</value>
-<value id="{dde869a9-5d2a-454c-bff8-b8d407d19e87}" mode="1" >0.33333334</value>
-<value id="{623cf6cd-548c-4212-ac65-a4761cfb5b7f}" mode="1" >1.21385181</value>
-<value id="{833bd2f5-fae9-441b-82ad-9117ffd29877}" mode="1" >0.31246525</value>
-<value id="{d520e71a-b3e2-46d4-b0c6-688085fe5742}" mode="1" >1.00000000</value>
-<value id="{ced1a494-71e9-4bc0-9973-a872920a4473}" mode="1" >1.70886242</value>
-<value id="{16c48afd-7c15-4e07-beee-ce56c7b61c80}" mode="1" >0.82670689</value>
-<value id="{e1aa96cf-3e30-4ad2-93ec-1494a0d60079}" mode="1" >0.20000000</value>
-<value id="{1a074887-a3a3-43ee-8de2-34b8e6a7a5a5}" mode="1" >0.72617590</value>
-<value id="{e1352cbc-9c2a-4650-8957-fb055156903b}" mode="1" >0.58649164</value>
-<value id="{3f7ea94f-e14d-4b53-8bbd-53563d0c23c1}" mode="1" >0.93524820</value>
-<value id="{9c657ab3-a738-40e2-92ae-b1128863fd78}" mode="1" >0.60559916</value>
-<value id="{56e321a8-c542-420c-a494-e759e36ea78a}" mode="1" >0.41786775</value>
-<value id="{77ce606f-b1c5-4911-bf36-79ea1b8f50ef}" mode="1" >0.25000000</value>
-<value id="{fec79e7f-6c43-482f-9fff-cedfc13eaea7}" mode="1" >0.69873726</value>
-<value id="{964db287-6df1-4fa8-baba-1e387d1fac12}" mode="1" >0.69873726</value>
-<value id="{7844fda3-a049-4ec6-885f-cba693b160c9}" mode="1" >0.69873726</value>
-<value id="{37d2f1f5-7da1-460a-a8a0-9d70e19e7da0}" mode="1" >1.42871964</value>
-<value id="{1713b2f6-0778-43b4-b81a-725331e94260}" mode="1" >0.52680331</value>
-<value id="{608ebd5c-d7b3-4c9a-8075-2204844bc42c}" mode="1" >1.72767055</value>
-<value id="{5f20cb6a-ad07-4210-aaa1-a0ee628ee2d4}" mode="1" >0.54525268</value>
-<value id="{dc16cdf0-7371-4027-bac0-7d26d9d21433}" mode="1" >0.92000002</value>
-<value id="{c211de7a-2f05-44f9-b09f-51523639dd8e}" mode="1" >1.48647273</value>
-<value id="{da8941a6-25be-42bd-9fc4-eb3bf5e4e6e1}" mode="1" >3.00000000</value>
-<value id="{8ade719c-f9d9-4348-91cc-a50077821391}" mode="1" >0.10895189</value>
-<value id="{aaa01bed-d7bb-4690-a71e-1ae6f64afc5a}" mode="1" >0.25000000</value>
-<value id="{21c7e2af-f1a0-41c0-be87-b103ea56c714}" mode="1" >1.67256188</value>
-<value id="{32c4cf2e-a76a-46b1-89bf-a4e4d2924309}" mode="1" >0.91890037</value>
-<value id="{b52b40e8-cd42-4060-8d22-cf0c9e0859f9}" mode="1" >1.00000000</value>
-<value id="{e9d2c154-945a-4024-b053-8e4c510f5ba3}" mode="1" >0.06035645</value>
-<value id="{72d91f82-8446-4985-8a6c-7617db96ad59}" mode="4" >0</value>
-<value id="{beca3791-f6ef-4ca6-8b17-b074357951d5}" mode="4" >0</value>
-</preset>
-<preset name="Alien" number="6" >
-<value id="{a4d4c497-04d4-4b7d-ad51-0f8832cb64bf}" mode="1" >0.77549207</value>
-<value id="{b418386f-afe6-4d3c-b8d6-c6c96885e9ab}" mode="1" >1.33936346</value>
-<value id="{f2ac6272-b33d-44fc-bb1e-fe52087e3a2b}" mode="1" >0.36569735</value>
-<value id="{8052b29d-d6ae-4249-b9cd-1788a2faf77c}" mode="1" >0.79167455</value>
-<value id="{3efde0c1-5828-4875-a997-174989989aa9}" mode="1" >0.62001997</value>
-<value id="{fa34129e-d983-460c-bd0e-89fb3e798bcb}" mode="1" >-1.40429783</value>
-<value id="{17b249bd-27ed-44c7-9bac-a847a81165e3}" mode="1" >0.61443049</value>
-<value id="{cba3fee2-d2a5-41b2-8842-34be212fa82a}" mode="1" >0.60574394</value>
-<value id="{f0305ec9-814b-4107-a9b5-55a5a13f0118}" mode="1" >0.82539755</value>
-<value id="{9f495b69-cdca-43c7-bc92-f26d9995caed}" mode="1" >0.36829379</value>
-<value id="{3f29a847-8cf1-4076-9a69-e88b5360a810}" mode="1" >0.15290628</value>
-<value id="{2ea377f7-6c31-4556-8e26-e47d9b6c000a}" mode="1" >0.76484829</value>
-<value id="{a6a5a56d-13c6-4c09-b6e8-74086df6e352}" mode="1" >0.12198304</value>
-<value id="{dde869a9-5d2a-454c-bff8-b8d407d19e87}" mode="1" >5.74750662</value>
-<value id="{623cf6cd-548c-4212-ac65-a4761cfb5b7f}" mode="1" >0.43798280</value>
-<value id="{833bd2f5-fae9-441b-82ad-9117ffd29877}" mode="1" >0.08567286</value>
-<value id="{d520e71a-b3e2-46d4-b0c6-688085fe5742}" mode="1" >0.56523472</value>
-<value id="{ced1a494-71e9-4bc0-9973-a872920a4473}" mode="1" >1.46649480</value>
-<value id="{16c48afd-7c15-4e07-beee-ce56c7b61c80}" mode="1" >0.60636872</value>
-<value id="{e1aa96cf-3e30-4ad2-93ec-1494a0d60079}" mode="1" >4.75232697</value>
-<value id="{1a074887-a3a3-43ee-8de2-34b8e6a7a5a5}" mode="1" >1.34307921</value>
-<value id="{e1352cbc-9c2a-4650-8957-fb055156903b}" mode="1" >0.95924777</value>
-<value id="{3f7ea94f-e14d-4b53-8bbd-53563d0c23c1}" mode="1" >0.39933148</value>
-<value id="{9c657ab3-a738-40e2-92ae-b1128863fd78}" mode="1" >1.27394211</value>
-<value id="{56e321a8-c542-420c-a494-e759e36ea78a}" mode="1" >0.74402839</value>
-<value id="{77ce606f-b1c5-4911-bf36-79ea1b8f50ef}" mode="1" >4.48528576</value>
-<value id="{fec79e7f-6c43-482f-9fff-cedfc13eaea7}" mode="1" >0.37414643</value>
-<value id="{964db287-6df1-4fa8-baba-1e387d1fac12}" mode="1" >0.37414643</value>
-<value id="{7844fda3-a049-4ec6-885f-cba693b160c9}" mode="1" >0.37414643</value>
-<value id="{37d2f1f5-7da1-460a-a8a0-9d70e19e7da0}" mode="1" >1.69390988</value>
-<value id="{1713b2f6-0778-43b4-b81a-725331e94260}" mode="1" >0.57565117</value>
-<value id="{608ebd5c-d7b3-4c9a-8075-2204844bc42c}" mode="1" >1.83773160</value>
-<value id="{5f20cb6a-ad07-4210-aaa1-a0ee628ee2d4}" mode="1" >0.97878075</value>
-<value id="{dc16cdf0-7371-4027-bac0-7d26d9d21433}" mode="1" >0.93248534</value>
-<value id="{c211de7a-2f05-44f9-b09f-51523639dd8e}" mode="1" >0.09797703</value>
-<value id="{da8941a6-25be-42bd-9fc4-eb3bf5e4e6e1}" mode="1" >4.98669291</value>
-<value id="{8ade719c-f9d9-4348-91cc-a50077821391}" mode="1" >0.42223135</value>
-<value id="{aaa01bed-d7bb-4690-a71e-1ae6f64afc5a}" mode="1" >5.98625231</value>
-<value id="{21c7e2af-f1a0-41c0-be87-b103ea56c714}" mode="1" >0.66106582</value>
-<value id="{32c4cf2e-a76a-46b1-89bf-a4e4d2924309}" mode="1" >0.37456763</value>
-<value id="{b52b40e8-cd42-4060-8d22-cf0c9e0859f9}" mode="1" >0.32205558</value>
-<value id="{e9d2c154-945a-4024-b053-8e4c510f5ba3}" mode="1" >1.07847786</value>
-<value id="{72d91f82-8446-4985-8a6c-7617db96ad59}" mode="4" >0</value>
-<value id="{beca3791-f6ef-4ca6-8b17-b074357951d5}" mode="4" >0</value>
-</preset>
-<preset name="Chimes" number="7" >
-<value id="{a4d4c497-04d4-4b7d-ad51-0f8832cb64bf}" mode="1" >0.00821707</value>
-<value id="{b418386f-afe6-4d3c-b8d6-c6c96885e9ab}" mode="1" >0.36902127</value>
-<value id="{f2ac6272-b33d-44fc-bb1e-fe52087e3a2b}" mode="1" >0.66646159</value>
-<value id="{8052b29d-d6ae-4249-b9cd-1788a2faf77c}" mode="1" >0.42549533</value>
-<value id="{3efde0c1-5828-4875-a997-174989989aa9}" mode="1" >1.20048034</value>
-<value id="{fa34129e-d983-460c-bd0e-89fb3e798bcb}" mode="1" >1.00000000</value>
-<value id="{17b249bd-27ed-44c7-9bac-a847a81165e3}" mode="1" >0.03101001</value>
-<value id="{cba3fee2-d2a5-41b2-8842-34be212fa82a}" mode="1" >1.11113417</value>
-<value id="{f0305ec9-814b-4107-a9b5-55a5a13f0118}" mode="1" >0.62771147</value>
-<value id="{9f495b69-cdca-43c7-bc92-f26d9995caed}" mode="1" >0.63929707</value>
-<value id="{3f29a847-8cf1-4076-9a69-e88b5360a810}" mode="1" >0.29363316</value>
-<value id="{2ea377f7-6c31-4556-8e26-e47d9b6c000a}" mode="1" >1.00000000</value>
-<value id="{a6a5a56d-13c6-4c09-b6e8-74086df6e352}" mode="1" >0.28083172</value>
-<value id="{dde869a9-5d2a-454c-bff8-b8d407d19e87}" mode="1" >1.00000000</value>
-<value id="{623cf6cd-548c-4212-ac65-a4761cfb5b7f}" mode="1" >1.83537996</value>
-<value id="{833bd2f5-fae9-441b-82ad-9117ffd29877}" mode="1" >0.07710903</value>
-<value id="{d520e71a-b3e2-46d4-b0c6-688085fe5742}" mode="1" >0.28639463</value>
-<value id="{ced1a494-71e9-4bc0-9973-a872920a4473}" mode="1" >1.08602405</value>
-<value id="{16c48afd-7c15-4e07-beee-ce56c7b61c80}" mode="1" >0.16538025</value>
-<value id="{e1aa96cf-3e30-4ad2-93ec-1494a0d60079}" mode="1" >1.00000000</value>
-<value id="{1a074887-a3a3-43ee-8de2-34b8e6a7a5a5}" mode="1" >0.00000100</value>
-<value id="{e1352cbc-9c2a-4650-8957-fb055156903b}" mode="1" >0.16000092</value>
-<value id="{3f7ea94f-e14d-4b53-8bbd-53563d0c23c1}" mode="1" >0.29407570</value>
-<value id="{9c657ab3-a738-40e2-92ae-b1128863fd78}" mode="1" >1.98959291</value>
-<value id="{56e321a8-c542-420c-a494-e759e36ea78a}" mode="1" >0.10801291</value>
-<value id="{77ce606f-b1c5-4911-bf36-79ea1b8f50ef}" mode="1" >0.33333334</value>
-<value id="{fec79e7f-6c43-482f-9fff-cedfc13eaea7}" mode="1" >1.26772940</value>
-<value id="{964db287-6df1-4fa8-baba-1e387d1fac12}" mode="1" >1.26772940</value>
-<value id="{7844fda3-a049-4ec6-885f-cba693b160c9}" mode="1" >1.00000000</value>
-<value id="{37d2f1f5-7da1-460a-a8a0-9d70e19e7da0}" mode="1" >1.07506883</value>
-<value id="{1713b2f6-0778-43b4-b81a-725331e94260}" mode="1" >0.67707473</value>
-<value id="{608ebd5c-d7b3-4c9a-8075-2204844bc42c}" mode="1" >1.73355865</value>
-<value id="{5f20cb6a-ad07-4210-aaa1-a0ee628ee2d4}" mode="1" >0.76444215</value>
-<value id="{dc16cdf0-7371-4027-bac0-7d26d9d21433}" mode="1" >0.35109249</value>
-<value id="{c211de7a-2f05-44f9-b09f-51523639dd8e}" mode="1" >1.18131566</value>
-<value id="{da8941a6-25be-42bd-9fc4-eb3bf5e4e6e1}" mode="1" >3.00000000</value>
-<value id="{8ade719c-f9d9-4348-91cc-a50077821391}" mode="1" >0.22447671</value>
-<value id="{aaa01bed-d7bb-4690-a71e-1ae6f64afc5a}" mode="1" >5.00000000</value>
-<value id="{21c7e2af-f1a0-41c0-be87-b103ea56c714}" mode="1" >0.09000097</value>
-<value id="{32c4cf2e-a76a-46b1-89bf-a4e4d2924309}" mode="1" >0.08000096</value>
-<value id="{b52b40e8-cd42-4060-8d22-cf0c9e0859f9}" mode="1" >0.76972228</value>
-<value id="{e9d2c154-945a-4024-b053-8e4c510f5ba3}" mode="1" >1.56563008</value>
-<value id="{72d91f82-8446-4985-8a6c-7617db96ad59}" mode="4" >0</value>
-<value id="{beca3791-f6ef-4ca6-8b17-b074357951d5}" mode="4" >0</value>
-</preset>
-<preset name="Fluty" number="8" >
-<value id="{a4d4c497-04d4-4b7d-ad51-0f8832cb64bf}" mode="1" >0.98524410</value>
-<value id="{b418386f-afe6-4d3c-b8d6-c6c96885e9ab}" mode="1" >1.64796364</value>
-<value id="{f2ac6272-b33d-44fc-bb1e-fe52087e3a2b}" mode="1" >0.52427548</value>
-<value id="{8052b29d-d6ae-4249-b9cd-1788a2faf77c}" mode="1" >0.38627648</value>
-<value id="{3efde0c1-5828-4875-a997-174989989aa9}" mode="1" >0.00000100</value>
-<value id="{fa34129e-d983-460c-bd0e-89fb3e798bcb}" mode="1" >1.00000000</value>
-<value id="{17b249bd-27ed-44c7-9bac-a847a81165e3}" mode="1" >0.70595562</value>
-<value id="{cba3fee2-d2a5-41b2-8842-34be212fa82a}" mode="1" >1.38320804</value>
-<value id="{f0305ec9-814b-4107-a9b5-55a5a13f0118}" mode="1" >0.58946502</value>
-<value id="{9f495b69-cdca-43c7-bc92-f26d9995caed}" mode="1" >0.71020597</value>
-<value id="{3f29a847-8cf1-4076-9a69-e88b5360a810}" mode="1" >0.00000100</value>
-<value id="{2ea377f7-6c31-4556-8e26-e47d9b6c000a}" mode="1" >2.00000000</value>
-<value id="{a6a5a56d-13c6-4c09-b6e8-74086df6e352}" mode="1" >0.07000000</value>
-<value id="{dde869a9-5d2a-454c-bff8-b8d407d19e87}" mode="1" >3.00000000</value>
-<value id="{623cf6cd-548c-4212-ac65-a4761cfb5b7f}" mode="1" >0.70741987</value>
-<value id="{833bd2f5-fae9-441b-82ad-9117ffd29877}" mode="1" >0.48335540</value>
-<value id="{d520e71a-b3e2-46d4-b0c6-688085fe5742}" mode="1" >0.49383950</value>
-<value id="{ced1a494-71e9-4bc0-9973-a872920a4473}" mode="1" >0.00000100</value>
-<value id="{16c48afd-7c15-4e07-beee-ce56c7b61c80}" mode="1" >0.38029835</value>
-<value id="{e1aa96cf-3e30-4ad2-93ec-1494a0d60079}" mode="1" >3.00000000</value>
-<value id="{1a074887-a3a3-43ee-8de2-34b8e6a7a5a5}" mode="1" >0.33000088</value>
-<value id="{e1352cbc-9c2a-4650-8957-fb055156903b}" mode="1" >0.34000084</value>
-<value id="{3f7ea94f-e14d-4b53-8bbd-53563d0c23c1}" mode="1" >0.10513637</value>
-<value id="{9c657ab3-a738-40e2-92ae-b1128863fd78}" mode="1" >0.04000099</value>
-<value id="{56e321a8-c542-420c-a494-e759e36ea78a}" mode="1" >0.00000000</value>
-<value id="{77ce606f-b1c5-4911-bf36-79ea1b8f50ef}" mode="1" >1.00000000</value>
-<value id="{fec79e7f-6c43-482f-9fff-cedfc13eaea7}" mode="1" >0.09399924</value>
-<value id="{964db287-6df1-4fa8-baba-1e387d1fac12}" mode="1" >0.09399924</value>
-<value id="{7844fda3-a049-4ec6-885f-cba693b160c9}" mode="1" >0.09399924</value>
-<value id="{37d2f1f5-7da1-460a-a8a0-9d70e19e7da0}" mode="1" >0.00000100</value>
-<value id="{1713b2f6-0778-43b4-b81a-725331e94260}" mode="1" >0.16000000</value>
-<value id="{608ebd5c-d7b3-4c9a-8075-2204844bc42c}" mode="1" >0.35776818</value>
-<value id="{5f20cb6a-ad07-4210-aaa1-a0ee628ee2d4}" mode="1" >0.46415842</value>
-<value id="{dc16cdf0-7371-4027-bac0-7d26d9d21433}" mode="1" >0.58610016</value>
-<value id="{c211de7a-2f05-44f9-b09f-51523639dd8e}" mode="1" >0.00000100</value>
-<value id="{da8941a6-25be-42bd-9fc4-eb3bf5e4e6e1}" mode="1" >4.00000000</value>
-<value id="{8ade719c-f9d9-4348-91cc-a50077821391}" mode="1" >0.52810043</value>
-<value id="{aaa01bed-d7bb-4690-a71e-1ae6f64afc5a}" mode="1" >1.00000000</value>
-<value id="{21c7e2af-f1a0-41c0-be87-b103ea56c714}" mode="1" >0.10946730</value>
-<value id="{32c4cf2e-a76a-46b1-89bf-a4e4d2924309}" mode="1" >0.14234683</value>
-<value id="{b52b40e8-cd42-4060-8d22-cf0c9e0859f9}" mode="1" >0.04914349</value>
-<value id="{e9d2c154-945a-4024-b053-8e4c510f5ba3}" mode="1" >0.00000100</value>
-<value id="{72d91f82-8446-4985-8a6c-7617db96ad59}" mode="4" >0</value>
-<value id="{beca3791-f6ef-4ca6-8b17-b074357951d5}" mode="4" >0</value>
-</preset>
-<preset name="Default" number="0" >
-<value id="{a4d4c497-04d4-4b7d-ad51-0f8832cb64bf}" mode="1" >0.60793877</value>
-<value id="{b418386f-afe6-4d3c-b8d6-c6c96885e9ab}" mode="1" >0.87604076</value>
-<value id="{f2ac6272-b33d-44fc-bb1e-fe52087e3a2b}" mode="1" >0.68532342</value>
-<value id="{8052b29d-d6ae-4249-b9cd-1788a2faf77c}" mode="1" >0.87491655</value>
-<value id="{3efde0c1-5828-4875-a997-174989989aa9}" mode="1" >0.24683115</value>
-<value id="{fa34129e-d983-460c-bd0e-89fb3e798bcb}" mode="1" >3.00000000</value>
-<value id="{17b249bd-27ed-44c7-9bac-a847a81165e3}" mode="1" >0.71242875</value>
-<value id="{cba3fee2-d2a5-41b2-8842-34be212fa82a}" mode="1" >1.51931179</value>
-<value id="{f0305ec9-814b-4107-a9b5-55a5a13f0118}" mode="1" >0.76090300</value>
-<value id="{9f495b69-cdca-43c7-bc92-f26d9995caed}" mode="1" >0.27295068</value>
-<value id="{3f29a847-8cf1-4076-9a69-e88b5360a810}" mode="1" >0.61171556</value>
-<value id="{2ea377f7-6c31-4556-8e26-e47d9b6c000a}" mode="1" >0.20000000</value>
-<value id="{a6a5a56d-13c6-4c09-b6e8-74086df6e352}" mode="1" >0.82246149</value>
-<value id="{dde869a9-5d2a-454c-bff8-b8d407d19e87}" mode="1" >1.00000000</value>
-<value id="{623cf6cd-548c-4212-ac65-a4761cfb5b7f}" mode="1" >1.93253195</value>
-<value id="{833bd2f5-fae9-441b-82ad-9117ffd29877}" mode="1" >0.21393649</value>
-<value id="{d520e71a-b3e2-46d4-b0c6-688085fe5742}" mode="1" >0.91956383</value>
-<value id="{ced1a494-71e9-4bc0-9973-a872920a4473}" mode="1" >1.47231400</value>
-<value id="{16c48afd-7c15-4e07-beee-ce56c7b61c80}" mode="1" >0.41843128</value>
-<value id="{e1aa96cf-3e30-4ad2-93ec-1494a0d60079}" mode="1" >2.00000000</value>
-<value id="{1a074887-a3a3-43ee-8de2-34b8e6a7a5a5}" mode="1" >0.25791028</value>
-<value id="{e1352cbc-9c2a-4650-8957-fb055156903b}" mode="1" >0.32575035</value>
-<value id="{3f7ea94f-e14d-4b53-8bbd-53563d0c23c1}" mode="1" >0.26118517</value>
-<value id="{9c657ab3-a738-40e2-92ae-b1128863fd78}" mode="1" >1.78432512</value>
-<value id="{56e321a8-c542-420c-a494-e759e36ea78a}" mode="1" >0.02822053</value>
-<value id="{77ce606f-b1c5-4911-bf36-79ea1b8f50ef}" mode="1" >1.00000000</value>
-<value id="{fec79e7f-6c43-482f-9fff-cedfc13eaea7}" mode="1" >1.85546792</value>
-<value id="{964db287-6df1-4fa8-baba-1e387d1fac12}" mode="1" >1.85546792</value>
-<value id="{7844fda3-a049-4ec6-885f-cba693b160c9}" mode="1" >1.00000000</value>
-<value id="{37d2f1f5-7da1-460a-a8a0-9d70e19e7da0}" mode="1" >0.80882120</value>
-<value id="{1713b2f6-0778-43b4-b81a-725331e94260}" mode="1" >0.88287294</value>
-<value id="{608ebd5c-d7b3-4c9a-8075-2204844bc42c}" mode="1" >1.85216427</value>
-<value id="{5f20cb6a-ad07-4210-aaa1-a0ee628ee2d4}" mode="1" >0.12375984</value>
-<value id="{dc16cdf0-7371-4027-bac0-7d26d9d21433}" mode="1" >0.01545162</value>
-<value id="{c211de7a-2f05-44f9-b09f-51523639dd8e}" mode="1" >1.01258862</value>
-<value id="{da8941a6-25be-42bd-9fc4-eb3bf5e4e6e1}" mode="1" >0.50000000</value>
-<value id="{8ade719c-f9d9-4348-91cc-a50077821391}" mode="1" >0.61456019</value>
-<value id="{aaa01bed-d7bb-4690-a71e-1ae6f64afc5a}" mode="1" >4.00000000</value>
-<value id="{21c7e2af-f1a0-41c0-be87-b103ea56c714}" mode="1" >1.79552197</value>
-<value id="{32c4cf2e-a76a-46b1-89bf-a4e4d2924309}" mode="1" >0.56583136</value>
-<value id="{b52b40e8-cd42-4060-8d22-cf0c9e0859f9}" mode="1" >0.70409799</value>
-<value id="{e9d2c154-945a-4024-b053-8e4c510f5ba3}" mode="1" >0.91626638</value>
-<value id="{72d91f82-8446-4985-8a6c-7617db96ad59}" mode="4" >0</value>
-<value id="{beca3791-f6ef-4ca6-8b17-b074357951d5}" mode="4" >0</value>
-</preset>
-<preset name="Fairy Dust" number="1" >
-<value id="{a4d4c497-04d4-4b7d-ad51-0f8832cb64bf}" mode="1" >0.60793877</value>
-<value id="{b418386f-afe6-4d3c-b8d6-c6c96885e9ab}" mode="1" >0.87604076</value>
-<value id="{f2ac6272-b33d-44fc-bb1e-fe52087e3a2b}" mode="1" >0.68532342</value>
-<value id="{8052b29d-d6ae-4249-b9cd-1788a2faf77c}" mode="1" >0.87491655</value>
-<value id="{3efde0c1-5828-4875-a997-174989989aa9}" mode="1" >0.24683115</value>
-<value id="{fa34129e-d983-460c-bd0e-89fb3e798bcb}" mode="1" >3.61637497</value>
-<value id="{17b249bd-27ed-44c7-9bac-a847a81165e3}" mode="1" >0.71242875</value>
-<value id="{cba3fee2-d2a5-41b2-8842-34be212fa82a}" mode="1" >1.51931179</value>
-<value id="{f0305ec9-814b-4107-a9b5-55a5a13f0118}" mode="1" >0.76090300</value>
-<value id="{9f495b69-cdca-43c7-bc92-f26d9995caed}" mode="1" >0.27295068</value>
-<value id="{3f29a847-8cf1-4076-9a69-e88b5360a810}" mode="1" >0.61171556</value>
-<value id="{2ea377f7-6c31-4556-8e26-e47d9b6c000a}" mode="1" >0.17211232</value>
-<value id="{a6a5a56d-13c6-4c09-b6e8-74086df6e352}" mode="1" >0.82246149</value>
-<value id="{dde869a9-5d2a-454c-bff8-b8d407d19e87}" mode="1" >2.73157001</value>
-<value id="{623cf6cd-548c-4212-ac65-a4761cfb5b7f}" mode="1" >1.93253195</value>
-<value id="{833bd2f5-fae9-441b-82ad-9117ffd29877}" mode="1" >0.21393649</value>
-<value id="{d520e71a-b3e2-46d4-b0c6-688085fe5742}" mode="1" >0.91956383</value>
-<value id="{ced1a494-71e9-4bc0-9973-a872920a4473}" mode="1" >1.47231400</value>
-<value id="{16c48afd-7c15-4e07-beee-ce56c7b61c80}" mode="1" >0.41843128</value>
-<value id="{e1aa96cf-3e30-4ad2-93ec-1494a0d60079}" mode="1" >4.45120955</value>
-<value id="{1a074887-a3a3-43ee-8de2-34b8e6a7a5a5}" mode="1" >0.25791028</value>
-<value id="{e1352cbc-9c2a-4650-8957-fb055156903b}" mode="1" >0.32575035</value>
-<value id="{3f7ea94f-e14d-4b53-8bbd-53563d0c23c1}" mode="1" >0.26118517</value>
-<value id="{9c657ab3-a738-40e2-92ae-b1128863fd78}" mode="1" >1.78432512</value>
-<value id="{56e321a8-c542-420c-a494-e759e36ea78a}" mode="1" >0.02822053</value>
-<value id="{77ce606f-b1c5-4911-bf36-79ea1b8f50ef}" mode="1" >3.40845633</value>
-<value id="{fec79e7f-6c43-482f-9fff-cedfc13eaea7}" mode="1" >1.85546792</value>
-<value id="{964db287-6df1-4fa8-baba-1e387d1fac12}" mode="1" >1.85546792</value>
-<value id="{7844fda3-a049-4ec6-885f-cba693b160c9}" mode="1" >1.00000000</value>
-<value id="{37d2f1f5-7da1-460a-a8a0-9d70e19e7da0}" mode="1" >0.80882120</value>
-<value id="{1713b2f6-0778-43b4-b81a-725331e94260}" mode="1" >0.88287294</value>
-<value id="{608ebd5c-d7b3-4c9a-8075-2204844bc42c}" mode="1" >1.85216427</value>
-<value id="{5f20cb6a-ad07-4210-aaa1-a0ee628ee2d4}" mode="1" >0.12375984</value>
-<value id="{dc16cdf0-7371-4027-bac0-7d26d9d21433}" mode="1" >0.01545162</value>
-<value id="{c211de7a-2f05-44f9-b09f-51523639dd8e}" mode="1" >1.01258862</value>
-<value id="{da8941a6-25be-42bd-9fc4-eb3bf5e4e6e1}" mode="1" >1.81891644</value>
-<value id="{8ade719c-f9d9-4348-91cc-a50077821391}" mode="1" >0.61456019</value>
-<value id="{aaa01bed-d7bb-4690-a71e-1ae6f64afc5a}" mode="1" >5.21777058</value>
-<value id="{21c7e2af-f1a0-41c0-be87-b103ea56c714}" mode="1" >1.79552197</value>
-<value id="{32c4cf2e-a76a-46b1-89bf-a4e4d2924309}" mode="1" >0.56583136</value>
-<value id="{b52b40e8-cd42-4060-8d22-cf0c9e0859f9}" mode="1" >0.70409799</value>
-<value id="{e9d2c154-945a-4024-b053-8e4c510f5ba3}" mode="1" >0.91626638</value>
-<value id="{72d91f82-8446-4985-8a6c-7617db96ad59}" mode="4" >0</value>
-<value id="{beca3791-f6ef-4ca6-8b17-b074357951d5}" mode="4" >0</value>
-</preset>
-<preset name="Shock" number="2" >
-<value id="{a4d4c497-04d4-4b7d-ad51-0f8832cb64bf}" mode="1" >0.09924940</value>
-<value id="{b418386f-afe6-4d3c-b8d6-c6c96885e9ab}" mode="1" >0.99000067</value>
-<value id="{f2ac6272-b33d-44fc-bb1e-fe52087e3a2b}" mode="1" >0.32000083</value>
-<value id="{8052b29d-d6ae-4249-b9cd-1788a2faf77c}" mode="1" >0.06253843</value>
-<value id="{3efde0c1-5828-4875-a997-174989989aa9}" mode="1" >0.97072107</value>
-<value id="{fa34129e-d983-460c-bd0e-89fb3e798bcb}" mode="1" >1.00000000</value>
-<value id="{17b249bd-27ed-44c7-9bac-a847a81165e3}" mode="1" >0.54646546</value>
-<value id="{cba3fee2-d2a5-41b2-8842-34be212fa82a}" mode="1" >1.13128877</value>
-<value id="{f0305ec9-814b-4107-a9b5-55a5a13f0118}" mode="1" >0.13656585</value>
-<value id="{9f495b69-cdca-43c7-bc92-f26d9995caed}" mode="1" >0.34610736</value>
-<value id="{3f29a847-8cf1-4076-9a69-e88b5360a810}" mode="1" >1.85934544</value>
-<value id="{2ea377f7-6c31-4556-8e26-e47d9b6c000a}" mode="1" >2.00000000</value>
-<value id="{a6a5a56d-13c6-4c09-b6e8-74086df6e352}" mode="1" >0.99779081</value>
-<value id="{dde869a9-5d2a-454c-bff8-b8d407d19e87}" mode="1" >0.33333334</value>
-<value id="{623cf6cd-548c-4212-ac65-a4761cfb5b7f}" mode="1" >0.00000100</value>
-<value id="{833bd2f5-fae9-441b-82ad-9117ffd29877}" mode="1" >0.44000077</value>
-<value id="{d520e71a-b3e2-46d4-b0c6-688085fe5742}" mode="1" >0.36350498</value>
-<value id="{ced1a494-71e9-4bc0-9973-a872920a4473}" mode="1" >1.70886242</value>
-<value id="{16c48afd-7c15-4e07-beee-ce56c7b61c80}" mode="1" >0.82670689</value>
-<value id="{e1aa96cf-3e30-4ad2-93ec-1494a0d60079}" mode="1" >1.00000000</value>
-<value id="{1a074887-a3a3-43ee-8de2-34b8e6a7a5a5}" mode="1" >0.00000100</value>
-<value id="{e1352cbc-9c2a-4650-8957-fb055156903b}" mode="1" >1.00000048</value>
-<value id="{3f7ea94f-e14d-4b53-8bbd-53563d0c23c1}" mode="1" >0.34000000</value>
-<value id="{9c657ab3-a738-40e2-92ae-b1128863fd78}" mode="1" >0.60559916</value>
-<value id="{56e321a8-c542-420c-a494-e759e36ea78a}" mode="1" >0.41786775</value>
-<value id="{77ce606f-b1c5-4911-bf36-79ea1b8f50ef}" mode="1" >0.25000000</value>
-<value id="{fec79e7f-6c43-482f-9fff-cedfc13eaea7}" mode="1" >0.69873726</value>
-<value id="{964db287-6df1-4fa8-baba-1e387d1fac12}" mode="1" >0.00000100</value>
-<value id="{7844fda3-a049-4ec6-885f-cba693b160c9}" mode="1" >0.69873726</value>
-<value id="{37d2f1f5-7da1-460a-a8a0-9d70e19e7da0}" mode="1" >1.42871964</value>
-<value id="{1713b2f6-0778-43b4-b81a-725331e94260}" mode="1" >0.52680331</value>
-<value id="{608ebd5c-d7b3-4c9a-8075-2204844bc42c}" mode="1" >1.08000064</value>
-<value id="{5f20cb6a-ad07-4210-aaa1-a0ee628ee2d4}" mode="1" >0.00000100</value>
-<value id="{dc16cdf0-7371-4027-bac0-7d26d9d21433}" mode="1" >0.12058064</value>
-<value id="{c211de7a-2f05-44f9-b09f-51523639dd8e}" mode="1" >1.48647273</value>
-<value id="{da8941a6-25be-42bd-9fc4-eb3bf5e4e6e1}" mode="1" >2.00000000</value>
-<value id="{8ade719c-f9d9-4348-91cc-a50077821391}" mode="1" >0.10895189</value>
-<value id="{aaa01bed-d7bb-4690-a71e-1ae6f64afc5a}" mode="1" >1.00000000</value>
-<value id="{21c7e2af-f1a0-41c0-be87-b103ea56c714}" mode="1" >0.00000100</value>
-<value id="{32c4cf2e-a76a-46b1-89bf-a4e4d2924309}" mode="1" >0.91890037</value>
-<value id="{b52b40e8-cd42-4060-8d22-cf0c9e0859f9}" mode="1" >0.31571576</value>
-<value id="{e9d2c154-945a-4024-b053-8e4c510f5ba3}" mode="1" >0.06035645</value>
-<value id="{72d91f82-8446-4985-8a6c-7617db96ad59}" mode="4" >0</value>
-<value id="{beca3791-f6ef-4ca6-8b17-b074357951d5}" mode="4" >0</value>
-<value id="{2edd913b-e4ed-497b-95a1-b45578fdcea6}" mode="1" >2.00000000</value>
-<value id="{df2a583c-d11a-4e3f-8f22-c20c945ad4b9}" mode="1" >0.00000000</value>
-<value id="{df2a583c-d11a-4e3f-8f22-c20c945ad4b9}" mode="4" >Shock</value>
-</preset>
-<preset name="Wobbly Bass" number="3" >
-<value id="{a4d4c497-04d4-4b7d-ad51-0f8832cb64bf}" mode="1" >0.35183150</value>
-<value id="{b418386f-afe6-4d3c-b8d6-c6c96885e9ab}" mode="1" >1.16110826</value>
-<value id="{f2ac6272-b33d-44fc-bb1e-fe52087e3a2b}" mode="1" >0.05349947</value>
-<value id="{8052b29d-d6ae-4249-b9cd-1788a2faf77c}" mode="1" >0.49104589</value>
-<value id="{3efde0c1-5828-4875-a997-174989989aa9}" mode="1" >1.94538844</value>
-<value id="{fa34129e-d983-460c-bd0e-89fb3e798bcb}" mode="1" >1.00000000</value>
-<value id="{17b249bd-27ed-44c7-9bac-a847a81165e3}" mode="1" >0.58744889</value>
-<value id="{cba3fee2-d2a5-41b2-8842-34be212fa82a}" mode="1" >0.88966805</value>
-<value id="{f0305ec9-814b-4107-a9b5-55a5a13f0118}" mode="1" >0.22458993</value>
-<value id="{9f495b69-cdca-43c7-bc92-f26d9995caed}" mode="1" >0.92106187</value>
-<value id="{3f29a847-8cf1-4076-9a69-e88b5360a810}" mode="1" >1.16434824</value>
-<value id="{2ea377f7-6c31-4556-8e26-e47d9b6c000a}" mode="1" >2.00000000</value>
-<value id="{a6a5a56d-13c6-4c09-b6e8-74086df6e352}" mode="1" >0.84130728</value>
-<value id="{dde869a9-5d2a-454c-bff8-b8d407d19e87}" mode="1" >2.00000000</value>
-<value id="{623cf6cd-548c-4212-ac65-a4761cfb5b7f}" mode="1" >0.26269972</value>
-<value id="{833bd2f5-fae9-441b-82ad-9117ffd29877}" mode="1" >0.40164155</value>
-<value id="{d520e71a-b3e2-46d4-b0c6-688085fe5742}" mode="1" >0.02464281</value>
-<value id="{ced1a494-71e9-4bc0-9973-a872920a4473}" mode="1" >0.82045412</value>
-<value id="{16c48afd-7c15-4e07-beee-ce56c7b61c80}" mode="1" >0.65424937</value>
-<value id="{e1aa96cf-3e30-4ad2-93ec-1494a0d60079}" mode="1" >4.00000000</value>
-<value id="{1a074887-a3a3-43ee-8de2-34b8e6a7a5a5}" mode="1" >0.03000099</value>
-<value id="{e1352cbc-9c2a-4650-8957-fb055156903b}" mode="1" >0.26000088</value>
-<value id="{3f7ea94f-e14d-4b53-8bbd-53563d0c23c1}" mode="1" >0.52906078</value>
-<value id="{9c657ab3-a738-40e2-92ae-b1128863fd78}" mode="1" >1.66721201</value>
-<value id="{56e321a8-c542-420c-a494-e759e36ea78a}" mode="1" >0.47983685</value>
-<value id="{77ce606f-b1c5-4911-bf36-79ea1b8f50ef}" mode="1" >0.50000000</value>
-<value id="{fec79e7f-6c43-482f-9fff-cedfc13eaea7}" mode="1" >0.76768428</value>
-<value id="{964db287-6df1-4fa8-baba-1e387d1fac12}" mode="1" >0.76768428</value>
-<value id="{7844fda3-a049-4ec6-885f-cba693b160c9}" mode="1" >0.76768428</value>
-<value id="{37d2f1f5-7da1-460a-a8a0-9d70e19e7da0}" mode="1" >1.12945914</value>
-<value id="{1713b2f6-0778-43b4-b81a-725331e94260}" mode="1" >0.24956867</value>
-<value id="{608ebd5c-d7b3-4c9a-8075-2204844bc42c}" mode="1" >1.23290610</value>
-<value id="{5f20cb6a-ad07-4210-aaa1-a0ee628ee2d4}" mode="1" >0.48934624</value>
-<value id="{dc16cdf0-7371-4027-bac0-7d26d9d21433}" mode="1" >0.55785310</value>
-<value id="{c211de7a-2f05-44f9-b09f-51523639dd8e}" mode="1" >0.01865082</value>
-<value id="{da8941a6-25be-42bd-9fc4-eb3bf5e4e6e1}" mode="1" >5.00000000</value>
-<value id="{8ade719c-f9d9-4348-91cc-a50077821391}" mode="1" >0.34645078</value>
-<value id="{aaa01bed-d7bb-4690-a71e-1ae6f64afc5a}" mode="1" >5.00000000</value>
-<value id="{21c7e2af-f1a0-41c0-be87-b103ea56c714}" mode="1" >0.24000092</value>
-<value id="{32c4cf2e-a76a-46b1-89bf-a4e4d2924309}" mode="1" >0.26000088</value>
-<value id="{b52b40e8-cd42-4060-8d22-cf0c9e0859f9}" mode="1" >0.34000000</value>
-<value id="{e9d2c154-945a-4024-b053-8e4c510f5ba3}" mode="1" >0.57990128</value>
-<value id="{72d91f82-8446-4985-8a6c-7617db96ad59}" mode="4" >0</value>
-<value id="{beca3791-f6ef-4ca6-8b17-b074357951d5}" mode="4" >0</value>
-</preset>
-<preset name="Outer Space" number="4" >
-<value id="{a4d4c497-04d4-4b7d-ad51-0f8832cb64bf}" mode="1" >0.52880144</value>
-<value id="{b418386f-afe6-4d3c-b8d6-c6c96885e9ab}" mode="1" >1.92315161</value>
-<value id="{f2ac6272-b33d-44fc-bb1e-fe52087e3a2b}" mode="1" >0.40721342</value>
-<value id="{8052b29d-d6ae-4249-b9cd-1788a2faf77c}" mode="1" >0.51781482</value>
-<value id="{3efde0c1-5828-4875-a997-174989989aa9}" mode="1" >1.48892212</value>
-<value id="{fa34129e-d983-460c-bd0e-89fb3e798bcb}" mode="1" >1.00000000</value>
-<value id="{17b249bd-27ed-44c7-9bac-a847a81165e3}" mode="1" >0.09598406</value>
-<value id="{cba3fee2-d2a5-41b2-8842-34be212fa82a}" mode="1" >1.14999413</value>
-<value id="{f0305ec9-814b-4107-a9b5-55a5a13f0118}" mode="1" >0.78067654</value>
-<value id="{9f495b69-cdca-43c7-bc92-f26d9995caed}" mode="1" >0.80435246</value>
-<value id="{3f29a847-8cf1-4076-9a69-e88b5360a810}" mode="1" >1.88658834</value>
-<value id="{2ea377f7-6c31-4556-8e26-e47d9b6c000a}" mode="1" >4.00000000</value>
-<value id="{a6a5a56d-13c6-4c09-b6e8-74086df6e352}" mode="1" >0.52892101</value>
-<value id="{dde869a9-5d2a-454c-bff8-b8d407d19e87}" mode="1" >5.00000000</value>
-<value id="{623cf6cd-548c-4212-ac65-a4761cfb5b7f}" mode="1" >0.57236409</value>
-<value id="{833bd2f5-fae9-441b-82ad-9117ffd29877}" mode="1" >0.02315990</value>
-<value id="{d520e71a-b3e2-46d4-b0c6-688085fe5742}" mode="1" >0.83943599</value>
-<value id="{ced1a494-71e9-4bc0-9973-a872920a4473}" mode="1" >0.25039724</value>
-<value id="{16c48afd-7c15-4e07-beee-ce56c7b61c80}" mode="1" >0.33299038</value>
-<value id="{e1aa96cf-3e30-4ad2-93ec-1494a0d60079}" mode="1" >0.50000000</value>
-<value id="{1a074887-a3a3-43ee-8de2-34b8e6a7a5a5}" mode="1" >0.43360656</value>
-<value id="{e1352cbc-9c2a-4650-8957-fb055156903b}" mode="1" >0.44469181</value>
-<value id="{3f7ea94f-e14d-4b53-8bbd-53563d0c23c1}" mode="1" >0.40249717</value>
-<value id="{9c657ab3-a738-40e2-92ae-b1128863fd78}" mode="1" >1.95878458</value>
-<value id="{56e321a8-c542-420c-a494-e759e36ea78a}" mode="1" >0.23041101</value>
-<value id="{77ce606f-b1c5-4911-bf36-79ea1b8f50ef}" mode="1" >5.00000000</value>
-<value id="{fec79e7f-6c43-482f-9fff-cedfc13eaea7}" mode="1" >1.32098460</value>
-<value id="{964db287-6df1-4fa8-baba-1e387d1fac12}" mode="1" >1.32098460</value>
-<value id="{7844fda3-a049-4ec6-885f-cba693b160c9}" mode="1" >1.00000000</value>
-<value id="{37d2f1f5-7da1-460a-a8a0-9d70e19e7da0}" mode="1" >1.64780557</value>
-<value id="{1713b2f6-0778-43b4-b81a-725331e94260}" mode="1" >0.41363844</value>
-<value id="{608ebd5c-d7b3-4c9a-8075-2204844bc42c}" mode="1" >0.26922104</value>
-<value id="{5f20cb6a-ad07-4210-aaa1-a0ee628ee2d4}" mode="1" >0.72871375</value>
-<value id="{dc16cdf0-7371-4027-bac0-7d26d9d21433}" mode="1" >0.76807946</value>
-<value id="{c211de7a-2f05-44f9-b09f-51523639dd8e}" mode="1" >1.28383279</value>
-<value id="{da8941a6-25be-42bd-9fc4-eb3bf5e4e6e1}" mode="1" >0.20000000</value>
-<value id="{8ade719c-f9d9-4348-91cc-a50077821391}" mode="1" >0.36287013</value>
-<value id="{aaa01bed-d7bb-4690-a71e-1ae6f64afc5a}" mode="1" >5.00000000</value>
-<value id="{21c7e2af-f1a0-41c0-be87-b103ea56c714}" mode="1" >0.97215766</value>
-<value id="{32c4cf2e-a76a-46b1-89bf-a4e4d2924309}" mode="1" >0.49834982</value>
-<value id="{b52b40e8-cd42-4060-8d22-cf0c9e0859f9}" mode="1" >0.89931619</value>
-<value id="{e9d2c154-945a-4024-b053-8e4c510f5ba3}" mode="1" >1.38783407</value>
-<value id="{72d91f82-8446-4985-8a6c-7617db96ad59}" mode="4" >0</value>
-<value id="{beca3791-f6ef-4ca6-8b17-b074357951d5}" mode="4" >0</value>
-</preset>
-<preset name="Gong" number="5" >
-<value id="{a4d4c497-04d4-4b7d-ad51-0f8832cb64bf}" mode="1" >0.09924940</value>
-<value id="{b418386f-afe6-4d3c-b8d6-c6c96885e9ab}" mode="1" >0.01480771</value>
-<value id="{f2ac6272-b33d-44fc-bb1e-fe52087e3a2b}" mode="1" >0.05123077</value>
-<value id="{8052b29d-d6ae-4249-b9cd-1788a2faf77c}" mode="1" >1.00000000</value>
-<value id="{3efde0c1-5828-4875-a997-174989989aa9}" mode="1" >0.97072107</value>
-<value id="{fa34129e-d983-460c-bd0e-89fb3e798bcb}" mode="1" >1.00000000</value>
-<value id="{17b249bd-27ed-44c7-9bac-a847a81165e3}" mode="1" >0.54646546</value>
-<value id="{cba3fee2-d2a5-41b2-8842-34be212fa82a}" mode="1" >1.13128877</value>
-<value id="{f0305ec9-814b-4107-a9b5-55a5a13f0118}" mode="1" >0.13656585</value>
-<value id="{9f495b69-cdca-43c7-bc92-f26d9995caed}" mode="1" >0.63000000</value>
-<value id="{3f29a847-8cf1-4076-9a69-e88b5360a810}" mode="1" >1.85934544</value>
-<value id="{2ea377f7-6c31-4556-8e26-e47d9b6c000a}" mode="1" >2.00000000</value>
-<value id="{a6a5a56d-13c6-4c09-b6e8-74086df6e352}" mode="1" >0.99779081</value>
-<value id="{dde869a9-5d2a-454c-bff8-b8d407d19e87}" mode="1" >0.33333334</value>
-<value id="{623cf6cd-548c-4212-ac65-a4761cfb5b7f}" mode="1" >1.21385181</value>
-<value id="{833bd2f5-fae9-441b-82ad-9117ffd29877}" mode="1" >0.31246525</value>
-<value id="{d520e71a-b3e2-46d4-b0c6-688085fe5742}" mode="1" >1.00000000</value>
-<value id="{ced1a494-71e9-4bc0-9973-a872920a4473}" mode="1" >1.70886242</value>
-<value id="{16c48afd-7c15-4e07-beee-ce56c7b61c80}" mode="1" >0.82670689</value>
-<value id="{e1aa96cf-3e30-4ad2-93ec-1494a0d60079}" mode="1" >0.20000000</value>
-<value id="{1a074887-a3a3-43ee-8de2-34b8e6a7a5a5}" mode="1" >0.72617590</value>
-<value id="{e1352cbc-9c2a-4650-8957-fb055156903b}" mode="1" >0.58649164</value>
-<value id="{3f7ea94f-e14d-4b53-8bbd-53563d0c23c1}" mode="1" >0.93524820</value>
-<value id="{9c657ab3-a738-40e2-92ae-b1128863fd78}" mode="1" >0.60559916</value>
-<value id="{56e321a8-c542-420c-a494-e759e36ea78a}" mode="1" >0.41786775</value>
-<value id="{77ce606f-b1c5-4911-bf36-79ea1b8f50ef}" mode="1" >0.25000000</value>
-<value id="{fec79e7f-6c43-482f-9fff-cedfc13eaea7}" mode="1" >0.69873726</value>
-<value id="{964db287-6df1-4fa8-baba-1e387d1fac12}" mode="1" >0.69873726</value>
-<value id="{7844fda3-a049-4ec6-885f-cba693b160c9}" mode="1" >0.69873726</value>
-<value id="{37d2f1f5-7da1-460a-a8a0-9d70e19e7da0}" mode="1" >1.42871964</value>
-<value id="{1713b2f6-0778-43b4-b81a-725331e94260}" mode="1" >0.52680331</value>
-<value id="{608ebd5c-d7b3-4c9a-8075-2204844bc42c}" mode="1" >1.72767055</value>
-<value id="{5f20cb6a-ad07-4210-aaa1-a0ee628ee2d4}" mode="1" >0.54525268</value>
-<value id="{dc16cdf0-7371-4027-bac0-7d26d9d21433}" mode="1" >0.92000002</value>
-<value id="{c211de7a-2f05-44f9-b09f-51523639dd8e}" mode="1" >1.48647273</value>
-<value id="{da8941a6-25be-42bd-9fc4-eb3bf5e4e6e1}" mode="1" >3.00000000</value>
-<value id="{8ade719c-f9d9-4348-91cc-a50077821391}" mode="1" >0.10895189</value>
-<value id="{aaa01bed-d7bb-4690-a71e-1ae6f64afc5a}" mode="1" >0.25000000</value>
-<value id="{21c7e2af-f1a0-41c0-be87-b103ea56c714}" mode="1" >1.67256188</value>
-<value id="{32c4cf2e-a76a-46b1-89bf-a4e4d2924309}" mode="1" >0.91890037</value>
-<value id="{b52b40e8-cd42-4060-8d22-cf0c9e0859f9}" mode="1" >1.00000000</value>
-<value id="{e9d2c154-945a-4024-b053-8e4c510f5ba3}" mode="1" >0.06035645</value>
-<value id="{72d91f82-8446-4985-8a6c-7617db96ad59}" mode="4" >0</value>
-<value id="{beca3791-f6ef-4ca6-8b17-b074357951d5}" mode="4" >0</value>
-</preset>
-<preset name="Alien" number="6" >
-<value id="{a4d4c497-04d4-4b7d-ad51-0f8832cb64bf}" mode="1" >0.77549207</value>
-<value id="{b418386f-afe6-4d3c-b8d6-c6c96885e9ab}" mode="1" >1.33936346</value>
-<value id="{f2ac6272-b33d-44fc-bb1e-fe52087e3a2b}" mode="1" >0.36569735</value>
-<value id="{8052b29d-d6ae-4249-b9cd-1788a2faf77c}" mode="1" >0.79167455</value>
-<value id="{3efde0c1-5828-4875-a997-174989989aa9}" mode="1" >0.62001997</value>
-<value id="{fa34129e-d983-460c-bd0e-89fb3e798bcb}" mode="1" >-1.40429783</value>
-<value id="{17b249bd-27ed-44c7-9bac-a847a81165e3}" mode="1" >0.61443049</value>
-<value id="{cba3fee2-d2a5-41b2-8842-34be212fa82a}" mode="1" >0.60574394</value>
-<value id="{f0305ec9-814b-4107-a9b5-55a5a13f0118}" mode="1" >0.82539755</value>
-<value id="{9f495b69-cdca-43c7-bc92-f26d9995caed}" mode="1" >0.36829379</value>
-<value id="{3f29a847-8cf1-4076-9a69-e88b5360a810}" mode="1" >0.15290628</value>
-<value id="{2ea377f7-6c31-4556-8e26-e47d9b6c000a}" mode="1" >0.76484829</value>
-<value id="{a6a5a56d-13c6-4c09-b6e8-74086df6e352}" mode="1" >0.12198304</value>
-<value id="{dde869a9-5d2a-454c-bff8-b8d407d19e87}" mode="1" >5.74750662</value>
-<value id="{623cf6cd-548c-4212-ac65-a4761cfb5b7f}" mode="1" >0.43798280</value>
-<value id="{833bd2f5-fae9-441b-82ad-9117ffd29877}" mode="1" >0.08567286</value>
-<value id="{d520e71a-b3e2-46d4-b0c6-688085fe5742}" mode="1" >0.56523472</value>
-<value id="{ced1a494-71e9-4bc0-9973-a872920a4473}" mode="1" >1.46649480</value>
-<value id="{16c48afd-7c15-4e07-beee-ce56c7b61c80}" mode="1" >0.60636872</value>
-<value id="{e1aa96cf-3e30-4ad2-93ec-1494a0d60079}" mode="1" >4.75232697</value>
-<value id="{1a074887-a3a3-43ee-8de2-34b8e6a7a5a5}" mode="1" >1.34307921</value>
-<value id="{e1352cbc-9c2a-4650-8957-fb055156903b}" mode="1" >0.95924777</value>
-<value id="{3f7ea94f-e14d-4b53-8bbd-53563d0c23c1}" mode="1" >0.39933148</value>
-<value id="{9c657ab3-a738-40e2-92ae-b1128863fd78}" mode="1" >1.27394211</value>
-<value id="{56e321a8-c542-420c-a494-e759e36ea78a}" mode="1" >0.74402839</value>
-<value id="{77ce606f-b1c5-4911-bf36-79ea1b8f50ef}" mode="1" >4.48528576</value>
-<value id="{fec79e7f-6c43-482f-9fff-cedfc13eaea7}" mode="1" >0.37414643</value>
-<value id="{964db287-6df1-4fa8-baba-1e387d1fac12}" mode="1" >0.37414643</value>
-<value id="{7844fda3-a049-4ec6-885f-cba693b160c9}" mode="1" >0.37414643</value>
-<value id="{37d2f1f5-7da1-460a-a8a0-9d70e19e7da0}" mode="1" >1.69390988</value>
-<value id="{1713b2f6-0778-43b4-b81a-725331e94260}" mode="1" >0.57565117</value>
-<value id="{608ebd5c-d7b3-4c9a-8075-2204844bc42c}" mode="1" >1.83773160</value>
-<value id="{5f20cb6a-ad07-4210-aaa1-a0ee628ee2d4}" mode="1" >0.97878075</value>
-<value id="{dc16cdf0-7371-4027-bac0-7d26d9d21433}" mode="1" >0.93248534</value>
-<value id="{c211de7a-2f05-44f9-b09f-51523639dd8e}" mode="1" >0.09797703</value>
-<value id="{da8941a6-25be-42bd-9fc4-eb3bf5e4e6e1}" mode="1" >4.98669291</value>
-<value id="{8ade719c-f9d9-4348-91cc-a50077821391}" mode="1" >0.42223135</value>
-<value id="{aaa01bed-d7bb-4690-a71e-1ae6f64afc5a}" mode="1" >5.98625231</value>
-<value id="{21c7e2af-f1a0-41c0-be87-b103ea56c714}" mode="1" >0.66106582</value>
-<value id="{32c4cf2e-a76a-46b1-89bf-a4e4d2924309}" mode="1" >0.37456763</value>
-<value id="{b52b40e8-cd42-4060-8d22-cf0c9e0859f9}" mode="1" >0.32205558</value>
-<value id="{e9d2c154-945a-4024-b053-8e4c510f5ba3}" mode="1" >1.07847786</value>
-<value id="{72d91f82-8446-4985-8a6c-7617db96ad59}" mode="4" >0</value>
-<value id="{beca3791-f6ef-4ca6-8b17-b074357951d5}" mode="4" >0</value>
-</preset>
-<preset name="Chimes" number="7" >
-<value id="{a4d4c497-04d4-4b7d-ad51-0f8832cb64bf}" mode="1" >0.00821707</value>
-<value id="{b418386f-afe6-4d3c-b8d6-c6c96885e9ab}" mode="1" >0.36902127</value>
-<value id="{f2ac6272-b33d-44fc-bb1e-fe52087e3a2b}" mode="1" >0.66646159</value>
-<value id="{8052b29d-d6ae-4249-b9cd-1788a2faf77c}" mode="1" >0.42549533</value>
-<value id="{3efde0c1-5828-4875-a997-174989989aa9}" mode="1" >1.20048034</value>
-<value id="{fa34129e-d983-460c-bd0e-89fb3e798bcb}" mode="1" >1.00000000</value>
-<value id="{17b249bd-27ed-44c7-9bac-a847a81165e3}" mode="1" >0.03101001</value>
-<value id="{cba3fee2-d2a5-41b2-8842-34be212fa82a}" mode="1" >1.11113417</value>
-<value id="{f0305ec9-814b-4107-a9b5-55a5a13f0118}" mode="1" >0.62771147</value>
-<value id="{9f495b69-cdca-43c7-bc92-f26d9995caed}" mode="1" >0.63929707</value>
-<value id="{3f29a847-8cf1-4076-9a69-e88b5360a810}" mode="1" >0.29363316</value>
-<value id="{2ea377f7-6c31-4556-8e26-e47d9b6c000a}" mode="1" >1.00000000</value>
-<value id="{a6a5a56d-13c6-4c09-b6e8-74086df6e352}" mode="1" >0.28083172</value>
-<value id="{dde869a9-5d2a-454c-bff8-b8d407d19e87}" mode="1" >1.00000000</value>
-<value id="{623cf6cd-548c-4212-ac65-a4761cfb5b7f}" mode="1" >1.83537996</value>
-<value id="{833bd2f5-fae9-441b-82ad-9117ffd29877}" mode="1" >0.07710903</value>
-<value id="{d520e71a-b3e2-46d4-b0c6-688085fe5742}" mode="1" >0.28639463</value>
-<value id="{ced1a494-71e9-4bc0-9973-a872920a4473}" mode="1" >1.08602405</value>
-<value id="{16c48afd-7c15-4e07-beee-ce56c7b61c80}" mode="1" >0.16538025</value>
-<value id="{e1aa96cf-3e30-4ad2-93ec-1494a0d60079}" mode="1" >1.00000000</value>
-<value id="{1a074887-a3a3-43ee-8de2-34b8e6a7a5a5}" mode="1" >0.00000100</value>
-<value id="{e1352cbc-9c2a-4650-8957-fb055156903b}" mode="1" >0.16000092</value>
-<value id="{3f7ea94f-e14d-4b53-8bbd-53563d0c23c1}" mode="1" >0.29407570</value>
-<value id="{9c657ab3-a738-40e2-92ae-b1128863fd78}" mode="1" >1.98959291</value>
-<value id="{56e321a8-c542-420c-a494-e759e36ea78a}" mode="1" >0.10801291</value>
-<value id="{77ce606f-b1c5-4911-bf36-79ea1b8f50ef}" mode="1" >0.33333334</value>
-<value id="{fec79e7f-6c43-482f-9fff-cedfc13eaea7}" mode="1" >1.26772940</value>
-<value id="{964db287-6df1-4fa8-baba-1e387d1fac12}" mode="1" >1.26772940</value>
-<value id="{7844fda3-a049-4ec6-885f-cba693b160c9}" mode="1" >1.00000000</value>
-<value id="{37d2f1f5-7da1-460a-a8a0-9d70e19e7da0}" mode="1" >1.07506883</value>
-<value id="{1713b2f6-0778-43b4-b81a-725331e94260}" mode="1" >0.67707473</value>
-<value id="{608ebd5c-d7b3-4c9a-8075-2204844bc42c}" mode="1" >1.73355865</value>
-<value id="{5f20cb6a-ad07-4210-aaa1-a0ee628ee2d4}" mode="1" >0.76444215</value>
-<value id="{dc16cdf0-7371-4027-bac0-7d26d9d21433}" mode="1" >0.35109249</value>
-<value id="{c211de7a-2f05-44f9-b09f-51523639dd8e}" mode="1" >1.18131566</value>
-<value id="{da8941a6-25be-42bd-9fc4-eb3bf5e4e6e1}" mode="1" >3.00000000</value>
-<value id="{8ade719c-f9d9-4348-91cc-a50077821391}" mode="1" >0.22447671</value>
-<value id="{aaa01bed-d7bb-4690-a71e-1ae6f64afc5a}" mode="1" >5.00000000</value>
-<value id="{21c7e2af-f1a0-41c0-be87-b103ea56c714}" mode="1" >0.09000097</value>
-<value id="{32c4cf2e-a76a-46b1-89bf-a4e4d2924309}" mode="1" >0.08000096</value>
-<value id="{b52b40e8-cd42-4060-8d22-cf0c9e0859f9}" mode="1" >0.76972228</value>
-<value id="{e9d2c154-945a-4024-b053-8e4c510f5ba3}" mode="1" >1.56563008</value>
-<value id="{72d91f82-8446-4985-8a6c-7617db96ad59}" mode="4" >0</value>
-<value id="{beca3791-f6ef-4ca6-8b17-b074357951d5}" mode="4" >0</value>
-</preset>
-<preset name="Fluty" number="8" >
-<value id="{a4d4c497-04d4-4b7d-ad51-0f8832cb64bf}" mode="1" >0.98524410</value>
-<value id="{b418386f-afe6-4d3c-b8d6-c6c96885e9ab}" mode="1" >1.64796364</value>
-<value id="{f2ac6272-b33d-44fc-bb1e-fe52087e3a2b}" mode="1" >0.52427548</value>
-<value id="{8052b29d-d6ae-4249-b9cd-1788a2faf77c}" mode="1" >0.38627648</value>
-<value id="{3efde0c1-5828-4875-a997-174989989aa9}" mode="1" >0.00000100</value>
-<value id="{fa34129e-d983-460c-bd0e-89fb3e798bcb}" mode="1" >1.00000000</value>
-<value id="{17b249bd-27ed-44c7-9bac-a847a81165e3}" mode="1" >0.70595562</value>
-<value id="{cba3fee2-d2a5-41b2-8842-34be212fa82a}" mode="1" >1.38320804</value>
-<value id="{f0305ec9-814b-4107-a9b5-55a5a13f0118}" mode="1" >0.58946502</value>
-<value id="{9f495b69-cdca-43c7-bc92-f26d9995caed}" mode="1" >0.71020597</value>
-<value id="{3f29a847-8cf1-4076-9a69-e88b5360a810}" mode="1" >0.00000100</value>
-<value id="{2ea377f7-6c31-4556-8e26-e47d9b6c000a}" mode="1" >2.00000000</value>
-<value id="{a6a5a56d-13c6-4c09-b6e8-74086df6e352}" mode="1" >0.07000000</value>
-<value id="{dde869a9-5d2a-454c-bff8-b8d407d19e87}" mode="1" >3.00000000</value>
-<value id="{623cf6cd-548c-4212-ac65-a4761cfb5b7f}" mode="1" >0.70741987</value>
-<value id="{833bd2f5-fae9-441b-82ad-9117ffd29877}" mode="1" >0.48335540</value>
-<value id="{d520e71a-b3e2-46d4-b0c6-688085fe5742}" mode="1" >0.49383950</value>
-<value id="{ced1a494-71e9-4bc0-9973-a872920a4473}" mode="1" >0.00000100</value>
-<value id="{16c48afd-7c15-4e07-beee-ce56c7b61c80}" mode="1" >0.38029835</value>
-<value id="{e1aa96cf-3e30-4ad2-93ec-1494a0d60079}" mode="1" >3.00000000</value>
-<value id="{1a074887-a3a3-43ee-8de2-34b8e6a7a5a5}" mode="1" >0.33000088</value>
-<value id="{e1352cbc-9c2a-4650-8957-fb055156903b}" mode="1" >0.34000084</value>
-<value id="{3f7ea94f-e14d-4b53-8bbd-53563d0c23c1}" mode="1" >0.10513637</value>
-<value id="{9c657ab3-a738-40e2-92ae-b1128863fd78}" mode="1" >0.04000099</value>
-<value id="{56e321a8-c542-420c-a494-e759e36ea78a}" mode="1" >0.00000000</value>
-<value id="{77ce606f-b1c5-4911-bf36-79ea1b8f50ef}" mode="1" >1.00000000</value>
-<value id="{fec79e7f-6c43-482f-9fff-cedfc13eaea7}" mode="1" >0.09399924</value>
-<value id="{964db287-6df1-4fa8-baba-1e387d1fac12}" mode="1" >0.09399924</value>
-<value id="{7844fda3-a049-4ec6-885f-cba693b160c9}" mode="1" >0.09399924</value>
-<value id="{37d2f1f5-7da1-460a-a8a0-9d70e19e7da0}" mode="1" >0.00000100</value>
-<value id="{1713b2f6-0778-43b4-b81a-725331e94260}" mode="1" >0.16000000</value>
-<value id="{608ebd5c-d7b3-4c9a-8075-2204844bc42c}" mode="1" >0.35776818</value>
-<value id="{5f20cb6a-ad07-4210-aaa1-a0ee628ee2d4}" mode="1" >0.46415842</value>
-<value id="{dc16cdf0-7371-4027-bac0-7d26d9d21433}" mode="1" >0.58610016</value>
-<value id="{c211de7a-2f05-44f9-b09f-51523639dd8e}" mode="1" >0.00000100</value>
-<value id="{da8941a6-25be-42bd-9fc4-eb3bf5e4e6e1}" mode="1" >4.00000000</value>
-<value id="{8ade719c-f9d9-4348-91cc-a50077821391}" mode="1" >0.52810043</value>
-<value id="{aaa01bed-d7bb-4690-a71e-1ae6f64afc5a}" mode="1" >1.00000000</value>
-<value id="{21c7e2af-f1a0-41c0-be87-b103ea56c714}" mode="1" >0.10946730</value>
-<value id="{32c4cf2e-a76a-46b1-89bf-a4e4d2924309}" mode="1" >0.14234683</value>
-<value id="{b52b40e8-cd42-4060-8d22-cf0c9e0859f9}" mode="1" >0.04914349</value>
-<value id="{e9d2c154-945a-4024-b053-8e4c510f5ba3}" mode="1" >0.00000100</value>
-<value id="{72d91f82-8446-4985-8a6c-7617db96ad59}" mode="4" >0</value>
-<value id="{beca3791-f6ef-4ca6-8b17-b074357951d5}" mode="4" >0</value>
-</preset>
 <preset name="Default" number="0" >
 <value id="{a4d4c497-04d4-4b7d-ad51-0f8832cb64bf}" mode="1" >0.60793877</value>
 <value id="{b418386f-afe6-4d3c-b8d6-c6c96885e9ab}" mode="1" >0.87604076</value>

@@ -1,3 +1,12 @@
+<CsoundSynthesizer>
+<CsOptions>
+-odac --env:SSDIR+=../../SourceMaterials
+; -d ; ucomment if you don't want to have output about tables and fft analyse
+</CsOptions>
+<CsInstruments>
+
+/*
+
 A demo and "Sandbox" for getting started with scanned synthesis.
 
 Many comments from experiences are added to the code (see instrument "sound" and tables in the score.
@@ -6,12 +15,7 @@ Meant to be run in CsoundQt but the code can be used also in other ways.
 
 By Tarmo Johannes trmjhnns@gmail.com 2013/2016
 
-<CsoundSynthesizer>
-<CsOptions>
--odac --env:SSDIR+= ../../SourceMaterials
-; -d ; ucomment if you don't want to have output about tables and fft analyse
-</CsOptions>
-<CsInstruments>
+*/
 
 sr = 44100
 ksmps = 64
@@ -29,37 +33,37 @@ giTest = filelen("circularstring-128")
 ; presets: every preset consist of 5 parameters: fninit, scanning rate, fnmass, fncentr,
 ; fn_scanning_trajectory (all of then are table numbers, expect scanning rate)
 
-giPresets = ftgen(0, 0, 256, -2, \)
-18, 0.03, 22, 40, 71, \  ; preset no 1 for instr preset_call, index 0 in table
-  10, 0.02, 20, 40, 70, \
-  16, 0.01, 21, 40, 71, \
-  12, 0.2, 21, 40, 72, \
-  12, 0.2, 21, 40, 72, \
-  14, 0.002, 22, 42, 72, \
-  19, 0.12, 20, 40, 73, \
-  11, 0.01, 23, 42, 71, \
-  14, 0.003, 22, 43, 74, \
-  19, 0.1, 25, 41, 70, \
-  13, 0.05, 20, 41, 70, \  ; preset 11
-  11, 0.1, 23, 42, 72, \
-  12, 0.3, 25, 42, 70, \
-  14, 0.001, 22, 43, 74, \
-  12, 0.005, 20, 40, 74, \
-  10, 0.01, 22, 41, 74, \
-  12, 0.008, 21, 42, 72, \
-  14, 0.002, 21, 42, 72, \
-  14, 0.002, 21, 40, 72, \
-  14, 0.1, 20, 40, 72, \
-  17, 0.02, 21, 40, 72, \  ; preset  21
-  15, 0.012, 22, 43, 70, \
-  18, 0.43, 20, 40, 72, \
-  10, 0.02, 20, 40, 70, \
-  16, 0.015, 22, 41, 71, \
-  12, 0.235, 20, 40, 73, \
-  13, 0.188, 21, 43, 70, \
-  14, 0.0025, 21, 42, 73, \
-  15, 0.128, 20, 41, 73, \
-  18, 0.122, 20, 42, 73  ; 30
+giPresets = ftgen(0, 0, 256, -2, 
+  18, 0.03, 22, 40, 71,   ; preset no 1 for instr preset_call, index 0 in table
+  10, 0.02, 20, 40, 70, 
+  16, 0.01, 21, 40, 71, 
+  12, 0.2, 21, 40, 72,   
+  12, 0.2, 21, 40, 72, 
+  14, 0.002, 22, 42, 72, 
+  19, 0.12, 20, 40, 73, 
+  11, 0.01, 23, 42, 71, 
+  14, 0.003, 22, 43, 74, 
+  19, 0.1, 25, 41, 70, 
+  13, 0.05, 20, 41, 70,   ; preset 11
+  11, 0.1, 23, 42, 72, 
+  12, 0.3, 25, 42, 70, 
+  14, 0.001, 22, 43, 74, 
+  12, 0.005, 20, 40, 74, 
+  10, 0.01, 22, 41, 74, 
+  12, 0.008, 21, 42, 72, 
+  14, 0.002, 21, 42, 72, 
+  14, 0.002, 21, 40, 72, 
+  14, 0.1, 20, 40, 72, 
+  17, 0.02, 21, 40, 72,   ; preset  21
+  15, 0.012, 22, 43, 70, 
+  18, 0.43, 20, 40, 72, 
+  10, 0.02, 20, 40, 70, 
+  16, 0.015, 22, 41, 71, 
+  12, 0.235, 20, 40, 73, 
+  13, 0.188, 21, 43, 70, 
+  14, 0.0025, 21, 42, 73, 
+  15, 0.128, 20, 41, 73, 
+  18, 0.122, 20, 42, 73)  ; 30
 
 
 ; helping instrument to enable to change preset by midi CC 1
@@ -115,6 +119,9 @@ instr preset_call, 1
   ascanned subinstr "sound", iamp, ip1, ip2, ip3, ip4, ip5, ifreq, ifileindex
   out(ascanned, ascanned)
   dispfft ascanned, 0.1, 1024  ; , 0, 0
+  if eventcycles() == 100 then 
+    outvalue "graph/findfft", "ascanned"
+  endif
 endin
 
 instr sound
@@ -261,43 +268,6 @@ f0 3600  ; wait for live events
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<EventPanel name="tweak parameters of isntr sound" tempo="60.00000000" loop="8.00000000" x="442" y="697" width="655" height="346" visible="false" loopStart="0" loopEnd="0">;             ;              ;              ;              ;amp dbFS             ;init             ;irate             ;massed             ;centering             ;scanning trajectory             ;freq 
-i "sound" 0 5 -10 18 0.43 20 40 72 261 
-i . 1 . . . . . . . 100 
-i . 2 . . . . . . . 200 
-i . 3 . . . . . . . 400 
-i . 4 . . . . . . . 800 
-i . 5 . . . . . . . 2000 </EventPanel>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="120" y="455" width="655" height="346" visible="true" loopStart="0" loopEnd="0">;             ;              ;              ;              ;amp             ;freq             ;preset           ;save file 
-i "preset_call" 0 4 -10 8.07 3 0 
-; viimane oli preset 8    </EventPanel>
-
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -307,11 +277,7 @@ i "preset_call" 0 4 -10 8.07 3 0
  <height>594</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>239</r>
-  <g>239</g>
-  <b>239</b>
- </bgcolor>
+ <bgcolor mode="background">#efefef</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
@@ -342,24 +308,11 @@ Have fun!
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>65</r>
-   <g>65</g>
-   <b>65</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#414141</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -380,21 +333,13 @@ Have fun!
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
   <maximum>30</maximum>
   <randomizable group="0">false</randomizable>
-  <value>2</value>
+  <value>15</value>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -414,24 +359,11 @@ Have fun!
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -457,14 +389,11 @@ Have fun!
   <eventLine>i1 0 -1  -10  8.00 0 0</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>false</flatStyle>
-  <color>
-   <r>49</r>
-   <g>54</g>
-   <b>59</b>
-  </color>
+  <color>#31363b</color>
   <pressedColor/>
   <borderColor>#a8a8a8</borderColor>
   <textColor>#eff0f1</textColor>
@@ -473,11 +402,11 @@ Have fun!
   <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBGraph" version="2">
-  <objectName/>
-  <x>14</x>
-  <y>401</y>
-  <width>369</width>
-  <height>193</height>
+  <objectName>graph</objectName>
+  <x>8</x>
+  <y>404</y>
+  <width>489</width>
+  <height>229</height>
   <uuid>{9d6c9171-d93b-4630-8cd4-ee4992293e89}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -494,11 +423,11 @@ Have fun!
   <dispy>1.00000000</dispy>
   <modex>lin</modex>
   <modey>lin</modey>
-  <showSelector>true</showSelector>
+  <showSelector>false</showSelector>
   <showGrid>true</showGrid>
-  <showTableInfo>true</showTableInfo>
+  <showTableInfo>false</showTableInfo>
   <showScrollbars>true</showScrollbars>
-  <enableTables>true</enableTables>
+  <enableTables>false</enableTables>
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
@@ -522,64 +451,11 @@ New presets apply to new notes, no infulence during playing time.</label>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>0</borderwidth>
- </bsbObject>
- <bsbObject type="BSBLabel" version="2">
-  <objectName/>
-  <x>394</x>
-  <y>398</y>
-  <width>99</width>
-  <height>179</height>
-  <uuid>{6a631529-6fa3-4414-8c12-4d6cd39b1320}</uuid>
-  <widgetName/>
-  <visible>true</visible>
-  <enabled>true</enabled>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <label>Have a look at the FFT display (last one in menu)</label>
-  <alignment>left</alignment>
-  <valignment>top</valignment>
-  <font>Liberation Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <padding>5</padding>
-  <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>

@@ -1936,6 +1936,12 @@ bool CsoundQt::playDetached(DocumentPage *page)
         QDir::setCurrent(QFileInfo(fileName).absolutePath());
     }
 
+    // Stop the previous performance *before* writing the new session copy:
+    // stopAll() also removes the playback temp files, and doing it afterwards
+    // would delete the file we are about to play.
+    if (!m_options->simultaneousRun)
+        stopAll();
+
     // A detached page is never saved to its source file by the main window, so
     // play a session copy of its current text (including widget changes).
     const QString tempPath = writePlaybackTempFile(page, fileName);
@@ -1957,21 +1963,15 @@ bool CsoundQt::playDetached(DocumentPage *page)
     m_options->csdSetsDbfs = CsoundOptions::textSetsDbfs(page->getBasicText(),
                                                          page->getOptionsText());
 
-    if (!m_options->simultaneousRun) {
-        stopAll();
-        for (WidgetWindow *other : m_widgetWindows) {
-            if (other->page() != page) {
-                other->page()->stop();
-                removePlaybackTempFile(other->page());
-            }
-        }
-    }
-
     const int ret = page->play(m_options);
     if (ret != 0)
         removePlaybackTempFile(page);
-    if (runAct != nullptr)
-        runAct->setChecked(ret == 0);
+    // The main window's Run action reflects its own document; the detached
+    // window has its own Run button.
+    for (WidgetWindow *window : m_widgetWindows) {
+        if (window->page() == page)
+            window->setPlaying(ret == 0);
+    }
     return ret == 0;
 }
 
@@ -1981,8 +1981,10 @@ void CsoundQt::stopDetached(DocumentPage *page)
         return;
     page->stop();
     removePlaybackTempFile(page);
-    if (runAct != nullptr)
-        runAct->setChecked(false);
+    for (WidgetWindow *window : m_widgetWindows) {
+        if (window->page() == page)
+            window->setPlaying(false);
+    }
 }
 
 void CsoundQt::playWidgetWindows()

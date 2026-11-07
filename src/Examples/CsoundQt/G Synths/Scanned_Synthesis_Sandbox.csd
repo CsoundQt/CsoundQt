@@ -26,7 +26,7 @@ giTest = filelen("../../SourceMaterials/circularstring-128")
 ; presets: every preset consist of 5 parameters: fninit, scanning rate, fnmass, fncentr,
 ; fn_scanning_trajectory (all of then are table numbers, expect scanning rate)
 
-giPresets = ftgen(0, 0, 256, -2, \)
+giPresets = ftgen(0, 0, 256, -2, 
 18, 0.03, 22, 40, 71, \  ; preset no 1 for instr preset_call, index 0 in table
   10, 0.02, 20, 40, 70, \
   16, 0.01, 21, 40, 71, \
@@ -56,7 +56,7 @@ giPresets = ftgen(0, 0, 256, -2, \)
   13, 0.188, 21, 43, 70, \
   14, 0.0025, 21, 42, 73, \
   15, 0.128, 20, 41, 73, \
-  18, 0.122, 20, 42, 73  ; 30
+  18, 0.122, 20, 42, 73)  ; 30
 
 
 ; helping instrument to enable to change preset by midi CC 1
@@ -301,6 +301,8 @@ i . 5 . . . . . . . 2000 </EventPanel>
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="120" y="455" width="655" height="346" visible="false" loopStart="0" loopEnd="0">;               ;                ;                ;                ;amp               ;freq               ;preset             ;save file 
 i "preset_call" 0 4 -10 8.07 3 0 
 ; viimane oli preset 8    </EventPanel>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -310,11 +312,7 @@ i "preset_call" 0 4 -10 8.07 3 0
  <height>594</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>239</r>
-  <g>239</g>
-  <b>239</b>
- </bgcolor>
+ <bgcolor mode="background">#efefef</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
@@ -345,24 +343,11 @@ Have fun!
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>103</r>
-   <g>103</g>
-   <b>103</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#676767</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -383,21 +368,13 @@ Have fun!
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
   <maximum>30</maximum>
   <randomizable group="0">false</randomizable>
-  <value>8</value>
+  <value>3</value>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -417,24 +394,11 @@ Have fun!
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>70</r>
-   <g>70</g>
-   <b>70</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#464646</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -462,12 +426,9 @@ Have fun!
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>true</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -525,24 +486,11 @@ New presets apply to new notes, no infulence during playing time.</label>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>48</r>
-   <g>48</g>
-   <b>48</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#303030</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -565,24 +513,11 @@ New presets apply to new notes, no infulence during playing time.</label>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>76</r>
-   <g>76</g>
-   <b>76</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#4c4c4c</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
