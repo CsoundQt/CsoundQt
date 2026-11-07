@@ -46,6 +46,7 @@ public:
     int tabFontSizeOffset;
 	QString font;
 	float fontPointSize;
+	float codePadFontPointSize;
 	bool showLineNumberArea;
 	// Line number contrast against the gutter background: 0 = invisible,
 	// 100 = full editor foreground colour.

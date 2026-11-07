@@ -20,8 +20,6 @@ public:
 	DocumentView *getDocumentView();
 
 public slots:
-	void setCsdMode(bool csdMode);
-	void modeChanged(int index);
 	void evaluateSlot(QString code);
 
 private:
@@ -30,7 +28,6 @@ private:
 
 signals:
 	void evaluate(QString code);
-	void enableCsdMode(bool enable);
 };
 
 #endif // LIVECODEEDITOR_H

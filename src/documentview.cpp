@@ -3514,6 +3514,17 @@ void DocumentView::applyEditorActions(const QList<QAction *> &actions)
     }
 }
 
+void DocumentView::addEditorActions(const QList<QAction *> &actions)
+{
+    TextEditor *editor = m_mainEditor;
+    for (QAction *action : actions) {
+        action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+        action->setProperty("shortcutScope", "editor");
+        if (editor != nullptr)
+            editor->addAction(action);
+    }
+}
+
 void DocumentView::moveLineDown()
 {
     moveLine(1);

@@ -61,6 +61,7 @@ class OpEntryParser;
 class Options;
 class ConfigLists;
 class DocumentPage;
+class DocumentView;
 class UtilitiesDialog;
 class Curve;
 class EventDispatcher;
@@ -231,6 +232,7 @@ protected:
 	int rightDockColumnWidth() const;
 	void recordRightDockRatio();
 	bool currentPageIsReadOnly() const;
+	void applyCodePadAppearance();
 	//    virtual void keyPressEvent(QKeyEvent *event);
 private slots:
 	void open();
@@ -248,10 +250,18 @@ private slots:
 	void paste();
 	void undo();
 	void redo();
+	void comment();
+	void tabsToSpaces();
+	void killLine();
+	void killToEnd();
+	void duplicateLine();
+	void moveLineUp();
+	void moveLineDown();
+	void showWordOccurrences();
+	void goBack();
 	void selectCurrentSection();
 	void evaluate(QString code = QString());
 	void evaluateString(QString evalCode);
-	void setScratchPadMode(bool csdMode);
 	void setWidgetEditMode(bool);  // This is not necessary as the action is passed and connected in the widget layout
 	void onFocusChanged(QWidget *old, QWidget *now);
 	void duplicate();
@@ -365,6 +375,9 @@ private slots:
             return nullptr;
         return documentPages[curPage];
     }
+    // The editor that currently has focus: the codepad or the current
+    // document's editor. Used by editor actions so their shortcuts work in both.
+    DocumentView *activeEditorView() const;
     void gotoLineDialog();
     // Jump to the definition of the name at the cursor.
     void goToSource();
@@ -583,7 +596,6 @@ private:
 	QAction *toggleLockedWidgetAct;
 	QAction *evaluateAct;
 	QAction *selectInstrOpcodeAct;
-	QAction *scratchPadCsdModeAct;
 	QAction *getToInAct;
 	QAction *inToGetAct;
 	QAction *highlightWidgetChannelAct;

@@ -2544,6 +2544,47 @@
                   </property>
                  </widget>
                 </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="codePadFontSizeLabel">
+                  <property name="text">
+                   <string>Codepad size</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QDoubleSpinBox" name="codePadFontSizeSpinBox">
+                  <property name="minimumSize">
+                   <size>
+                    <width>80</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>80</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Codepad font size in points. This is independent of the editor font size.</string>
+                  </property>
+                  <property name="decimals">
+                   <number>1</number>
+                  </property>
+                  <property name="minimum">
+                   <double>6.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>48.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>1.000000000000000</double>
+                  </property>
+                  <property name="value">
+                   <double>10.000000000000000</double>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </item>
              </layout>

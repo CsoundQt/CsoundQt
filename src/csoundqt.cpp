@@ -620,9 +620,11 @@ CsoundQt::CsoundQt(QStringList fileNames, bool noRecentFiles,
 
     m_scratchPad = new QDockWidget(this);
     addDockWidget(Qt::LeftDockWidgetArea, m_scratchPad);
+    // Keep the internal object name stable so existing saved dock layouts
+    // still find the panel; only the visible title changes.
     m_scratchPad->setObjectName("Interactive Code Pad");
-    QDEBUG << "setWindowTItle scratchpad";
-    m_scratchPad->setWindowTitle(tr("Interactive Code Pad"));
+    QDEBUG << "setWindowTItle codepad";
+    m_scratchPad->setWindowTitle(tr("Codepad"));
     m_scratchPad->hide();
     connect(helpPanel, SIGNAL(openManualExample(QString)), this, SLOT(openManualExample(QString)));
 
@@ -781,13 +783,8 @@ CsoundQt::CsoundQt(QStringList fileNames, bool noRecentFiles,
     LiveCodeEditor *liveeditor = new LiveCodeEditor(m_scratchPad, m_opcodeTree);
     liveeditor->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     connect(liveeditor, SIGNAL(evaluate(QString)), this, SLOT(evaluate(QString)));
-    connect(liveeditor, SIGNAL(enableCsdMode(bool)),
-            scratchPadCsdModeAct, SLOT(setChecked(bool)));
-    //	connect(scratchPadCsdModeAct, SIGNAL(toggled(bool)),
-    //			liveeditor, SLOT(setCsdMode(bool)));
     m_scratchPad->setWidget(liveeditor);
     m_scratchPad->setFocusProxy(liveeditor->getDocumentView());
-    scratchPadCsdModeAct->setChecked(true);
 
     // Open files passed in the command line. Here to make sure they are the active tab.
     foreach (QString fileName, fileNames) {
@@ -1735,9 +1732,75 @@ void CsoundQt::redo()
     documentPages[curPage]->redo();
 }
 
+DocumentView *CsoundQt::activeEditorView() const
+{
+    if (m_scratchPad != nullptr && m_scratchPad->widget() != nullptr
+            && m_scratchPad->isAncestorOf(QApplication::focusWidget())) {
+        if (auto *editor = qobject_cast<LiveCodeEditor *>(m_scratchPad->widget()))
+            return editor->getDocumentView();
+    }
+    if (curPage >= 0 && curPage < documentPages.size())
+        return documentPages[curPage]->getView();
+    return nullptr;
+}
+
+void CsoundQt::comment()
+{
+    if (DocumentView *view = activeEditorView())
+        view->comment();
+}
+
+void CsoundQt::tabsToSpaces()
+{
+    if (DocumentView *view = activeEditorView())
+        view->tabsToSpaces();
+}
+
+void CsoundQt::killLine()
+{
+    if (DocumentView *view = activeEditorView())
+        view->killLine();
+}
+
+void CsoundQt::killToEnd()
+{
+    if (DocumentView *view = activeEditorView())
+        view->killToEnd();
+}
+
+void CsoundQt::duplicateLine()
+{
+    if (DocumentView *view = activeEditorView())
+        view->duplicateLine();
+}
+
+void CsoundQt::moveLineUp()
+{
+    if (DocumentView *view = activeEditorView())
+        view->moveLineUp();
+}
+
+void CsoundQt::moveLineDown()
+{
+    if (DocumentView *view = activeEditorView())
+        view->moveLineDown();
+}
+
+void CsoundQt::showWordOccurrences()
+{
+    if (DocumentView *view = activeEditorView())
+        view->showWordOccurrences();
+}
+
+void CsoundQt::goBack()
+{
+    if (DocumentView *view = activeEditorView())
+        view->goBackToPreviousPosition();
+}
+
 void CsoundQt::selectCurrentSection()
 {
-    if (static_cast<LiveCodeEditor *>(m_scratchPad->widget())->getDocumentView()->hasFocus()) {
+    if (static_cast<LiveCodeEditor *>(m_scratchPad->widget())->getDocumentView()->childHasFocus()) {
         static_cast<LiveCodeEditor *>(m_scratchPad->widget())
                 ->getDocumentView()->getActiveSection();
         return;
@@ -1750,7 +1813,7 @@ void CsoundQt::evaluate(QString code)
 {
     QString evalCode;
     if (code.isEmpty()) { //evaluate current selection in current document
-        if (static_cast<LiveCodeEditor *>(m_scratchPad->widget())->getDocumentView()->hasFocus()) {
+        if (static_cast<LiveCodeEditor *>(m_scratchPad->widget())->getDocumentView()->childHasFocus()) {
             evalCode = static_cast<LiveCodeEditor *>(m_scratchPad->widget())->getDocumentView()->getActiveText();
         }
         else {
@@ -1788,29 +1851,43 @@ void CsoundQt::breakpointReached()
 void CsoundQt::evaluateString(QString evalCode)
 {
     TREE *testTree = NULL;
-    if  (scratchPadCsdModeAct->isChecked()) {
-        // first check if it is a scoreline, then if it is csound code, if that also that fails, try with python
-        if (QRegularExpression(uR"([if]\s*-*[0-9]+\s+[0-9]+\s+[0-9]+.*\n)"_s).match(evalCode).hasMatch()) {
-            sendEvent(evalCode);
-            return;
-        }
-        CSOUND *csound = getEngine(curPage)->getCsound();
-        if (csound!=NULL) {
-            testTree = csoundParseOrc(csound,evalCode.toLocal8Bit()); // return not NULL, if the code is valid
-            if (testTree == NULL) {
-                qDebug() << "Not Csound code or cannot compile";
-            }
-        }
-        if (testTree) { // when the code is csound code, but with errors, it will be sent to python interpreter too
-            evaluateCsound(evalCode);
-            return;
+    // An instrument event is a score statement when it starts with "i"
+    // followed by whitespace and a number, a quoted instrument name, or a plain
+    // instrument name. "i1 ..." is not accepted. This applies to both the
+    // codepad and the main editor.
+    static const QRegularExpression scoreEventRx(
+                uR"(^\s*i\s+(?:-?\d+|[A-Za-z_]\w*|"[^"]*")(?:\s|$))"_s);
+    const QStringList lines = evalCode.split(QLatin1Char('\n'));
+    bool anyLine = false;
+    bool allEvents = true;
+    for (const QString &line : lines) {
+        if (line.trimmed().isEmpty())
+            continue;
+        anyLine = true;
+        if (!scoreEventRx.match(line).hasMatch()) {
+            allEvents = false;
+            break;
         }
     }
-}
-
-void CsoundQt::setScratchPadMode(bool csdMode)
-{
-    static_cast<LiveCodeEditor *>(m_scratchPad->widget())->setCsdMode(csdMode);
+    if (anyLine && allEvents) {
+        sendEvent(curPage, evalCode);
+        return;
+    }
+    // Keep the historical f-table/score-line detection for the main editor.
+    if (QRegularExpression(uR"([if]\s*-*[0-9]+\s+[0-9]+\s+[0-9]+.*\n)"_s).match(evalCode).hasMatch()) {
+        sendEvent(curPage, evalCode);
+        return;
+    }
+    CSOUND *csound = getEngine(curPage)->getCsound();
+    if (csound!=NULL) {
+        testTree = csoundParseOrc(csound,evalCode.toLocal8Bit()); // return not NULL, if the code is valid
+        if (testTree == NULL) {
+            qDebug() << "Not Csound code or cannot compile";
+        }
+    }
+    if (testTree) { // when the code is csound code, but with errors, it will be sent to python interpreter too
+        evaluateCsound(evalCode);
+    }
 }
 
 void CsoundQt::setWidgetEditMode(bool active)
@@ -2434,7 +2511,7 @@ void CsoundQt::focusToTab(int tab) {
         break;
 
     case 8:
-        qDebug()<<"Raise Code Pad";
+        qDebug()<<"Raise Codepad";
         panel = m_scratchPad;
         action = showScratchPadAct;
         break;
@@ -2935,7 +3012,8 @@ void CsoundQt::showUtilities(bool show)
 
 void CsoundQt::inToGet()
 {
-    documentPages[curPage]->inToGet();
+    if (DocumentView *view = activeEditorView())
+        view->inToGet();
 }
 
 void CsoundQt::insertMidiControlInstrument()
@@ -2954,7 +3032,8 @@ void CsoundQt::insertMidiControlInstrument()
 
 void CsoundQt::getToIn()
 {
-    documentPages[curPage]->getToIn();
+    if (DocumentView *view = activeEditorView())
+        view->getToIn();
 }
 
 void CsoundQt::saveWidgetsToQml()
@@ -4971,6 +5050,13 @@ void CsoundQt::changeFontSize(int change)
         QFont consoleFont(m_options->consoleFont);
         consoleFont.setPointSizeF(m_options->consoleFontPointSize);
         documentPages[curPage]->setConsoleFont(consoleFont);
+    } else if (m_scratchPad->widget() != nullptr
+               && m_scratchPad->isAncestorOf(QApplication::focusWidget())) {
+        m_options->codePadFontPointSize = qBound(
+                    MIN_EDITOR_FONT_POINT_SIZE,
+                    double(m_options->codePadFontPointSize) + change,
+                    MAX_EDITOR_FONT_POINT_SIZE);
+        applyCodePadAppearance();
     } else {
         m_options->fontPointSize = qBound(MIN_EDITOR_FONT_POINT_SIZE,
                                           double(m_options->fontPointSize) + change,
@@ -4980,9 +5066,6 @@ void CsoundQt::changeFontSize(int change)
         for (int i = 0; i < documentPages.size(); i++) {
             documentPages[i]->setTextFont(editorFont);
         }
-        // apply the same size to code pad (maybe should be separate but so far it has used the same size.
-        DocumentView *pad = static_cast<LiveCodeEditor*>(m_scratchPad->widget())->getDocumentView();
-        pad->setFont(editorFont);
     }
     // console live changing not supported now, possible only through Configuration Dialog
 }
@@ -5534,10 +5617,7 @@ void CsoundQt::applySettings()
         //	}
     }
 
-    DocumentView *pad = static_cast<LiveCodeEditor*>(m_scratchPad->widget())->getDocumentView();
-    QFont editorFont(m_options->font);
-    editorFont.setPointSizeF(m_options->fontPointSize);
-    pad->setFont(editorFont);
+    applyCodePadAppearance();
     if (csoundGetVersion() < 5140) {
         m_options->newParser = false; // Don't use new parser flags
     }
@@ -5691,6 +5771,21 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->setFlags(flags);
 
     applyThemeToPage(p);
+}
+
+void CsoundQt::applyCodePadAppearance()
+{
+    auto *editor = qobject_cast<LiveCodeEditor *>(m_scratchPad->widget());
+    if (editor == nullptr)
+        return;
+    DocumentView *pad = editor->getDocumentView();
+    QFont padFont(m_options->font);
+    padFont.setPointSizeF(m_options->codePadFontPointSize);
+    pad->setFont(padFont);
+    pad->setTheme(m_options->highlightingTheme);
+    const QTextCharFormat defaultFormat = pad->getDefaultFormat();
+    pad->setColors(defaultFormat.foreground().color(),
+                   defaultFormat.background().color());
 }
 
 void CsoundQt::applyThemeToPage(DocumentPage *p)
@@ -5989,6 +6084,7 @@ void CsoundQt::setColors(QString themeMode)
     if (configureToolBar) configureToolBar->update();
     for (WidgetWindow *window : m_widgetWindows)
         window->applyTheme();
+    applyCodePadAppearance();
 
     // Decide console colors:
     // Keep user-set colors for explicit modes; optionally adapt in "auto"
@@ -6147,6 +6243,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     showEditorAct->setShortcut(tr("Ctrl+Shift+0"));
     showWidgetsAct->setShortcut(tr("Ctrl+Shift+1"));
     showHelpAct->setShortcut(tr("Ctrl+Shift+2"));
+    showScratchPadAct->setShortcut(tr("Ctrl+Shift+4"));
     focusEditorAct->setShortcut(tr("Ctrl+0"));
     focusWidgetsAct->setShortcut(tr("Ctrl+1"));
     focusHelpAct->setShortcut(tr("Ctrl+2"));
@@ -6187,7 +6284,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     openQuickRefAct->setShortcut(tr(""));
     commentAct->setShortcut(tr("Ctrl+/"));
     //  uncommentAct->setShortcut(tr("Shift+Ctrl+/"));
-    evaluateAct->setShortcut(tr("Shift+Ctrl+E"));
+    evaluateAct->setShortcut(tr("Ctrl+Return"));
     selectInstrOpcodeAct->setShortcut(tr("Ctrl+Shift+W"));
     raiseScratchPadAct->setShortcut(tr("Ctrl+8"));
     killLineAct->setShortcut(tr("Ctrl+K"));
@@ -6214,24 +6311,26 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 
 void CsoundQt::toggleLineArea()
 {
-    documentPages[curPage]->toggleLineArea();
+    if (DocumentView *view = activeEditorView())
+        view->toggleLineArea();
 }
 
 void CsoundQt::toggleParameterMode()
 {
-    documentPages[curPage]->toggleParameterMode();
+    if (DocumentView *view = activeEditorView())
+        view->toggleParameterMode();
 }
 
 void CsoundQt::autocomplete()
 {
-    DocumentPage* page = documentPages[curPage];
-    page->autocomplete();
+    if (DocumentView *view = activeEditorView())
+        view->autoCompleteAtCursor(true);
 }
 
 void CsoundQt::insertOpcode()
 {
-    DocumentPage* page = documentPages[curPage];
-    page->insertOpcode();
+    if (DocumentView *view = activeEditorView())
+        view->showOpcodeInsertBar();
 }
 
 void CsoundQt::highlightWidgetChannel()
@@ -6461,7 +6560,8 @@ void CsoundQt::createActions()
 
     evaluateAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Evaluate Selection/Line"), this);
     evaluateAct->setStatusTip(tr("Evaluate the selection or the current line"));
-    evaluateAct->setShortcutContext(Qt::ApplicationShortcut);
+    evaluateAct->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    evaluateAct->setProperty("shortcutScope", "editor");
     evaluateAct->setEnabled(false);
     connect(evaluateAct, SIGNAL(triggered()), this, SLOT(evaluate()));
 
@@ -6469,12 +6569,6 @@ void CsoundQt::createActions()
     selectInstrOpcodeAct->setStatusTip(tr("Select the current instrument or opcode block"));
     selectInstrOpcodeAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(selectInstrOpcodeAct, SIGNAL(triggered()), this, SLOT(selectCurrentSection()));
-
-    scratchPadCsdModeAct = new QAction(tr("Code Pad in Csound Mode"), this);
-    scratchPadCsdModeAct->setStatusTip(tr("Toggle the mode for the scratch pad"));
-    scratchPadCsdModeAct->setShortcutContext(Qt::ApplicationShortcut);
-    scratchPadCsdModeAct->setCheckable(true);
-    connect(scratchPadCsdModeAct, SIGNAL(toggled(bool)), this, SLOT(setScratchPadMode(bool)));
 
     inToGetAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Invalue→Chnget"), this);
     inToGetAct->setStatusTip(tr("Convert invalue/outvalue to chnget/chnset"));
@@ -6669,17 +6763,18 @@ void CsoundQt::createActions()
     connect(focusMapper, SIGNAL(mappedInt(int)), this, SLOT(focusToTab(int)));
     this->addAction(focusHelpAct);
 
-    showScratchPadAct = new QAction(icon("scratchpad.png"), tr("CodePad"), this);
+    showScratchPadAct = new QAction(icon("scratchpad.png"), tr("Codepad"), this);
     showScratchPadAct->setCheckable(true);
     //  showPythonConsoleAct->setChecked(true);  // Unnecessary because it is set by options
-    showScratchPadAct->setStatusTip(tr("Show Code Pad"));
-    showScratchPadAct->setIconText(tr("CodePad"));
+    showScratchPadAct->setStatusTip(tr("Show Codepad"));
+    showScratchPadAct->setIconText(tr("Codepad"));
+    showScratchPadAct->setProperty("shortcutName", tr("Toggle Codepad"));
     showScratchPadAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showScratchPadAct, SIGNAL(triggered(bool)), m_scratchPad, SLOT(setVisible(bool)));
     connect(m_scratchPad, SIGNAL(visibilityChanged(bool)), showScratchPadAct, SLOT(setChecked(bool)));
 
     raiseScratchPadAct = new QAction(this);
-    raiseScratchPadAct->setText(tr("Show/Raise Code Pad"));
+    raiseScratchPadAct->setText(tr("Show/Raise Codepad"));
     raiseScratchPadAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(raiseScratchPadAct, SIGNAL(triggered()), focusMapper, SLOT(map()));
     focusMapper->setMapping(raiseScratchPadAct, 8);
@@ -6882,7 +6977,7 @@ void CsoundQt::createActions()
     goBackAct = new QAction(tr("Go Back"), this);
     goBackAct->setStatusTip(tr("Go back to previous position"));
     goBackAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(goBackAct, &QAction::triggered, [this]() { this->getCurrentDocumentPage()->goBackToPreviousPosition(); });
+    connect(goBackAct, &QAction::triggered, this, &CsoundQt::goBack);
     // Sync with the current focus: the widget panel may already hold it.
     onFocusChanged(nullptr, QApplication::focusWidget());
 
@@ -7061,6 +7156,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(showHelpAct);
     m_keyActions.append(showConsoleAct);
     m_keyActions.append(showInspectorAct);
+    m_keyActions.append(showScratchPadAct);
     m_keyActions.append(focusEditorAct);
     m_keyActions.append(focusWidgetsAct);
     m_keyActions.append(focusHelpAct);
@@ -7117,6 +7213,8 @@ void CsoundQt::connectActions()
 {
     DocumentPage * doc = documentPages[curPage];
 
+    // These actions dispatch to whichever editor has focus (the current
+    // document or the codepad), so their shortcuts work in both.
     disconnect(commentAct, 0, 0, 0);
     disconnect(tabsToSpacesAct, 0, 0, 0);
     disconnect(killLineAct, 0, 0, 0);
@@ -7124,17 +7222,16 @@ void CsoundQt::connectActions()
     disconnect(duplicateLineAct, 0, 0, 0);
     disconnect(moveLineUpAct, 0, 0, 0);
     disconnect(moveLineDownAct, 0, 0, 0);
-    connect(commentAct, SIGNAL(triggered()), doc, SLOT(comment()));
-    //  connect(uncommentAct, SIGNAL(triggered()), doc, SLOT(uncomment()));
     disconnect(showOccurrencesAct, 0, 0, 0);
+    connect(commentAct, &QAction::triggered, this, &CsoundQt::comment);
     connect(showOccurrencesAct, &QAction::triggered,
-            doc, &DocumentPage::showWordOccurrences);
-    connect(tabsToSpacesAct, SIGNAL(triggered()), doc, SLOT(tabsToSpaces()));
-    connect(killLineAct, SIGNAL(triggered()), doc, SLOT(killLine()));
-    connect(killToEndAct, SIGNAL(triggered()), doc, SLOT(killToEnd()));
-    connect(duplicateLineAct, SIGNAL(triggered()), doc, SLOT(duplicateLine()));
-    connect(moveLineUpAct, SIGNAL(triggered()), doc, SLOT(moveLineUp()));
-    connect(moveLineDownAct, SIGNAL(triggered()), doc, SLOT(moveLineDown()));
+            this, &CsoundQt::showWordOccurrences);
+    connect(tabsToSpacesAct, &QAction::triggered, this, &CsoundQt::tabsToSpaces);
+    connect(killLineAct, &QAction::triggered, this, &CsoundQt::killLine);
+    connect(killToEndAct, &QAction::triggered, this, &CsoundQt::killToEnd);
+    connect(duplicateLineAct, &QAction::triggered, this, &CsoundQt::duplicateLine);
+    connect(moveLineUpAct, &QAction::triggered, this, &CsoundQt::moveLineUp);
+    connect(moveLineDownAct, &QAction::triggered, this, &CsoundQt::moveLineDown);
 
     // Line-editing and other editor actions are editor shortcuts: their
     // shortcuts must only fire while the editor has focus, not from the
@@ -7147,7 +7244,7 @@ void CsoundQt::connectActions()
     // (editor or widget layout, see DocumentPage::undo()/cut()/...). Scoping
     // them to the editor would disable Ctrl+Z and clipboard shortcuts while
     // the widget panel has focus.
-    doc->applyEditorActions({
+    const QList<QAction *> editorActions = {
         // Text editing.
         commentAct, tabsToSpacesAct,
         killLineAct, killToEndAct, duplicateLineAct,
@@ -7160,9 +7257,14 @@ void CsoundQt::connectActions()
         parameterModeAct, highlightWidgetChannelAct,
         highlightWidgetChannelsAct,
         showOccurrencesAct,
+        // Evaluation is editor-only, not application-global.
+        evaluateAct,
         // Document-level editor commands.
         checkSyntaxAct, reloadDependenciesAct, lineNumbersAct, selectInstrOpcodeAct
-    });
+    };
+    doc->applyEditorActions(editorActions);
+    if (auto *codePad = qobject_cast<LiveCodeEditor *>(m_scratchPad->widget()))
+        codePad->getDocumentView()->addEditorActions(editorActions);
 
     // Duplicate Widgets and Toggle locked belong to the widgets panel.
     // Register them on the page's widget layout: it is the parent of the
@@ -7850,6 +7952,10 @@ void CsoundQt::readSettings()
     // to F3; an explicitly different user binding is left untouched.
     if (findAgainAct && findAgainAct->shortcut() == QKeySequence("Ctrl+G"))
         findAgainAct->setShortcut(QKeySequence("F3"));
+    // Evaluate Selection/Line moved from the old global default to Ctrl+Enter
+    // and is now editor-scoped.
+    if (evaluateAct && evaluateAct->shortcut() == QKeySequence("Shift+Ctrl+E"))
+        evaluateAct->setShortcut(QKeySequence("Ctrl+Return"));
     // F1 used to open the documentation, but Quick Reference took it over.
     // Settings that still map the documentation to that old default follow it
     // to Ctrl+F1. A stored Quick Reference binding means the user has seen the
@@ -7870,6 +7976,10 @@ void CsoundQt::readSettings()
     m_options->fontPointSize = qBound(MIN_EDITOR_FONT_POINT_SIZE,
                                       settings.value("fontsize", 10).toDouble(),
                                       MAX_EDITOR_FONT_POINT_SIZE);
+    m_options->codePadFontPointSize = qBound(
+                MIN_EDITOR_FONT_POINT_SIZE,
+                settings.value("codepadfontsize", 10).toDouble(),
+                MAX_EDITOR_FONT_POINT_SIZE);
     m_options->consoleFont = settings.value("consolefont", "JetBrains Mono").toString();
     m_options->consoleFontPointSize = settings.value("consolefontsize", 8).toDouble();
     m_options->showLineNumberArea = settings.value("showLineNumberArea", true).toBool();
@@ -8192,6 +8302,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.beginGroup("Editor");
     settings.setValue("font", m_options->font );
     settings.setValue("fontsize", m_options->fontPointSize);
+    settings.setValue("codepadfontsize", m_options->codePadFontPointSize);
     settings.setValue("showLineNumberArea", m_options->showLineNumberArea);
     settings.setValue("lineNumberContrast", m_options->lineNumberContrast);
     settings.setValue("consolefont", m_options->consoleFont );
@@ -10018,8 +10129,8 @@ void CsoundQt::loadPreset(int preSetIndex, int index) {
 }
 
 void CsoundQt::gotoLineDialog() {
-    auto doc = this->getCurrentDocumentPage();
-    doc->gotoLineDialog();
+    if (DocumentView *view = activeEditorView())
+        view->gotoLineDialog();
 }
 
 void CsoundQt::goToSource() {

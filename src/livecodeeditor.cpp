@@ -10,20 +10,16 @@ LiveCodeEditor::LiveCodeEditor(QWidget *parent, OpEntryParser *m_opcodeTree) :
 {
 	ui->setupUi(this);
 	m_docView = new DocumentView(this, m_opcodeTree);
-	// The code pad never shows line numbers.
+	// The codepad is always a Csound code editor. Use the standalone-orchestra
+	// mode so the highlighter treats the whole text as Csound code (a full CSD
+	// mode would wait for <CsInstruments> tags and highlight nothing).
+	m_docView->setFileType(EDIT_ORC_MODE);
+	// The codepad never shows line numbers.
 	m_docView->showLineArea(false);
 	m_docView->setFullText("");
 
 	ui->verticalLayout->addWidget(m_docView);
 
-	// The mode selector is only useful when there is more than one mode to
-	// choose from; hide it otherwise.
-	if (ui->modeComboBox->count() <= 1) {
-		ui->modeComboBox->hide();
-	}
-
-	connect(ui->modeComboBox, SIGNAL(currentIndexChanged(int)),
-			this, SLOT(modeChanged(int)));
 	connect(m_docView, SIGNAL(evaluate(QString)), this, SLOT(evaluateSlot(QString)));
 }
 
@@ -35,23 +31,6 @@ LiveCodeEditor::~LiveCodeEditor()
 DocumentView *LiveCodeEditor::getDocumentView()
 {
 	return m_docView;
-}
-
-void LiveCodeEditor::setCsdMode(bool csdMode)
-{
-	if (csdMode) {
-		ui->modeComboBox->setCurrentIndex(0);
-	} else {
-		ui->modeComboBox->setCurrentIndex(1);
-	}
-}
-
-void LiveCodeEditor::modeChanged(int index)
-{
-    if (index != 0)
-        qDebug() << "LiveCodeEditor: only csound mode supported";
-	m_docView->setFileType(EDIT_CSOUND_MODE);
-    emit enableCsdMode(true);
 }
 
 void LiveCodeEditor::evaluateSlot(QString code)

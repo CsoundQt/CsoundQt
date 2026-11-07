@@ -162,6 +162,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	}
 	fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
 	fontSizeSpinBox->setValue(m_options->fontPointSize);
+	codePadFontSizeSpinBox->setValue(m_options->codePadFontPointSize);
 	lineNumbersCheckBox->setChecked(m_options->showLineNumberArea);
 	lineNumberContrastSpinBox->setValue(m_options->lineNumberContrast);
 
@@ -810,6 +811,9 @@ void ConfigDialog::apply()
 	m_options->fontPointSize = qBound(MIN_EDITOR_FONT_POINT_SIZE,
 	                                  fontSizeSpinBox->value(),
 	                                  MAX_EDITOR_FONT_POINT_SIZE);
+	m_options->codePadFontPointSize = qBound(MIN_EDITOR_FONT_POINT_SIZE,
+	                                         codePadFontSizeSpinBox->value(),
+	                                         MAX_EDITOR_FONT_POINT_SIZE);
 	m_options->showLineNumberArea = lineNumbersCheckBox->isChecked();
 	m_options->lineNumberContrast = lineNumberContrastSpinBox->value();
 	m_options->consoleFont = consoleFontComboBox->currentText();

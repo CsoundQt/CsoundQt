@@ -40,6 +40,7 @@ Options::Options(ConfigLists *configlists) :
     widgetStyle = defaultWidgetStyleName();
     tabFontSizeOffset = 0;
     fontPointSize = 10;
+    codePadFontPointSize = 10;
     showLineNumberArea = true;
     lineNumberContrast = 50;
     consoleFont = "JetBrains Mono";

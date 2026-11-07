@@ -29,15 +29,6 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item>
-    <widget class="QComboBox" name="modeComboBox">
-     <item>
-      <property name="text">
-       <string>Csound Mode</string>
-      </property>
-     </item>
-    </widget>
-   </item>
   </layout>
  </widget>
  <resources/>

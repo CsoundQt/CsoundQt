@@ -307,6 +307,9 @@ public slots:
 	// Associate these actions with this view's editor. Their shortcuts are
 	// widget-scoped, so they only fire while the editor has focus.
 	void applyEditorActions(const QList<QAction *> &actions);
+	// Add the actions to this editor without removing them from other editors.
+	// Used for the codepad, whose shortcuts must coexist with the main editor's.
+	void addEditorActions(const QList<QAction *> &actions);
 
 	void markErrorLines(QList<QPair<int, QString> > lines);
 	void unmarkErrorLines();
