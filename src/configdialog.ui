@@ -2897,6 +2897,16 @@
                   </widget>
                  </item>
                  <item>
+                  <widget class="QCheckBox" name="antialiasScopesCheckBox">
+                   <property name="toolTip">
+                    <string>Enable antialiased drawing for scopes by default. Individual scopes can override this in their properties.</string>
+                   </property>
+                   <property name="text">
+                    <string>Antialias scopes</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
                   <spacer name="horizontalSpacer_9">
                    <property name="orientation">
                     <enum>Qt::Orientation::Horizontal</enum>

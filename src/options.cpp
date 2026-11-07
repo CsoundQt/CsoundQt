@@ -42,6 +42,7 @@ Options::Options(ConfigLists *configlists) :
     fontPointSize = 10;
     codePadFontPointSize = 10;
     showLineNumberArea = true;
+    antialiasScopes = false;
     lineNumberContrast = 50;
     consoleFont = "JetBrains Mono";
     consoleFontPointSize = 8;

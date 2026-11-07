@@ -307,6 +307,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	autoParameterModeCheckBox->setChecked(m_options->autoParameterMode);
 	widgetsCheckBox->setChecked(m_options->enableWidgets);
 	midiCcToCurrentPageOnlyCheckBox->setChecked(m_options->midiCcToCurrentPageOnly);
+	antialiasScopesCheckBox->setChecked(m_options->antialiasScopes);
 	showWidgetsOnRunCheckBox->setChecked(m_options->showWidgetsOnRun);
 	showTooltipsCheckBox->setChecked(m_options->showTooltips);
     graphUpdateRateSpinBox->setValue(m_options->graphUpdateRate);
@@ -855,6 +856,7 @@ void ConfigDialog::apply()
 	m_options->autoParameterMode = autoParameterModeCheckBox->isChecked();
 	m_options->enableWidgets = widgetsCheckBox->isChecked();
 	m_options->midiCcToCurrentPageOnly = midiCcToCurrentPageOnlyCheckBox->isChecked();
+	m_options->antialiasScopes = antialiasScopesCheckBox->isChecked();
 	m_options->showWidgetsOnRun = showWidgetsOnRunCheckBox->isChecked();
 	m_options->showTooltips = showTooltipsCheckBox->isChecked();
 	m_options->openProperties = openPropertiesCheckBox->isChecked();

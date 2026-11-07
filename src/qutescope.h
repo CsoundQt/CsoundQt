@@ -85,6 +85,7 @@ protected:
 	QComboBox *channelBox;
     QComboBox *triggerBox;
 	QLineEdit *name2LineEdit = nullptr;   // names a Csound audio channel to monitor
+	QCheckBox *antialiasCheckBox = nullptr;
 	QDoubleSpinBox *zoomxBox;
 	QDoubleSpinBox *zoomyBox;
 	AudioChannelMonitor *m_monitor = nullptr; // acquired for m_channel2
@@ -124,6 +125,11 @@ public:
 
 	bool freeze;
 
+	// Global fallback from Settings; a per-scope override of -1 follows it.
+	static void setGlobalAntialias(bool enabled) { s_globalAntialias = enabled; }
+	static bool globalAntialias() { return s_globalAntialias; }
+	void setAntialiasOverride(int overrideValue) { m_antialiasOverride = overrideValue; }
+
 protected:
 	//     virtual void contextMenuEvent(QContextMenuEvent *event)
 	//     {emit(popUpMenu(event->globalPos()));}
@@ -140,6 +146,9 @@ protected:
 
 	//   signals:
 	//     void popUpMenu(QPoint pos);
+private:
+	static bool s_globalAntialias;
+	int m_antialiasOverride = -1; // -1 = use global, 0 = off, 1 = on
 };
 
 

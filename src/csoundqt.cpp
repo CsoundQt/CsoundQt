@@ -74,6 +74,7 @@
 #include "editorthemes.h"
 #include "widgetpanel.h"
 #include "widgetwindow.h"
+#include "qutescope.h"
 #include "utilitiesdialog.h"
 #include "about.h"
 #include "midihandler.h"
@@ -5554,6 +5555,7 @@ void CsoundQt::applySettings()
     if (m_options->csdocdir != m_appliedCsdocdir)
         applyManualDirectory(true);
 
+    ScopeWidget::setGlobalAntialias(m_options->antialiasScopes);
     for (int i = 0; i < documentPages.size(); i++) {
         setCurrentOptionsForPage(documentPages[i]);
     }
@@ -8061,6 +8063,7 @@ void CsoundQt::readSettings()
     m_options->autocompleteMenuMaxLines = settings.value("autocompleteMenuMaxLines", 20).toInt();
     m_options->autoParameterMode = settings.value("autoParameterMode", true).toBool();
     m_options->enableWidgets = settings.value("enableWidgets", true).toBool();
+    m_options->antialiasScopes = settings.value("antialiasScopes", false).toBool();
     m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
     m_options->showTooltips = settings.value("showTooltips", true).toBool();
     m_options->openProperties = settings.value("openProperties", true).toBool();
@@ -8342,6 +8345,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("autocompleteMenuMaxLines", m_options->autocompleteMenuMaxLines);
     settings.setValue("autoParameterMode", m_options->autoParameterMode);
     settings.setValue("enableWidgets", m_options->enableWidgets);
+    settings.setValue("antialiasScopes", m_options->antialiasScopes);
     settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);
     settings.setValue("graphUpdateRate", m_options->graphUpdateRate);
     settings.setValue("showTooltips", m_options->showTooltips);

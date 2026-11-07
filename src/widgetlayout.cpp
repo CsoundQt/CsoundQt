@@ -1060,6 +1060,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
                  || nodeName == "enabled"
                  || nodeName == "locked"
                  || nodeName == "flatStyle"
+                 || nodeName == "antialias"
                  || nodeName == "instant" ) {  // BOOL type
             QDomNode n = node.firstChild();
             if (nodeName == "randomizable") {

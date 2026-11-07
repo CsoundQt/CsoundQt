@@ -26,8 +26,13 @@
 #include "types.h"  //necessary for the userdata struct
 #include "csoundqt.h"  //necessary for the userdata struct
 
+bool ScopeWidget::s_globalAntialias = false;
+
 void ScopeWidget::paintEvent(QPaintEvent *event)
 {
+	const bool antialias = m_antialiasOverride < 0
+	        ? s_globalAntialias : (m_antialiasOverride != 0);
+	setRenderHint(QPainter::Antialiasing, antialias);
 	QGraphicsView::paintEvent(event);
 	if (!isEnabled()) {
 		QPainter painter(viewport());
@@ -156,6 +161,9 @@ QString QuteScope::getWidgetXmlText()
 	s.writeTextElement("dispy", QString::number(property("CSQT_dispy").toDouble(), 'f', 8));
     s.writeTextElement("mode",  QString::number(property("CSQT_mode").toDouble(), 'f', 8));
     s.writeTextElement("triggermode", property("CSQT_triggermode").toString());
+    if (property("CSQT_antialias").isValid())
+        s.writeTextElement("antialias",
+                           property("CSQT_antialias").toBool() ? "true" : "false");
 	s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -233,6 +241,11 @@ bool QuteScope::applyProperty(const QString &name)
 		m_channel2 = name2;
 		return true;
 	}
+	if (name == "CSQT_antialias") {
+		static_cast<ScopeWidget *>(m_widget)->setAntialiasOverride(
+		            property("CSQT_antialias").toBool() ? 1 : 0);
+		return true;
+	}
 	return QuteWidget::applyProperty(name);
 }
 
@@ -244,6 +257,9 @@ void QuteScope::applyInternalProperties()
 	setType(property("CSQT_type").toString());
 	setValue(property("CSQT_value").toDouble());
     m_params->triggerMode = triggerNameToMode(property("CSQT_triggermode").toString());
+	const QVariant antialias = property("CSQT_antialias");
+	static_cast<ScopeWidget *>(m_widget)->setAntialiasOverride(
+	            antialias.isValid() ? (antialias.toBool() ? 1 : 0) : -1);
 }
 
 void QuteScope::createPropertiesDialog()
@@ -317,6 +333,15 @@ void QuteScope::createPropertiesDialog()
     triggerBox->setCurrentIndex(triggerBox->findData(property("CSQT_triggermode").toString()));
     layout->addWidget(triggerBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 	++row;
+    antialiasCheckBox = new QCheckBox(tr("Antialias"), dialog);
+    antialiasCheckBox->setToolTip(
+                tr("Draw this scope with antialiasing. When the property is unset, "
+                   "the global Settings → Widgets value is used."));
+    const QVariant antialias = property("CSQT_antialias");
+    antialiasCheckBox->setChecked(antialias.isValid()
+                                  ? antialias.toBool()
+                                  : ScopeWidget::globalAntialias());
+    layout->addWidget(antialiasCheckBox, row, 0, 1, 2, Qt::AlignLeft|Qt::AlignVCenter);
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -337,6 +362,15 @@ void QuteScope::applyProperties()
     auto triggerModeStr = triggerBox->currentData().toString();
     setProperty("CSQT_triggermode", triggerModeStr);
     m_params->triggerMode = triggerNameToMode(triggerModeStr);
+    if (antialiasCheckBox != nullptr) {
+        const bool checked = antialiasCheckBox->isChecked();
+        // Keep the property unset when the widget follows the global setting,
+        // so a later global change still applies to it.
+        if (checked == ScopeWidget::globalAntialias())
+            setProperty("CSQT_antialias", QVariant());
+        else
+            setProperty("CSQT_antialias", checked);
+    }
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif

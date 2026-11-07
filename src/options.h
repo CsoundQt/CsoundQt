@@ -48,6 +48,7 @@ public:
 	float fontPointSize;
 	float codePadFontPointSize;
 	bool showLineNumberArea;
+	bool antialiasScopes; // default for scope widgets without an override
 	// Line number contrast against the gutter background: 0 = invisible,
 	// 100 = full editor foreground colour.
 	int lineNumberContrast;
