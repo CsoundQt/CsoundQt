@@ -23,11 +23,16 @@
 
 #include <QApplication>
 #include <QDebug>
+#include <QFontMetrics>
 #include <QProxyStyle>
 #include <QStringList>
 #include <QStyle>
 #include <QStyleFactory>
+#include <QStyleOptionDockWidget>
 using namespace Qt::StringLiterals;
+
+// How much smaller dock-panel titles are drawn than the widget's normal font.
+constexpr qreal DOCK_TITLE_FONT_DELTA = 0.9;
 
 // Some desktop styles (e.g. Breeze) put themed icons on dialog buttons
 // (Yes/No/Cancel/...). Those icons follow the desktop icon theme rather than
@@ -39,6 +44,27 @@ class DialogButtonStyle : public QProxyStyle
 {
 public:
     using QProxyStyle::QProxyStyle;
+
+    void drawControl(ControlElement element, const QStyleOption *option,
+                     QPainter *painter, const QWidget *widget = nullptr) const override
+    {
+        // Dock panel title bars are a little too prominent at the normal UI
+        // font size; draw just the title with a slightly smaller font.
+        if (element == CE_DockWidgetTitle && option != nullptr) {
+            QStyleOptionDockWidget dockOption(
+                        *static_cast<const QStyleOptionDockWidget *>(option));
+            QFont font = widget != nullptr ? widget->font() : QApplication::font();
+            if (font.pointSizeF() > 0.0) {
+                font.setPointSizeF(qMax(1.0, font.pointSizeF() - DOCK_TITLE_FONT_DELTA));
+            } else if (font.pixelSize() > 0) {
+                font.setPixelSize(qMax(1, font.pixelSize() - qRound(DOCK_TITLE_FONT_DELTA)));
+            }
+            dockOption.fontMetrics = QFontMetrics(font);
+            QProxyStyle::drawControl(element, &dockOption, painter, widget);
+            return;
+        }
+        QProxyStyle::drawControl(element, option, painter, widget);
+    }
 
     QIcon standardIcon(StandardPixmap standardIcon,
                        const QStyleOption *option = nullptr,
