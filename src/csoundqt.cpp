@@ -679,6 +679,11 @@ CsoundQt::CsoundQt(QStringList fileNames, bool noRecentFiles,
     // missing theme can fall back to "auto".
     EditorThemes::initialize();
     readSettings();
+    // Set this after readSettings(): restoring a saved window/dock state also
+    // restores the corner ownership, which would otherwise make a bottom dock
+    // span the full window width again.
+    setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
+    setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
     // The widget mode is known now: remember it, so that the applySettings()
     // call below does not mistake it for a mode change.
     m_appliedWidgetsIndependent = m_options->widgetsIndependent;
