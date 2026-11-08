@@ -41,6 +41,7 @@
 #include <QShortcut>
 #include <QToolTip>
 #include <QHelpEvent>
+#include <QWhatsThis>
 #include <QFontMetrics>
 #include <QFontDatabase>
 #include <QScreen>
@@ -732,37 +733,32 @@ CsoundQt::CsoundQt(QStringList fileNames, bool noRecentFiles,
     documentTabs->setDocumentMode(true);
     documentTabs->setMinimumSize(QSize(500, 500));
 
-    // set shortcuts to change between tabs,Alt +<tab no>
-    // example from: https://stackoverflow.com/questions/10160232/qt-designer-shortcut-to-another-tab
-    // Setup a signal mapper to avoid creating custom slots for each tab
-    // it is possible to switch it out from Cinfigure->Editor
-    if (m_options->tabShortcutActive) {
-        QSignalMapper *mapper = new QSignalMapper(this);
-        // Setup the shortcut for tabs 1..10
-        for (int i=0; i<10; i++) {
-            int key = (i==9) ? 0 : i+1;
+    // Tab shortcuts are always enabled. Use Alt+<number> (Cmd+<number> on
+    // macOS); Ctrl+<number> is reserved for focusing panels.
+    QSignalMapper *mapper = new QSignalMapper(this);
+    for (int i=0; i<10; i++) {
+        int key = (i==9) ? 0 : i+1;
 #ifdef Q_OS_MACOS
-            QShortcut *shortcut = new  QShortcut(QKeySequence(Qt::META | (Qt::Key_0 + key)), this);
+        QShortcut *shortcut = new  QShortcut(QKeySequence(Qt::META | (Qt::Key_0 + key)), this);
 #else
-            QShortcut *shortcut = new QShortcut(QKeySequence(Qt::ALT | (Qt::Key_0 + key)), this);
+        QShortcut *shortcut = new QShortcut(QKeySequence(Qt::ALT | (Qt::Key_0 + key)), this);
 #endif
-            connect(shortcut, SIGNAL(activated()), mapper, SLOT(map()));
-            mapper->setMapping(shortcut, i); // tab 0 -> Alt+1, tab 1 -> Alt + 2 etc tab 9 -> Alt + 0
-        }
-        // Wire the signal mapper to the tab widget index change slot
-        connect(mapper, SIGNAL(mappedInt(int)), documentTabs, SLOT(setCurrentIndex(int)));
-#ifdef Q_OS_MACOS
-        QShortcut *tabLeft = new QShortcut(QKeySequence(Qt::META | Qt::SHIFT | Qt::Key_Left), this);
-        QShortcut *tabRight = new QShortcut(QKeySequence(Qt::META | Qt::SHIFT | Qt::Key_Right), this);
-#else
-        // Alt+Left/Right is used for fine widget movement in the widget editor,
-        // so cycle tabs with Alt+Shift+Left/Right instead.
-        QShortcut *tabLeft = new QShortcut(QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_Left), this);
-        QShortcut *tabRight = new QShortcut(QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_Right), this);
-#endif
-        connect(tabLeft, SIGNAL(activated()), this, SLOT(pageLeft()));
-        connect(tabRight, SIGNAL(activated()), this, SLOT(pageRight()));
+        connect(shortcut, SIGNAL(activated()), mapper, SLOT(map()));
+        mapper->setMapping(shortcut, i); // tab 0 -> Alt+1, tab 1 -> Alt + 2 etc tab 9 -> Alt + 0
     }
+    // Wire the signal mapper to the tab widget index change slot
+    connect(mapper, SIGNAL(mappedInt(int)), documentTabs, SLOT(setCurrentIndex(int)));
+#ifdef Q_OS_MACOS
+    QShortcut *tabLeft = new QShortcut(QKeySequence(Qt::META | Qt::SHIFT | Qt::Key_Left), this);
+    QShortcut *tabRight = new QShortcut(QKeySequence(Qt::META | Qt::SHIFT | Qt::Key_Right), this);
+#else
+    // Alt+Left/Right is used for fine widget movement in the widget editor,
+    // so cycle tabs with Alt+Shift+Left/Right instead.
+    QShortcut *tabLeft = new QShortcut(QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_Left), this);
+    QShortcut *tabRight = new QShortcut(QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_Right), this);
+#endif
+    connect(tabLeft, SIGNAL(activated()), this, SLOT(pageLeft()));
+    connect(tabRight, SIGNAL(activated()), this, SLOT(pageRight()));
 
     fillFileMenu();     // Must be placed after readSettings to include recent Files
     /*
@@ -1666,16 +1662,8 @@ void CsoundQt::openFromAction()
 
 void CsoundQt::openFromAction(QString fileName)
 {
-    if (!fileName.isEmpty()) {
-        if ( (fileName.endsWith(".sco") || fileName.endsWith(".orc"))
-             && m_options->autoJoin) {
-
-        }
-        else {
-            loadCompanionFile(fileName);
-            loadFile(fileName);
-        }
-    }
+    if (!fileName.isEmpty())
+        loadFile(fileName);
 }
 
 bool CsoundQt::save()
@@ -3333,7 +3321,7 @@ void CsoundQt::play(bool realtime, int index)
         }
         if (realtime)
             updatePerformanceInfo(page);
-        if (m_options->enableWidgets && m_options->showWidgetsOnRun && isCsd) {
+        if (m_options->showWidgetsOnRun && isCsd) {
             if (!m_options->widgetsIndependent) {
                 // Show and raise the panel even when docked: if it was hidden
                 // or its tab sits behind another dock (e.g. Help), it must be
@@ -5453,7 +5441,15 @@ void CsoundQt::configure()
             this, SLOT(setDefaultKeyboardShortcuts()));
     connect(dialog.testAudioSetupButton, SIGNAL(released()),
             this, SLOT(testAudioSetup()));
+    // Shift+F1 is the standard What's This shortcut. The main window's
+    // "Opcode Entry" action also uses it as an application-wide shortcut,
+    // which would shadow the dialog's help. Disable it while the dialog is
+    // open and restore its previous state afterwards.
+    const bool helpEntryWasEnabled = setHelpEntryAct->isEnabled();
+    setHelpEntryAct->setEnabled(false);
     const int result = dialog.exec();
+    QWhatsThis::leaveWhatsThisMode();
+    setHelpEntryAct->setEnabled(helpEntryWasEnabled);
     // Shortcuts are applied and permanent as soon as they are assigned, so
     // they are kept whatever button closes the dialog: store them even on
     // Cancel, where nothing else is written.
@@ -5530,6 +5526,7 @@ void CsoundQt::applySettings()
     if (m_options->widgetsIndependent != m_appliedWidgetsIndependent)
         applyWidgetModeChange();
     applyWidgetStyle();
+    DialogButtonStyle::setToolTipWakeUpDelay(m_options->tooltipWakeUpDelay);
 
     // Document tabs: use the application font plus the configured relative
     // adjustment. Always start from qApp->font(), so repeated applySettings()
@@ -5741,7 +5738,7 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->setAutoCompleteMenuWidth(m_options->autocompleteMenuWidth);
     p->setAutoCompleteMenuMaxLines(m_options->autocompleteMenuMaxLines);
     p->setAutoParameterMode(m_options->autoParameterMode);
-    p->setWidgetEnabled(m_options->enableWidgets);
+    p->setWidgetEnabled(true);
     p->setChannelHighlightMode(m_options->channelHighlightMode);
     p->setChannelReferenceHighlightMode(m_options->channelReferenceHighlightMode);
     p->showWidgetTooltips(m_options->showTooltips);
@@ -5765,7 +5762,7 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->setQuickHelpHoverDelay(m_options->quickHelpHoverDelay);
     p->setShowVariableOccurrences(m_options->showVariableOccurrences);
 
-    p->enableScoreSyntaxHighlighting(m_options->highlightScore);
+    p->enableScoreSyntaxHighlighting(true);
 
     int flags = m_options->noBuffer ? CSQT_NO_COPY_BUFFER : 0;
     flags |= m_options->noMessages ? CSQT_NO_CONSOLE_MESSAGES : 0;
@@ -7586,9 +7583,10 @@ void CsoundQt::fillExampleMenu()
 
 void CsoundQt::fillExampleSubmenu(QDir dir, QMenu *m, int depth)
 {
+    static constexpr int kMaxMenuDepth = 5;
     QString test = dir.dirName();
     //qDebug() << "dirName: " << test;
-    if (depth > m_options->menuDepth) {
+    if (depth > kMaxMenuDepth) {
         return;
     }
 
@@ -7868,6 +7866,8 @@ void CsoundQt::readSettings()
                                            defaultWidgetStyleName()).toString();
     m_options->tabFontSizeOffset =
             qBound(-20, settings.value("tabFontSizeOffset", 0).toInt(), 0);
+    m_options->tooltipWakeUpDelay = qBound(
+                0, settings.value("tooltipWakeUpDelay", 500).toInt(), 5000);
     QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
     if(!pos.isNull())
         move(pos);
@@ -8020,8 +8020,6 @@ void CsoundQt::readSettings()
         m_options->editorTheme = "auto";
     }
 
-    m_options->autoJoin = settings.value("autoJoin", true).toBool();
-    m_options->menuDepth = settings.value("menuDepth", 3).toInt();
     m_options->saveChanges = settings.value("savechanges", false).toBool();
     m_options->rememberFile = settings.value("rememberfile", true).toBool();
     m_options->midiCcToCurrentPageOnly = settings.value("midiCcToActivePageOnly", false).toBool();
@@ -8062,7 +8060,6 @@ void CsoundQt::readSettings()
     m_options->autocompleteMenuWidth = settings.value("autocompleteMenuWidth", 42).toInt();
     m_options->autocompleteMenuMaxLines = settings.value("autocompleteMenuMaxLines", 20).toInt();
     m_options->autoParameterMode = settings.value("autoParameterMode", true).toBool();
-    m_options->enableWidgets = settings.value("enableWidgets", true).toBool();
     m_options->antialiasScopes = settings.value("antialiasScopes", false).toBool();
     m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
     m_options->showTooltips = settings.value("showTooltips", true).toBool();
@@ -8071,9 +8068,7 @@ void CsoundQt::readSettings()
     lastFiles = settings.value("lastfiles", QStringList()).toStringList();
     lastTabIndex = settings.value("lasttabindex", "").toInt();
     m_options->debugPort = settings.value("debugPort",34711).toInt();
-    m_options->tabShortcutActive = settings.value("tabShortcutActive", true).toBool();
     m_options->tabShowCloseButton = settings.value("tabShowCloseButton", true).toBool();
-    m_options->highlightScore = settings.value("highlightScore", false).toBool();
 
     settings.endGroup();
     settings.beginGroup("Run");
@@ -8216,9 +8211,6 @@ void CsoundQt::readSettings()
     settings.beginGroup("External");
     m_options->terminal = settings.value("terminal", DEFAULT_TERM_EXECUTABLE).toString();
     m_options->browser = settings.value("browser", DEFAULT_BROWSER_EXECUTABLE).toString();
-    m_options->waveeditor = settings.value("waveeditor",
-                                           DEFAULT_WAVEEDITOR_EXECUTABLE
-                                           ).toString();
     m_options->waveplayer = settings.value("waveplayer",
                                            DEFAULT_WAVEPLAYER_EXECUTABLE
                                            ).toString();
@@ -8227,8 +8219,6 @@ void CsoundQt::readSettings()
 
         QList <QString *> apps;
         apps << &m_options->terminal << &m_options->browser << &m_options->waveplayer;
-        // not sure about  &m_options->waveeditor (Audacity) -  where is this installed on Catalina
-        // no correctrion for waveeditor now
 
         foreach (QString * app, apps) {
             if (app->startsWith("/Applications")) {
@@ -8298,6 +8288,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("themeMode", m_options->themeMode);
     settings.setValue("widgetStyle", m_options->widgetStyle);
     settings.setValue("tabFontSizeOffset", m_options->tabFontSizeOffset);
+    settings.setValue("tooltipWakeUpDelay", m_options->tooltipWakeUpDelay);
     settings.setValue("windowState", saveState());
     settings.setValue("windowGeometry", saveGeometry());
     settings.setValue("editorVisible", showEditorAct->isChecked());
@@ -8322,8 +8313,6 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("editorPadding", m_options->editorPadding);
     settings.setValue("colorvariables", m_options->colorVariables);
     settings.setValue("editorTheme", m_options->editorTheme);
-    settings.setValue("autoJoin", m_options->autoJoin);
-    settings.setValue("menuDepth", m_options->menuDepth);
     settings.setValue("savechanges", m_options->saveChanges);
     settings.setValue("rememberfile", m_options->rememberFile);
     settings.setValue("midiCcToActivePageOnly", m_options->midiCcToCurrentPageOnly);
@@ -8346,16 +8335,13 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("autocompleteMenuWidth", m_options->autocompleteMenuWidth);
     settings.setValue("autocompleteMenuMaxLines", m_options->autocompleteMenuMaxLines);
     settings.setValue("autoParameterMode", m_options->autoParameterMode);
-    settings.setValue("enableWidgets", m_options->enableWidgets);
     settings.setValue("antialiasScopes", m_options->antialiasScopes);
     settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);
     settings.setValue("graphUpdateRate", m_options->graphUpdateRate);
     settings.setValue("showTooltips", m_options->showTooltips);
     settings.setValue("openProperties", m_options->openProperties);
     settings.setValue("debugPort", m_options->debugPort);
-    settings.setValue("tabShortcutActive", m_options->tabShortcutActive);
     settings.setValue("tabShowCloseButton", m_options->tabShowCloseButton);
-    settings.setValue("highlightScore", m_options->highlightScore);
 
     settings.setValue("lastfiles", openFiles);
     settings.setValue("lasttabindex", lastIndex);
@@ -8446,7 +8432,6 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.beginGroup("External");
     settings.setValue("terminal", m_options->terminal);
     settings.setValue("browser", m_options->browser);
-    settings.setValue("waveeditor", m_options->waveeditor);
     settings.setValue("waveplayer", m_options->waveplayer);
     settings.endGroup(); // options/external
 
@@ -8687,51 +8672,6 @@ void changeNewLines(QByteArray &line) {
     }
 }
 
-void fillCompanionSco(QString &fileName, QString &text) {
-    auto companionFileName = fileName.replace(".orc", ".sco");
-    if (!QFile::exists(companionFileName))
-        return;
-    text.prepend("<CsoundSynthesizer>\n<CsOptions>\n</CsOptions>\n<CsInstruments>\n");
-    text.append("\n</CsInstruments>\n<CsScore>\n");
-    QFile companionFile(companionFileName);
-    if (!companionFile.open(QFile::ReadOnly))
-        return;
-    while (!companionFile.atEnd()) {
-        QByteArray line = companionFile.readLine();
-        changeNewLines(line);
-        //QTextDecoder decoder(QTextCodec::codecForLocale());
-        QStringDecoder decoder(QStringDecoder::Utf8); // Fixed: use UTF-8 instead of system locale
-
-        text = text + decoder(line);
-        if (!line.endsWith("\n"))
-            text.append("\n");
-    }
-    text.append("</CsScore>\n</CsoundSynthesizer>\n");
-}
-
-void fillCompanionOrc(QString &fileName, QString &text) {
-    auto companionFileName = fileName.replace(".sco", ".orc");
-    if (!QFile::exists(companionFileName))
-        return;
-    QFile companionFile(companionFileName);
-    QString orcText = "";
-    if (!companionFile.open(QFile::ReadOnly))
-        return;
-    while (!companionFile.atEnd()) {
-        QByteArray line = companionFile.readLine();
-        changeNewLines(line);
-        //QTextDecoder decoder(QTextCodec::codecForLocale());
-        QStringDecoder decoder(QStringDecoder::Utf8); // Fixed: use UTF-8 instead of system locale
-        orcText = orcText + decoder(line);
-        if (!line.endsWith("\n"))
-            orcText += "\n";
-    }
-    text.prepend("\n</CsInstruments>\n<CsScore>\n");
-    text.prepend(orcText);
-    text.prepend("<CsoundSynthesizer>\n<CsOptions>\n</CsOptions>\n<CsInstruments>\n");
-    text += "</CsScore>\n</CsoundSynthesizer>\n";
-}
-
 void CsoundQt::loadPendingSessionFile()
 {
     if (m_pendingSessionFiles.isEmpty())
@@ -8816,13 +8756,6 @@ int CsoundQt::loadFile(QString fileName, bool runNow, bool activate, int insertA
         }
     }
     text = lines.join("");
-    if (m_options->autoJoin) {
-        // QString companionFileName = fileName;
-        if (fileName.endsWith(".orc"))
-            fillCompanionSco(fileName, text);
-        else if (fileName.endsWith(".sco"))
-            fillCompanionOrc(fileName, text);
-    }
 
     if (fileName == ":/default.csd") {
         fileName = QString("");
@@ -8836,35 +8769,18 @@ int CsoundQt::loadFile(QString fileName, bool runNow, bool activate, int insertA
         return -1;
     }
 
-    if (!m_options->autoJoin &&
-            (fileName.endsWith(".sco") ||
-             fileName.endsWith(".orc")) ) {
+    if (fileName.endsWith(".sco") || fileName.endsWith(".orc")) {
         // load companion, when the new page is made, otherwise isOpen works uncorrect
         loadCompanionFile(fileName, activate, newPageIndex + 1, readOnly);
     }
 
-    if (m_options->autoJoin &&
-            (fileName.endsWith(".sco") || fileName.endsWith(".orc"))) {
-        fileName.chop(4);
-        fileName +=  ".csd";
-        documentPages[newPageIndex]->setFileName(fileName);  // Must update internal name
-        if (activate) {
-            setCurrentFile(fileName);
-            if (!QFile::exists(fileName))
-                save();
-            else
-                saveAs();
-        }
-    } else {
-        documentPages[newPageIndex]->setModified(false);
-        if (activate)
-            setWindowModified(false);
-        documentTabs->setTabIcon(newPageIndex, QIcon());
-    }
+    documentPages[newPageIndex]->setModified(false);
+    if (activate)
+        setWindowModified(false);
+    documentTabs->setTabIcon(newPageIndex, QIcon());
 
     // Ensure the tab has its final name even when the page was loaded in the
-    // background (no changePage()/setCurrentFile() call) or the autoJoin path
-    // renamed an .orc/.sco to .csd.
+    // background (no changePage()/setCurrentFile() call).
     setTabTextForPage(newPageIndex, fileName);
 
     if (fileName.startsWith(m_options->csdocdir) && !m_options->csdocdir.isEmpty()) {

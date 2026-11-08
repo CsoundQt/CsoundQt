@@ -29,7 +29,21 @@
 class CsoundQt;
 class Options;
 class QAction;
+class QPlainTextEdit;
 class KeyboardShortcutsWidget;
+
+// Editor for the template used when creating a new csd file. Kept as a
+// separate dialog so that the Settings dialog does not need a Template tab.
+class TemplateDialog : public QDialog
+{
+	Q_OBJECT
+public:
+	explicit TemplateDialog(const QString &text, QWidget *parent = nullptr);
+	QString text() const;
+
+private:
+	QPlainTextEdit *m_edit = nullptr;
+};
 
 class ConfigDialog : public QDialog, public Ui::ConfigDialog
 {
@@ -52,10 +66,19 @@ public:
 public slots:
 	void warnOpcodeDir(bool on);
 
+protected:
+	void showEvent(QShowEvent *event) override;
+	bool eventFilter(QObject *watched, QEvent *event) override;
+
 private:
 	CsoundQt* m_parent;
+	bool m_tabOrderApplied = false;
+	bool m_tabOrderUpdatePending = false;
+	void scheduleReadingOrderTabOrder();
+	void applyReadingOrderTabOrder();
 	Options *m_options;
 	ConfigLists *m_configlists;
+	QString m_csdTemplate;
 	KeyboardShortcutsWidget *m_shortcutsWidget = nullptr;
 	QHash<QString, QList<AudioDeviceInfo>> m_audioDeviceCache;
 	int m_overrideOutputChannels = 2;
@@ -84,7 +107,6 @@ private slots:
 	void updateLogPathLabel();
 	void browseTerminal();
 	void browseBrowser();
-	void browseWaveEditor();
 	void browseWavePlayer();
 	void selectAudioInput();
 	void selectAudioOutput();
@@ -95,8 +117,7 @@ private slots:
 	void selectEditorBgColor();
 	void selectWidgetFrameColorUnselected();
 	void selectWidgetFrameColorSelected();
-	void clearTemplate();
-	void defaultTemplate();
+	void editTemplates();
 
 	void on_internalMidiCheckBox_toggled(bool checked);
 	void updateMidiControls(bool internalMidi);

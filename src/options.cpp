@@ -58,7 +58,6 @@ Options::Options(ConfigLists *configlists) :
     colorVariables = true;
     editorTheme = "auto";
     highlightingTheme = "light";
-    autoJoin = false;
 	midiCcToCurrentPageOnly = false;
     saveChanges = false;
     quitOnLastTabClosed = false;
@@ -80,13 +79,14 @@ Options::Options(ConfigLists *configlists) :
     // entries are 42 characters wide.
     autocompleteMenuWidth = 42;
     autocompleteMenuMaxLines = 20;
+    tooltipWakeUpDelay = 500;
+    tabShowCloseButton = true;
 
     showWidgetsOnRun = true;
     showTooltips = false;
     openProperties = true;  // Open properties automatically when creating a widget
     graphUpdateRate = 30;
 
-    enableWidgets = true;
     widgetsIndependent = false;  // Widget layouts in Separate Window (instead of Dock Widget)
     keyRepeat = true;
     debugLiveEvents = false;
@@ -98,7 +98,6 @@ Options::Options(ConfigLists *configlists) :
 
     csdPath = "./"; //path of active csd needed for setting -o -i paths
 
-    menuDepth = 3;
     defaultCsd = "";
     defaultCsdActive = false;
     opcodexmldir = "";
@@ -120,7 +119,6 @@ Options::Options(ConfigLists *configlists) :
     // External applications
     terminal = "";
     browser = "";
-    waveeditor = "";
     waveplayer = "";
     language = 0;  // Interface language
 

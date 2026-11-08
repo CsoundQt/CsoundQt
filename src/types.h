@@ -58,13 +58,11 @@
 #define DEFAULT_TERM_EXECUTABLE ""
 #endif
 #define DEFAULT_BROWSER_EXECUTABLE ""
-#define DEFAULT_WAVEEDITOR_EXECUTABLE ""
 #define DEFAULT_WAVEPLAYER_EXECUTABLE ""
 #endif
 #ifdef Q_OS_SOLARIS
 #define DEFAULT_TERM_EXECUTABLE ""
 #define DEFAULT_BROWSER_EXECUTABLE ""
-#define DEFAULT_WAVEEDITOR_EXECUTABLE ""
 #define DEFAULT_WAVEPLAYER_EXECUTABLE ""
 #endif
 #ifdef Q_OS_MAC
@@ -72,26 +70,22 @@
 // for running a script in a terminal. Everything else uses the system default.
 #define DEFAULT_TERM_EXECUTABLE "/Applications/Utilities/Terminal.app"
 #define DEFAULT_BROWSER_EXECUTABLE ""
-#define DEFAULT_WAVEEDITOR_EXECUTABLE ""
 #define DEFAULT_WAVEPLAYER_EXECUTABLE ""
 #endif
 #ifdef Q_OS_WIN32
 // cmd.exe is always present; everything else uses the system default.
 #define DEFAULT_TERM_EXECUTABLE "cmd.exe"
 #define DEFAULT_BROWSER_EXECUTABLE ""
-#define DEFAULT_WAVEEDITOR_EXECUTABLE ""
 #define DEFAULT_WAVEPLAYER_EXECUTABLE ""
 #endif
 #ifdef Q_OS_HAIKU
 #define DEFAULT_TERM_EXECUTABLE ""
 #define DEFAULT_BROWSER_EXECUTABLE ""
-#define DEFAULT_WAVEEDITOR_EXECUTABLE ""
 #define DEFAULT_WAVEPLAYER_EXECUTABLE ""
 #endif
 #ifdef Q_OS_OPENBSD
 #define DEFAULT_TERM_EXECUTABLE ""
 #define DEFAULT_BROWSER_EXECUTABLE ""
-#define DEFAULT_WAVEEDITOR_EXECUTABLE ""
 #define DEFAULT_WAVEPLAYER_EXECUTABLE ""
 #endif
 

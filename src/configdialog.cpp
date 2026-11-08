@@ -24,12 +24,28 @@
 #include <QDir>
 #include <algorithm>
 //#include <QOperatingSystemVersion> // not present before Qt 5.9
+#include <QAbstractSpinBox>
+#include <QComboBox>
+#include <QContextMenuEvent>
 #include <QDesktopServices>
+#include <QDialogButtonBox>
 #include <QFile>
+#include <QGroupBox>
+#include <QGuiApplication>
+#include <QHBoxLayout>
+#include <QLineEdit>
+#include <QMenu>
 #include <QMessageBox>
+#include <QPlainTextEdit>
+#include <QPushButton>
+#include <QShowEvent>
 #include <QSysInfo>
 #include <QStandardItemModel>
+#include <QTextEdit>
+#include <QTimer>
 #include <QUrl>
+#include <QVBoxLayout>
+#include <QWhatsThis>
 
 #include "csoundqt.h"
 #include "configdialog.h"
@@ -80,6 +96,111 @@ static ChannelHighlightMode channelHighlightModeFromIndex(int index)
 	return ChannelHighlightMode::CursorOnly;
 }
 
+namespace {
+
+// A setting widget and its position within the visible tab page, used to
+// build a predictable reading-order tab chain.
+struct TabOrderEntry {
+    QWidget *widget;
+    QPoint pos;
+};
+
+// Show a What's This? window once the context menu has really closed. If the
+// menu was activated while a mouse button is still held, wait for the release
+// first; otherwise the popup can be dismissed immediately.
+static void showWhatsThisLater(const QPoint &pos, const QString &text,
+                               QWidget *target, int delay = 0)
+{
+    QTimer::singleShot(delay, target, [pos, text, target]() {
+        if (QGuiApplication::mouseButtons() != Qt::NoButton) {
+            showWhatsThisLater(pos, text, target, 20);
+            return;
+        }
+        QWhatsThis::showText(pos, text, target);
+    });
+}
+
+static bool isTabFocusable(QWidget *widget)
+{
+    if (widget->focusPolicy() == Qt::NoFocus)
+        return false;
+    // Popups (e.g. a combo box's list view) are top-level windows and are not
+    // part of the dialog's tab chain. Hidden controls are skipped for the same
+    // reason Qt skips them when tabbing.
+    if (widget->isWindow() || !widget->isVisible())
+        return false;
+    if (qobject_cast<QGroupBox *>(widget)
+            || qobject_cast<QTabWidget *>(widget)
+            || qobject_cast<QStackedWidget *>(widget)
+            || qobject_cast<QTabBar *>(widget)
+            || qobject_cast<QScrollBar *>(widget)) {
+        return false;
+    }
+    // Internal line edits of combo boxes and spin boxes are not tab stops.
+    if (QWidget *parent = widget->parentWidget()) {
+        if (qobject_cast<QComboBox *>(parent)
+                || qobject_cast<QAbstractSpinBox *>(parent)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+static void setReadingOrderTabOrder(QWidget *page,
+                                    const QList<QWidget *> &trailingWidgets)
+{
+    QList<TabOrderEntry> entries;
+    const QList<QWidget *> widgets = page->findChildren<QWidget *>();
+    for (QWidget *widget : widgets) {
+        if (isTabFocusable(widget))
+            entries.append({widget, widget->mapTo(page, QPoint(0, 0))});
+    }
+
+    // First sort by vertical position, then group widgets whose tops are close
+    // together into one visual row and sort each row from left to right. This
+    // gives the usual reading order: top to bottom, left to right.
+    std::sort(entries.begin(), entries.end(),
+              [](const TabOrderEntry &a, const TabOrderEntry &b) {
+        if (a.pos.y() != b.pos.y())
+            return a.pos.y() < b.pos.y();
+        return a.pos.x() < b.pos.x();
+    });
+
+    QList<QWidget *> ordered;
+    const int rowTolerance = 12; // pixels; covers small layout offsets
+    for (int i = 0; i < entries.size();) {
+        const int rowTop = entries[i].pos.y();
+        int rowEnd = i + 1;
+        while (rowEnd < entries.size()
+               && entries[rowEnd].pos.y() - rowTop <= rowTolerance) {
+            ++rowEnd;
+        }
+        std::sort(entries.begin() + i, entries.begin() + rowEnd,
+                  [](const TabOrderEntry &a, const TabOrderEntry &b) {
+            return a.pos.x() < b.pos.x();
+        });
+        for (int j = i; j < rowEnd; ++j)
+            ordered.append(entries[j].widget);
+        i = rowEnd;
+    }
+
+    // Dialog buttons come after the settings, in their own left-to-right order.
+    ordered.append(trailingWidgets);
+
+    QWidget *previous = nullptr;
+    for (QWidget *widget : ordered) {
+        if (previous != nullptr)
+            QWidget::setTabOrder(previous, widget);
+        previous = widget;
+    }
+    // Close the loop so that tabbing from the last button returns to the first
+    // setting instead of wandering into the tab bar or a hidden page.
+    if (ordered.size() > 1)
+        QWidget::setTabOrder(ordered.last(), ordered.first());
+}
+
+} // namespace
+
 static int channelReferenceHighlightIndex(ChannelReferenceHighlightMode mode)
 {
 	switch (mode) {
@@ -111,6 +232,21 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     // don't expand over screen, leave some room for panels
     setMaximumSize(  QGuiApplication::primaryScreen()->geometry().width()  * 0.9,
                    QGuiApplication::primaryScreen()->geometry().height() * 0.9);
+
+    // What's This? help reuses the existing tooltip texts.
+    for (QWidget *widget : findChildren<QWidget *>()) {
+        if (widget->whatsThis().isEmpty() && !widget->toolTip().isEmpty())
+            widget->setWhatsThis(widget->toolTip());
+    }
+    connect(helpButton, &QPushButton::clicked, this, []() {
+        QWhatsThis::enterWhatsThisMode();
+    });
+    // Shift+F1 is Qt's standard What's This shortcut. Add it to the dialog
+    // explicitly so that it also works when no widget has focus (the built-in
+    // handling in QWidget only sees it when a widget is focused).
+    QAction *whatsThisAction = QWhatsThis::createAction(this);
+    whatsThisAction->setShortcutContext(Qt::WindowShortcut);
+    addAction(whatsThisAction);
 
     m_shortcutsWidget = new KeyboardShortcutsWidget(this, keyActions, defaultShortcuts);
     shortcutsTabLayout->addWidget(m_shortcutsWidget);
@@ -282,8 +418,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
 
 
-	autoJoinCheckBox->setChecked(m_options->autoJoin);
-	menusDepthSpinBox->setValue(m_options->menuDepth);
 	saveChangesCheckBox->setChecked(m_options->saveChanges);
 	rememberFileCheckBox->setChecked(m_options->rememberFile);
 	widgetsIndependentCheckBox->setChecked(m_options->widgetsIndependent);
@@ -305,16 +439,14 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     autocompleteMenuMaxLinesSpinBox->setValue(m_options->autocompleteMenuMaxLines);
 
 	autoParameterModeCheckBox->setChecked(m_options->autoParameterMode);
-	widgetsCheckBox->setChecked(m_options->enableWidgets);
 	midiCcToCurrentPageOnlyCheckBox->setChecked(m_options->midiCcToCurrentPageOnly);
 	antialiasScopesCheckBox->setChecked(m_options->antialiasScopes);
 	showWidgetsOnRunCheckBox->setChecked(m_options->showWidgetsOnRun);
 	showTooltipsCheckBox->setChecked(m_options->showTooltips);
     graphUpdateRateSpinBox->setValue(m_options->graphUpdateRate);
 	openPropertiesCheckBox->setChecked(m_options->openProperties);
-    tabShortcutActiveCheckBox->setChecked(m_options->tabShortcutActive);
     tabCloseButtonCheckBox->setChecked(m_options->tabShowCloseButton);
-    highlightScoreCheckBox->setChecked(m_options->highlightScore);
+    tooltipDelaySpinBox->setValue(m_options->tooltipWakeUpDelay);
 
 	noMessagesCheckBox->setChecked(m_options->noMessages);
 	noBufferCheckBox->setChecked(m_options->noBuffer);
@@ -322,7 +454,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
 	//  threadCheckBox->setChecked(m_options->thread);
 	keyRepeatCheckBox->setChecked(m_options->keyRepeat);
-	debugLiveEventsCheckBox->setChecked(m_options->debugLiveEvents);
 	int bufferIndex = consoleBufferComboBox->findText(QString::number(m_options->consoleBufferSize));
 	if (bufferIndex < 0) {
 		bufferIndex = consoleBufferComboBox->count() - 1;
@@ -517,11 +648,10 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     browserToolButton->setEnabled(false);
     label_20->setEnabled(false);
 #endif
-	WaveEditorLineEdit->setText(m_options->waveeditor);
 	WavePlayerLineEdit->setText(m_options->waveplayer);
 	languageComboBox->setCurrentIndex(m_options->language);
 
-	templateTextEdit->setPlainText(m_options->csdTemplate);
+	m_csdTemplate = m_options->csdTemplate;
 
     connect(csdocdirToolButton, SIGNAL(clicked()), this, SLOT(browseCsdocdir()));
     connect(opcode7dir64ToolButton, SIGNAL(clicked()), this, SLOT(browseOpcode7dir64())); // was commented out - why?
@@ -533,7 +663,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     connect(examplePathToolButton, SIGNAL(clicked()), this, SLOT(browseExamplePath()) );
     connect(terminalToolButton, SIGNAL(clicked()), this, SLOT(browseTerminal()));
 	connect(browserToolButton, SIGNAL(clicked()), this, SLOT(browseBrowser()));
-	connect(waveEditorToolButton, SIGNAL(clicked()), this, SLOT(browseWaveEditor()));
 	connect(wavePlayerToolButton, SIGNAL(clicked()), this, SLOT(browseWavePlayer()));
 	connect(logDebugCheckBox, &QCheckBox::toggled, this, &ConfigDialog::updateLogPathLabel);
 	connect(openLogToolButton, &QToolButton::clicked, this, &ConfigDialog::openDebugLog);
@@ -554,8 +683,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	connect(frameColorUnselectedButton, SIGNAL(released()), this, SLOT(selectWidgetFrameColorUnselected()));
 	connect(frameColorSelectedButton, SIGNAL(released()), this, SLOT(selectWidgetFrameColorSelected()));
 
-	connect(clearTemplatePushButton,SIGNAL(released()), this, SLOT(clearTemplate()));
-	connect(defaultTemplatePushButton,SIGNAL(released()), this, SLOT(defaultTemplate()));
+	connect(templatesButton, &QPushButton::clicked, this, &ConfigDialog::editTemplates);
 
     // connect(OpcodedirCheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
     // connect(Opcodedir64CheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
@@ -568,10 +696,102 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
 
     m_selectedOutputDeviceIndex = -1;
+
+    // Geometry is only valid once the dialog has been laid out, so the tab
+    // order is applied when it is shown (and again for each tab page).
+    connect(editorTabWidget, &QTabWidget::currentChanged, this, [this](int) {
+        if (m_tabOrderApplied)
+            scheduleReadingOrderTabOrder();
+    });
+    // Right-clicking any setting should offer its What's This? text.
+    qApp->installEventFilter(this);
 }
 
 ConfigDialog::~ConfigDialog()
 {
+}
+
+void ConfigDialog::showEvent(QShowEvent *event)
+{
+    QDialog::showEvent(event);
+    if (!m_tabOrderApplied) {
+        m_tabOrderApplied = true;
+        // Let the layout run before reading widget geometry.
+        scheduleReadingOrderTabOrder();
+    }
+}
+
+void ConfigDialog::scheduleReadingOrderTabOrder()
+{
+    if (m_tabOrderUpdatePending)
+        return;
+    m_tabOrderUpdatePending = true;
+    QTimer::singleShot(0, this, [this]() {
+        m_tabOrderUpdatePending = false;
+        applyReadingOrderTabOrder();
+    });
+}
+
+void ConfigDialog::applyReadingOrderTabOrder()
+{
+    if (QWidget *page = editorTabWidget->currentWidget()) {
+        setReadingOrderTabOrder(page,
+                                {helpButton, okButton, applyButton, cancelButton});
+    }
+}
+
+bool ConfigDialog::eventFilter(QObject *watched, QEvent *event)
+{
+    if (event->type() == QEvent::Show || event->type() == QEvent::Hide) {
+        QWidget *widget = qobject_cast<QWidget *>(watched);
+        if (widget != nullptr && !widget->isWindow() && m_tabOrderApplied
+                && isAncestorOf(widget)) {
+            // Controls that appear or disappear change the tab chain.
+            scheduleReadingOrderTabOrder();
+        }
+        return QDialog::eventFilter(watched, event);
+    }
+
+    if (event->type() != QEvent::ContextMenu)
+        return QDialog::eventFilter(watched, event);
+
+    QWidget *widget = qobject_cast<QWidget *>(watched);
+    if (widget == nullptr || (widget != this && !isAncestorOf(widget)))
+        return QDialog::eventFilter(watched, event);
+
+    // Spin boxes and editable combo boxes receive the event on their internal
+    // line edit; their help text is stored on the parent widget.
+    QWidget *target = widget;
+    if (QWidget *parent = widget->parentWidget()) {
+        if (qobject_cast<QAbstractSpinBox *>(parent)
+                || qobject_cast<QComboBox *>(parent)) {
+            target = parent;
+        }
+    }
+    const QString whatsThis = target->whatsThis();
+    if (whatsThis.isEmpty())
+        return QDialog::eventFilter(watched, event);
+
+    auto *contextEvent = static_cast<QContextMenuEvent *>(event);
+    QMenu *menu = nullptr;
+    if (auto *lineEdit = qobject_cast<QLineEdit *>(widget))
+        menu = lineEdit->createStandardContextMenu();
+    else if (auto *textEdit = qobject_cast<QTextEdit *>(widget))
+        menu = textEdit->createStandardContextMenu();
+    else if (auto *plainTextEdit = qobject_cast<QPlainTextEdit *>(widget))
+        menu = plainTextEdit->createStandardContextMenu();
+    else
+        menu = new QMenu(this);
+
+    QAction *whatsThisAction = menu->addAction(tr("What's this?"));
+    QAction *chosen = menu->exec(contextEvent->globalPos());
+    const bool showHelp = (chosen == whatsThisAction);
+    delete menu;
+
+    if (showHelp) {
+        showWhatsThisLater(contextEvent->globalPos(), whatsThis, target);
+    }
+    return true;
 }
 
 void ConfigDialog::populateSampleFormats(const QString &preferredFlag)
@@ -829,8 +1049,6 @@ void ConfigDialog::apply()
     m_options->widgetStyle = widgetStyleComboBox->currentData().toString();
     m_options->tabFontSizeOffset = tabFontSizeSpinBox->value();
 
-	m_options->autoJoin = autoJoinCheckBox->isChecked();
-	m_options->menuDepth = menusDepthSpinBox->value();
 	m_options->saveChanges = saveChangesCheckBox->isChecked();
 	m_options->widgetsIndependent = widgetsIndependentCheckBox->isChecked();
 	m_options->channelHighlightMode =
@@ -854,7 +1072,6 @@ void ConfigDialog::apply()
     m_options->autocompleteMenuWidth = autocompleteMenuWidthSpinBox->value();
     m_options->autocompleteMenuMaxLines = autocompleteMenuMaxLinesSpinBox->value();
 	m_options->autoParameterMode = autoParameterModeCheckBox->isChecked();
-	m_options->enableWidgets = widgetsCheckBox->isChecked();
 	m_options->midiCcToCurrentPageOnly = midiCcToCurrentPageOnlyCheckBox->isChecked();
 	m_options->antialiasScopes = antialiasScopesCheckBox->isChecked();
 	m_options->showWidgetsOnRun = showWidgetsOnRunCheckBox->isChecked();
@@ -862,11 +1079,10 @@ void ConfigDialog::apply()
 	m_options->openProperties = openPropertiesCheckBox->isChecked();
     m_options->graphUpdateRate = graphUpdateRateSpinBox->value();
 	m_options->debugPort = debugPortSpinBox->value();
-    m_options->tabShortcutActive = tabShortcutActiveCheckBox->isChecked();
     m_options->tabShowCloseButton = tabCloseButtonCheckBox->isChecked();
+    m_options->tooltipWakeUpDelay = tooltipDelaySpinBox->value();
 	//  m_options->thread = threadCheckBox->isChecked();
 	m_options->keyRepeat = keyRepeatCheckBox->isChecked();
-	m_options->debugLiveEvents = debugLiveEventsCheckBox->isChecked();
 	m_options->consoleBufferSize = consoleBufferComboBox->itemText(consoleBufferComboBox->currentIndex()).toInt();
 	const bool internalMidi = internalMidiCheckBox->isChecked();
 	m_options->useCsoundMidi = !internalMidi;
@@ -963,13 +1179,12 @@ void ConfigDialog::apply()
 
 	m_options->terminal = TerminalLineEdit->text();
 	m_options->browser = browserLineEdit->text();
-	m_options->waveeditor = WaveEditorLineEdit->text();
 	m_options->waveplayer = WavePlayerLineEdit->text();
 	m_options->language = languageComboBox->currentIndex();
 
-	m_options->csdTemplate = templateTextEdit->toPlainText();
+	m_options->csdTemplate = m_csdTemplate;
     m_options->checkSyntaxBeforeRun = checkSyntaxBeforeRunCheckBox->isChecked();
-    m_options->highlightScore = highlightScoreCheckBox->isChecked();
+
 
 	//  emit(changeFont());
 }
@@ -1044,12 +1259,6 @@ void ConfigDialog::browseBrowser()
 {
 	browseFile(m_options->browser);
 	browserLineEdit->setText(m_options->browser);
-}
-
-void ConfigDialog::browseWaveEditor()
-{
-	browseFile(m_options->waveeditor);
-	WaveEditorLineEdit->setText(m_options->waveeditor);
 }
 
 void ConfigDialog::browseWavePlayer()
@@ -1315,15 +1524,50 @@ void ConfigDialog::selectWidgetFrameColorSelected()
 	}
 }
 
-void ConfigDialog::clearTemplate()
+TemplateDialog::TemplateDialog(const QString &text, QWidget *parent)
+	: QDialog(parent)
 {
-	templateTextEdit->clear();
+	setWindowTitle(tr("Csd Template"));
+	resize(640, 480);
+
+	auto *layout = new QVBoxLayout(this);
+	auto *group = new QGroupBox(tr("csd Template"), this);
+	auto *groupLayout = new QVBoxLayout(group);
+	m_edit = new QPlainTextEdit(group);
+	m_edit->setPlainText(text);
+	groupLayout->addWidget(m_edit);
+
+	auto *buttonLayout = new QHBoxLayout;
+	buttonLayout->addStretch();
+	auto *clearButton = new QPushButton(tr("Clear"), group);
+	auto *defaultButton = new QPushButton(tr("Default"), group);
+	buttonLayout->addWidget(clearButton);
+	buttonLayout->addWidget(defaultButton);
+	groupLayout->addLayout(buttonLayout);
+	layout->addWidget(group);
+
+	auto *buttonBox = new QDialogButtonBox(
+				QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+	layout->addWidget(buttonBox);
+
+	connect(clearButton, &QPushButton::clicked, m_edit, &QPlainTextEdit::clear);
+	connect(defaultButton, &QPushButton::clicked, this, [this]() {
+		m_edit->setPlainText(QString(CSQT_DEFAULT_TEMPLATE));
+	});
 }
 
-void ConfigDialog::defaultTemplate()
+QString TemplateDialog::text() const
 {
-	QString defaultText = CSQT_DEFAULT_TEMPLATE;
-	templateTextEdit->setPlainText(defaultText );
+	return m_edit != nullptr ? m_edit->toPlainText() : QString();
+}
+
+void ConfigDialog::editTemplates()
+{
+	TemplateDialog dialog(m_csdTemplate, this);
+	if (dialog.exec() == QDialog::Accepted)
+		m_csdTemplate = dialog.text();
 }
 
 int ConfigDialog::selectedDeviceChannels(bool isOutput)

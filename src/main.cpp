@@ -215,6 +215,8 @@ int main(int argc, char *argv[])
         QSettings styleSettings("csoundqt", "csoundqt");
         widgetStyle = styleSettings.value("GUI/widgetStyle",
                                           defaultWidgetStyleName()).toString();
+        DialogButtonStyle::setToolTipWakeUpDelay(
+                    styleSettings.value("GUI/tooltipWakeUpDelay", 500).toInt());
     }
     if (QStyle *widgetStyleBase = createWidgetStyle(resolveWidgetStyleName(widgetStyle))) {
         qApp->setStyle(new DialogButtonStyle(widgetStyleBase));

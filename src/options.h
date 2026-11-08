@@ -67,7 +67,6 @@ public:
     QString editorTheme;
     // Resolved editor theme actually handed to the documents (never "auto").
     QString highlightingTheme;
-	bool autoJoin;
 	bool midiCcToCurrentPageOnly;
 	bool saveChanges;
 	bool quitOnLastTabClosed; // exit instead of opening an empty document
@@ -99,10 +98,8 @@ public:
     // the list is reached by scrolling.
     int autocompleteMenuMaxLines;
 	bool autoParameterMode;
-    bool tabShortcutActive;
     bool tabShowCloseButton;
-
-    bool highlightScore;
+    int tooltipWakeUpDelay; // milliseconds before a tooltip appears
 
 	bool showWidgetsOnRun;
 	bool showTooltips;
@@ -114,7 +111,6 @@ public:
 	QColor widgetFrameColorUnselected;
 	QColor widgetFrameColorSelected;
 
-	bool enableWidgets;
 	bool widgetsIndependent;  // Widget layouts in Separate Window (instead of Dock Widget)
 	ChannelHighlightMode channelHighlightMode = ChannelHighlightMode::CursorOnly;
 	ChannelReferenceHighlightMode channelReferenceHighlightMode = ChannelReferenceHighlightMode::NotPerforming;
@@ -134,7 +130,6 @@ public:
 
 	QString csdPath; //path of active csd needed for setting -o -i paths
 
-	int menuDepth;
 	QString defaultCsd;
 	bool defaultCsdActive;
 	QString opcodexmldir;
@@ -157,7 +152,6 @@ public:
 	// External applications
 	QString terminal;
 	QString browser;
-	QString waveeditor;
 	QString waveplayer;
 	int language;  // Interface language
 

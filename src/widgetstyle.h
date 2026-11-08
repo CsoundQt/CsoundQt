@@ -45,6 +45,22 @@ class DialogButtonStyle : public QProxyStyle
 public:
     using QProxyStyle::QProxyStyle;
 
+    inline static int s_toolTipWakeUpDelay = 500;
+
+    static void setToolTipWakeUpDelay(int milliseconds)
+    {
+        s_toolTipWakeUpDelay = qMax(0, milliseconds);
+    }
+
+    int styleHint(StyleHint hint, const QStyleOption *option = nullptr,
+                  const QWidget *widget = nullptr,
+                  QStyleHintReturn *returnData = nullptr) const override
+    {
+        if (hint == SH_ToolTip_WakeUpDelay)
+            return s_toolTipWakeUpDelay;
+        return QProxyStyle::styleHint(hint, option, widget, returnData);
+    }
+
     void drawControl(ControlElement element, const QStyleOption *option,
                      QPainter *painter, const QWidget *widget = nullptr) const override
     {
