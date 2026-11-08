@@ -72,7 +72,7 @@ ConfigLists::ConfigLists()
     renderFileTypeLongNames  << "wave" << "aiff" << "flac" << "caf" << "wave64 (w64)";
 
 	fileFormatFlags << "24bit" << "short" << "long" << "float";
-	fileFormatNames << "pcm24" << "pcm16" << "pcm32" << "float32";
+	fileFormatNames << "24 bit int" << "16 bit int" << "32 bit int" << "32 bit float";
 
     languages << "English" << "Spanish" << "German" << "French" << "Portuguese"
               << "Italian"  << "Turkish"  << "Finnish" << "Russian" << "Korean"
@@ -93,8 +93,8 @@ QStringList ConfigLists::sampleFormatFlagsForFileType(const QString &fileType) c
     // FLAC supports only integer PCM up to 24 bit; the other render formats
     // expose the same four choices.
     if (fileType == "flac"_L1)
-        return {u"short"_s, u"24bit"_s}; // pcm16, pcm24
-    return {u"24bit"_s, u"short"_s, u"long"_s, u"float"_s}; // pcm24, pcm16, pcm32, float32
+        return {u"short"_s, u"24bit"_s}; // 16 bit int, 24 bit int
+    return {u"24bit"_s, u"short"_s, u"long"_s, u"float"_s}; // 24/16/32 bit int, 32 bit float
 }
 
 void ConfigLists::msgCallback(CSOUND *csound, int attr, const char *fmt, va_list args)

@@ -345,7 +345,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	AdditionalFlagsCheckBox->setChecked(m_options->additionalFlagsActive);
 	AdditionalFlagsLineEdit->setText(m_options->additionalFlags);
 	AdditionalFlagsLineEdit->setEnabled(m_options->additionalFlagsActive);
-	FileUseOptionsCheckBox->setChecked(m_options->fileUseOptions);
 	FileOverrideCheckBox->setChecked(m_options->fileOverrideOptions);
 	AskFilenameCheckBox->setChecked(m_options->fileAskFilename);
 	const int fileTypeIndex = qBound(0, m_options->fileFileType,
@@ -363,7 +362,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 		offlineLabelColumnWidth = qMax(offlineLabelColumnWidth,
 		                               widget->sizeHint().width());
 	};
-	considerLabelWidth(FileUseOptionsCheckBox);
 	considerLabelWidth(FileOverrideCheckBox);
 	considerLabelWidth(label_9);
 	considerLabelWidth(label_10);
@@ -400,7 +398,9 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     channelsSetupMethod->setCurrentIndex(channelsMethodIndex);
     connect(channelsSetupMethod, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, [this](int) { updateChannelControls(); });
-    resetChannelsMethodForBackend();
+    // Do not force a backend default here: this would overwrite the persisted
+    // channelsSetupMethod every time the dialog opens. updateChannelControls()
+    // only replaces an invalid selection (e.g. Device for PortAudio).
 
     numChannelsSpinBox->setMinimum(0);
     numChannelsSpinBox->setMaximum(64);
@@ -899,7 +899,9 @@ void ConfigDialog::apply()
 	m_options->numThreads = numThreadsSpinBox->value();
 	m_options->additionalFlags = AdditionalFlagsLineEdit->text();
 	m_options->additionalFlagsActive = AdditionalFlagsCheckBox->isChecked();
-	m_options->fileUseOptions = FileUseOptionsCheckBox->isChecked();
+	// The render tab options always override matching CsOptions entries; the
+	// remaining CsOptions still apply. The old "Override" checkbox is gone.
+	m_options->fileUseOptions = true;
 	m_options->fileOverrideOptions = FileOverrideCheckBox->isChecked();
 	m_options->fileAskFilename = AskFilenameCheckBox->isChecked();
 	m_options->fileFileType = FileTypeComboBox->currentIndex();

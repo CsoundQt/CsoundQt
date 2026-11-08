@@ -8136,9 +8136,11 @@ void CsoundQt::readSettings()
     m_options->realtimeFlag = settings.value("realtimeFlag", false).toBool();
     m_options->sampleAccurateFlag = settings.value("sampleAccurateFlag", false).toBool();
     m_options->additionalFlagsActive = settings.value("additionalFlagsActive", false).toBool();
-    m_options->fileUseOptions = settings.value("fileUseOptions", true).toBool();
+    // Render tab options always take precedence over matching CsOptions; the
+    // old "Override" toggle has been removed.
+    m_options->fileUseOptions = true;
     m_options->fileOverrideOptions = settings.value("fileOverrideOptions", false).toBool();
-    m_options->fileAskFilename = settings.value("fileAskFilename", false).toBool();
+    m_options->fileAskFilename = settings.value("fileAskFilename", true).toBool();
     if (settings.contains("renderFileType")) {
         m_options->fileFileType = settings.value("renderFileType", 0).toInt();
     } else {

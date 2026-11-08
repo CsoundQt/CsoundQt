@@ -249,7 +249,7 @@ else
 	afilt = anoise
 endif
 
-dispfft afilt, 0.1, 4096
+dispfft afilt, 1/24, 4096
 aout = afilt*0.02
 aout clip aout, 0, 0.3 ; For ear and speaker protection from unstable filters
 outs aout, aout
@@ -280,6 +280,8 @@ e
 
 
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="557" y="270" width="608" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -289,11 +291,7 @@ e
  <height>510</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>204</r>
-  <g>204</g>
-  <b>204</b>
- </bgcolor>
+ <bgcolor mode="background">#cccccc</bgcolor>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>freq</objectName>
   <x>9</x>
@@ -309,7 +307,7 @@ e
   <description/>
   <minimum>1.00000000</minimum>
   <maximum>22050.00000000</maximum>
-  <value>8055.57122708</value>
+  <value>3266.36671368</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -337,11 +335,11 @@ e
   <dispy>1.00000000</dispy>
   <modex>lin</modex>
   <modey>lin</modey>
-  <showSelector>true</showSelector>
+  <showSelector>false</showSelector>
   <showGrid>true</showGrid>
   <showTableInfo>true</showTableInfo>
   <showScrollbars>true</showScrollbars>
-  <enableTables>true</enableTables>
+  <enableTables>false</enableTables>
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
@@ -363,24 +361,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -403,24 +388,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -499,16 +471,12 @@ e
   <minimum>-20.00000000</minimum>
   <maximum>36.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>16.40000000</value>
+  <value>12.20000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
-  </color>
+  <color>#f57c00</color>
   <textcolor>#512900</textcolor>
   <border>0</border>
   <borderColor>#512900</borderColor>
@@ -534,24 +502,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -574,24 +529,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -612,16 +554,12 @@ e
   <minimum>0.10000000</minimum>
   <maximum>100.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>28.43164000</value>
+  <value>8.45164000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
-  </color>
+  <color>#f57c00</color>
   <textcolor>#512900</textcolor>
   <border>0</border>
   <borderColor>#512900</borderColor>
@@ -647,24 +585,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -687,24 +612,11 @@ e
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -727,24 +639,11 @@ e
   <valignment>center</valignment>
   <font>Noto Sans</font>
   <fontsize>28</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>179</r>
-   <g>179</g>
-   <b>179</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="background">#b3b3b3</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -762,30 +661,18 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>b0=1.084      b1=-0.973      b2=0.885
+  <label>b0=1.074      b1=-1.776      b2=0.879
 
-a1=-0.973      a2=0.970</label>
+a1=-1.776      a2=0.952</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <padding>5</padding>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -803,28 +690,16 @@ a1=-0.973      a2=0.970</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>8056</label>
+  <label>3266</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>0</precision>
   <padding>3</padding>
-  <color>
-   <r>34</r>
-   <g>34</g>
-   <b>34</b>
-  </color>
-  <bgcolor mode="background">
-   <r>245</r>
-   <g>245</g>
-   <b>245</b>
-  </bgcolor>
-  <bordercolor>
-   <r>49</r>
-   <g>54</g>
-   <b>59</b>
-  </bordercolor>
+  <color>#222222</color>
+  <bgcolor mode="background">#f5f5f5</bgcolor>
+  <bordercolor>#31363b</bordercolor>
   <bordermode>true</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>

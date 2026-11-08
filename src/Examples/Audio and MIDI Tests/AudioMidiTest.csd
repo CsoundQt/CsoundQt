@@ -291,16 +291,23 @@ instr Setup
   for i0 in [1 ... nchnls] do
     outvalue sprintf("on%d/enabled", i0), 1
     outvalue sprintf("vu%d/enabled", i0), 1
-    outvalue sprintf("in%d/enabled", i0), 1
-    outvalue sprintf("indb%d/enabled", i0), 1
   od
 
   for i0 in [nchnls+1 ... 8] do
     outvalue sprintf("on%d/enabled", i0), 0
     outvalue sprintf("vu%d/enabled", i0), 0
+  od
+  
+  for i0 in [1 ... nchnls_i] do
+    outvalue sprintf("in%d/enabled", i0), 1
+    outvalue sprintf("indb%d/enabled", i0), 1
+  od
+  
+  for i0 in [nchnls_i+1 ... 8] do
     outvalue sprintf("in%d/enabled", i0), 0
     outvalue sprintf("indb%d/enabled", i0), 0
   od
+  
   turnoff
 endin
 
@@ -312,6 +319,10 @@ i "Setup"       0.02 -1
 e
 </CsScore>
 </CsoundSynthesizer>
+
+
+
+
 
 
 
@@ -832,7 +843,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-9.38598085</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>3</pointsize>
   <exponent>1.00000000</exponent>
@@ -897,7 +908,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-11.46931426</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <exponent>1.00000000</exponent>
@@ -962,7 +973,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <exponent>1.00000000</exponent>
@@ -1027,7 +1038,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <exponent>1.00000000</exponent>
@@ -1092,7 +1103,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <exponent>1.00000000</exponent>
@@ -1612,9 +1623,9 @@ e
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>spmenu</objectName>
-  <x>622</x>
-  <y>389</y>
-  <width>80</width>
+  <x>4</x>
+  <y>589</y>
+  <width>90</width>
   <height>28</height>
   <uuid>{a8934883-bf45-4155-be13-834e1b5f9a9b}</uuid>
   <widgetName/>
@@ -1758,9 +1769,9 @@ e
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>fftsize</objectName>
-  <x>622</x>
-  <y>417</y>
-  <width>80</width>
+  <x>95</x>
+  <y>589</y>
+  <width>90</width>
   <height>28</height>
   <uuid>{13bbe66e-eb51-4cd5-b44e-59eb1ee3e6dd}</uuid>
   <widgetName/>
@@ -2029,7 +2040,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-16</label>
+  <label>-22</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
@@ -2056,7 +2067,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-16</label>
+  <label>-21</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>

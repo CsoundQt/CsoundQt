@@ -5,6 +5,30 @@ These instructions build the **`csoundqt7`** branch (CsoundQt 7), which requires
 is developed separately. Report problems at
 <https://github.com/CsoundQt/CsoundQt/issues>.
 
+## Submodules
+
+The build uses two Git submodules:
+
+- `third_party/litehtml` — documentation/HTML viewer (required)
+- `third_party/rtmidi` — MIDI support (enabled by default)
+
+Clone recursively:
+
+```bash
+git clone --recursive -b csoundqt7 https://github.com/CsoundQt/CsoundQt.git
+```
+
+If you already cloned the repository without `--recursive`, or the submodule
+directories are empty, initialise them before running qmake:
+
+```bash
+git submodule update --init --recursive
+```
+
+A missing litehtml submodule makes the build fail with missing source files. A
+missing RtMidi submodule makes qmake stop with an explicit error; RtMidi can be
+disabled with `CONFIG+=no_rtmidi`, but litehtml is always required.
+
 # Windows
 
 ## Prerequisites
@@ -130,18 +154,25 @@ To rebuild after editing code, run the build and run commands again from the
 
 # Linux
 
-CsoundQt needs a recent version of csound 7. Build/installation instructions for that are
-out of scope here.
+CsoundQt needs a recent version of Csound 7, including its development headers
+(`csound.h`, `csound.hpp`, `cwindow.h`) and library (`libcsound64`). Building or
+installing Csound itself is out of scope here.
 
-Install the Qt 6 development packages (Debian/Ubuntu shown), then build and
-install:
+Install the Qt 6 and audio development packages (Debian/Ubuntu shown), then
+build and install:
 
 ```bash
-sudo apt-get install build-essential git qt6-base-dev qt6-declarative-dev
-# add qt6-webengine-dev for CONFIG+=html_support
+sudo apt-get install build-essential git \
+    qt6-base-dev qt6-declarative-dev \
+    libasound2-dev
+# optional: libjack-jackd2-dev enables JACK support when detected
+# optional: qt6-webengine-dev for CONFIG+=html_support
 
 git clone --recursive -b csoundqt7 https://github.com/CsoundQt/CsoundQt.git
 cd CsoundQt
+
+# If you cloned without --recursive:
+git submodule update --init --recursive
 
 qmake6 qcs.pro CONFIG+=release
 make -j$(nproc)
@@ -152,12 +183,23 @@ sudo make install          # optional, installs under /usr/local
 
 Notes:
 
-- At the moment of this writing, distro packages of Csound are Csound 6; 
-  build Csound 7 from source (<https://github.com/csound/csound/blob/develop/BUILD.md>).
+- `libasound2-dev` is required for the bundled RtMidi/ALSA support. Without it
+  linking fails with `cannot find -lasound`.
+- At the moment of this writing, distro packages of Csound are Csound 6;
+  build Csound 7 from source
+  (<https://github.com/csound/csound/blob/develop/BUILD.md>).
 - For a user-local install:
   `qmake6 qcs.pro INSTALL_DIR=~ SHARE_DIR=~/.local/share && make install`.
 - To use a Csound build tree that is not installed, set `CSOUND_SOURCE_TREE` to
   the Csound source directory.
+- If qmake reports `RtMidi submodule not found`, run
+  `git submodule update --init --recursive` (or use `CONFIG+=no_rtmidi`).
+- If the build fails with missing litehtml files, the `third_party/litehtml`
+  submodule is empty; run the same `git submodule update` command.
+- If qmake reports that no valid Csound API include/library directory was
+  found, install the Csound 7 development files or point qmake at them with
+  `CSOUND_INCLUDE_DIR` / `CSOUND_LIBRARY_DIR`, or set `CSOUND_SOURCE_TREE` for
+  an uninstalled Csound build tree.
 
 # Reference
 
@@ -201,10 +243,6 @@ CSOUND_LIBRARY_DIR = ~/.local/lib
 > though `csPerfThread.hpp` is still installed. Always build Csound with
 > `-DBUILD_PERFTHREAD_CLASS=ON` (the CMake default).
 
-Build the **`csoundqt7`** branch:
-
-    $ git clone --recursive -b csoundqt7 https://github.com/CsoundQt/CsoundQt.git
-
-`--recursive` fetches the required submodules `third_party/litehtml` (manual
-viewer) and `third_party/rtmidi` (MIDI).
+See [Submodules](#submodules) for the required recursive clone and the command
+to initialise submodules in an existing checkout.
 

@@ -1236,19 +1236,6 @@
                 <property name="spacing">
                  <number>6</number>
                 </property>
-                <item row="0" column="0">
-                 <widget class="QCheckBox" name="FileUseOptionsCheckBox">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Override the file type and sample format below when rendering offline. If &amp;quot;Ignore CsOptions&amp;quot; is not checked, settings are merged and options set here take precedence over the CsOptions tag in the .csd file.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="text">
-                   <string>Override</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
                 <item row="5" column="0">
                  <widget class="QCheckBox" name="DisableDisplaysCheckBox">
                   <property name="toolTip">
@@ -1402,17 +1389,17 @@
                 </property>
                 <item>
                  <property name="text">
-                  <string>pcm16</string>
+                  <string>16 bit int</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>pcm24</string>
+                  <string>24 bit int</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>float32</string>
+                  <string>32 bit float</string>
                  </property>
                 </item>
                </widget>

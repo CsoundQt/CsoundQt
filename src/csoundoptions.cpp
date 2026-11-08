@@ -55,9 +55,9 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 	additionalFlags = "";
 	additionalFlagsActive = false;
 
-	fileUseOptions = false;
+	fileUseOptions = true;
 	fileOverrideOptions = false;
-	fileAskFilename = false;
+	fileAskFilename = true;
 	fileFileType = 0;
 	fileSampleFormat = "short";
 	renderOutputFilename = "";
