@@ -363,6 +363,43 @@ private slots:
         QVERIFY(colourAt(document, text.indexOf("chnget")).isValid());
     }
 
+    // Csound 7 allows a type annotation after the opcode name, e.g.
+    // chnget:k "channel". The channel string must be coloured exactly like the
+    // untyped form, in both command and function syntax.
+    void typedChannelOpcodesHighlightChannels()
+    {
+        const QString text = QStringLiteral(
+            "<CsInstruments>\n"
+            "k1 chnget \"chan-plain\"\n"
+            "k2 chnget:k \"chan-get\"\n"
+            "chnset 1, \"chan-set-plain\"\n"
+            "chnset:k 1, \"chan-set\"\n"
+            "chnset:k(1, \"chan-set-function\")\n"
+            "</CsInstruments>\n");
+
+        QTextDocument document;
+        document.setPlainText(text);
+        Highlighter highlighter(&document);
+        highlighter.setTheme(QStringLiteral("light"));
+
+        const QColor channelColour = colourAt(document, text.indexOf("chan-plain"));
+        QVERIFY(channelColour.isValid());
+
+        QCOMPARE(colourAt(document, text.indexOf("chan-get")), channelColour);
+        QCOMPARE(colourAt(document, text.indexOf("chan-set-plain")), channelColour);
+        QCOMPARE(colourAt(document, text.indexOf("chan-set\"")), channelColour);
+        QCOMPARE(colourAt(document, text.indexOf("chan-set-function")), channelColour);
+
+        // The opcode token itself keeps the I/O opcode colour, not the generic
+        // opcode colour used for function-style opcode:type(...) calls.
+        const QColor ioColour = colourAt(document, text.indexOf("chnget "));
+        QVERIFY(ioColour.isValid());
+        QCOMPARE(colourAt(document, text.indexOf("chnget:k")), ioColour);
+        QCOMPARE(colourAt(document, text.indexOf("chnset ")), ioColour);
+        QCOMPARE(colourAt(document, text.indexOf("chnset:k ")), ioColour);
+        QCOMPARE(colourAt(document, text.indexOf("chnset:k(")), ioColour);
+    }
+
 private:
     // Runs the matcher over a piece of text and returns the marked pair.
     static QPair<int, int> match(const QString &text, int cursorPosition)

@@ -52,6 +52,19 @@ QColor colorFromProperty(const QVariant &value)
     return color;
 }
 
+QuteTableWidget::PlotType tablePlotTypeFromString(const QString &type)
+{
+    const QString value = type.trimmed().toLower();
+    if (value == "bar"_L1) {
+        return QuteTableWidget::Bar;
+    }
+    if (value == "filledline"_L1 || value == "filled"_L1
+            || value == "filled line"_L1) {
+        return QuteTableWidget::FilledLine;
+    }
+    return QuteTableWidget::Line;
+}
+
 } // namespace
 
 
@@ -1817,12 +1830,92 @@ void QuteTableWidget::showSnapshot() {
         m_data = nullptr;
         m_tabsize = 0;
         m_path.clear();
+        m_fillPath = QPainterPath();
+        m_barPath = QPainterPath();
+        m_points.clear();
+        m_visibleCount = 0;
         update();
         return;
     }
     m_data = m_snapshot.data();
     buildPath(m_snapshot.constData(), m_snapshot.size());
     update();
+}
+
+void QuteTableWidget::setLineWidth(int width)
+{
+    width = qMax(1, width);
+    if (m_lineWidth == width) {
+        return;
+    }
+    m_lineWidth = width;
+    update();
+}
+
+void QuteTableWidget::setPlotType(PlotType type)
+{
+    if (m_plotType == type) {
+        return;
+    }
+    m_plotType = type;
+    // Point markers sit at the sample position for line plots and at the bar
+    // centre for bar plots, so the cached marker positions must be rebuilt.
+    rebuildPath();
+}
+
+int QuteTableWidget::visiblePointCount() const
+{
+    if (m_tabsize <= 0) {
+        return 0;
+    }
+    const double zoom = m_zoom > 0.0 ? m_zoom : 1.0;
+    const int visible = int(double(m_tabsize) / zoom);
+    return qBound(1, visible, m_tabsize);
+}
+
+bool QuteTableWidget::canShowPoints() const
+{
+    const int visible = visiblePointCount();
+    if (visible <= 0) {
+        // The table size is not known yet; allow the setting and enforce the
+        // condition again when drawing.
+        return plotRect().width() > 0.0;
+    }
+    return plotRect().width() > double(visible);
+}
+
+void QuteTableWidget::updateVisibleRange()
+{
+    if (m_tabsize <= 0) {
+        m_visibleCount = 0;
+        m_viewStart = 0;
+        return;
+    }
+    m_visibleCount = visiblePointCount();
+    m_viewStart = qBound(0, m_viewStart, m_tabsize - m_visibleCount);
+}
+
+void QuteTableWidget::setZoom(double zoom)
+{
+    zoom = qBound(1.0, zoom, 1.0e6);
+    if (qFuzzyCompare(m_zoom, zoom)) {
+        return;
+    }
+    m_zoom = zoom;
+    rebuildPath();
+}
+
+void QuteTableWidget::rebuildPath()
+{
+    QMutexLocker locker(&mutex);
+    if (m_running && m_tabnum > 0) {
+        updatePath();
+    } else if (m_hasSnapshot.load(std::memory_order_acquire)
+               && !m_snapshot.isEmpty()) {
+        buildPath(m_snapshot.constData(), m_snapshot.size());
+    } else {
+        update();
+    }
 }
 
 
@@ -1992,17 +2085,26 @@ void QuteTableWidget::paintGrid(QPainter *painter) {
     }
 
     // ------------------------- x axis -------------------------
-    const double xMax = double(m_tabsize) * xFactor();
-    if (xMax > 0.0 && std::isfinite(xMax)) {
+    if (m_tabsize > 0) {
+        updateVisibleRange();
+    }
+    const double xFactorValue = xFactor();
+    const double xStart = double(m_viewStart) * xFactorValue;
+    const double xEnd = double(m_viewStart + m_visibleCount) * xFactorValue;
+    const double xSpan = xEnd - xStart;
+    if (xSpan > 0.0 && std::isfinite(xSpan)) {
         const int xTargetTicks = qBound(2, int(plot.width() / 80.0), 10);
-        const double xStep = niceTickStep(xMax, xTargetTicks);
+        const double xStep = niceTickStep(xSpan, xTargetTicks);
         if (xStep > 0.0) {
+            const long long first =
+                    (long long)std::ceil((xStart - xStep * 1e-9) / xStep);
             const long long last =
-                    (long long)std::floor((xMax + xStep * 1e-9) / xStep);
+                    (long long)std::floor((xEnd + xStep * 1e-9) / xStep);
             const int widgetWidth = rect().width();
-            for (long long i = 0; i <= last && i < 1000; ++i) {
+            for (long long i = first; i <= last && i - first < 1000; ++i) {
                 const double value = double(i) * xStep;
-                const double x = plot.left() + value / xMax * plot.width();
+                const double x = plot.left()
+                        + (value - xStart) / xSpan * plot.width();
                 // Major gridline.
                 painter->setPen(QPen(m_gridColor, 0));
                 painter->drawLine(QPointF(x, plot.top()),
@@ -2026,15 +2128,18 @@ void QuteTableWidget::paintGrid(QPainter *painter) {
             // Minor ticks on the x axis, no text.
             const int minorDivisions = 5;
             const double minorStep = xStep / minorDivisions;
+            const long long firstMinor =
+                    (long long)std::ceil((xStart - minorStep * 1e-9) / minorStep);
             const long long lastMinor =
-                    (long long)std::floor((xMax + minorStep * 1e-9) / minorStep);
-            if (lastMinor < 5000) {
+                    (long long)std::floor((xEnd + minorStep * 1e-9) / minorStep);
+            if (lastMinor - firstMinor < 5000) {
                 painter->setPen(QPen(axisColor, 0));
-                for (long long i = 0; i <= lastMinor; ++i) {
+                for (long long i = firstMinor; i <= lastMinor; ++i) {
                     if (i % minorDivisions == 0)
                         continue; // already drawn as a major tick
+                    const double value = double(i) * minorStep;
                     const double x = plot.left()
-                            + double(i) * minorStep / xMax * plot.width();
+                            + (value - xStart) / xSpan * plot.width();
                     painter->drawLine(QPointF(x, plot.bottom()),
                                       QPointF(x, plot.bottom() + minorTickLength));
                 }
@@ -2086,12 +2191,42 @@ void QuteTableWidget::paintEvent(QPaintEvent *event) {
     if(m_showGrid) {
         this->paintGrid(&painter);
     }
-    // Keep the curve inside the plotting area so it cannot run over the tick
+    // Keep the plot inside the plotting area so it cannot run over the tick
     // labels or outside the widget.
     painter.save();
     painter.setClipRect(plotRect());
-    painter.setPen(QPen(m_color, 0));
-    painter.drawPath(m_path);
+    QPen linePen(m_color, m_lineWidth == 1 ? 0 : m_lineWidth,
+                 Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    switch (m_plotType) {
+    case Bar:
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(m_color);
+        painter.drawPath(m_barPath);
+        break;
+    case FilledLine: {
+        QColor fillColor = m_color;
+        fillColor.setAlpha(m_color.alpha() / 3);
+        painter.fillPath(m_fillPath, fillColor);
+        painter.setPen(linePen);
+        painter.setBrush(Qt::NoBrush);
+        painter.drawPath(m_path);
+        break;
+    }
+    case Line:
+    default:
+        painter.setPen(linePen);
+        painter.setBrush(Qt::NoBrush);
+        painter.drawPath(m_path);
+        break;
+    }
+    if (m_pointRadius > 0 && !m_points.isEmpty()) {
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(m_color);
+        const qreal radius = m_pointRadius;
+        for (const QPointF &point : m_points) {
+            painter.drawEllipse(point, radius, radius);
+        }
+    }
     painter.restore();
     mutex.unlock();
     if (!isEnabled())
@@ -2101,11 +2236,92 @@ void QuteTableWidget::paintEvent(QPaintEvent *event) {
 
 void QuteTableWidget::resizeEvent(QResizeEvent *event) {
     QWidget::resizeEvent(event);
+    QMutexLocker locker(&mutex);
     if (!m_running && m_hasSnapshot.load(std::memory_order_acquire)
             && !m_snapshot.isEmpty()) {
-        QMutexLocker locker(&mutex);
         buildPath(m_snapshot.constData(), m_snapshot.size());
+    } else if (m_running && m_data != nullptr && m_tabsize > 0) {
+        buildPath(m_data, m_tabsize);
     }
+}
+
+void QuteTableWidget::wheelEvent(QWheelEvent *event)
+{
+    const int delta = event->angleDelta().y();
+    if (delta == 0 || m_tabsize <= 0) {
+        QWidget::wheelEvent(event);
+        return;
+    }
+
+    if (event->modifiers() & Qt::ShiftModifier) {
+        // Shift+wheel scrolls without changing the zoom.
+        const int visible = visiblePointCount();
+        const int step = qMax(1, visible / 10);
+        const int maxStart = qMax(0, m_tabsize - visible);
+        m_viewStart = qBound(0, m_viewStart - (delta > 0 ? step : -step),
+                             maxStart);
+        rebuildPath();
+    } else {
+        // Plain wheel zooms around the data under the mouse.
+        const QRectF plot = plotRect();
+        if (plot.width() <= 0.0) {
+            return;
+        }
+        const double relative = qBound(0.0,
+                (event->position().x() - plot.left()) / plot.width(), 1.0);
+        const int oldVisible = visiblePointCount();
+        const int indexUnderMouse = m_viewStart + int(relative * oldVisible);
+        const double factor = delta > 0 ? 1.25 : 1.0 / 1.25;
+        m_zoom = qBound(1.0, m_zoom * factor, 1.0e6);
+        const int newVisible = visiblePointCount();
+        m_viewStart = qBound(0, indexUnderMouse - int(relative * newVisible),
+                             qMax(0, m_tabsize - newVisible));
+        rebuildPath();
+    }
+    event->accept();
+}
+
+void QuteTableWidget::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton
+            && (event->modifiers() & Qt::ControlModifier)
+            && m_tabsize > 0) {
+        m_panning = true;
+        m_pressPos = event->pos();
+        m_pressViewStart = m_viewStart;
+        event->accept();
+        return;
+    }
+    QWidget::mousePressEvent(event);
+}
+
+void QuteTableWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    if (m_panning && (event->buttons() & Qt::LeftButton)) {
+        const QRectF plot = plotRect();
+        if (plot.width() > 0.0) {
+            const int visible = visiblePointCount();
+            const double xscale = double(visible) / plot.width();
+            const int dx = event->pos().x() - m_pressPos.x();
+            const int maxStart = qMax(0, m_tabsize - visible);
+            m_viewStart = qBound(0, m_pressViewStart - int(dx * xscale),
+                                 maxStart);
+            rebuildPath();
+        }
+        event->accept();
+        return;
+    }
+    QWidget::mouseMoveEvent(event);
+}
+
+void QuteTableWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton && m_panning) {
+        m_panning = false;
+        event->accept();
+        return;
+    }
+    QWidget::mouseReleaseEvent(event);
 }
 
 void QuteTableWidget::setRange(double maxy) {
@@ -2171,13 +2387,20 @@ void QuteTableWidget::updatePath() {
 }
 
 void QuteTableWidget::buildPath(const cs_float *data, int tabsize) {
+    m_fillPath = QPainterPath();
+    m_barPath = QPainterPath();
+    m_points.clear();
+
     if (data == nullptr || tabsize <= 0) {
         m_tabsize = 0;
+        m_visibleCount = 0;
+        m_viewStart = 0;
         m_path.clear();
         return;
     }
 
     m_tabsize = tabsize;
+    updateVisibleRange();
 
     double maxy = m_maxy;
     double miny = m_miny;
@@ -2208,34 +2431,92 @@ void QuteTableWidget::buildPath(const cs_float *data, int tabsize) {
 
     // Keep the curve inside the same area used by the grid and labels.
     const QRectF plot = plotRect();
-    if (plot.width() <= 0.0 || plot.height() <= 0.0) {
+    if (plot.width() <= 0.0 || plot.height() <= 0.0 || m_visibleCount <= 0) {
         m_path.clear();
         return;
     }
 
-    double xscale = plot.width() / (double)tabsize;
-    double x0 = plot.left();
+    const int first = m_viewStart;
+    const int visible = m_visibleCount;
+    const int last = qMin(tabsize, first + visible);
+    if (last <= first) {
+        m_path.clear();
+        return;
+    }
 
-    int step = int(tabsize / qMax(1.0, plot.width()));
-    if(step == 0)
+    const double xscale = plot.width() / double(visible);
+    const double yscale = -plot.height() / (maxy - miny);
+    auto xForIndex = [&](int index) {
+        return plot.left() + (index - first) * xscale;
+    };
+    auto yForValue = [&](double value) {
+        return (value - miny) * yscale + plot.bottom();
+    };
+
+    // The line/path is decimated when there are more points than pixels.
+    int step = int(double(last - first) / qMax(1.0, plot.width()));
+    if (step < 1)
         step = 1;
 
-    m_path.clear();
+    m_path = QPainterPath();
     QPolygonF poly;
-    size_t numpoints = tabsize / step;
-    poly.reserve(numpoints+1);
-    double yscale = -plot.height() / (maxy-miny);
-    double ydata = data[0];
-    poly.append(QPointF(x0, (ydata-miny)*yscale + plot.bottom()));
-    double ytop = plot.bottom();
-    for(int i=1; i < tabsize; i+=step) {
-        ydata = data[i];
-        double x2 = i*xscale + x0;
-        double y2 = (ydata - miny) * yscale + ytop;
-        poly.append(QPointF(x2, y2));
+    poly.reserve((last - first) / step + 2);
+    poly.append(QPointF(xForIndex(first), yForValue(data[first])));
+    for (int i = first + step; i < last; i += step) {
+        poly.append(QPointF(xForIndex(i), yForValue(data[i])));
+    }
+    // Always finish at the last visible sample, even if the decimation step
+    // does not land on it.
+    if (poly.constLast().x() < xForIndex(last - 1) - 0.01) {
+        poly.append(QPointF(xForIndex(last - 1), yForValue(data[last - 1])));
     }
     m_path.addPolygon(poly);
-    // delete[] data;
+
+    // Filled line: close the sampled curve at the zero line (or at the nearest
+    // plot edge when zero is outside the current range).
+    if (poly.size() >= 2) {
+        const double baselineValue = qBound(miny, 0.0, maxy);
+        const double baselineY = yForValue(baselineValue);
+        m_fillPath.moveTo(poly.constFirst().x(), baselineY);
+        for (const QPointF &point : poly) {
+            m_fillPath.lineTo(point);
+        }
+        m_fillPath.lineTo(poly.constLast().x(), baselineY);
+        m_fillPath.closeSubpath();
+    }
+
+    // Bars: one bar per pixel-safe sample, from the baseline to the value.
+    const int barStep = qMax(1, int(std::ceil(double(last - first)
+                                              / qMax(1.0, plot.width()))));
+    const double barSlot = xscale * barStep;
+    double barWidth = barSlot > 2.0 ? barSlot - 1.0 : barSlot;
+    barWidth = qMax(1.0, barWidth);
+    const double baselineValue = qBound(miny, 0.0, maxy);
+    const double baselineY = yForValue(baselineValue);
+    for (int i = first; i < last; i += barStep) {
+        const double left = plot.left() + (i - first) * xscale
+                + (barSlot - barWidth) / 2.0;
+        const double y = yForValue(data[i]);
+        const double top = qMin(y, baselineY);
+        const double height = qMax(1.0, qAbs(y - baselineY));
+        m_barPath.addRect(QRectF(left, top, barWidth, height));
+    }
+
+    // Point markers are only possible when every visible point has at least
+    // one pixel of its own.
+    if (plot.width() > double(visible)) {
+        m_points.reserve(last - first);
+        if (m_plotType == Bar) {
+            for (int i = first; i < last; ++i) {
+                const double x = xForIndex(i) + xscale / 2.0;
+                m_points.append(QPointF(x, yForValue(data[i])));
+            }
+        } else {
+            for (int i = first; i < last; ++i) {
+                m_points.append(QPointF(xForIndex(i), yForValue(data[i])));
+            }
+        }
+    }
 }
 
 void QuteTableWidget::updateData(int tabnum) {
@@ -2254,6 +2535,7 @@ void QuteTableWidget::updateData(int tabnum) {
             m_miny = 0;
         }
         m_tabnum = tabnum;
+        m_viewStart = 0;
         // The new table may define a different sample rate (or none at all).
         m_sampleRateTable = -1;
         m_sampleRateQueryActive = false;
@@ -2294,6 +2576,10 @@ QuteTable::QuteTable(QWidget *parent) : QuteWidget(parent) {
     setProperty("CSQT_gridcolor", QColor(160, 160, 160, 72));
     setProperty("CSQT_samplerate", 1.0);
     setProperty("CSQT_showGrid", true);
+    setProperty("CSQT_linewidth", 1);
+    setProperty("CSQT_plottype", "line");
+    setProperty("CSQT_pointradius", 0);
+    setProperty("CSQT_zoom", 1.0);
     // Transitory ("method-like") table methods (see transitoryProperties()).
     // They are created here so that they can be addressed as
     // "<channel>/<method>"; the values are neither saved nor restored.
@@ -2338,7 +2624,15 @@ QHash<QString, QString> QuteTable::propertyDescriptions() const
           tr("Sample rate used for the x axis (index / sample rate gives "
              "seconds). Zero selects auto mode: the table's sample rate when "
              "it defines one, otherwise 1") },
-        { u"showGrid"_s, tr("Show the value grid") }
+        { u"showGrid"_s, tr("Show the value grid") },
+        { u"linewidth"_s, tr("Width of the plotted line in pixels") },
+        { u"plottype"_s, tr("Plot type: \"line\", \"bar\" or \"filledline\"") },
+        { u"pointradius"_s,
+          tr("Radius of the point markers in pixels (0 hides them). Markers "
+             "are only drawn when the plot is wider than the visible points") },
+        { u"zoom"_s,
+          tr("Horizontal zoom factor. The mouse wheel zooms around the cursor, "
+             "Shift+wheel scrolls, and Ctrl+drag pans") }
     };
 }
 
@@ -2369,6 +2663,22 @@ bool QuteTable::applyProperty(const QString &name)
 		w->showGrid(property("CSQT_showGrid").toBool());
 		return true;
 	}
+	if (name == "CSQT_linewidth") {
+		w->setLineWidth(property("CSQT_linewidth").toInt());
+		return true;
+	}
+	if (name == "CSQT_plottype") {
+		w->setPlotType(tablePlotTypeFromString(property("CSQT_plottype").toString()));
+		return true;
+	}
+	if (name == "CSQT_pointradius") {
+		w->setPointRadius(property("CSQT_pointradius").toInt());
+		return true;
+	}
+	if (name == "CSQT_zoom") {
+		w->setZoom(property("CSQT_zoom").toDouble());
+		return true;
+	}
 	if (name == "CSQT_update") {
 		// A non-zero value requests an update of the current table, exactly like
 		// sending -1 to the widget channel.
@@ -2396,6 +2706,10 @@ void QuteTable::applyInternalProperties() {
     w->setSampleRate(property("CSQT_samplerate").toDouble());
     w->setRange(property("CSQT_range").toDouble());
     w->showGrid(property("CSQT_showGrid").toBool());
+    w->setLineWidth(property("CSQT_linewidth").toInt());
+    w->setPlotType(tablePlotTypeFromString(property("CSQT_plottype").toString()));
+    w->setPointRadius(property("CSQT_pointradius").toInt());
+    w->setZoom(property("CSQT_zoom").toDouble());
 }
 
 void QuteTable::createPropertiesDialog() {
@@ -2473,6 +2787,70 @@ void QuteTable::createPropertiesDialog() {
     layout->addWidget(rangeSpinBox, row, 2, Qt::AlignLeft|Qt::AlignVCenter);
     connect(rangeCheckBox, SIGNAL(toggled(bool)), rangeSpinBox, SLOT(setEnabled(bool)));
 
+    ++row;
+    label = new QLabel(tr("Plot type"), dialog);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    plotTypeComboBox = new QComboBox(dialog);
+    plotTypeComboBox->addItem(tr("Line"), u"line"_s);
+    plotTypeComboBox->addItem(tr("Bar"), u"bar"_s);
+    plotTypeComboBox->addItem(tr("Filled line"), u"filledline"_s);
+    {
+        const int index = plotTypeComboBox->findData(
+                    property("CSQT_plottype").toString());
+        plotTypeComboBox->setCurrentIndex(index >= 0 ? index : 0);
+    }
+    layout->addWidget(plotTypeComboBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
+    QLabel *lineWidthLabel = new QLabel(tr("Line width"), dialog);
+    layout->addWidget(lineWidthLabel, row, 2, Qt::AlignRight|Qt::AlignVCenter);
+    lineWidthSpinBox = new QSpinBox(dialog);
+    lineWidthSpinBox->unsetLocale();
+    lineWidthSpinBox->setRange(1, 64);
+    lineWidthSpinBox->setValue(property("CSQT_linewidth").toInt());
+    layout->addWidget(lineWidthSpinBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+
+    auto updateLineWidthEnabled = [this, lineWidthLabel]() {
+        const bool bar = plotTypeComboBox->currentData().toString() == "bar"_L1;
+        lineWidthLabel->setEnabled(!bar);
+        lineWidthSpinBox->setEnabled(!bar);
+    };
+    connect(plotTypeComboBox, &QComboBox::currentIndexChanged,
+            this, updateLineWidthEnabled);
+    updateLineWidthEnabled();
+
+    ++row;
+    label = new QLabel(tr("Point radius"), dialog);
+    label->setToolTip(tr("Radius of a circle drawn at each point. Markers are "
+                         "only available when the plot is wider than the "
+                         "visible points, otherwise they would overlap."));
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+    pointRadiusSpinBox = new QSpinBox(dialog);
+    pointRadiusSpinBox->unsetLocale();
+    pointRadiusSpinBox->setRange(0, 64);
+    pointRadiusSpinBox->setValue(property("CSQT_pointradius").toInt());
+    pointRadiusSpinBox->setToolTip(label->toolTip());
+    layout->addWidget(pointRadiusSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    {
+        auto tableWidget = static_cast<QuteTableWidget *>(m_widget);
+        const bool pointsAvailable = tableWidget->canShowPoints();
+        label->setEnabled(pointsAvailable);
+        pointRadiusSpinBox->setEnabled(pointsAvailable);
+    }
+
+    label = new QLabel(tr("Zoom X"), dialog);
+    label->setToolTip(tr("Horizontal zoom factor. Use the mouse wheel to zoom "
+                         "around the cursor, Shift+wheel to scroll and "
+                         "Ctrl+drag to pan."));
+    layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
+    zoomSpinBox = new QDoubleSpinBox(dialog);
+    zoomSpinBox->setDecimals(2);
+    zoomSpinBox->setRange(1.0, 1000000.0);
+    zoomSpinBox->setSingleStep(0.25);
+    zoomSpinBox->setValue(property("CSQT_zoom").toDouble());
+    zoomSpinBox->setToolTip(label->toolTip());
+    layout->addWidget(zoomSpinBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+
 }
 
 void QuteTable::applyProperties() {
@@ -2492,6 +2870,10 @@ void QuteTable::applyProperties() {
         setProperty("CSQT_range", 0.0);
     }
     setProperty("CSQT_showGrid", gridCheckBox->isChecked());
+    setProperty("CSQT_linewidth", lineWidthSpinBox->value());
+    setProperty("CSQT_plottype", plotTypeComboBox->currentData().toString());
+    setProperty("CSQT_pointradius", pointRadiusSpinBox->value());
+    setProperty("CSQT_zoom", zoomSpinBox->value());
 
 #ifdef  USE_WIDGET_MUTEX
     widgetLock.unlock();
@@ -2533,6 +2915,13 @@ QString QuteTable::getWidgetXmlText() {
                        QString::number(property("CSQT_samplerate").toDouble(), 'g', 12));
     auto range = property("CSQT_range").toDouble();
     s.writeTextElement("range", QString::number(range, 'f', 2));
+    s.writeTextElement("linewidth",
+                       QString::number(property("CSQT_linewidth").toInt()));
+    s.writeTextElement("plottype", property("CSQT_plottype").toString());
+    s.writeTextElement("pointradius",
+                       QString::number(property("CSQT_pointradius").toInt()));
+    s.writeTextElement("zoom",
+                       QString::number(property("CSQT_zoom").toDouble(), 'f', 6));
 
     s.writeEndElement();      // --------- end
     return xmlText;

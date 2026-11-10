@@ -238,6 +238,8 @@ class QuteTableWidget : public QWidget {
     Q_OBJECT
 
 public:
+    enum PlotType { Line, Bar, FilledLine };
+
     QuteTableWidget(QWidget *parent = nullptr)
         : QWidget(parent)
         , m_tabnum(0)
@@ -261,6 +263,14 @@ public:
     int currentTableNumber() { return m_tabnum; }
     void updatePath();
     void setColor(QColor color) { m_color = color; }
+    void setLineWidth(int width);
+    void setPlotType(PlotType type);
+    void setPointRadius(int radius) { m_pointRadius = qMax(0, radius); update(); }
+    void setZoom(double zoom);
+    double zoom() const { return m_zoom; }
+    // Whether there is room to draw one marker per visible point.
+    bool canShowPoints() const;
+    int visiblePointCount() const;
     // Colour of the plot background.
     void setBackgroundColor(const QColor &color) {
         if (m_background == color) return;
@@ -310,11 +320,17 @@ public:
 protected:
     virtual void paintEvent(QPaintEvent *event) override;
     virtual void resizeEvent(QResizeEvent *event) override;
+    virtual void wheelEvent(QWheelEvent *event) override;
+    virtual void mousePressEvent(QMouseEvent *event) override;
+    virtual void mouseMoveEvent(QMouseEvent *event) override;
+    virtual void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
     void buildPath(const cs_float *data, int tabsize);
     // Redraw the persisted table copy (used when Csound is not running).
     void showSnapshot();
+    void updateVisibleRange();
+    void rebuildPath();
 
     // Area used for the curve and the grid, inside the tick labels.
     QRectF plotRect() const;
@@ -354,7 +370,19 @@ private:
     double m_maxy;
     double m_miny;
     bool m_autorange;
+    PlotType m_plotType = Line;
+    int m_lineWidth = 1;
+    int m_pointRadius = 0;
+    double m_zoom = 1.0;
+    int m_viewStart = 0;
+    int m_visibleCount = 0;
     QPainterPath m_path;
+    QPainterPath m_fillPath;
+    QPainterPath m_barPath;
+    QPolygonF m_points;
+    bool m_panning = false;
+    QPoint m_pressPos;
+    int m_pressViewStart = 0;
     // QPainterPath *m_path;
     QMutex mutex;
     bool m_showGrid;
@@ -412,6 +440,10 @@ protected:
     QCheckBox *rangeCheckBox;
     QDoubleSpinBox *rangeSpinBox;
     QCheckBox *gridCheckBox;
+    QComboBox *plotTypeComboBox;
+    QSpinBox *lineWidthSpinBox;
+    QSpinBox *pointRadiusSpinBox;
+    QDoubleSpinBox *zoomSpinBox;
     QMutex mutex;
     bool m_csoundRunning;
     QPointer<CsoundEngine> m_registeredEngine;  // engine the snapshot callback is registered with

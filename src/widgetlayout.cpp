@@ -268,6 +268,13 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
     // mode) will change this background and make many existing scripts/examples
     // unreadable.
     setBackground(true,  isLightTheme ? QColor(240, 240, 240) : QColor(53, 53, 53));
+    // A colour-theme change replaces the application palette. The panel's own
+    // background is document data, so re-assert it after the new palette has
+    // been installed instead of letting the theme alter the design.
+    if (qApp) {
+        connect(qApp, &QGuiApplication::paletteChanged, this,
+                [this](const QPalette &) { restoreBackgroundFromProperties(); });
+    }
     m_updating = true;
     QTimer::singleShot(500, this, SLOT(updateData())); // Delay first update
     // updateData(); // Starts updateData timer
@@ -1017,6 +1024,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
                  || nodeName == "minimum" || nodeName == "maximum"
                  || nodeName == "pressedValue"
                  || nodeName == "exponent"
+                 || nodeName == "zoom"
                  || nodeName == "samplerate") {  // DOUBLE type
             nodeName.prepend("CSQT_");
             widget->setProperty(nodeName.toLocal8Bit(), node.firstChild().nodeValue().toDouble());
@@ -1044,6 +1052,8 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
                  || nodeName == "thumbWidth"
                  || nodeName == "thumbPadding"
                  || nodeName == "thumbRadius"
+                 || nodeName == "linewidth"
+                 || nodeName == "pointradius"
                  || nodeName == "selectedIndex" ) {  // INT type
             QDomNode n = node.firstChild();
             nodeName.prepend("CSQT_");
@@ -2778,7 +2788,13 @@ void WidgetLayout::propertiesDialog()
     QGridLayout *layout = new QGridLayout(dialog);
     bgCheckBox = new QCheckBox(dialog);
     bgCheckBox->setText("Enable Background");
-    if (m_contained) {
+    // Use the saved panel properties, not the live auto-fill state: the latter
+    // can depend on the current Qt style or on whether the panel is docked, and
+    // must never silently change the document's background.
+    if (property("CSQT_bg").isValid()) {
+        bgCheckBox->setChecked(property("CSQT_bg").toBool());
+    }
+    else if (m_contained) {
         bgCheckBox->setChecked(parentWidget()->autoFillBackground());
     }
     else {
@@ -2791,12 +2807,10 @@ void WidgetLayout::propertiesDialog()
     layout->addWidget(label, 1, 0, Qt::AlignRight|Qt::AlignVCenter);
     bgButton = new QPushButton(dialog);
     QPixmap pixmap = QPixmap(64,64);
-    QColor color;
-    if (m_contained) {
-        color = parentWidget()->palette().button().color();
-    }
-    else {
-        color = this->palette().button().color();
+    QColor color = property("CSQT_bgcolor").value<QColor>();
+    if (!color.isValid()) {
+        color = m_contained ? parentWidget()->palette().button().color()
+                            : this->palette().button().color();
     }
     bgButton->setProperty("CSQT_color",QVariant(color));
     pixmap.fill(color);
@@ -2826,13 +2840,12 @@ void WidgetLayout::applyProperties()
 
 void WidgetLayout::selectBgColor()
 {
-    QColor color;
-    if (m_contained) {
-        color = QColorDialog::getColor(parentWidget()->palette().button().color(), this);
+    QColor current = property("CSQT_bgcolor").value<QColor>();
+    if (!current.isValid()) {
+        current = m_contained ? parentWidget()->palette().button().color()
+                              : this->palette().button().color();
     }
-    else {
-        color = QColorDialog::getColor(this->palette().button().color(), this);
-    }
+    QColor color = QColorDialog::getColor(current, this);
     if (color.isValid()) {
         bgButton->setProperty("CSQT_color",QVariant(color));
         QPixmap pixmap(64,64);
@@ -3871,6 +3884,20 @@ void WidgetLayout::mouseReleaseEvent(QMouseEvent *event)
     //  QWidget::mouseReleaseEvent(event);
 }
 
+void WidgetLayout::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    // A double click on the panel background opens the panel properties, like
+    // double-clicking a widget opens its own properties. Widgets and their edit
+    // frames receive their own double-click events, so this only runs for the
+    // empty background.
+    if (m_editMode && event->button() == Qt::LeftButton) {
+        propertiesDialog();
+        event->accept();
+        return;
+    }
+    QWidget::mouseDoubleClickEvent(event);
+}
+
 void WidgetLayout::contextMenuEvent(QContextMenuEvent *event)
 {
     if (m_enableEdit) {
@@ -4293,6 +4320,12 @@ QString WidgetLayout::createVUMeter(int x, int y, int width, int height)
 
 void WidgetLayout::setBackground(bool bg, QColor bgColor)
 {
+    // Setting the palette/background role sends palette-change events. Block
+    // the changeEvent() handler while doing so: it would call back into this
+    // function while layoutMutex is held and deadlock.
+    const bool wasRestoring = m_restoringBackground;
+    m_restoringBackground = true;
+
     QWidget *w;
     layoutMutex.lock();
     w = m_contained ?  this->parentWidget() : this;  // If contained, set background of parent widget
@@ -4306,6 +4339,35 @@ void WidgetLayout::setBackground(bool bg, QColor bgColor)
     layoutMutex.unlock();
     this->setProperty("CSQT_bg", QVariant(bg));
     this->setProperty("CSQT_bgcolor", QVariant(bgColor));
+
+    m_restoringBackground = wasRestoring;
+}
+
+void WidgetLayout::restoreBackgroundFromProperties()
+{
+    if (m_restoringBackground) {
+        return;
+    }
+    const QColor bgColor = property("CSQT_bgcolor").value<QColor>();
+    if (!bgColor.isValid()) {
+        return;
+    }
+    m_restoringBackground = true;
+    setBackground(property("CSQT_bg").toBool(), bgColor);
+    m_restoringBackground = false;
+}
+
+void WidgetLayout::changeEvent(QEvent *event)
+{
+    QWidget::changeEvent(event);
+    // The panel background belongs to the document, not to the application
+    // style. A style change can reset the palette or auto-fill state of the
+    // container, so restore the saved background afterwards. Colour-theme
+    // changes are handled by the qApp paletteChanged connection, which avoids
+    // re-entering setBackground() from the palette events it generates itself.
+    if (event->type() == QEvent::StyleChange) {
+        restoreBackgroundFromProperties();
+    }
 }
 
 FrameWidget *WidgetLayout::getEditWidget(QuteWidget *widget)

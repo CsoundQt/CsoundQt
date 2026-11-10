@@ -194,24 +194,32 @@ const QSet<QString> builtinTypes = {
     u"Complex"_s, u"InstrDef"_s, u"Instr"_s, u"OpcodeDef"_s, u"Opcode"_s,
 };
 
+// Strip a Csound 7 type annotation such as the ":k" in "chnget:k".
+QString opcodeBaseName(const QString &name)
+{
+    const int colon = name.indexOf(QLatin1Char(':'));
+    return colon > 0 ? name.left(colon) : name;
+}
+
 // Argument position of the channel name for the opcodes that address a named
 // channel. -1 means that the opcode does not take one in the supported forms.
 int channelArgumentIndex(const QString &name)
 {
+    const QString base = opcodeBaseName(name);
     // "chnget \"chan\"", "invalue \"chan\"", "outvalue \"chan\", value"
-    if (name == QLatin1StringView("chnget")
-            || name == QLatin1StringView("invalue")
-            || name == QLatin1StringView("outvalue"))
+    if (base == QLatin1StringView("chnget")
+            || base == QLatin1StringView("invalue")
+            || base == QLatin1StringView("outvalue"))
         return 0;
     // "chnset value, \"chan\"", "chnmix value, \"chan\""
-    if (name == QLatin1StringView("chnset")
-            || name == QLatin1StringView("chnmix"))
+    if (base == QLatin1StringView("chnset")
+            || base == QLatin1StringView("chnmix"))
         return 1;
     return -1;
 }
 
 const QRegularExpression channelSecondArgRx(
-        QStringLiteral("\\b(chnset|chnmix)\\b"));
+        QStringLiteral("\\b(chnset|chnmix)(?:\\s*:\\s*[A-Za-z]+)?\\b"));
 
 } // namespace
 
@@ -1405,6 +1413,10 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
                     if(wordStart > 0 && text.at(wordStart - 1) == QLatin1Char('@')) {
                         // Highlight "@global:type" together as a keyword annotation
                         setFormat(wordStart - 1, wordLength + 1, keywordFormat);
+                    }
+                    else if(ioPatterns.contains(varName.toString())) {
+                        // chnget:k, chnset:k, ... keep the I/O opcode colour.
+                        setFormat(wordStart, wordLength, ioFormat);
                     }
                     else if(isOpcode(varName.toString())) {
                         // functional style opcode:type(...) — existing behaviour

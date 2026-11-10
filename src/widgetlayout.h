@@ -422,11 +422,13 @@ protected:
 	virtual void mousePressEvent(QMouseEvent *event);
 	virtual void mouseMoveEvent(QMouseEvent *event);
 	virtual void mouseReleaseEvent(QMouseEvent *event);
+	virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
 	virtual void keyPressEvent(QKeyEvent *event);
 	virtual void keyReleaseEvent(QKeyEvent *event);
 	virtual bool focusNextPrevChild(bool next) override;
 	virtual void contextMenuEvent(QContextMenuEvent *event);
 	virtual bool eventFilter(QObject *watched, QEvent *event) override;
+	virtual void changeEvent(QEvent *event) override;
 	void setHoveredWidget(QuteWidget *widget);
 	QuteWidget *hoveredWidgetFor(QObject *watched) const;
     virtual void closeEvent(QCloseEvent *event);
@@ -439,6 +441,7 @@ protected:
 
 private:
 	void updateWindowTitle();
+	void restoreBackgroundFromProperties();
 
 	QMutex widgetsMutex;
 	QMutex layoutMutex;
@@ -475,6 +478,7 @@ private:
 	QPoint currentPosition;  //TODO use proper variables instead of storing data in the widgets...
 	QCheckBox *bgCheckBox;
 	QPushButton *bgButton;
+	bool m_restoringBackground = false; // guards re-applying the panel palette
 	int closing; // to control timer when destroying this object
     // XXXX: flag to control updateData
     bool m_updating;
