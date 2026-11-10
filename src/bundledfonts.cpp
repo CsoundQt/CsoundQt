@@ -53,9 +53,11 @@ const BundledFont monoFonts[] = {
 	{"JetBrains Mono",  ":/fonts/Mono/JetBrainsMono/JetBrainsMono[wght].ttf"},
 };
 
-// Registered but not offered in the widget font picker: ProggyCleanTT is a
-// pixel-style font used only at a fixed size for meter rulers.
+// Extra fonts registered but not offered in the widget font picker. These are
+// pixel-style fonts that can be used for dense numeric rulers; the ruler
+// currently uses Noto Sans (a normal bundled family) at a small pixel size.
 const BundledFont rulerFonts[] = {
+	{"ProggyTinyTT",  ":/fonts/Mono/ProggyTiny/ProggyTiny.ttf"},
 	{"ProggyCleanTT", ":/fonts/Mono/ProggyClean/ProggyClean.ttf"},
 };
 
@@ -167,12 +169,12 @@ QString defaultFamily()
 
 QString rulerFamily()
 {
-	return QString::fromLatin1(rulerFonts[0].family);
+	return QStringLiteral("Noto Sans");
 }
 
 int rulerPixelSize()
 {
-	return 16;
+	return 8;
 }
 
 bool isBundled(const QString &family)

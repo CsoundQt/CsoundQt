@@ -1016,6 +1016,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         else if (nodeName == "value" || nodeName == "resolution"
                  || nodeName == "minimum" || nodeName == "maximum"
                  || nodeName == "pressedValue"
+                 || nodeName == "exponent"
                  || nodeName == "samplerate") {  // DOUBLE type
             nodeName.prepend("CSQT_");
             widget->setProperty(nodeName.toLocal8Bit(), node.firstChild().nodeValue().toDouble());
@@ -1040,6 +1041,9 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
                  || nodeName == "borderradius"
                  || nodeName == "borderWidth"
                  || nodeName == "borderRadius"
+                 || nodeName == "thumbWidth"
+                 || nodeName == "thumbPadding"
+                 || nodeName == "thumbRadius"
                  || nodeName == "selectedIndex" ) {  // INT type
             QDomNode n = node.firstChild();
             nodeName.prepend("CSQT_");

@@ -20,7 +20,7 @@
 */
 
 #include "qutevumeter.h"
-#include "bundledfonts.h"
+#include "widgetruler.h"
 
 #include <algorithm>
 #include <cmath>
@@ -47,6 +47,19 @@ static const double kNiceDbLabels[] = {
 	-24.0, -20.0, -16.0, -12.0, -9.0, -6.0, -3.0,
 	0.0, 3.0, 6.0, 9.0, 12.0, 18.0, 24.0, 30.0, 36.0, 42.0, 48.0
 };
+
+static WidgetRuler::Mode toWidgetRulerMode(VUMeterWidget::RulerMode mode)
+{
+	switch (mode) {
+	case VUMeterWidget::RulerHide:
+		return WidgetRuler::Hide;
+	case VUMeterWidget::RulerCompact:
+		return WidgetRuler::Compact;
+	case VUMeterWidget::RulerFull:
+	default:
+		return WidgetRuler::Full;
+	}
+}
 
 VUMeterWidget::VUMeterWidget(QWidget *parent) : QWidget(parent)
 {
@@ -82,70 +95,37 @@ void VUMeterWidget::paintEvent(QPaintEvent * /*event*/)
 	const bool vertical = isVertical();
 	const QRectF full = rect();
 
-	QFont rulerFont = font();
-	rulerFont.setFamily(BundledFonts::rulerFamily());
-	rulerFont.setPixelSize(BundledFonts::rulerPixelSize());
-	// ProggyClean is a pixel font: turn off antialiasing and hint fully so it
-	// stays crisp instead of being smoothed/rescaled.
-	rulerFont.setStyleStrategy(QFont::NoAntialias);
-	rulerFont.setHintingPreference(QFont::PreferFullHinting);
-	const QFontMetrics rulerFm(rulerFont);
-
-	// Space taken by the ruler labels.
-	int rulerSize = 0;
-	if (m_rulerMode != RulerHide) {
-		const int labelLen = qMax(rulerFm.horizontalAdvance(rulerLabelForDb(m_min)),
-		                          rulerFm.horizontalAdvance(rulerLabelForDb(m_max)));
-		rulerSize = vertical ? labelLen + 6 : rulerFm.height() + 4;
+	QVector<double> dbCandidates;
+	for (double db : kNiceDbLabels) {
+		dbCandidates << db;
 	}
 
-	// The meter fills the widget, but leave half a ruler label at both ends
-	// (top+bottom for a vertical meter, left+right for a horizontal one) so the
-	// extreme labels (min and max) can be centred on their ticks without being
-	// clipped by the widget edge.
-	QRectF meter = full;
-	if (vertical) {
-		const int margin = (m_rulerMode != RulerHide) ? (rulerFm.height() + 1) / 2 : 0;
-		meter.setTop(full.top() + margin);
-		meter.setHeight(full.height() - 2 * margin);
-	} else {
-		const int margin = (m_rulerMode != RulerHide)
-				? (rulerFm.horizontalAdvance(rulerLabelForDb(m_min))
-				   + 1) / 2 : 0;
-		meter.setLeft(full.left() + margin);
-		meter.setRight(full.right() - margin);
-	}
-
-	// Reserve ruler space only if the bar remains usable; otherwise the labels
-	// would be clipped anyway and the bar would vanish.
-	QRectF bar = meter;
-	bool drawRulerLabels = (m_rulerMode != RulerHide);
-	if (m_rulerMode != RulerHide) {
-		if (vertical) {
-			if (meter.width() - rulerSize >= 4) {
-				bar.setWidth(meter.width() - rulerSize);
-			} else {
-				drawRulerLabels = false;
-			}
-		} else {
-			if (meter.height() - rulerSize >= 4) {
-				bar.setHeight(meter.height() - rulerSize);
-			} else {
-				drawRulerLabels = false;
-			}
+	// Reserve space for the widest candidate label, not only the two ends.
+	const QFontMetrics labelMetrics(WidgetRuler::rulerFont());
+	QString widestLabel = rulerLabelForDb(m_min);
+	int widestWidth = labelMetrics.horizontalAdvance(widestLabel);
+	auto considerLabel = [&](const QString &text) {
+		const int width = labelMetrics.horizontalAdvance(text);
+		if (width > widestWidth) {
+			widestLabel = text;
+			widestWidth = width;
+		}
+	};
+	considerLabel(rulerLabelForDb(m_max));
+	for (double db : dbCandidates) {
+		if (db >= m_min && db <= m_max) {
+			considerLabel(rulerLabelForDb(db));
 		}
 	}
-	if (bar.width() < 1 || bar.height() < 1) {
+
+	const WidgetRuler::Geometry rulerGeometry = WidgetRuler::layout(
+			full, vertical, toWidgetRulerMode(m_rulerMode),
+			rulerLabelForDb(m_min), rulerLabelForDb(m_max), widestLabel);
+	if (!rulerGeometry.valid) {
 		return;
 	}
-
-	// The scale (fill and ticks) maps onto the border rows themselves, so both
-	// the minimum and maximum ticks line up with the inner edge of the meter.
-	// (QRectF::bottom()/right() are one past the last pixel, hence the -1.)
-	QRectF scale = bar.adjusted(0, 0, -1, -1);
-	if (scale.width() < 1 || scale.height() < 1) {
-		scale = bar;
-	}
+	const QRectF bar = rulerGeometry.bar;
+	const QRectF scale = rulerGeometry.scale;
 
 	// Meter background.
 	if (m_drawBackground) {
@@ -227,140 +207,23 @@ void VUMeterWidget::paintEvent(QPaintEvent * /*event*/)
 
 	// Ruler: labelled dB ticks (the values DAW meters usually show) plus, in
 	// full mode, minor ticks between them. Min, max and 0 dB are always
-	// labelled.
+	// labelled. The drawing itself is shared with the flat slider.
 	if (m_rulerMode != RulerHide) {
-		p.setFont(rulerFont);
-		p.setPen(m_rulerColor);
-
-		auto tickPos = [&](double db) -> double {
-			const double f = fractionForDb(db);
-			return vertical ? scale.bottom() - f * scale.height()
-			                : scale.left() + f * scale.width();
+		auto minorDbTicks = [](double a, double b) {
+			QVector<double> ticks;
+			const int gapDb = qRound(b - a);
+			if (gapDb <= 1 || qAbs((b - a) - gapDb) > 1e-6) {
+				return ticks;
+			}
+			for (int i = 1; i < gapDb; ++i) {
+				ticks << a + i;
+			}
+			return ticks;
 		};
-		auto drawTickAt = [&](double t, int len) {
-			const int ti = qRound(t);
-			if (vertical) {
-				p.drawLine(QPointF(bar.right(), ti), QPointF(bar.right() + len, ti));
-			} else {
-				p.drawLine(QPointF(ti, bar.bottom()), QPointF(ti, bar.bottom() + len));
-			}
-		};
-
-		// Major (candidate) tick positions: the nice dB values inside the
-		// range, plus min and max.
-		QVector<double> majors;
-		for (double db : kNiceDbLabels) {
-			if (db >= m_min - 1e-6 && db <= m_max + 1e-6) {
-				majors << db;
-			}
-		}
-		if (majors.isEmpty() || qAbs(majors.first() - m_min) > 1e-6) {
-			majors.prepend(m_min);
-		}
-		if (qAbs(majors.last() - m_max) > 1e-6) {
-			majors.append(m_max);
-		}
-		std::sort(majors.begin(), majors.end());
-
-		// Decide which ticks are labelled (and therefore long). Min and max are
-		// always labelled; the rest are dropped if they would overlap.
-		QVector<double> labelled;
-		QVector<double> labelledPos;
-		// Minimum spacing between labels along the scale axis.
-		const double labelSpacing = vertical ? rulerFm.height()
-		                                     : rulerFm.horizontalAdvance(u"-000"_s);
-		auto tryLabel = [&](double db) {
-			const double t = tickPos(db);
-			for (double p : labelledPos) {
-				if (qAbs(t - p) < labelSpacing) {
-					return;
-				}
-			}
-			labelled << db;
-			labelledPos << t;
-		};
-		tryLabel(m_max);
-		tryLabel(m_min);
-		// 0 dB is important enough to always be shown when it is in range.
-		if (m_min <= 0.0 && m_max >= 0.0) {
-			const double t0 = tickPos(0.0);
-			bool present = false;
-			for (double p : labelledPos) {
-				if (qAbs(t0 - p) < 1e-6) {
-					present = true;
-					break;
-				}
-			}
-			if (!present) {
-				labelled << 0.0;
-				labelledPos << t0;
-			}
-		}
-		for (double db : majors) {
-			if (qAbs(db - m_min) < 1e-6 || qAbs(db - m_max) < 1e-6) {
-				continue;
-			}
-			tryLabel(db);
-		}
-		std::sort(labelled.begin(), labelled.end());
-
-		// Minor ticks (full ruler only): between two labelled ticks, place them
-		// at regular integer dB steps, but only if they stay reasonably apart
-		// (>= 8 px). Otherwise a coarser integer step (or none) is used, so the
-		// compressed low end of the skewed scale does not fill with ticks.
-		if (m_rulerMode == RulerFull) {
-			const double minTickSpacing = 8.0;
-			for (int i = 0; i + 1 < labelled.size(); ++i) {
-				const double a = labelled[i];
-				const double b = labelled[i + 1];
-				const int gapDb = qRound(b - a);
-				if (gapDb <= 1 || qAbs((b - a) - gapDb) > 1e-6) {
-					continue;
-				}
-				int step = 0;
-				for (int s = 1; s < gapDb; ++s) {
-					if (gapDb % s != 0) {
-						continue;
-					}
-					if (qAbs(tickPos(a + s) - tickPos(a)) >= minTickSpacing) {
-						step = s;
-						break;
-					}
-				}
-				if (step > 0) {
-					for (double db = a + step; db < b - 1e-6; db += step) {
-						drawTickAt(tickPos(db), 2);
-					}
-				}
-			}
-		}
-
-		// Labelled ticks (long) on top.
-		for (double db : labelled) {
-			drawTickAt(tickPos(db), 4);
-		}
-
-		// Labels, with the tick at the exact centre of the number.
-		if (drawRulerLabels) {
-			for (double db : labelled) {
-				const QString text = rulerLabelForDb(db);
-				const double t = tickPos(db);
-				const QRectF br = rulerFm.boundingRect(text);
-				if (vertical) {
-					double baseline = t - br.center().y();
-					baseline = qBound(full.top() - br.top(),
-					                  baseline,
-					                  full.bottom() - br.bottom());
-					p.drawText(QPointF(qRound(bar.right() + 6), qRound(baseline)), text);
-				} else {
-					const double adv = rulerFm.horizontalAdvance(text);
-					double x = t - adv / 2.0;
-					x = qBound(full.left(), x, full.right() - adv);
-					const double baseline = bar.bottom() + 6 + rulerFm.ascent();
-					p.drawText(QPointF(qRound(x), qRound(baseline)), text);
-				}
-			}
-		}
+		WidgetRuler::draw(p, rulerGeometry, toWidgetRulerMode(m_rulerMode),
+		                  m_rulerColor, ValueMapping{m_min, m_max, m_exponent},
+		                  [this](double db) { return rulerLabelForDb(db); },
+		                  dbCandidates, {0.0}, minorDbTicks);
 	}
 
 	// Cursor (second channel): a line across the meter at the cursor's dB value

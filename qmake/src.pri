@@ -77,6 +77,7 @@ HEADERS = "src/about.h" \
     "src/themedicons.h" \
     "src/types.h" \
     "src/valuemapping.h" \
+    "src/widgetruler.h" \
     "src/utilitiesdialog.h" \
     "src/widgetlayout.h" \
     "src/widgetpanel.h" \
@@ -145,6 +146,7 @@ SOURCES = "src/about.cpp" \
     "src/qutewaveform.cpp" \
     "src/qutevumeter.cpp" \
     "src/quteslider.cpp" \
+    "src/widgetruler.cpp" \
     "src/qutespinbox.cpp" \
     "src/qutetext.cpp" \
     "src/qutewidget.cpp" \

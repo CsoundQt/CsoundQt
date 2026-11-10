@@ -24,5 +24,7 @@
     <file>fonts/Mono/LiberationMono/LICENSE</file>
     <file>fonts/Mono/ProggyClean/ProggyClean.ttf</file>
     <file>fonts/Mono/ProggyClean/Licence.txt</file>
+    <file>fonts/Mono/ProggyTiny/ProggyTiny.ttf</file>
+    <file>fonts/Mono/ProggyTiny/Licence.txt</file>
 </qresource>
 </RCC>
