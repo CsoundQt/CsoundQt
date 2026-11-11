@@ -44,6 +44,9 @@ protected:
 
 private:
 	Ui::About *ui;
+	// Apply the flat Fusion scrollbar look to the info text browser. Does
+	// nothing for other widget styles (see widgetstyle.h).
+	void updateScrollBarStyle();
 };
 
 #endif // ABOUT_H

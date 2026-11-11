@@ -23,12 +23,33 @@
 
 #include "about.h"
 #include "ui_about.h"
+#include "widgetstyle.h"
+
+#include <QScrollBar>
 
 About::About(QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::About)
 {
 	ui->setupUi(this);
+	updateScrollBarStyle();
+}
+
+void About::updateScrollBarStyle()
+{
+	// Flat scrollbars are a Fusion-only extra (see widgetstyle.h): every other
+	// widget style keeps its native scrollbars.
+	const bool flat =
+			currentWidgetStyleName().compare(u"Fusion"_s, Qt::CaseInsensitive) == 0
+			&& flatScrollBarsEnabled();
+	const QString sheet = flat
+			? flatScrollBarStyleSheet(ui->infoText->palette().color(QPalette::Base))
+			: QString();
+	for (QScrollBar *bar : {ui->infoText->verticalScrollBar(),
+							ui->infoText->horizontalScrollBar()}) {
+		if (bar->styleSheet() != sheet)
+			bar->setStyleSheet(sheet);
+	}
 }
 
 About::~About()
@@ -52,6 +73,12 @@ void About::changeEvent(QEvent *e)
 	switch (e->type()) {
 	case QEvent::LanguageChange:
 		ui->retranslateUi(this);
+		break;
+	case QEvent::StyleChange:
+	case QEvent::PaletteChange:
+		// The widget style or application palette changed while the dialog is
+		// open: keep the scrollbar look in sync.
+		updateScrollBarStyle();
 		break;
 	default:
 		break;

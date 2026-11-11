@@ -22,6 +22,7 @@
 
 #include "themedicons.h"
 
+#include <QFile>
 #include <QFileInfo>
 #include <QHash>
 #include <QIconEngine>
@@ -110,8 +111,6 @@ const QHash<QString, QString> &iconNameMap()
 		{ u"terminal"_s,      u"utilities-terminal"_s },
 		{ u"render"_s,        u"document-export"_s },
 		{ u"scratchpad"_s,    u"document-edit"_s },
-		{ u"playfile"_s,      u"audio-x-generic"_s },
-		{ u"editfile"_s,      u"document-edit"_s },
 		{ u"widgets"_s,       u"view-grid"_s },
 		{ u"editor"_s,        u"accessories-text-editor"_s },
 		{ u"devel"_s,         u"applications-utilities"_s },
@@ -120,7 +119,6 @@ const QHash<QString, QString> &iconNameMap()
 		{ u"settings"_s,      u"configure"_s },
 		{ u"home"_s,          u"go-home"_s },
 		{ u"about"_s,         u"help-about"_s },
-		{ u"note"_s,          u"audio-x-generic"_s },
 		{ u"hearing"_s,       u"audio-volume-high"_s },
 	};
 	return map;
@@ -154,6 +152,23 @@ bool isStandardName(const QString &baseName)
 
 namespace ThemedIcons {
 
+QString resolvePath(const QString &resourcePath)
+{
+	// The icon set is vector-only: derive the SVG name from whatever path was
+	// given (e.g. ".../media-play.png") and use it when it exists. Keeping the
+	// original path otherwise means a missing icon simply stays null instead of
+	// silently loading a rasterized fallback.
+	const QFileInfo info(resourcePath);
+	const QString svgPath = info.path() + QLatin1Char('/') + info.completeBaseName()
+			+ u".svg"_s;
+	return QFile::exists(svgPath) ? svgPath : resourcePath;
+}
+
+QIcon icon(const QString &resourcePath)
+{
+	return QIcon(resolvePath(resourcePath));
+}
+
 QString freedesktopName(const QString &fileName)
 {
 	const QString baseName = QFileInfo(fileName).completeBaseName();
@@ -169,9 +184,23 @@ QString freedesktopName(const QString &fileName)
 
 QIcon forMenu(const QString &resourcePath)
 {
-	const QIcon bundled(resourcePath);
-	const QString name = freedesktopName(resourcePath);
-	if (name.isEmpty() || bundled.isNull()) {
+	const QString path = resolvePath(resourcePath);
+	const QIcon bundled(path);
+	if (bundled.isNull()) {
+		return bundled;
+	}
+	// Let the menus draw the same bundled pixels as the toolbars. Exporting a
+	// freedesktop icon name instead (the previous behaviour) makes a global
+	// menu (e.g. KDE Plasma's) draw the icon in the shell's own theme, so the
+	// menu and the toolbar show different artwork for the same action. Set
+	// CSQT_DESKTOP_MENU_ICON_NAMES=1 to get the name-based behaviour back.
+	static const bool exposeName =
+			qEnvironmentVariableIsSet("CSQT_DESKTOP_MENU_ICON_NAMES");
+	if (!exposeName) {
+		return bundled;
+	}
+	const QString name = freedesktopName(path);
+	if (name.isEmpty()) {
 		return bundled;
 	}
 	return QIcon(new NamedPixmapIconEngine(name, bundled));

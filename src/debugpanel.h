@@ -41,6 +41,8 @@ public:
     QVector<QVariantList> getBreakpoints();
     QVector<QVariant> getInstrument();
     void setDebugFilename(QString filename);
+    // Load the toolbar icons from the given bundled icon theme.
+    void setIconTheme(const QString &theme);
 
 public slots:
     void setVariableList(QVector<QVariantList> varList);

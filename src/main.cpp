@@ -147,7 +147,10 @@ int main(int argc, char *argv[])
 {
     int result = 0;
 
-    // Set a global template for ALL qDebug messages.
+    // Set a global template for ALL qDebug messages. qcs.pro defines
+    // QT_MESSAGELOGCONTEXT, so file/line/function are present in release
+    // builds too; otherwise Qt compiles the context out and the prefix shows
+    // "unknown:0 unknown".
 	qSetMessagePattern("[%{if-debug}D%{endif}%{if-info}I%{endif}%{if-warning}W%{endif}%{if-critical}C%{endif}%{if-fatal}F%{endif}][%{file}:%{line} %{function}] %{message}");
 
     // Route CsoundQt's own debug output through our handler so it can also be
@@ -218,12 +221,13 @@ int main(int argc, char *argv[])
         DialogButtonStyle::setToolTipWakeUpDelay(
                     styleSettings.value("GUI/tooltipWakeUpDelay", 500).toInt());
     }
-    if (QStyle *widgetStyleBase = createWidgetStyle(resolveWidgetStyleName(widgetStyle))) {
-        qApp->setStyle(new DialogButtonStyle(widgetStyleBase));
+    const QString resolvedStyle = resolveWidgetStyleName(widgetStyle);
+    if (QStyle *widgetStyleBase = createWidgetStyle(resolvedStyle)) {
+        installWidgetStyle(widgetStyleBase, resolvedStyle);
     } else {
         // No explicit style (macOS/Windows default): keep Qt's style, just
         // strip themed dialog button icons.
-        qApp->setStyle(new DialogButtonStyle(qApp->style()));
+        installWidgetStyle(qApp->style(), resolvedStyle);
     }
 
     bool autoplay = false;

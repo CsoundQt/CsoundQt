@@ -158,6 +158,8 @@ schedule 20, 0, 100
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -186,6 +188,10 @@ schedule 20, 0, 100
   <gridcolor>#48a0a0a0</gridcolor>
   <samplerate>1</samplerate>
   <range>0.00</range>
+  <linewidth>1</linewidth>
+  <plottype>line</plottype>
+  <pointradius>0</pointradius>
+  <zoom>1.000000</zoom>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -261,6 +267,10 @@ schedule 20, 0, 100
   <gridcolor>#48a0a0a0</gridcolor>
   <samplerate>750</samplerate>
   <range>0.00</range>
+  <linewidth>2</linewidth>
+  <plottype>line</plottype>
+  <pointradius>0</pointradius>
+  <zoom>1.000000</zoom>
  </bsbObject>
  <bsbObject type="BSBTableDisplay" version="2">
   <objectName>plot4</objectName>
@@ -280,6 +290,10 @@ schedule 20, 0, 100
   <gridcolor>#ff464600</gridcolor>
   <samplerate>48000</samplerate>
   <range>0.00</range>
+  <linewidth>1</linewidth>
+  <plottype>line</plottype>
+  <pointradius>0</pointradius>
+  <zoom>1.000000</zoom>
  </bsbObject>
  <bsbObject type="BSBTableDisplay" version="2">
   <objectName>plot1</objectName>
@@ -299,6 +313,10 @@ schedule 20, 0, 100
   <gridcolor>#48a0a0a0</gridcolor>
   <samplerate>1</samplerate>
   <range>0.00</range>
+  <linewidth>1</linewidth>
+  <plottype>line</plottype>
+  <pointradius>0</pointradius>
+  <zoom>1.000000</zoom>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>

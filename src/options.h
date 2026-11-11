@@ -41,13 +41,20 @@ public:
     QString theme;  // Icon theme name TODO: rename to iconTheme
     QString themeMode; // application theme: "auto", "dark", "light"
     QString widgetStyle; // Qt widget style ("Fusion", "Breeze", ...); empty = default
+    // Draw the code editor scrollbars flat (thin, no arrow buttons). Only
+    // honoured while the Fusion widget style is active.
+    bool flatScrollBars;
     // Adjustment to the document tab font size, in points relative to the
     // application font (0 keeps the application size).
     int tabFontSizeOffset;
 	QString font;
 	float fontPointSize;
 	float codePadFontPointSize;
+	int inspectorFontPointSize; // points; 0 keeps the application font
 	bool showLineNumberArea;
+	// Insert the matching endin/endop/endif/endsw/od when Enter is pressed
+	// after an instr/opcode/if/switch line or a "for/while ... do" line.
+	bool autoCloseBlocks;
 	bool antialiasScopes; // default for scope widgets without an override
 	// Line number contrast against the gutter background: 0 = invisible,
 	// 100 = full editor foreground colour.

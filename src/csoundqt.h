@@ -244,6 +244,7 @@ private slots:
 	bool saveAs();
 	bool saveNoWidgets();
 	void info();
+	void showEmbeddedFiles();
 	// Edition
 	void copy();
 	void cut();
@@ -381,6 +382,8 @@ private slots:
     void gotoLineDialog();
     // Jump to the definition of the name at the cursor.
     void goToSource();
+    // Opcodes/instruments/<CsScore> of the current document and its includes.
+    void goToAnything();
 
 #ifdef CSQT_DEBUGGER
 	void runDebugger();
@@ -585,6 +588,7 @@ private:
 	QAction *closeTabAct;
 	QAction *exportPdfAct;
 	QAction *infoAct;
+	QAction *embeddedFilesAct = nullptr;
 	QAction *exitAct;
 	QList<QAction *> openRecentAct;
 	QAction *undoAct;
@@ -666,6 +670,7 @@ private:
     QAction *gotoLineAct;
     QAction *goBackAct = nullptr;
     QAction *goToSourceAct = nullptr;
+    QAction *goToAnythingAct = nullptr;
     QAction *reloadDependenciesAct = nullptr;
 	QAction *aboutAct;
 	QAction *donateAct;

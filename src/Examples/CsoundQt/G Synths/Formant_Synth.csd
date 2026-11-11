@@ -7,9 +7,10 @@
 ; Formant synthesizer with glottal parameters
 ; Andreas Bergsland, 2009
 ; ************************************************************
-sr = 44100
-ksmps = 64
+sr     = 44100
+ksmps  = 64
 nchnls = 2
+0dbfs  = 1
 
 
 giSine = ftgen(0, 0, 1024, 10, 1)
@@ -129,7 +130,7 @@ instr 10
                   i24, iC, i25, iC, i26, iClose, 0)
 
   kf0  = chnget("f0")
-  kamp = linen(4000, .2, p3, .35)
+  kamp = linen(1, .2, p3, .35)
 
 
   ; ***************************************************************
@@ -238,7 +239,7 @@ instr 10
 
 
   ; Mix
-  afilt = abal1 * kFamp1 +abal2 * kFamp2 +abal3 * kFamp3 + abal4*kFamp4
+  afilt = abal1*kFamp1 + abal2*kFamp2 + abal3*kFamp3 + abal4*kFamp4
 
   ; Master Volume
   kMasterVol = chnget("Vol")
@@ -254,8 +255,7 @@ instr master
   dispfft asig, 1/24, 2048  
   out(asig, asig)
   chnclear("master")
-  
-  if eventcycles() == 100 then
+  if timeinstk() == 100 then
     outvalue "graph/findfft", "asig"
   endif
   
@@ -267,6 +267,8 @@ i1 0 3600
 i "master" 0 3600
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 
@@ -331,7 +333,7 @@ i "master" 0 3600
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <value>0</value>
+  <value>1</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomx>1.00000000</zoomx>
@@ -369,7 +371,7 @@ i "master" 0 3600
   <eventLine/>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
   <font>Liberation Sans</font>
   <flatStyle>true</flatStyle>
@@ -769,7 +771,7 @@ i "master" 0 3600
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <selected>false</selected>
+  <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
@@ -1750,9 +1752,9 @@ i "master" 0 3600
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
-  <maximum>2.00000000</maximum>
+  <maximum>1.00000000</maximum>
   <exponent>2.00000000</exponent>
-  <value>0.98196098</value>
+  <value>0.12545764</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1781,7 +1783,7 @@ i "master" 0 3600
   <minimum>30.00000000</minimum>
   <maximum>800.00000000</maximum>
   <exponent>1.50000000</exponent>
-  <value>193.41790583</value>
+  <value>136.53109836</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1810,7 +1812,7 @@ i "master" 0 3600
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.37240000</value>
+  <value>0.39200000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1839,7 +1841,7 @@ i "master" 0 3600
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.43120000</value>
+  <value>0.37230000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1867,8 +1869,8 @@ i "master" 0 3600
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <exponent>1.00000000</exponent>
-  <value>0.41160000</value>
+  <exponent>1.50000000</exponent>
+  <value>0.70016846</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>

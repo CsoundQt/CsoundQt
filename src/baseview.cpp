@@ -107,6 +107,7 @@ void BaseView::setFullText(QString text, bool goToTop)
 		m_mainEditor->moveCursor(QTextCursor::Start);
 	}
 	m_mainEditor->setUndoRedoEnabled(true);
+	emit embeddedFilesChanged();
 }
 
 void BaseView::setBasicText(QString text)
@@ -255,6 +256,9 @@ void BaseView::setColors(QColor text, QColor background)
     palette.setColor(QPalette::Text, text);
     palette.setColor(QPalette::Base, background);
     m_mainEditor->setPalette(palette);
+    // The "Flat scrollbars" setting and the widget style may have changed; the
+    // palette did not necessarily change, so refresh explicitly.
+    m_mainEditor->updateScrollBarStyle();
     m_mainEditor->setEditorBackground(background);
 }
 
@@ -311,6 +315,7 @@ void BaseView::setSco(QString text)
 void BaseView::clearFileBText()
 {
 	m_filebText.clear();
+	m_embeddedFilesModified = false;
 }
 
 void BaseView::appendFileBText(QString text)
@@ -550,6 +555,67 @@ QString BaseView::getOptionsText()
 QString BaseView::getFileB()
 {
 	return m_filebText;
+}
+
+QVector<EmbeddedFile> BaseView::embeddedFiles() const
+{
+	return EmbeddedFiles::parse(m_filebText);
+}
+
+QStringList BaseView::embeddedFileNames() const
+{
+	QStringList names;
+	const QVector<EmbeddedFile> files = embeddedFiles();
+	names.reserve(files.size());
+	for (const EmbeddedFile &file : files)
+		names << file.name;
+	return names;
+}
+
+bool BaseView::setEmbeddedFile(const QString &name, const QByteArray &data,
+                               QString *error)
+{
+	const QString nameError = EmbeddedFiles::validateName(name);
+	if (!nameError.isEmpty()) {
+		if (error)
+			*error = nameError;
+		return false;
+	}
+
+	QVector<EmbeddedFile> files = embeddedFiles();
+	const QString block = EmbeddedFiles::makeBlock(name, data);
+	bool replaced = false;
+	for (EmbeddedFile &file : files) {
+		if (file.name == name) {
+			file.rawBlock = block;
+			replaced = true;
+			break;
+		}
+	}
+	if (!replaced) {
+		EmbeddedFile file;
+		file.name = name;
+		file.rawBlock = block;
+		file.decodedSize = data.size();
+		files.append(file);
+	}
+
+	m_filebText = EmbeddedFiles::serialize(files);
+	m_embeddedFilesModified = true;
+	emit embeddedFilesChanged();
+	return true;
+}
+
+bool BaseView::removeEmbeddedFile(int index)
+{
+	QVector<EmbeddedFile> files = embeddedFiles();
+	if (index < 0 || index >= files.size())
+		return false;
+	files.removeAt(index);
+	m_filebText = EmbeddedFiles::serialize(files);
+	m_embeddedFilesModified = true;
+	emit embeddedFilesChanged();
+	return true;
 }
 
 //void BaseView::setOpcodeNameList(QStringList list)

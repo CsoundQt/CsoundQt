@@ -22,6 +22,7 @@
 #define WIDGETSTYLE_H
 
 #include <QApplication>
+#include <QColor>
 #include <QDebug>
 #include <QFontMetrics>
 #include <QProxyStyle>
@@ -124,15 +125,83 @@ inline QString defaultWidgetStyleName()
 #endif
 }
 
+// Name of the style CsoundQt installed last (see installWidgetStyle below).
+// Qt replaces the application style with an internal QStyleSheetStyle as soon
+// as any stylesheet is set - the code editor styles its scrollbars, and dialogs
+// such as About have their own stylesheets - and that wrapper hides the real
+// style from currentWidgetStyleName().
+inline QString &installedWidgetStyleName()
+{
+    static QString name;
+    return name;
+}
+
+// Whether the code editor uses the flat (thin, arrow-less) scrollbars. Set from
+// the "Flat scrollbars" setting and only ever honoured for the Fusion style
+// (see TextEditLineNumbers::updateScrollBarStyle).
+inline bool &flatScrollBarsEnabled()
+{
+    static bool enabled = true;
+    return enabled;
+}
+
+// Flat scrollbar look used when the Fusion style is active and the "Flat
+// scrollbars" setting is on: thin, arrow-less bars with a rounded handle. The
+// track is filled with `background` (the surface behind the bars) so it blends
+// into the surrounding area; clicking the track still pages.
+inline QString flatScrollBarStyleSheet(const QColor &background)
+{
+    return uR"(
+QScrollBar:vertical {
+    width: 6px;
+    background: %1;
+    margin: 0;
+}
+QScrollBar::handle:vertical {
+    background: palette(mid);
+    border-radius: 3px;
+    min-height: 24px;
+}
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0;
+    background: none;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+QScrollBar:horizontal {
+    height: 6px;
+    background: %1;
+    margin: 0;
+}
+QScrollBar::handle:horizontal {
+    background: palette(mid);
+    border-radius: 3px;
+    min-width: 24px;
+}
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    width: 0;
+    background: none;
+}
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background: none;
+}
+)"_s.arg(background.name());
+}
+
 // Name of the style currently in use. The application style is wrapped in
 // DialogButtonStyle, whose own objectName is empty, so look at the base style
 // it wraps.
 inline QString currentWidgetStyleName()
 {
     if (auto *proxy = qobject_cast<QProxyStyle *>(QApplication::style())) {
-        if (proxy->baseStyle() != nullptr)
+        if (proxy->baseStyle() != nullptr && !proxy->baseStyle()->objectName().isEmpty())
             return proxy->baseStyle()->objectName();
     }
+    // A stylesheet is active: Qt hid the real style (see above), so fall back
+    // to the name recorded when it was installed.
+    if (!installedWidgetStyleName().isEmpty())
+        return installedWidgetStyleName();
     if (QApplication::style() != nullptr)
         return QApplication::style()->objectName();
     return QString();
@@ -186,6 +255,22 @@ inline QStyle *createWidgetStyle(const QString &name)
         return style;
     }
     return nullptr;
+}
+
+// Install an application style (nullptr keeps Qt's current style), wrapped in
+// DialogButtonStyle so dialog buttons stay text-only. Also records which style
+// is active, so widgets that adapt to the style (e.g. the editor scrollbars)
+// can still tell which one it is once a stylesheet hides it (see above).
+inline void installWidgetStyle(QStyle *style, const QString &name)
+{
+    if (style == nullptr)
+        style = QApplication::style();
+    if (style == nullptr)
+        return;
+    const QString installedName = name.isEmpty() ? style->objectName() : name;
+    qApp->setStyle(new DialogButtonStyle(style));
+    installedWidgetStyleName() = installedName.isEmpty()
+            ? currentWidgetStyleName() : installedName;
 }
 
 #endif // WIDGETSTYLE_H

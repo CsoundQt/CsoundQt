@@ -2572,23 +2572,69 @@ void DocumentView::exitParameterMode()
 
 void DocumentView::indentNewLine()
 {
-	QTextCursor linecursor = m_mainEditor->textCursor();
-	if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
-			   || m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE) {
-		linecursor.movePosition(QTextCursor::PreviousBlock);
-		linecursor.select(QTextCursor::LineUnderCursor);
-		QString line = linecursor.selectedText();
-        static const QRegularExpression regex(uR"(\s+)"_s);
-		if (line.indexOf(regex) == 0) {
-            // old: m_mainEditor->insertPlainText(regex.cap());
+	if (isReadOnly())
+		return;
+	const bool csoundLike = m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
+			|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE;
+	if (!csoundLike)
+		return;
 
-            // TODO: check! Not sure if done the right way! (Qt6)
-            // see https://github.com/Komet/MediaElch/issues/1086
-            QString text = regex.match(line).captured();
-            qDebug() << "Captured text" << text; // SHORTHEN LATER!
-            m_mainEditor->insertPlainText(text);
-		}
+	QTextCursor linecursor = m_mainEditor->textCursor();
+	linecursor.movePosition(QTextCursor::PreviousBlock);
+	linecursor.select(QTextCursor::LineUnderCursor);
+	const QString line = linecursor.selectedText();
+
+	// Keep the opener's indentation, as before.
+	static const QRegularExpression leadingRx(uR"(^\s*)"_s);
+	const QString leading = leadingRx.match(line).captured();
+	if (!leading.isEmpty())
+		m_mainEditor->insertPlainText(leading);
+
+	// After instr/opcode/if, for/while loops that end with "do", and switch
+	// blocks, add one indentation step for the body and the matching end tag on
+	// its own line. The cursor stays in the body.
+	if (!m_autoCloseBlocks || m_mode == EDIT_SCO_MODE)
+		return;
+	static const QRegularExpression openerRx(
+			uR"(^\s*(opcode|instr|if|for|while|switch)\b)"_s,
+			QRegularExpression::CaseInsensitiveOption);
+	const QRegularExpressionMatch opener = openerRx.match(line);
+	if (!opener.hasMatch())
+		return;
+	const QString keyword = opener.captured(1).toLower();
+	if (keyword == u"for"_s || keyword == u"while"_s) {
+		// Only a complete "for/while ... do" header starts a block; a wrapped
+		// header line without "do" is continued instead.
+		static const QRegularExpression doRx(
+				uR"(\bdo\s*(?:(?://|;).*)?$)"_s,
+				QRegularExpression::CaseInsensitiveOption);
+		if (!doRx.match(line).hasMatch())
+			return;
 	}
+	QString endTag;
+	if (keyword == u"opcode"_s)
+		endTag = u"endop"_s;
+	else if (keyword == u"instr"_s)
+		endTag = u"endin"_s;
+	else if (keyword == u"if"_s)
+		endTag = u"endif"_s;
+	else if (keyword == u"switch"_s)
+		endTag = u"endsw"_s;
+	else
+		endTag = u"od"_s;
+	const QString step = indentString();
+	const QString bodyIndent = leading + step;
+
+	internalChange = true;
+	m_mainEditor->insertPlainText(step + QLatin1Char('\n') + leading + endTag);
+	// insertPlainText moves the cursor after the end tag; put it back on the
+	// indented body line.
+	QTextCursor cursor = m_mainEditor->textCursor();
+	cursor.movePosition(QTextCursor::PreviousBlock);
+	cursor.movePosition(QTextCursor::StartOfBlock);
+	cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor,
+	                    bodyIndent.size());
+	m_mainEditor->setTextCursor(cursor);
 }
 
 void DocumentView::findReplace()
@@ -2640,6 +2686,24 @@ void DocumentView::showOpcodeInsertBar()
 	ensureOpcodeInsertBar();
 	m_opcodeInsertBar->setOpcodes(m_opcodeTree->opcodeNameList());
 	m_opcodeInsertBar->showBar();
+}
+
+void DocumentView::ensureGoToAnythingBar()
+{
+	if (m_goToAnythingBar)
+		return;
+	m_goToAnythingBar = new GoToAnythingBar(m_mainEditor);
+	connect(m_goToAnythingBar, &GoToAnythingBar::entryChosen, this,
+	        [this](const QString &file, int line, int column) {
+		emit goToAnythingChosen(file, line, column);
+	});
+}
+
+void DocumentView::showGoToAnything(const QVector<GoToAnythingBar::Entry> &entries)
+{
+	ensureGoToAnythingBar();
+	m_goToAnythingBar->setEntries(entries);
+	m_goToAnythingBar->showBar();
 }
 
 void DocumentView::collectFindMatches()

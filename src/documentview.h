@@ -30,6 +30,7 @@
 #include "bracketmatcher.h"
 #include "widgetpropertyinfo.h"
 #include "channelhighlightmode.h"
+#include "gotoanythingbar.h"
 
 #include <QKeyEvent> // For syntax menu class
 #include <QPair>
@@ -271,6 +272,10 @@ public slots:
 	void replaceAll();
 	void closeFindBar();
 	void showOpcodeInsertBar();
+	void showGoToAnything(const QVector<GoToAnythingBar::Entry> &entries);
+	// Insert the matching endin/endop/endif/endsw/od when Enter follows an
+	// instr/opcode/if/switch or "for/while ... do" line.
+	void setAutoCloseBlocks(bool enabled) { m_autoCloseBlocks = enabled; }
 	void evaluate();
 	void updateContext();
 	void updateOrcContext(QString orc);
@@ -377,6 +382,7 @@ private:
 
 	void ensureFindBar();
 	void ensureOpcodeInsertBar();
+	void ensureGoToAnythingBar();
 	void cancelAutoCompleteOnCursorMove();
 	void updateCompletionFont();
 	void collectFindMatches();
@@ -410,7 +416,7 @@ private:
 
 	bool m_isModified;
 	bool m_autoComplete;
-    int m_autoCompleteDelay = 150;
+    int m_autoCompleteDelay = 250;
     // Width of the autocomplete menu, in characters of its entries.
     int m_autoCompleteMenuWidth = 42;
     int m_autoCompleteMenuMaxLines = 20;
@@ -443,6 +449,9 @@ private:
 
 	FindBar *m_findBar = nullptr;
 	OpcodeInsertBar *m_opcodeInsertBar = nullptr;
+	GoToAnythingBar *m_goToAnythingBar = nullptr;
+	// Settings/Editor: insert endin/endop/endif after block openers.
+	bool m_autoCloseBlocks = true;
 	class DocstringPopup *m_docstringPopup = nullptr;
 	// Ctrl+hover quick reference: the card follows the pointer while it stays
 	// on one name, so the name and its editor are remembered while it is up.
@@ -539,6 +548,9 @@ signals:
                              int line);
     // The cursor is inside an #include path: resolve the included file.
     void goToSourceIncludeRequested(const QString &path);
+    // A "Go to Anything" entry was chosen. `file` is empty when the target is
+    // in the current document.
+    void goToAnythingChosen(const QString &file, int line, int column);
     // Ask the page to outline widgets using this channel. Empty clears any
     // existing outline.
     void channelHighlightRequested(const QString &channel);

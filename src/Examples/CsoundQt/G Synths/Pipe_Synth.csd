@@ -18,59 +18,6 @@ gaIn_Reverb = init(0)
 ; all midi channels to instrument 1
 massign 0, 1
 
-chn_k "kC1", 1
-chn_k "kC10", 1
-chn_k "kC11", 1
-chn_k "kC12", 1
-chn_k "kC13", 1
-chn_k "kC14", 1
-chn_k "kC15", 1
-chn_k "kC16", 1
-chn_k "kC17", 1
-chn_k "kC18", 1
-chn_k "kC19", 1
-chn_k "kC2", 1
-chn_k "kC20", 1
-chn_k "kC21", 1
-chn_k "kC22", 1
-chn_k "kC23", 1
-chn_k "kC24", 1
-chn_k "kC25", 1
-chn_k "kC26", 1
-chn_k "kC27", 1
-chn_k "kC28", 1
-chn_k "kC29", 1
-chn_k "kC3", 1
-chn_k "kC30", 1
-chn_k "kC31", 1
-chn_k "kC32", 1
-chn_k "kC33", 1
-chn_k "kC34", 1
-chn_k "kC35", 1
-chn_k "kC36", 1
-chn_k "kC37", 1
-chn_k "kC38", 1
-chn_k "kC39", 1
-chn_k "kC4", 1
-chn_k "kC40", 1
-chn_k "kC41", 1
-chn_k "kC42", 1
-chn_k "kC43", 1
-chn_k "kC44", 1
-chn_k "kC45", 1
-chn_k "kC46", 1
-chn_k "kC47", 1
-chn_k "kC48", 1
-chn_k "kC49", 1
-chn_k "kC5", 1
-chn_k "kC50", 1
-chn_k "kC6", 1
-chn_k "kC7", 1
-chn_k "kC8", 1
-chn_k "kC9", 1
-chn_k "tempo", 2
-chn_k "vu_Left", 2
-chn_k "vu_Right", 2
 
 opcode PIPE, a, iiiiiiikkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
 
@@ -785,6 +732,8 @@ i 1 7.5 0.1 37
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="118" y="351" width="655" height="346" visible="true" loopStart="0" loopEnd="0">i 1 0 0.1 73 </EventPanel>
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -891,7 +840,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-20.00000000</minimum>
   <maximum>100.00000000</maximum>
-  <value>-20.00000000</value>
+  <value>25.60000038</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1014,7 +963,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00000000</value>
+  <value>0.89999998</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1060,7 +1009,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.000</label>
+  <label>0.900</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -1089,7 +1038,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-20.00000000</minimum>
   <maximum>100.00000000</maximum>
-  <value>10.00000000</value>
+  <value>20.79999924</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1135,7 +1084,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>10.000</label>
+  <label>20.800</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -1164,7 +1113,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00000000</value>
+  <value>0.34000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1210,7 +1159,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.000</label>
+  <label>0.340</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -1239,7 +1188,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-1.00000000</minimum>
   <maximum>0.00000000</maximum>
-  <value>-0.25000000</value>
+  <value>-0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1285,7 +1234,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-0.250</label>
+  <label>-0.500</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -1314,7 +1263,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>240.00000000</maximum>
-  <value>28.79999924</value>
+  <value>31.20000076</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1360,7 +1309,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>28.800</label>
+  <label>31.200</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -1389,7 +1338,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-1.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.38000000</value>
+  <value>-1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1435,7 +1384,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.380</label>
+  <label>-1.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -1464,7 +1413,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>60.00000000</maximum>
-  <value>30.00000000</value>
+  <value>16.79999924</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1510,7 +1459,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>30.000</label>
+  <label>16.800</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -1539,7 +1488,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
-  <value>60.00000000</value>
+  <value>58.79999924</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1585,7 +1534,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>60.000</label>
+  <label>58.800</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -1689,7 +1638,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>30.00000000</maximum>
-  <value>1.79999995</value>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1735,7 +1684,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>1.800</label>
+  <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -1764,7 +1713,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>30.00000000</maximum>
-  <value>1.79999995</value>
+  <value>2.70000005</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1810,7 +1759,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>1.800</label>
+  <label>2.700</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -1839,7 +1788,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.41999999</value>
+  <value>0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1885,7 +1834,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.420</label>
+  <label>0.500</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -1914,7 +1863,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.30000001</value>
+  <value>0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1960,7 +1909,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.300</label>
+  <label>0.500</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -1989,7 +1938,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.20000000</value>
+  <value>0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2035,7 +1984,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.200</label>
+  <label>0.500</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -2064,7 +2013,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.75000000</value>
+  <value>0.54000002</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2110,7 +2059,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.750</label>
+  <label>0.540</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -2139,7 +2088,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.75000000</value>
+  <value>0.25000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2185,7 +2134,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.750</label>
+  <label>0.250</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -2241,7 +2190,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>1.00000000</value>
+  <value>0.66000003</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2287,7 +2236,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>1.000</label>
+  <label>0.660</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -2316,7 +2265,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
-  <value>90.00000000</value>
+  <value>79.19999695</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2362,7 +2311,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>90.000</label>
+  <label>79.200</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -2541,7 +2490,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.85000002</value>
+  <value>0.28000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2587,7 +2536,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.850</label>
+  <label>0.280</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -2641,7 +2590,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <selected>false</selected>
+  <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
@@ -2696,7 +2645,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
-  <value>0.00000000</value>
+  <value>12.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2742,7 +2691,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.000</label>
+  <label>12.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -2771,7 +2720,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
-  <value>34.79999924</value>
+  <value>67.19999695</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2817,7 +2766,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>34.800</label>
+  <label>67.200</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -2921,7 +2870,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
-  <value>120.00000000</value>
+  <value>67.19999695</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2967,7 +2916,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>120.000</label>
+  <label>67.200</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -2996,7 +2945,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
-  <value>60.00000000</value>
+  <value>97.19999695</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3042,7 +2991,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>60.000</label>
+  <label>97.200</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -3071,7 +3020,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>1.00000000</value>
+  <value>0.80000001</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3117,7 +3066,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>1.000</label>
+  <label>0.800</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -3173,7 +3122,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00000000</value>
+  <value>0.38000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3219,7 +3168,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.000</label>
+  <label>0.380</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -3273,7 +3222,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <selected>true</selected>
+  <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
@@ -3328,7 +3277,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-60.00000000</minimum>
   <maximum>60.00000000</maximum>
-  <value>3.59999990</value>
+  <value>1.20000005</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3374,7 +3323,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>3.600</label>
+  <label>1.200</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -3403,7 +3352,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-1.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>-0.02000000</value>
+  <value>-0.12000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3449,7 +3398,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-0.020</label>
+  <label>-0.120</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -3478,7 +3427,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-5.00000000</minimum>
   <maximum>0.00000000</maximum>
-  <value>-2.50000000</value>
+  <value>-1.54999995</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3524,7 +3473,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-2.500</label>
+  <label>-1.550</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -3553,7 +3502,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-2.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.47999999</value>
+  <value>-1.24000001</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3599,7 +3548,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.480</label>
+  <label>-1.240</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -3655,7 +3604,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-90.00000000</minimum>
   <maximum>30.00000000</maximum>
-  <value>-72.00000000</value>
+  <value>-60.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3701,7 +3650,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-72.000</label>
+  <label>-60.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -3730,7 +3679,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.68000001</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3776,7 +3725,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.680</label>
+  <label>1.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -3805,7 +3754,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
-  <value>0.00000000</value>
+  <value>7.19999981</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3851,7 +3800,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.000</label>
+  <label>7.200</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -3907,7 +3856,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-60.00000000</minimum>
   <maximum>60.00000000</maximum>
-  <value>-10.80000019</value>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3953,7 +3902,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-10.800</label>
+  <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -3982,7 +3931,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-1.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.25999999</value>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -4028,7 +3977,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.260</label>
+  <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -4057,7 +4006,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-5.00000000</minimum>
   <maximum>0.00000000</maximum>
-  <value>-0.30000001</value>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -4103,7 +4052,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-0.300</label>
+  <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -4132,7 +4081,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-2.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.47999999</value>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -4178,7 +4127,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.480</label>
+  <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -4234,7 +4183,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-1.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.25999999</value>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -4280,7 +4229,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.260</label>
+  <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -4334,7 +4283,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <selected>true</selected>
+  <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
@@ -4389,7 +4338,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-1.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>1.00000000</value>
+  <value>0.41999999</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -4435,7 +4384,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>1.000</label>
+  <label>0.420</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -4464,7 +4413,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.00000000</value>
+  <value>1.55999994</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -4510,7 +4459,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.000</label>
+  <label>1.560</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -4566,7 +4515,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>1.00000000</value>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -4612,7 +4561,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>1.000</label>
+  <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -4641,7 +4590,7 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00000000</value>
+  <value>0.34000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -4687,7 +4636,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.000</label>
+  <label>0.340</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -4744,7 +4693,7 @@ i 1 7.5 0.1 37
   <minimum>0.00000000</minimum>
   <maximum>5.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>5.00000000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -4797,7 +4746,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>5.000</label>
+  <label>1.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -4829,8 +4778,8 @@ i 1 7.5 0.1 37
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000005</xValue>
-  <yValue>0.04600020</yValue>
+  <xValue>0.42857099</xValue>
+  <yValue>0.13766154</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <exponent>1.00000000</exponent>
@@ -4861,8 +4810,8 @@ i 1 7.5 0.1 37
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000005</xValue>
-  <yValue>0.05658570</yValue>
+  <xValue>0.42857099</xValue>
+  <yValue>0.09865567</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <exponent>1.00000000</exponent>
@@ -4948,7 +4897,7 @@ i 1 7.5 0.1 37
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.27777800</xValue>
-  <yValue>-1.00000000</yValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <exponent>1.00000000</exponent>
@@ -5001,7 +4950,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-20.000</label>
+  <label>25.600</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -5036,7 +4985,7 @@ i 1 7.5 0.1 37
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
-  <triggermode>NoTrigger</triggermode>
+  <triggermode>TriggerUp</triggermode>
  </bsbObject>
  <bsbObject type="BSBScope" version="2">
   <objectName/>
@@ -5059,7 +5008,7 @@ i 1 7.5 0.1 37
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
-  <triggermode>NoTrigger</triggermode>
+  <triggermode>TriggerUp</triggermode>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>_GetPresetName</objectName>
@@ -5074,7 +5023,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>Bell + Reverb 6</label>
+  <label>Flute + Reverb 5</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
@@ -5110,7 +5059,7 @@ i 1 7.5 0.1 37
   <minimum>0</minimum>
   <maximum>20</maximum>
   <randomizable group="0">false</randomizable>
-  <value>2</value>
+  <value>4</value>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Pause</objectName>

@@ -22,11 +22,14 @@
 
 #include "debugpanel.h"
 #include "ui_debugpanel.h"
+#include "themedicons.h"
 
 #include <QInputDialog>
 #include <QModelIndex>
 #include <QTableWidget>
 #include <QCheckBox>
+#include <QIcon>
+#include <QSize>
 
 #include <QDebug>
 
@@ -59,8 +62,25 @@ DebugPanel::DebugPanel(QWidget *parent) :
             this, SLOT(currentCellChanged(int,int,int,int)));
 }
 
-DebugPanel::~DebugPanel()
+void DebugPanel::setIconTheme(const QString &theme)
 {
+    // The icons used to be set in the .ui file, pointing at PNGs of the old
+    // "boring" theme which no longer exists. Load them from the current theme
+    // instead (ThemedIcons prefers the SVG version).
+    const auto iconPath = [&theme](const QString &name) {
+        return ThemedIcons::resolvePath(QString(":/themes/%1/%2").arg(theme, name));
+    };
+    QIcon runIcon;
+    runIcon.addFile(iconPath("media-play.svg"), QSize(), QIcon::Normal, QIcon::Off);
+    runIcon.addFile(iconPath("media-stop.svg"), QSize(), QIcon::Normal, QIcon::On);
+    ui->runButton->setIcon(runIcon);
+    ui->pauseButton->setIcon(ThemedIcons::icon(iconPath("media-pause.svg")));
+    ui->continueButton->setIcon(ThemedIcons::icon(iconPath("reload.svg")));
+    ui->newBreakpointToolButton->setIcon(ThemedIcons::icon(iconPath("edit-new.svg")));
+    ui->deleteBreakpointToolButton->setIcon(ThemedIcons::icon(iconPath("edit-close.svg")));
+}
+
+DebugPanel::~DebugPanel(){
     delete ui;
 }
 

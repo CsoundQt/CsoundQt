@@ -24,6 +24,7 @@
 #include "dockhelp.h"
 #include "ui_dockhelp.h"
 #include "dockpanelutils.h"
+#include "themedicons.h"
 
 #include <QtWidgets>
 #include <QMainWindow>
@@ -59,8 +60,8 @@ DockHelp::DockHelp(QWidget *parent)
 	m_view = new LiteHtmlView(this);
 	ui->verticalLayout->addWidget(m_view);
 
-    ui->backButton->setIcon(QIcon(":/themes/breeze/br_prev.png"));
-    ui->forwardButton->setIcon(QIcon(":/themes/breeze/br_next.png"));
+    ui->backButton->setIcon(ThemedIcons::icon(":/themes/breeze/br_prev.svg"));
+    ui->forwardButton->setIcon(ThemedIcons::icon(":/themes/breeze/br_next.svg"));
     ui->externalBrowserButton->setIcon(externalBrowserIcon(this));
 
     connect(ui->externalBrowserButton, &QToolButton::clicked,
@@ -136,11 +137,11 @@ void DockHelp::clear()
 
 void DockHelp::setIconTheme(QString theme)
 {
-    ui->backButton->setIcon(QIcon(QString(":/themes/%1/browse-prev.png").arg(theme)));
-    ui->forwardButton->setIcon(QIcon(QString(":/themes/%1/browse-next.png").arg(theme)));
-    ui->homeToolButton->setIcon(QIcon(QString(":/themes/%1/home.png").arg(theme)));
-    ui->toggleFindButton->setIcon(QIcon(QString(":/themes/%1/edit-find.png").arg(theme)));
-    ui->searchToolButton->setIcon(QIcon(QString(":/themes/%1/edit-find.png").arg(theme)));
+    ui->backButton->setIcon(ThemedIcons::icon(QString(":/themes/%1/browse-prev.svg").arg(theme)));
+    ui->forwardButton->setIcon(ThemedIcons::icon(QString(":/themes/%1/browse-next.svg").arg(theme)));
+    ui->homeToolButton->setIcon(ThemedIcons::icon(QString(":/themes/%1/home.svg").arg(theme)));
+    ui->toggleFindButton->setIcon(ThemedIcons::icon(QString(":/themes/%1/edit-find.svg").arg(theme)));
+    ui->searchToolButton->setIcon(ThemedIcons::icon(QString(":/themes/%1/edit-find.svg").arg(theme)));
     ui->externalBrowserButton->setIcon(externalBrowserIcon(this));
 }
 

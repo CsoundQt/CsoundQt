@@ -14,6 +14,7 @@ FORMS = "src/about.ui" \
     src/dockhelp.ui \
     src/livecodeeditor.ui \
     src/newbreakpointdialog.ui \
+    src/embeddedfilesdialog.ui \
     src/html5guidisplay.ui
 
 HEADERS = "src/about.h" \
@@ -36,6 +37,8 @@ HEADERS = "src/about.h" \
     "src/searchindex.h" \
     "src/documentpage.h" \
     "src/documentview.h" \
+    "src/embeddedfiles.h" \
+    "src/embeddedfilesdialog.h" \
     "src/externallauncher.h" \
     "src/eventsheet.h" \
     "src/findbar.h" \
@@ -54,6 +57,7 @@ HEADERS = "src/about.h" \
     "src/inspector.h" \
     "src/keyboardshortcuts.h" \
     "src/node.h" \
+    "src/gotoanythingbar.h" \
     "src/opcodeinsertbar.h" \
     "src/opentryparser.h" \
     "src/options.h" \
@@ -113,6 +117,8 @@ SOURCES = "src/about.cpp" \
     "src/searchindex.cpp" \
     "src/documentpage.cpp" \
     "src/documentview.cpp" \
+    "src/embeddedfiles.cpp" \
+    "src/embeddedfilesdialog.cpp" \
     "src/externallauncher.cpp" \
     "src/eventsheet.cpp" \
     "src/findbar.cpp" \
@@ -130,6 +136,7 @@ SOURCES = "src/about.cpp" \
     "src/keyboardshortcuts.cpp" \
     "src/main.cpp" \
     "src/node.cpp" \
+    "src/gotoanythingbar.cpp" \
     "src/opcodeinsertbar.cpp" \
     "src/opentryparser.cpp" \
     "src/options.cpp" \

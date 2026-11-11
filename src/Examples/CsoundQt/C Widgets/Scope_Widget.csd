@@ -3,10 +3,10 @@
 </CsOptions>
 <CsInstruments>
 
-sr = 44100
-ksmps = 64
+sr     = 44100
+ksmps  = 64
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
 instr 1
   kfreq = chnget("freq")
@@ -18,9 +18,8 @@ endin
 
 instr 2
   kfreq = chnget("freq")
-  kdb   = chnget("db")
   asig  = oscili(1, kfreq * (1 + oscili(1, kfreq*1.68)))
-  asig *= ampdb(kdb)
+  asig *= ampdb(chnget:k("db"))
   ; send the audio to the scope
   chnset(asig, "scope1")
 endin
@@ -46,6 +45,8 @@ i 2 0 1000
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -55,11 +56,7 @@ i 2 0 1000
  <height>658</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>138</r>
-  <g>149</g>
-  <b>156</b>
- </bgcolor>
+ <bgcolor mode="background">#8a959c</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
@@ -80,21 +77,9 @@ i 2 0 1000
   <fontsize>10</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>48</r>
-   <g>48</g>
-   <b>48</b>
-  </bgcolor>
-  <bordercolor>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#ffaa00</color>
+  <bgcolor mode="background">#303030</bgcolor>
+  <bordercolor>#ffaa00</bordercolor>
   <bordermode>true</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -119,21 +104,9 @@ i 2 0 1000
   <fontsize>24</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>191</r>
-   <g>204</g>
-   <b>234</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#bfccea</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -158,21 +131,9 @@ i 2 0 1000
   <fontsize>10</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>191</r>
-   <g>204</g>
-   <b>234</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="background">#bfccea</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -199,6 +160,7 @@ i 2 0 1000
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
   <triggermode>NoTrigger</triggermode>
+  <antialias>true</antialias>
  </bsbObject>
  <bsbObject type="BSBScope" version="2">
   <objectName/>
@@ -245,6 +207,7 @@ i 2 0 1000
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
   <triggermode>TriggerUp</triggermode>
+  <antialias>true</antialias>
  </bsbObject>
  <bsbObject type="BSBScope" version="2">
   <objectName/>
@@ -289,21 +252,9 @@ i 2 0 1000
   <fontsize>10</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>191</r>
-   <g>204</g>
-   <b>234</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="background">#bfccea</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -397,21 +348,9 @@ i 2 0 1000
   <fontsize>10</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>191</r>
-   <g>204</g>
-   <b>234</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="background">#bfccea</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -437,11 +376,7 @@ i 2 0 1000
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
-  </color>
+  <color>#ffaa00</color>
   <textcolor>#ffaa00</textcolor>
   <border>0</border>
   <borderColor>#512900</borderColor>
@@ -469,21 +404,9 @@ i 2 0 1000
   <fontsize>12</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>77</r>
-   <g>52</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#4d3400</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -509,21 +432,9 @@ i 2 0 1000
   <fontsize>11</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#ffaa00</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>0</borderradius>
   <borderwidth>0</borderwidth>
@@ -550,6 +461,7 @@ i 2 0 1000
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
   <triggermode>TriggerUp</triggermode>
+  <antialias>true</antialias>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>db</objectName>
@@ -567,16 +479,12 @@ i 2 0 1000
   <minimum>-60.00000000</minimum>
   <maximum>0.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>-9.00000000</value>
+  <value>-45.75000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
-  </color>
+  <color>#f57c00</color>
   <textcolor>#4a2600</textcolor>
   <border>1</border>
   <borderColor>#512900</borderColor>
@@ -604,21 +512,9 @@ i 2 0 1000
   <fontsize>12</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>77</r>
-   <g>52</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#4d3400</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -644,21 +540,9 @@ i 2 0 1000
   <fontsize>11</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#ffaa00</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>0</borderradius>
   <borderwidth>0</borderwidth>
@@ -683,21 +567,9 @@ i 2 0 1000
   <fontsize>11</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#ffaa00</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>0</borderradius>
   <borderwidth>0</borderwidth>
@@ -722,21 +594,9 @@ i 2 0 1000
   <fontsize>11</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#ffaa00</color>
+  <bgcolor mode="nobackground">#ffffff</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>0</borderradius>
   <borderwidth>0</borderwidth>

@@ -23,6 +23,7 @@
 
 #include "inspector.h"
 
+#include <QApplication>
 #include <QShowEvent>
 
 using namespace Qt::StringLiterals;
@@ -34,6 +35,10 @@ Inspector::Inspector(QWidget *parent)
 	m_treeWidget = new QTreeWidget(this);
 //	m_treeWidget->setHeaderLabel(tr("Inspector"));
 	m_treeWidget->setHeaderHidden(true);
+	// Compact tree: the default indentation leaves a wide gap between the
+	// expander and the node text, and indents children too far. 12 px per
+	// level matches the other panels.
+	m_treeWidget->setIndentation(12);
 	m_treeWidget->show();
 	setWidget(m_treeWidget);
 	// Jump on mouse click and on Enter/double-click. Deliberately NOT on
@@ -82,6 +87,39 @@ void Inspector::setScan(const CodeScan::ResultPtr &scan)
 }
 
 
+void Inspector::clearScan()
+{
+    m_embeddedFiles.clear();
+    m_scan = CodeScan::empty();
+    m_treeDirty = true;
+    if (isVisible()) {
+        m_treeDirty = false;
+        buildTree(*m_scan);
+    }
+}
+
+
+void Inspector::setEmbeddedFiles(const QStringList &names)
+{
+    if (names == m_embeddedFiles)
+        return;
+    m_embeddedFiles = names;
+    if (isHidden()) {
+        m_treeDirty = true;
+        return;
+    }
+    buildTree(*m_scan);
+}
+
+void Inspector::setFontSize(int pointSize)
+{
+    QFont font = QApplication::font();
+    if (pointSize > 0)
+        font.setPointSize(pointSize);
+    m_treeWidget->setFont(font);
+}
+
+
 void Inspector::buildTree(const CodeScan::Result &scan)
 {
     m_treeDirty = false;
@@ -93,6 +131,7 @@ void Inspector::buildTree(const CodeScan::Result &scan)
     bool instrumentsExpanded = true;
     bool ftablesExpanded = true;
     bool scoreExpanded = true;
+    bool embeddedExpanded = true;
     QHash<QString, bool> instrumentExpanded;
     if (treeItem1 != nullptr) {
         opcodesExpanded = treeItem1->isExpanded();
@@ -100,6 +139,8 @@ void Inspector::buildTree(const CodeScan::Result &scan)
         instrumentsExpanded = treeItem3->isExpanded();
         ftablesExpanded = treeItem4->isExpanded();
         scoreExpanded = treeItem5->isExpanded();
+        if (treeItemEmbedded != nullptr)
+            embeddedExpanded = treeItemEmbedded->isExpanded();
         for (int i = 0; i < treeItem3->childCount(); ++i) {
             QTreeWidgetItem *instrument = treeItem3->child(i);
             if (instrument->columnCount() > 0)
@@ -120,6 +161,16 @@ void Inspector::buildTree(const CodeScan::Result &scan)
     treeItem5 = new TreeItem(m_treeWidget, QStringList(tr("Score")));
     treeItem5->setLine(-1);
 
+    treeItemEmbedded = nullptr;
+    if (!m_embeddedFiles.isEmpty()) {
+        treeItemEmbedded = new TreeItem(m_treeWidget, QStringList(tr("Embedded Files")));
+        treeItemEmbedded->setLine(-1);
+        for (const QString &name : m_embeddedFiles) {
+            TreeItem *item = new TreeItem(treeItemEmbedded, QStringList(name));
+            item->setLine(-1);
+        }
+    }
+
     // The scan also carries the symbols declared in the files the document
     // includes: completion, highlighting and "Go to Source" use them. The tree
     // describes the document the user is editing, so it lists only the
@@ -131,18 +182,6 @@ void Inspector::buildTree(const CodeScan::Result &scan)
             treeItem1->setLine(udo.line);
         TreeItem *item = new TreeItem(treeItem1, QStringList(udo.text));
         item->setLine(udo.line);
-        // A Csound 7 signature already shows the arguments in the declaration
-        // line; there are no xin/xout lines to list below it.
-        if (!udo.newStyle) {
-            if (!udo.inArgs.isEmpty()) {
-                TreeItem *args = new TreeItem(item, QStringList(udo.inArgs + u" xin"_s));
-                args->setLine(udo.inArgsLine);
-            }
-            if (!udo.outArgs.isEmpty()) {
-                TreeItem *args = new TreeItem(item, QStringList(u"xout "_s + udo.outArgs));
-                args->setLine(udo.outArgsLine);
-            }
-        }
     }
 
     for (const CodeScan::Definition &entry : scan.preprocessor) {
@@ -173,11 +212,21 @@ void Inspector::buildTree(const CodeScan::Result &scan)
 
     treeItem5->setLine(scan.scoreLine);
 
+    // Do not show empty categories. "Score" has no child entries; it exists
+    // only when the document has a <CsScore> tag to jump to.
+    treeItem1->setHidden(treeItem1->childCount() == 0);
+    treeItem2->setHidden(treeItem2->childCount() == 0);
+    treeItem3->setHidden(treeItem3->childCount() == 0);
+    treeItem4->setHidden(treeItem4->childCount() == 0);
+    treeItem5->setHidden(scan.scoreLine < 1);
+
     treeItem1->setExpanded(opcodesExpanded);
     treeItem2->setExpanded(macrosExpanded);
     treeItem3->setExpanded(instrumentsExpanded);
     treeItem4->setExpanded(ftablesExpanded);
     treeItem5->setExpanded(scoreExpanded);
+    if (treeItemEmbedded != nullptr)
+        treeItemEmbedded->setExpanded(embeddedExpanded);
     for (int i = 0; i < treeItem3->childCount(); ++i) {
         QTreeWidgetItem *instrument = treeItem3->child(i);
         if (instrumentExpanded.contains(instrument->text(0)))

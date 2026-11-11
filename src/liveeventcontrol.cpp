@@ -23,6 +23,8 @@
 #include "liveeventcontrol.h"
 #include "ui_liveeventcontrol.h"
 
+using namespace Qt::StringLiterals;
+
 LiveEventControl::LiveEventControl(QWidget *parent) :
 	QWidget(parent),
 	m_ui(new Ui::LiveEventControl)
@@ -96,7 +98,7 @@ void LiveEventControl::appendPanel(LiveEventFrame *e)
 	visibleItem->setCheckState(e->getVisibleEnabled() ? Qt::Checked : Qt::Unchecked);
 	connect(e, SIGNAL(closed(LiveEventFrame *)), this, SLOT(frameClosed(LiveEventFrame *)) );
 	QTableWidgetItem *playItem = getItem(newRow, 1);
-	playItem->setIcon(QIcon(":/themes/boring/gtk-media-play-ltr.png"));
+	playItem->setIcon(QIcon::fromTheme(u"media-playback-start"_s));
 	//  playItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
 	QTableWidgetItem *loopItem = getItem(newRow, 2);
 	loopItem->setCheckState(Qt::Unchecked);

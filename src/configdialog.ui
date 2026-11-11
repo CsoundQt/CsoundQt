@@ -11,6 +11,12 @@
     <height>680</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>24</width>
+    <height>0</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>CsoundQt Configuration</string>
   </property>
@@ -52,8 +58,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>734</width>
-        <height>638</height>
+        <width>720</width>
+        <height>651</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_18">
@@ -84,7 +90,7 @@
           <string/>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="tab_audio">
           <attribute name="title">
@@ -908,7 +914,7 @@
                  <string>Use limiter, limit to:</string>
                 </property>
                 <property name="checked">
-                 <bool>true</bool>
+                 <bool>false</bool>
                 </property>
                </widget>
               </item>
@@ -1391,12 +1397,28 @@
              <property name="title">
               <string>Recording</string>
              </property>
-             <layout class="QFormLayout" name="recordingFormLayout">
-              <property name="fieldGrowthPolicy">
-               <enum>QFormLayout::FieldGrowthPolicy::AllNonFixedFieldsGrow</enum>
-              </property>
+             <layout class="QGridLayout" name="gridLayout_14">
+              <item row="0" column="2">
+               <spacer name="horizontalSpacer_15">
+                <property name="orientation">
+                 <enum>Qt::Orientation::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
               <item row="0" column="0">
                <widget class="QLabel" name="recordingSampleFormatLabel">
+                <property name="minimumSize">
+                 <size>
+                  <width>120</width>
+                  <height>0</height>
+                 </size>
+                </property>
                 <property name="toolTip">
                  <string>Sample format for WAV files recorded with the record button. This is not the same as offline rendering.</string>
                 </property>
@@ -1409,7 +1431,7 @@
                <widget class="QComboBox" name="sampleFormatComboBox">
                 <property name="minimumSize">
                  <size>
-                  <width>100</width>
+                  <width>120</width>
                   <height>0</height>
                  </size>
                 </property>
@@ -1533,27 +1555,74 @@
                 <property name="verticalSpacing">
                  <number>6</number>
                 </property>
-                <item row="1" column="4">
-                 <spacer name="horizontalSpacer_3">
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_27">
+                  <property name="text">
+                   <string>Buffer size</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QDoubleSpinBox" name="consoleFontSizeSpinBox">
+                  <property name="maximumSize">
+                   <size>
+                    <width>60</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Console font size in points. Fractional values are allowed.</string>
+                  </property>
+                  <property name="decimals">
+                   <number>1</number>
+                  </property>
+                  <property name="minimum">
+                   <double>1.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>999.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>1.000000000000000</double>
+                  </property>
+                  <property name="value">
+                   <double>8.000000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="4">
+                 <widget class="QPushButton" name="consoleFontColorPushButton">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>2000</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Foreground</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="3">
+                 <spacer name="horizontalSpacer_18">
                   <property name="orientation">
                    <enum>Qt::Orientation::Horizontal</enum>
                   </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Policy::Fixed</enum>
+                  </property>
                   <property name="sizeHint" stdset="0">
                    <size>
-                    <width>40</width>
-                    <height>20</height>
+                    <width>10</width>
+                    <height>0</height>
                    </size>
                   </property>
                  </spacer>
                 </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_15">
-                  <property name="text">
-                   <string>Size</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1">
+                <item row="2" column="1">
                  <widget class="QComboBox" name="consoleBufferComboBox">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -1589,34 +1658,6 @@
                   </item>
                  </widget>
                 </item>
-                <item row="1" column="1">
-                 <widget class="QDoubleSpinBox" name="consoleFontSizeSpinBox">
-                  <property name="maximumSize">
-                   <size>
-                    <width>80</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>Console font size in points. Fractional values are allowed.</string>
-                  </property>
-                  <property name="decimals">
-                   <number>1</number>
-                  </property>
-                  <property name="minimum">
-                   <double>1.000000000000000</double>
-                  </property>
-                  <property name="maximum">
-                   <double>999.000000000000000</double>
-                  </property>
-                  <property name="singleStep">
-                   <double>1.000000000000000</double>
-                  </property>
-                  <property name="value">
-                   <double>8.000000000000000</double>
-                  </property>
-                 </widget>
-                </item>
                 <item row="0" column="0">
                  <widget class="QLabel" name="label_11">
                   <property name="maximumSize">
@@ -1629,48 +1670,6 @@
                    <string>Font</string>
                   </property>
                  </widget>
-                </item>
-                <item row="0" column="3">
-                 <widget class="QPushButton" name="consoleFontColorPushButton">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>2000</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>Foreground</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="3">
-                 <widget class="QPushButton" name="consoleBgColorPushButton">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="text">
-                   <string>Background</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <spacer name="horizontalSpacer_18">
-                  <property name="orientation">
-                   <enum>Qt::Orientation::Horizontal</enum>
-                  </property>
-                  <property name="sizeType">
-                   <enum>QSizePolicy::Policy::Fixed</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>10</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                 </spacer>
                 </item>
                 <item row="0" column="1">
                  <widget class="QFontComboBox" name="consoleFontComboBox">
@@ -1688,14 +1687,30 @@
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="0">
-                 <widget class="QLabel" name="label_27">
+                <item row="2" column="4">
+                 <widget class="QPushButton" name="consoleBgColorPushButton">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
                   <property name="text">
-                   <string>Buffer size</string>
+                   <string>Background</string>
                   </property>
                  </widget>
                 </item>
                </layout>
+              </item>
+              <item row="0" column="1">
+               <spacer name="horizontalSpacer_3">
+                <property name="orientation">
+                 <enum>Qt::Orientation::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
               </item>
              </layout>
             </widget>
@@ -1706,25 +1721,175 @@
               <string>Interface</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_11">
-              <item row="3" column="3">
-               <widget class="QCheckBox" name="tabCloseButtonCheckBox">
-                <property name="toolTip">
-                 <string>Show a close button on each document tab.</string>
+              <item row="8" column="1">
+               <widget class="QDoubleSpinBox" name="codePadFontSizeSpinBox">
+                <property name="minimumSize">
+                 <size>
+                  <width>80</width>
+                  <height>0</height>
+                 </size>
                 </property>
-                <property name="text">
-                 <string>Show tab close button</string>
+                <property name="maximumSize">
+                 <size>
+                  <width>120</width>
+                  <height>40</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Codepad font size in points. This is independent of the editor font size.</string>
+                </property>
+                <property name="decimals">
+                 <number>1</number>
+                </property>
+                <property name="minimum">
+                 <double>6.000000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>48.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>1.000000000000000</double>
+                </property>
+                <property name="value">
+                 <double>10.000000000000000</double>
                 </property>
                </widget>
               </item>
-              <item row="0" column="1">
-               <widget class="QComboBox" name="languageComboBox">
+              <item row="5" column="0">
+               <spacer name="verticalSpacer_11">
+                <property name="orientation">
+                 <enum>Qt::Orientation::Vertical</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Policy::Fixed</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>10</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="6" column="1">
+               <widget class="QSpinBox" name="tabFontSizeSpinBox">
                 <property name="maximumSize">
                  <size>
                   <width>120</width>
                   <height>16777215</height>
                  </size>
                 </property>
+                <property name="toolTip">
+                 <string>Adjust the document tab font size relative to the application font, in points. Negative values make the tabs smaller; 0 uses the application font size.</string>
+                </property>
+                <property name="suffix">
+                 <string> pt</string>
+                </property>
+                <property name="minimum">
+                 <number>-20</number>
+                </property>
+                <property name="maximum">
+                 <number>0</number>
+                </property>
+                <property name="value">
+                 <number>0</number>
+                </property>
                </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QComboBox" name="widgetStyleComboBox">
+                <property name="maximumSize">
+                 <size>
+                  <width>120</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Qt widget style used by the application. &quot;Fusion&quot; looks the same on every platform; other styles follow the desktop.</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="1">
+               <widget class="QSpinBox" name="inspectorFontSizeSpinBox">
+                <property name="maximumSize">
+                 <size>
+                  <width>120</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Font size of the inspector tree, in points. 0 uses the application font.</string>
+                </property>
+                <property name="specialValueText">
+                 <string>Default</string>
+                </property>
+                <property name="suffix">
+                 <string> pt</string>
+                </property>
+                <property name="maximum">
+                 <number>48</number>
+                </property>
+                <property name="value">
+                 <number>10</number>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="languageLabel">
+                <property name="text">
+                 <string>Language</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="0">
+               <widget class="QLabel" name="inspectorFontSizeLabel">
+                <property name="text">
+                 <string>Inspector font size</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="widgetStyleLabel">
+                <property name="text">
+                 <string>Widget style</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <spacer name="verticalSpacer_12">
+                <property name="orientation">
+                 <enum>Qt::Orientation::Vertical</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Policy::Fixed</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>10</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="9" column="0">
+               <widget class="QLabel" name="tooltipDelayLabel">
+                <property name="text">
+                 <string>Tooltip delay</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="5">
+               <spacer name="horizontalSpacer_6">
+                <property name="orientation">
+                 <enum>Qt::Orientation::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
               </item>
               <item row="1" column="0">
                <widget class="QLabel" name="colourThemeLabel">
@@ -1733,7 +1898,7 @@
                 </property>
                </widget>
               </item>
-              <item row="3" column="2">
+              <item row="2" column="2">
                <spacer name="horizontalSpacer_8">
                 <property name="orientation">
                  <enum>Qt::Orientation::Horizontal</enum>
@@ -1749,27 +1914,34 @@
                 </property>
                </spacer>
               </item>
-              <item row="2" column="1">
-               <widget class="QComboBox" name="widgetStyleComboBox">
+              <item row="6" column="4">
+               <widget class="QCheckBox" name="tabCloseButtonCheckBox">
+                <property name="toolTip">
+                 <string>Show a close button on each document tab.</string>
+                </property>
+                <property name="text">
+                 <string>Show tab close button</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="0">
+               <widget class="QLabel" name="tabFontSizeLabel">
+                <property name="text">
+                 <string>Tab font relative size</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QComboBox" name="languageComboBox">
                 <property name="maximumSize">
                  <size>
                   <width>120</width>
                   <height>16777215</height>
                  </size>
                 </property>
-                <property name="toolTip">
-                 <string>Qt widget style used by the application. &quot;Fusion&quot; looks the same on every platform; other styles follow the desktop.</string>
-                </property>
                </widget>
               </item>
-              <item row="0" column="0">
-               <widget class="QLabel" name="languageLabel">
-                <property name="text">
-                 <string>Language</string>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="1">
+              <item row="9" column="1">
                <widget class="QSpinBox" name="tooltipDelaySpinBox">
                 <property name="maximumSize">
                  <size>
@@ -1797,62 +1969,16 @@
                 </property>
                </widget>
               </item>
-              <item row="5" column="0">
-               <widget class="QLabel" name="tooltipDelayLabel">
-                <property name="text">
-                 <string>Tooltip delay</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="1">
-               <widget class="QSpinBox" name="tabFontSizeSpinBox">
-                <property name="maximumSize">
-                 <size>
-                  <width>120</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
+              <item row="2" column="4">
+               <widget class="QCheckBox" name="flatScrollBarsCheckBox">
                 <property name="toolTip">
-                 <string>Adjust the document tab font size relative to the application font, in points. Negative values make the tabs smaller; 0 uses the application font size.</string>
+                 <string>Draw the code editor scrollbars thin and without arrow buttons. Only applies to the Fusion widget style.</string>
                 </property>
-                <property name="suffix">
-                 <string> pt</string>
-                </property>
-                <property name="minimum">
-                 <number>-20</number>
-                </property>
-                <property name="maximum">
-                 <number>0</number>
-                </property>
-                <property name="value">
-                 <number>0</number>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="4">
-               <spacer name="horizontalSpacer_6">
-                <property name="orientation">
-                 <enum>Qt::Orientation::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item row="3" column="0">
-               <widget class="QLabel" name="tabFontSizeLabel">
                 <property name="text">
-                 <string>Tab font relative size</string>
+                 <string>Flat scrollbars</string>
                 </property>
-               </widget>
-              </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="widgetStyleLabel">
-                <property name="text">
-                 <string>Widget style</string>
+                <property name="checked">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -1879,6 +2005,26 @@
                   <string>light</string>
                  </property>
                 </item>
+               </widget>
+              </item>
+              <item row="4" column="0" colspan="2">
+               <widget class="Line" name="divLine1">
+                <property name="orientation">
+                 <enum>Qt::Orientation::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="0">
+               <widget class="QLabel" name="codePadFontSizeLabel">
+                <property name="minimumSize">
+                 <size>
+                  <width>110</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Codepad font size</string>
+                </property>
                </widget>
               </item>
              </layout>
@@ -1980,7 +2126,7 @@
                <widget class="QSpinBox" name="toolbarIconSizeSpinBox">
                 <property name="minimumSize">
                  <size>
-                  <width>80</width>
+                  <width>0</width>
                   <height>0</height>
                  </size>
                 </property>
@@ -2057,21 +2203,8 @@
              </property>
              <layout class="QGridLayout" name="gridLayout_17">
               <item row="0" column="0">
-               <layout class="QFormLayout" name="formLayout_2">
-                <property name="labelAlignment">
-                 <set>Qt::AlignmentFlag::AlignLeading</set>
-                </property>
-                <property name="formAlignment">
-                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
-                </property>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label">
-                  <property name="text">
-                   <string>Font</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
+               <layout class="QGridLayout" name="gridLayout_22">
+                <item row="0" column="1" colspan="2">
                  <widget class="QFontComboBox" name="fontComboBox">
                   <property name="maximumSize">
                    <size>
@@ -2088,24 +2221,37 @@
                  </widget>
                 </item>
                 <item row="1" column="0">
-                 <widget class="QLabel" name="label_2">
+                 <widget class="QLabel" name="editorThemeLabel">
                   <property name="text">
-                   <string>Size</string>
+                   <string>Editor theme</string>
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="1">
+                <item row="4" column="0">
+                 <widget class="QLabel" name="tabSizeLabel">
+                  <property name="text">
+                   <string>Tab Size</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="5">
                  <widget class="QDoubleSpinBox" name="fontSizeSpinBox">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="minimumSize">
                    <size>
-                    <width>80</width>
+                    <width>0</width>
                     <height>0</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>80</width>
-                    <height>40</height>
+                    <width>60</width>
+                    <height>16777215</height>
                    </size>
                   </property>
                   <property name="toolTip">
@@ -2128,86 +2274,17 @@
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="0">
-                 <widget class="QLabel" name="editorThemeLabel">
-                  <property name="text">
-                   <string>Editor theme</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <layout class="QFormLayout" name="formLayout_3">
-                  <item row="0" column="0">
-                   <widget class="QComboBox" name="editorThemeComboBox">
-                    <property name="minimumSize">
-                     <size>
-                      <width>140</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>120</width>
-                      <height>16777215</height>
-                     </size>
-                    </property>
-                    <property name="toolTip">
-                     <string>Syntax highlighting theme of the editor. &quot;auto&quot; follows the application theme. User themes are loaded from the CsoundQt theme folder.</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="1">
-                   <widget class="QPushButton" name="duplicateThemeButton">
-                    <property name="maximumSize">
-                     <size>
-                      <width>24</width>
-                      <height>16777215</height>
-                     </size>
-                    </property>
-                    <property name="toolTip">
-                     <string>Create an editable copy of the selected theme in the user theme folder</string>
-                    </property>
-                    <property name="text">
-                     <string>+</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
                 <item row="3" column="1">
-                 <widget class="QPushButton" name="openThemesFolderButton">
-                  <property name="maximumSize">
-                   <size>
-                    <width>140</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>Open the folder where user editor themes are stored</string>
-                  </property>
-                  <property name="text">
-                   <string>Open Themes Folder</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="7" column="0">
-                 <widget class="QLabel" name="editorPaddingLabel">
-                  <property name="text">
-                   <string>Editor padding</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="7" column="1">
                  <widget class="QSpinBox" name="editorPaddingSpinBox">
                   <property name="minimumSize">
                    <size>
-                    <width>80</width>
+                    <width>0</width>
                     <height>0</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>50</width>
+                    <width>60</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -2225,54 +2302,74 @@
                   </property>
                  </widget>
                 </item>
-                <item row="9" column="0">
-                 <widget class="QLabel" name="codePadFontSizeLabel">
+                <item row="1" column="1">
+                 <widget class="QComboBox" name="editorThemeComboBox">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="minimumSize">
                    <size>
-                    <width>110</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>Codepad Font Size</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="9" column="1">
-                 <widget class="QDoubleSpinBox" name="codePadFontSizeSpinBox">
-                  <property name="minimumSize">
-                   <size>
-                    <width>80</width>
+                    <width>0</width>
                     <height>0</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>80</width>
-                    <height>40</height>
+                    <width>120</width>
+                    <height>16777215</height>
                    </size>
                   </property>
                   <property name="toolTip">
-                   <string>Codepad font size in points. This is independent of the editor font size.</string>
-                  </property>
-                  <property name="decimals">
-                   <number>1</number>
-                  </property>
-                  <property name="minimum">
-                   <double>6.000000000000000</double>
-                  </property>
-                  <property name="maximum">
-                   <double>48.000000000000000</double>
-                  </property>
-                  <property name="singleStep">
-                   <double>1.000000000000000</double>
-                  </property>
-                  <property name="value">
-                   <double>10.000000000000000</double>
+                   <string>Syntax highlighting theme of the editor. &quot;auto&quot; follows the application theme. User themes are loaded from the CsoundQt theme folder.</string>
                   </property>
                  </widget>
                 </item>
-                <item row="11" column="0" colspan="2">
+                <item row="3" column="0">
+                 <widget class="QLabel" name="editorPaddingLabel">
+                  <property name="text">
+                   <string>Editor padding</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label">
+                  <property name="text">
+                   <string>Font</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QPushButton" name="duplicateThemeButton">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>24</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Create an editable copy of the selected theme in the user theme folder</string>
+                  </property>
+                  <property name="text">
+                   <string>Duplicate</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0" colspan="2">
                  <widget class="QCheckBox" name="tabUseSpacesCheckBox">
                   <property name="toolTip">
                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, pressing Tab inserts spaces instead of a tab character. The number of spaces is the &quot;Tab Size&quot; below, which is also the width used to display tab characters.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -2282,24 +2379,17 @@
                   </property>
                  </widget>
                 </item>
-                <item row="10" column="0">
-                 <widget class="QLabel" name="tabSizeLabel">
-                  <property name="text">
-                   <string>Tab Size</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="10" column="1">
+                <item row="4" column="1">
                  <widget class="QSpinBox" name="tabSizeSpinBox">
                   <property name="minimumSize">
                    <size>
-                    <width>80</width>
+                    <width>0</width>
                     <height>0</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>50</width>
+                    <width>60</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -2317,18 +2407,37 @@
                   </property>
                  </widget>
                 </item>
-                <item row="4" column="1">
-                 <spacer name="verticalSpacer_10">
+                <item row="2" column="1">
+                 <widget class="QPushButton" name="openThemesFolderButton">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>120</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Open the folder where user editor themes are stored</string>
+                  </property>
+                  <property name="text">
+                   <string>Themes Folder ...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="0">
+                 <spacer name="verticalSpacer_13">
                   <property name="orientation">
                    <enum>Qt::Orientation::Vertical</enum>
-                  </property>
-                  <property name="sizeType">
-                   <enum>QSizePolicy::Policy::Fixed</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
                     <width>20</width>
-                    <height>12</height>
+                    <height>0</height>
                    </size>
                   </property>
                  </spacer>
@@ -2476,77 +2585,6 @@
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="0">
-                 <widget class="QCheckBox" name="lineNumbersCheckBox">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>Line Numbers</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="1">
-                 <widget class="QSpinBox" name="lineNumberContrastSpinBox">
-                  <property name="minimumSize">
-                   <size>
-                    <width>80</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>80</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>Contrast of the line numbers against the gutter background (0 = invisible, 100 = full text colour)</string>
-                  </property>
-                  <property name="suffix">
-                   <string> %</string>
-                  </property>
-                  <property name="maximum">
-                   <number>100</number>
-                  </property>
-                  <property name="value">
-                   <number>50</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="7" column="0">
-                 <spacer name="verticalSpacer_9">
-                  <property name="orientation">
-                   <enum>Qt::Orientation::Vertical</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>20</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="8" column="0">
-                 <widget class="QPushButton" name="templatesButton">
-                  <property name="toolTip">
-                   <string>Edit the template used for new csd files</string>
-                  </property>
-                  <property name="text">
-                   <string>Templates...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="0">
-                 <widget class="QCheckBox" name="wrapLinesCheckBox">
-                  <property name="text">
-                   <string>Wrap Lines</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="4" column="0">
                  <widget class="QCheckBox" name="quickHelpOnHoverCheckBox">
                   <property name="toolTip">
@@ -2588,6 +2626,64 @@
                   </property>
                  </widget>
                 </item>
+                <item row="5" column="0">
+                 <widget class="QCheckBox" name="wrapLinesCheckBox">
+                  <property name="text">
+                   <string>Wrap Lines</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="0">
+                 <widget class="QCheckBox" name="lineNumbersCheckBox">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Line Numbers</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="1">
+                 <widget class="QSpinBox" name="lineNumberContrastSpinBox">
+                  <property name="minimumSize">
+                   <size>
+                    <width>80</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>80</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Contrast of the line numbers against the gutter background (0 = invisible, 100 = full text colour)</string>
+                  </property>
+                  <property name="suffix">
+                   <string> %</string>
+                  </property>
+                  <property name="maximum">
+                   <number>100</number>
+                  </property>
+                  <property name="value">
+                   <number>50</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="0" colspan="2">
+                 <widget class="QCheckBox" name="autoCloseBlocksCheckBox">
+                  <property name="toolTip">
+                   <string>When pressing Enter after an instr, opcode, if, for ... do, while ... do or switch line, insert the matching endin/endop/endif/od/endsw and indent the body.</string>
+                  </property>
+                  <property name="text">
+                   <string>Add end tag automatically</string>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </item>
               <item row="0" column="1">
@@ -2601,7 +2697,7 @@
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>12</width>
-                  <height>12</height>
+                  <height>20</height>
                  </size>
                 </property>
                </spacer>
@@ -3232,6 +3328,16 @@
                  <widget class="QLabel" name="label_36">
                   <property name="text">
                    <string>Csound Executable</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="14" column="0">
+                 <widget class="QPushButton" name="templatesButton">
+                  <property name="toolTip">
+                   <string>Edit the template used for new csd files</string>
+                  </property>
+                  <property name="text">
+                   <string>Templates...</string>
                   </property>
                  </widget>
                 </item>

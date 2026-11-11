@@ -10,34 +10,33 @@
 
 </CsOptions>
 <CsInstruments>
-sr = 44100
-ksmps = 64
 nchnls = 2
+0dbfs  = 32768
 
 massign 0, 2  ; all midi to instrument 2
 
-instr 1                                  ; gui
-  gkndxatt = chnget("Index1_Attack")     ; init .002
-  gkndxdec = chnget("Index1_Decay")      ; init 5
-  gkndxslev = chnget("Index1_Sustain")   ; init 0
-  gkndxrel = chnget("Index1_Release")    ; init .1
-  gkndxatt2 = chnget("Index2_Attack")    ; init .002
-  gkndxdec2 = chnget("Index2_Decay")     ; init 5
-  gkndxslev2 = chnget("Index2_Sustain")  ; init 0
-  gkndxrel2 = chnget("Index2_Release")   ; init .1
-  gkampatt = chnget("Amp_Attack")        ; init .002
-  gkampdec = chnget("Amp_Decay")         ; init 6
-  gkampslev = chnget("Amp_Sustain")      ; init 0
-  gkamprel = chnget("Amp_Release")       ; init .1
-  gkcutoff = chnget("Filter_Cutoff")     ; init 6000
-  gkreson = chnget("Filter_Reso")        ; init 1
-  gkpan = chnget("Pan")                  ; init .5
-  gkchorus = chnget("Chorus")            ; init .333
-  gkvol = chnget("Volume")               ; init 1
-  gkmodratio = chnget("Mod_ratio1")      ; init 1
-  gkmodratio2 = chnget("Mod_ratio2")     ; init 2
-  gkindex = chnget("Mod_index1")         ; init 3
-  gkindex2 = chnget("Mod_index2")        ; init 2
+instr 1                                    ; gui
+  gkndxatt    = chnget("Index1_Attack")    ; init .002
+  gkndxdec    = chnget("Index1_Decay")     ; init 5
+  gkndxslev   = chnget("Index1_Sustain")   ; init 0
+  gkndxrel    = chnget("Index1_Release")   ; init .1
+  gkndxatt2   = chnget("Index2_Attack")    ; init .002
+  gkndxdec2   = chnget("Index2_Decay")     ; init 5
+  gkndxslev2  = chnget("Index2_Sustain")   ; init 0
+  gkndxrel2   = chnget("Index2_Release")   ; init .1
+  gkampatt    = chnget("Amp_Attack")       ; init .002
+  gkampdec    = chnget("Amp_Decay")        ; init 6
+  gkampslev   = chnget("Amp_Sustain")      ; init 0
+  gkamprel    = chnget("Amp_Release")      ; init .1
+  gkcutoff    = chnget("Filter_Cutoff")    ; init 6000
+  gkreson     = chnget("Filter_Reso")      ; init 1
+  gkpan       = chnget("Pan")              ; init .5
+  gkchorus    = chnget("Chorus")           ; init .333
+  gkvol       = chnget("Volume")           ; init 1
+  gkmodratio  = chnget("Mod_ratio1")       ; init 1
+  gkmodratio2 = chnget("Mod_ratio2")       ; init 2
+  gkindex     = chnget("Mod_index1")       ; init 3
+  gkindex2    = chnget("Mod_index2")       ; init 2
 endin
 
 instr 2  ; Fm (pm)
@@ -62,7 +61,7 @@ instr 2  ; Fm (pm)
   kjitR = jitter(i(gkchorus)*3, 1.5, 5)
 
   ; Modulators
-  aModulator = oscil(kpeakdev * kndxenv, icps * gkmodratio, 1)
+  aModulator  = oscil(kpeakdev * kndxenv, icps * gkmodratio, 1)
   aModulator2 = oscil(kpeakdev2 * kndxenv2, icps * gkmodratio2, 1)
   aCarrierL = phasor(icps + kjitL)
   aCarrierR = phasor(icps + kjitR)
@@ -92,6 +91,8 @@ i 3 1 0     ; init
 </CsoundSynthesizer>
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -101,7 +102,7 @@ i 3 1 0     ; init
  <height>357</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">#3d3d3d</bgcolor>
+ <bgcolor mode="background">#434343</bgcolor>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Index1_Attack</objectName>
   <x>9</x>

@@ -299,7 +299,9 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
 	fontSizeSpinBox->setValue(m_options->fontPointSize);
 	codePadFontSizeSpinBox->setValue(m_options->codePadFontPointSize);
+	inspectorFontSizeSpinBox->setValue(m_options->inspectorFontPointSize);
 	lineNumbersCheckBox->setChecked(m_options->showLineNumberArea);
+	autoCloseBlocksCheckBox->setChecked(m_options->autoCloseBlocks);
 	lineNumberContrastSpinBox->setValue(m_options->lineNumberContrast);
 
 	consoleFontComboBox->setCurrentIndex(consoleFontComboBox->findText(m_options->consoleFont) );
@@ -415,6 +417,18 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
         styleIndex = 0;
     widgetStyleComboBox->setCurrentIndex(styleIndex);
     tabFontSizeSpinBox->setValue(m_options->tabFontSizeOffset);
+
+    // Flat scrollbars are a Fusion-only extra: hide the option (it is inert)
+    // for every other style instead of only disabling it.
+    flatScrollBarsCheckBox->setChecked(m_options->flatScrollBars);
+    const auto updateFlatScrollBarsVisibility = [this]() {
+        flatScrollBarsCheckBox->setVisible(
+                    widgetStyleComboBox->currentData().toString()
+                    .compare(u"Fusion"_s, Qt::CaseInsensitive) == 0);
+    };
+    updateFlatScrollBarsVisibility();
+    connect(widgetStyleComboBox, &QComboBox::currentIndexChanged, this,
+            [updateFlatScrollBarsVisibility](int) { updateFlatScrollBarsVisibility(); });
 
 
 
@@ -1035,7 +1049,9 @@ void ConfigDialog::apply()
 	m_options->codePadFontPointSize = qBound(MIN_EDITOR_FONT_POINT_SIZE,
 	                                         codePadFontSizeSpinBox->value(),
 	                                         MAX_EDITOR_FONT_POINT_SIZE);
+	m_options->inspectorFontPointSize = inspectorFontSizeSpinBox->value();
 	m_options->showLineNumberArea = lineNumbersCheckBox->isChecked();
+	m_options->autoCloseBlocks = autoCloseBlocksCheckBox->isChecked();
 	m_options->lineNumberContrast = lineNumberContrastSpinBox->value();
 	m_options->consoleFont = consoleFontComboBox->currentText();
 	m_options->consoleFontPointSize = consoleFontSizeSpinBox->value();
@@ -1047,6 +1063,7 @@ void ConfigDialog::apply()
     m_options->themeMode = themeComboBox->currentData().toString();    // to allow to be translated
     m_options->editorTheme = editorThemeComboBox->currentData().toString();
     m_options->widgetStyle = widgetStyleComboBox->currentData().toString();
+    m_options->flatScrollBars = flatScrollBarsCheckBox->isChecked();
     m_options->tabFontSizeOffset = tabFontSizeSpinBox->value();
 
 	m_options->saveChanges = saveChangesCheckBox->isChecked();

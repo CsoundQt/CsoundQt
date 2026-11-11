@@ -58,9 +58,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree,
 		return getWidgetProperties(channelOrName);
 	});
 	m_view->setDocumentDirectoryProvider([this]() {
-		if (fileName.isEmpty() || fileName.startsWith(QLatin1String(":/")))
-			return QDir::currentPath();
-		return QFileInfo(fileName).absolutePath();
+		return workingDirectory();
 	});
 	m_view->setIncludeSearchPathsProvider([this]() {
 		return includeSearchPaths();
@@ -83,6 +81,12 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree,
 	});
 	connect(m_view, &DocumentView::editorEscapePressed,
 	        this, &DocumentPage::clearWidgetChannelHighlights);
+	connect(m_view, &BaseView::embeddedFilesChanged,
+	        this, &DocumentPage::embeddedFilesChanged);
+	connect(m_view, &BaseView::embeddedFilesChanged, this, [this]() {
+		if (m_view->hasModifiedEmbeddedFiles())
+			setModified(true);
+	});
 	m_midiLearn = midiLearn;
     m_colorTheme = "";
 	foreach(WidgetLayout* wl, m_widgetLayouts) {
@@ -198,6 +202,11 @@ void DocumentPage::setEditorFocus()
 void DocumentPage::showLineNumbers(bool show)
 {
 	m_view->showLineArea(show);
+}
+
+void DocumentPage::setAutoCloseBlocks(bool enabled)
+{
+	m_view->setAutoCloseBlocks(enabled);
 }
 
 void DocumentPage::setLineNumberContrast(int contrast)
@@ -539,6 +548,23 @@ QString DocumentPage::embeddedFiles()
 	return QString::number(text.count("<CsFileB "));
 }
 
+QStringList DocumentPage::embeddedFileNames()
+{
+	return m_view->embeddedFileNames();
+}
+
+QString DocumentPage::workingDirectory() const
+{
+	if (fileName.isEmpty() || fileName.startsWith(QLatin1String(":/")))
+		return QDir::currentPath();
+	return QFileInfo(fileName).absolutePath();
+}
+
+QString DocumentPage::getTextWithoutWidgets()
+{
+	return m_view->getFullText();
+}
+
 QString DocumentPage::getFilePath()
 {
 	return fileName.left(fileName.lastIndexOf("/"));
@@ -558,6 +584,7 @@ void DocumentPage::setModified(bool mod)
         // unmodified() call isModified() to update the tab marker, and must
         // see the saved document, or they put the '*' back.
 		m_view->setModified(false);
+		m_view->clearModifiedEmbeddedFiles();
 		foreach (WidgetLayout  *wl, m_widgetLayouts) {
 			wl->setModified(false);
 		}
@@ -572,7 +599,7 @@ void DocumentPage::sendCodeToEngine(QString code)
 
 bool DocumentPage::isModified()
 {
-    if (m_view->isModified()) {
+    if (m_view->isModified() || m_view->hasModifiedEmbeddedFiles()) {
         return true;
     }
 	foreach (WidgetLayout *wl, m_widgetLayouts) {
@@ -942,6 +969,15 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 	connect(m_view, &DocumentView::goToSourceRequested, this, &DocumentPage::goToSource);
 	connect(m_view, &DocumentView::goToSourceIncludeRequested,
 	        this, &DocumentPage::openIncludedFile);
+	// "Go to Anything": jump inside this document, or open the included file
+	// and jump there.
+	connect(m_view, &DocumentView::goToAnythingChosen, this,
+	        [this](const QString &file, int line, int column) {
+		if (file.isEmpty())
+			m_view->jumpToDefinition(line, column);
+		else
+			emit goToSourceFileRequested(file, line, column);
+	});
 
 
 	// Connect for clearing marked lines and letting inspector know text has changed
@@ -1117,6 +1153,61 @@ void DocumentPage::jumpToLineWithoutFocus(int line)
 void DocumentPage::jumpToDefinition(int line, int column)
 {
 	m_view->jumpToDefinition(line, column);
+}
+
+void DocumentPage::showGoToAnything()
+{
+	if (m_view == nullptr)
+		return;
+	// Re-scan now so a definition typed just before invoking the command is
+	// included. The result already contains the definitions pulled in by
+	// #include, with their file paths.
+	if (m_scanService != nullptr)
+		m_scanService->scanNow(this);
+
+	QVector<GoToAnythingBar::Entry> entries;
+	const auto append = [&entries](const CodeScan::Definition &definition) {
+		QString label;
+		switch (definition.kind) {
+		case CodeScan::Kind::Udo:
+			label = QStringLiteral("opcode ") + definition.name;
+			break;
+		case CodeScan::Kind::Instrument:
+			label = QStringLiteral("instr ")
+					+ (definition.text.isEmpty() ? definition.name : definition.text);
+			break;
+		default:
+			return;
+		}
+		if (!definition.file.isEmpty()) {
+			label += QStringLiteral("  —  ")
+					+ QFileInfo(definition.file).fileName()
+					+ QLatin1Char(':') + QString::number(definition.line);
+		}
+		entries.append({label, definition.file, definition.line, definition.column});
+	};
+
+	// Current document first, then the definitions from included files.
+	for (const CodeScan::Definition &definition : m_scan->udos) {
+		if (definition.file.isEmpty())
+			append(definition);
+	}
+	for (const CodeScan::Definition &definition : m_scan->instruments) {
+		if (definition.file.isEmpty())
+			append(definition);
+	}
+	if (m_scan->scoreLine >= 1)
+		entries.append({QStringLiteral("<CsScore>"), QString(), m_scan->scoreLine, 0});
+	for (const CodeScan::Definition &definition : m_scan->udos) {
+		if (!definition.file.isEmpty())
+			append(definition);
+	}
+	for (const CodeScan::Definition &definition : m_scan->instruments) {
+		if (!definition.file.isEmpty())
+			append(definition);
+	}
+
+	m_view->showGoToAnything(entries);
 }
 
 void DocumentPage::comment()

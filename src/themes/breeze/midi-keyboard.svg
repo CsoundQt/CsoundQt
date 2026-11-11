@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Original artwork: SVG Repo (www.svgrepo.com), redrawn on a 32 px grid -->
+
+<svg
+   width="32"
+   height="32"
+   viewBox="0 0 32 32"
+   version="1.1"
+   id="svg10"
+   sodipodi:docname="midi-keyboard.svg"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs10" />
+  <sodipodi:namedview
+     id="namedview10"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="26.415389"
+     inkscape:cx="16.032321"
+     inkscape:cy="18.474079"
+     inkscape:current-layer="g10" />
+  <g
+     fill="#231f20"
+     id="g10">
+    <!-- frame -->
+    <rect
+       x="0"
+       y="0"
+       width="32"
+       height="1"
+       id="rect1" />
+    <rect
+       x="0"
+       y="31"
+       width="32"
+       height="1"
+       id="rect2" />
+    <rect
+       x="0"
+       y="0"
+       width="1"
+       height="32"
+       id="rect3" />
+    <rect
+       x="31"
+       y="0"
+       width="1"
+       height="32"
+       id="rect4" />
+    <!-- black keys (upper part) -->
+    <rect
+       x="3.9607565"
+       y="1"
+       width="6.0784864"
+       height="20"
+       id="rect5"
+       style="stroke-width:1.10259" />
+    <rect
+       x="13.960756"
+       y="1"
+       width="6.0784864"
+       height="20"
+       id="rect5-6"
+       style="stroke-width:1.10259" />
+    <rect
+       x="23.960756"
+       y="1"
+       width="6.0784864"
+       height="20"
+       id="rect5-6-6"
+       style="stroke-width:1.10259" />
+    <!-- black key stems between the white keys -->
+    <rect
+       x="6"
+       y="21"
+       width="2"
+       height="10"
+       id="rect8" />
+    <rect
+       x="15.999999"
+       y="21"
+       width="2"
+       height="10"
+       id="rect9" />
+    <rect
+       x="26"
+       y="21"
+       width="2"
+       height="10"
+       id="rect10" />
+  </g>
+</svg>

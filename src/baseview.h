@@ -24,6 +24,7 @@
 
 #include <QtWidgets>
 
+#include "embeddedfiles.h"
 #include "highlighter.h"
 
 class TextEditor;
@@ -104,12 +105,26 @@ public:
 	QString getOptionsText();  // Without tags
 	QString getFileB(); // Embedded files. With tags (for filenames)
 
+	// The <CsFileB> blocks of the document, parsed from m_filebText.
+	QVector<EmbeddedFile> embeddedFiles() const;
+	QStringList embeddedFileNames() const;
+	// Add a file, or replace the data of an existing entry with the same
+	// name. Changes are not part of the editor undo stack; the document is
+	// marked modified through hasModifiedEmbeddedFiles().
+	bool setEmbeddedFile(const QString &name, const QByteArray &data,
+	                     QString *error = nullptr);
+	bool removeEmbeddedFile(int index);
+	bool hasModifiedEmbeddedFiles() const { return m_embeddedFilesModified; }
+	void clearModifiedEmbeddedFiles() { m_embeddedFilesModified = false; }
+
 	void clearUndoRedoStack();
 
 	QString getBasicText();  // What Csound needs (no widgets, misc text, etc.)
 
 signals:
     void fileDropped(QList<QUrl> urls, QPoint globalPos);
+    // The list of embedded files changed (added, removed or replaced).
+    void embeddedFilesChanged();
 
 public slots:
 	void toggleLineArea();
@@ -124,6 +139,9 @@ protected:
 	// Embedded files are kept out of the editable text (and therefore out of
 	// the scanner and the Csound code). getFullText() puts them back.
 	QString m_filebText;
+	// Asset changes are not part of the editor's undo/save point, so they are
+	// tracked here and checked by DocumentPage::isModified().
+	bool m_embeddedFilesModified = false;
 
 	int m_tabSize = 2; // tab size in spaces, see setTabSize()
 	void applyTabSize();

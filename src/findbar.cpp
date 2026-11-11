@@ -20,6 +20,7 @@
 */
 
 #include "findbar.h"
+#include "themedicons.h"
 
 #include <QApplication>
 #include <QAbstractButton>
@@ -280,9 +281,9 @@ void FindBar::applyPalette()
 	// hard to see on a dark theme. Use the themed arrow/close icons instead.
 	const bool dark = p.color(QPalette::Button).lightness() < 128;
 	const QString theme = dark ? "breeze-dark" : "breeze";
-	m_prevButton->setIcon(QIcon(QString(":/themes/%1/browse-prev.png").arg(theme)));
-	m_nextButton->setIcon(QIcon(QString(":/themes/%1/browse-next.png").arg(theme)));
-	m_closeButton->setIcon(QIcon(QString(":/themes/%1/edit-close.png").arg(theme)));
+	m_prevButton->setIcon(ThemedIcons::icon(QString(":/themes/%1/browse-prev.svg").arg(theme)));
+	m_nextButton->setIcon(ThemedIcons::icon(QString(":/themes/%1/browse-next.svg").arg(theme)));
+	m_closeButton->setIcon(ThemedIcons::icon(QString(":/themes/%1/edit-close.svg").arg(theme)));
 }
 
 void FindBar::reposition()

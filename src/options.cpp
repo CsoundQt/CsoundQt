@@ -38,11 +38,14 @@ Options::Options(ConfigLists *configlists) :
     // Default widget style: Fusion on Linux (consistent look everywhere), and
     // the native Qt style elsewhere (macOS, windows11/windowsvista on Windows).
     widgetStyle = defaultWidgetStyleName();
-    tabFontSizeOffset = 0;
+    flatScrollBars = true;
+    tabFontSizeOffset = -1;
     fontPointSize = 10;
     codePadFontPointSize = 10;
+    inspectorFontPointSize = 0;
     showLineNumberArea = true;
-    antialiasScopes = false;
+    autoCloseBlocks = true;
+    antialiasScopes = true;
     lineNumberContrast = 50;
     consoleFont = "JetBrains Mono";
     consoleFontPointSize = 8;
@@ -68,10 +71,11 @@ Options::Options(ConfigLists *configlists) :
     iconText = false;
     showToolbar = true;
     lockToolbar = false;
-    toolbarIconSize = 20;
+    toolbarIconSize = 16;
     wrapLines = true;
     showScrollBar = true;
     autoComplete = true;
+    autoCompleteDelay = 250;
     quickHelpOnHover = true;
     quickHelpHoverDelay = 500;
     showVariableOccurrences = true;
@@ -80,7 +84,7 @@ Options::Options(ConfigLists *configlists) :
     autocompleteMenuWidth = 42;
     autocompleteMenuMaxLines = 20;
     tooltipWakeUpDelay = 500;
-    tabShowCloseButton = true;
+    tabShowCloseButton = false;
 
     showWidgetsOnRun = true;
     showTooltips = false;

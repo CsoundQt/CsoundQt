@@ -40,6 +40,11 @@ DEFINES += CSQT_VERSION=\\\"$$VER\\\"
 #To prepare for Qt6 build
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 
+# Keep file/line/function information in qDebug output also in release builds.
+# Without this, QT_NO_DEBUG makes Qt compile the message context out, and the
+# qSetMessagePattern() prefix in main.cpp shows "[unknown:0 unknown]".
+DEFINES += QT_MESSAGELOGCONTEXT
+
 lessThan(QT_MAJOR_VERSION,6): error("Qt6 is required for this build.")
 
 DEFINES += NOMINMAX

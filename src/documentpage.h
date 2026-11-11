@@ -56,6 +56,8 @@ public:
 	void setCompanionFileName(QString name);
 	void setEditorFocus();
 	void showLineNumbers(bool show);
+	// Insert endin/endop/endif automatically after instr/opcode/if lines.
+	void setAutoCloseBlocks(bool enabled);
 	void setLineNumberContrast(int contrast);
 	void setEditorPadding(int padding);
 	void insertText(QString text, int section = -1);
@@ -163,6 +165,12 @@ public:
 	int udoCount();
 	int widgetCount();
 	QString embeddedFiles();
+	QStringList embeddedFileNames();
+	// The directory Csound uses when the document runs: the directory of the
+	// CSD, or the process working directory for an unsaved/resource document.
+	QString workingDirectory() const;
+	// The document text without widgets/presets, but with embedded files.
+	QString getTextWithoutWidgets();
 	QString getFilePath();
     bool isModified();
 	bool isRunning();
@@ -294,6 +302,9 @@ public slots:
 	// Passed directly to document view
 	void jumpToLine(int line);
 	void jumpToLineWithoutFocus(int line);
+	// Open the "Go to Anything" overlay: all opcodes/instruments defined in
+	// this document or in files it includes, plus its <CsScore> tag.
+	void showGoToAnything();
 	// Jump to a definition: the line of the definition and the column of the
 	// name, as reported by the scanner (also used to reach included files).
 	void jumpToDefinition(int line, int column);
@@ -347,6 +358,8 @@ signals:
     //void liveEventsVisible(bool);  // To change the action in the main window
 	void modified();  // Triggered whenever the children change
     void unmodified();
+    // The <CsFileB> list changed (added, removed or replaced).
+    void embeddedFilesChanged();
     void stopSignal(); // To tell main application that running has stopped
 	void setHelpSignal(); // Propagated from view
     // Requests from play/render/pause/stop buttons in the widget layout. The

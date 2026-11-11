@@ -64,6 +64,7 @@
 #include "scanservice.h"
 #include "includecache.h"
 #include "documentpage.h"
+#include "embeddedfilesdialog.h"
 #include "externallauncher.h"
 #include "inspector.h"
 #include "opentryparser.h"
@@ -1355,6 +1356,7 @@ void CsoundQt::changePage(int index)
         // the typing debounce; the others wait until they are shown again.
         m_scanService->setActiveSource(page);
         m_scanService->scanNow(page);
+        m_inspector->setEmbeddedFiles(page->embeddedFileNames());
     }
 #if defined(CSQT_QTHTML)
     if (!documentPages.isEmpty()) {
@@ -2872,6 +2874,23 @@ void CsoundQt::info()
                              QMessageBox::Ok);
 }
 
+void CsoundQt::showEmbeddedFiles()
+{
+    DocumentPage *page = getCurrentDocumentPage();
+    if (page == nullptr)
+        return;
+
+    const QString fileName = page->getFileName();
+    if (!fileName.isEmpty()
+            && !fileName.endsWith(".csd"_L1, Qt::CaseInsensitive)) {
+        return;
+    }
+
+    EmbeddedFilesDialog dialog(page->getView(), fileName,
+                               page->workingDirectory(), this);
+    dialog.exec();
+}
+
 bool CsoundQt::closeTab(bool forceCloseApp, int index)
 {
     if (index == -1) {
@@ -3654,7 +3673,7 @@ void CsoundQt::runInTerm(bool realtime)
             runAct->setChecked(false);
             return;
         }
-        QString csdText = documentPages[curPage]->getBasicText();
+        QString csdText = documentPages[curPage]->getTextWithoutWidgets();
         fileName = tempFile.fileName();
         tempFile.write(csdText.toUtf8());
         tempFile.flush();
@@ -3722,9 +3741,9 @@ void CsoundQt::pause(int index)
     if (docIndex >= 0 && docIndex < documentPages.size()) {
         documentPages[docIndex]->pause();
         if (documentPages[docIndex]->getEngine()->isPaused() ) {
-            documentTabs->setTabIcon(docIndex, QIcon(QString(":/themes/%1/media-pause.png").arg(m_options->theme )));
+            documentTabs->setTabIcon(docIndex, ThemedIcons::icon(QString(":/themes/%1/media-pause.svg").arg(m_options->theme )));
         } else {
-            documentTabs->setTabIcon(docIndex, QIcon(QString(":/themes/%1/media-play.png").arg(m_options->theme )));
+            documentTabs->setTabIcon(docIndex, ThemedIcons::icon(QString(":/themes/%1/media-play.svg").arg(m_options->theme )));
         }
     }
 }
@@ -5378,11 +5397,11 @@ void CsoundQt::updateTabIcon(int index)
     DocumentPage *page = documentPages[index];
     if (page->isRunning()) {
         documentTabs->setTabIcon(index,
-                QIcon(QString(":/themes/%1/media-play.png").arg(m_options->theme)));
+                ThemedIcons::icon(QString(":/themes/%1/media-play.svg").arg(m_options->theme)));
     }
     else if (page->isRecording()) {
         documentTabs->setTabIcon(index,
-                QIcon(QString(":/themes/%1/media-record.png").arg(m_options->theme)));
+                ThemedIcons::icon(QString(":/themes/%1/media-record.svg").arg(m_options->theme)));
     }
     else {
         documentTabs->setTabIcon(index, QIcon());
@@ -5479,7 +5498,7 @@ void CsoundQt::applyWidgetStyle()
         return; // already active (or platform default)
 
     if (QStyle *style = createWidgetStyle(name))
-        qApp->setStyle(new DialogButtonStyle(style));
+        installWidgetStyle(style, name);
 }
 
 void CsoundQt::applyPaletteToChrome()
@@ -5521,6 +5540,10 @@ void CsoundQt::applyPaletteToChrome()
 void CsoundQt::applySettings()
 {
     m_realtimeAudioValidated = false;
+    // The editor's flat scrollbars are a Fusion-only extra: remember the
+    // setting before the style is applied, so the editors' StyleChange
+    // handlers already see the new value.
+    flatScrollBarsEnabled() = m_options->flatScrollBars;
     // The widget mode may have been changed in the dialog: the layouts then
     // have to move between the dock panel and their own windows.
     if (m_options->widgetsIndependent != m_appliedWidgetsIndependent)
@@ -5617,6 +5640,7 @@ void CsoundQt::applySettings()
     }
 
     applyCodePadAppearance();
+    m_inspector->setFontSize(m_options->inspectorFontPointSize);
     if (csoundGetVersion() < 5140) {
         m_options->newParser = false; // Don't use new parser flags
     }
@@ -5756,6 +5780,7 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
 
     p->setConsoleBufferSize(m_options->consoleBufferSize);
     p->showLineNumbers(m_options->showLineNumberArea);
+    p->setAutoCloseBlocks(m_options->autoCloseBlocks);
     p->setLineNumberContrast(m_options->lineNumberContrast);
     p->setEditorPadding(m_options->editorPadding);
     p->setQuickHelpOnHover(m_options->quickHelpOnHover);
@@ -5782,6 +5807,7 @@ void CsoundQt::applyCodePadAppearance()
     padFont.setPointSizeF(m_options->codePadFontPointSize);
     pad->setFont(padFont);
     pad->setTheme(m_options->highlightingTheme);
+    pad->setAutoCloseBlocks(m_options->autoCloseBlocks);
     const QTextCharFormat defaultFormat = pad->getDefaultFormat();
     pad->setColors(defaultFormat.foreground().color(),
                    defaultFormat.background().color());
@@ -6004,12 +6030,10 @@ void CsoundQt::setColors(QString themeMode)
     }
 
     // Helper to set an icon if the action exists.
-    // ThemedIcons::forMenu() keeps painting our bundled icon in the toolbar,
-    // but also names it after the matching freedesktop icon so that the desktop
-    // shell draws it in *its own* theme when the menu is shown globally (e.g. in
-    // KDE Plasma's Global Menu panel widget). Without the name Qt would send a
-    // rasterized copy of our icon, which stays dark on a dark background and
-    // becomes unreadable when CsoundQt's theme differs from the desktop's.
+    // ThemedIcons::forMenu() gives menus and toolbars the same bundled icon.
+    // Set CSQT_DESKTOP_MENU_ICON_NAMES=1 to export a freedesktop name instead,
+    // so a global menu (e.g. KDE Plasma's) draws it in the shell's own theme
+    // (this makes the menu icon differ from the toolbar icon).
     auto setIcon = [&](QAction *act, const QString &iconName) {
         if (act) {
             act->setIcon(ThemedIcons::forMenu(QString(":/themes/%1/%2").arg(m_options->theme, iconName)));
@@ -6049,35 +6073,35 @@ void CsoundQt::setColors(QString themeMode)
 #endif
 
     // Update all toolbar/menu actions (single source of truth)
-    setIcon(newAct, "edit-new.png");
-    setIcon(openAct, "folder.png");
-    setIcon(reloadAct, "reload.png");
-    setIcon(saveAct, "floppy.png");
-    setIcon(closeTabAct, "edit-close.png");
-    setIcon(undoAct, "edit-undo.png");
-    setIcon(redoAct, "edit-redo.png");
-    setIcon(cutAct, "edit-cut.png");
-    setIcon(copyAct, "edit-copy.png");
-    setIcon(pasteAct, "edit-paste.png");
-    setIcon(runAct, "media-play.png");
-    setIcon(runTermAct, "terminal.png");
-    setIcon(stopAct, "media-stop.png");
-    setIcon(pauseAct, "media-pause.png");
-    setIcon(stopAllAct, "media-stop.png");
-    setIcon(recAct, "media-record.png");
+    setIcon(newAct, "edit-new.svg");
+    setIcon(openAct, "folder.svg");
+    setIcon(reloadAct, "reload.svg");
+    setIcon(saveAct, "floppy.svg");
+    setIcon(closeTabAct, "edit-close.svg");
+    setIcon(undoAct, "edit-undo.svg");
+    setIcon(redoAct, "edit-redo.svg");
+    setIcon(cutAct, "edit-cut.svg");
+    setIcon(copyAct, "edit-copy.svg");
+    setIcon(pasteAct, "edit-paste.svg");
+    setIcon(runAct, "media-play.svg");
+    setIcon(runTermAct, "terminal.svg");
+    setIcon(stopAct, "media-stop.svg");
+    setIcon(pauseAct, "media-pause.svg");
+    setIcon(stopAllAct, "media-stop.svg");
+    setIcon(recAct, "media-record.svg");
     setIcon(renderAct, "render.svg");
-    setIcon(showWidgetsAct, "widgets.png");
-    setIcon(showInspectorAct, "edit-find.png");
-    setIcon(showEditorAct, "editor.png");
-    setIcon(showHelpAct, "info.png");
-    setIcon(showConsoleAct, "terminal.png");
-    setIcon(showScratchPadAct, "scratchpad.png");
-    setIcon(showUtilitiesAct, "devel.png");
-    setIcon(showVirtualKeyboardAct, "midi-keyboard.png");
-    setIcon(aboutAct, "about.png");
-    setIcon(configureAct, "settings.png");
-    setIcon(setHelpEntryAct, "info.png");
-    setIcon(quickReferenceAct, "info.png");
+    setIcon(showWidgetsAct, "widgets.svg");
+    setIcon(showInspectorAct, "edit-find.svg");
+    setIcon(showEditorAct, "editor.svg");
+    setIcon(showHelpAct, "info.svg");
+    setIcon(showConsoleAct, "terminal.svg");
+    setIcon(showScratchPadAct, "scratchpad.svg");
+    setIcon(showUtilitiesAct, "devel.svg");
+    setIcon(showVirtualKeyboardAct, "midi-keyboard.svg");
+    setIcon(aboutAct, "about.svg");
+    setIcon(configureAct, "settings.svg");
+    setIcon(setHelpEntryAct, "info.svg");
+    setIcon(quickReferenceAct, "info.svg");
 
     if (controlToolBar)  controlToolBar->update();
     if (configureToolBar) configureToolBar->update();
@@ -6117,6 +6141,11 @@ void CsoundQt::setColors(QString themeMode)
         updateTabIcon(i);
     }
 
+#ifdef CSQT_DEBUGGER
+    if (m_debugPanel != nullptr)
+        m_debugPanel->setIconTheme(m_options->theme);
+#endif
+
 #ifdef Q_OS_MACOS
     // Qt 6 on macOS: with documentMode enabled the native tab-bar rendering path
     // does not show the Qt-injected close-button widgets.
@@ -6126,10 +6155,11 @@ void CsoundQt::setColors(QString themeMode)
         if (m_options->tabShowCloseButton) {
             tabBarCss = QString(
                 "QTabBar::close-button {"
-                "  image: url(:/themes/%1/edit-close.png);"
+                "  image: url(%1);"
                 "  subcontrol-position: left;"
                 "}"
-            ).arg(m_options->theme);
+            ).arg(ThemedIcons::resolvePath(
+                       QString(":/themes/%1/edit-close.svg").arg(m_options->theme)));
         }
         documentTabs->tabBar()->setStyleSheet(tabBarCss);
     }
@@ -6292,6 +6322,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     moveLineUpAct->setShortcut(tr("Ctrl+Shift+Up"));
     moveLineDownAct->setShortcut(tr("Ctrl+Shift+Down"));
     gotoLineAct->setShortcut(tr("Ctrl+L"));
+    goToAnythingAct->setShortcut(tr("Ctrl+Shift+P"));
     goBackAct->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Left));
     goToSourceAct->setShortcut(tr("Ctrl+B"));
     reloadDependenciesAct->setShortcut(tr("Ctrl+Shift+B"));
@@ -6446,25 +6477,25 @@ void CsoundQt::createActions()
     auto icon = [&prefix](const QString &fileName) {
         return ThemedIcons::forMenu(prefix + fileName);
     };
-    newAct = new QAction(icon("edit-new.png"), tr("&New"), this);
+    newAct = new QAction(icon("edit-new.svg"), tr("&New"), this);
     newAct->setStatusTip(tr("Create a new file"));
     newAct->setIconText(tr("New"));
     newAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(newAct, SIGNAL(triggered()), this, SLOT(newFile()));
 
-    openAct = new QAction(icon("folder.png"), tr("&Open..."), this);
+    openAct = new QAction(icon("folder.svg"), tr("&Open..."), this);
     openAct->setStatusTip(tr("Open an existing file"));
     openAct->setIconText(tr("Open"));
     openAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(openAct, SIGNAL(triggered()), this, SLOT(open()));
 
-    reloadAct = new QAction(icon("reload.png"), tr("Reload"), this);
+    reloadAct = new QAction(icon("reload.svg"), tr("Reload"), this);
     reloadAct->setStatusTip(tr("Reload file from disk, discarding changes"));
     //   reloadAct->setIconText(tr("Reload"));
     reloadAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(reloadAct, SIGNAL(triggered()), this, SLOT(reload()));
 
-    saveAct = new QAction(icon("floppy.png"), tr("&Save"), this);
+    saveAct = new QAction(icon("floppy.svg"), tr("&Save"), this);
     saveAct->setStatusTip(tr("Save the document to disk"));
     saveAct->setIconText(tr("Save"));
     saveAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -6497,7 +6528,7 @@ void CsoundQt::createActions()
     closeTabAct = new QAction(tr("Close current tab"), this);
     closeTabAct->setStatusTip(tr("Close current tab"));
     //   closeTabAct->setIconText(tr("Close"));
-    closeTabAct->setIcon(icon("edit-close.png"));
+    closeTabAct->setIcon(icon("edit-close.svg"));
     closeTabAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(closeTabAct, SIGNAL(triggered()), this, SLOT(closeTab()));
 
@@ -6518,39 +6549,46 @@ void CsoundQt::createActions()
     infoAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(infoAct, SIGNAL(triggered()), this, SLOT(info()));
 
+    embeddedFilesAct = new QAction(tr("Embedded Files..."), this);
+    embeddedFilesAct->setStatusTip(
+                tr("Show and manage the files embedded in the current document"));
+    embeddedFilesAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(embeddedFilesAct, &QAction::triggered,
+            this, &CsoundQt::showEmbeddedFiles);
+
     exitAct = new QAction(tr("E&xit"), this);
     exitAct->setStatusTip(tr("Exit the application"));
     //   exitAct->setIconText(tr("Exit"));
     exitAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
 
-    undoAct = new QAction(icon("edit-undo.png"), tr("Undo"), this);
+    undoAct = new QAction(icon("edit-undo.svg"), tr("Undo"), this);
     undoAct->setStatusTip(tr("Undo last action"));
     undoAct->setIconText(tr("Undo"));
     undoAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(undoAct, SIGNAL(triggered()), this, SLOT(undo()));
 
-    redoAct = new QAction(icon("edit-redo.png"), tr("Redo"), this);
+    redoAct = new QAction(icon("edit-redo.svg"), tr("Redo"), this);
     redoAct->setStatusTip(tr("Redo last action"));
     redoAct->setIconText(tr("Redo"));
     redoAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(redoAct, SIGNAL(triggered()), this, SLOT(redo()));
 
-    cutAct = new QAction(icon("edit-cut.png"), tr("Cu&t"), this);
+    cutAct = new QAction(icon("edit-cut.svg"), tr("Cu&t"), this);
     cutAct->setStatusTip(tr("Cut the current selection's contents to the "
                             "clipboard"));
     cutAct->setIconText(tr("Cut"));
     cutAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(cutAct, SIGNAL(triggered()), this, SLOT(cut()));
 
-    copyAct = new QAction(icon("edit-copy.png"), tr("&Copy"), this);
+    copyAct = new QAction(icon("edit-copy.svg"), tr("&Copy"), this);
     copyAct->setStatusTip(tr("Copy the current selection's contents to the "
                              "clipboard"));
     copyAct->setIconText(tr("Copy"));
     copyAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(copyAct, SIGNAL(triggered()), this, SLOT(copy()));
 
-    pasteAct = new QAction(icon("edit-paste.png"), tr("&Paste"), this);
+    pasteAct = new QAction(icon("edit-paste.svg"), tr("&Paste"), this);
     pasteAct->setStatusTip(tr("Paste the clipboard's contents into the current "
                               "selection"));
     pasteAct->setIconText(tr("Paste"));
@@ -6628,7 +6666,7 @@ void CsoundQt::createActions()
     connect(findPreviousAct, SIGNAL(triggered()), this, SLOT(findPrevious()));
 
 
-    configureAct = new QAction(icon("settings.png"), tr("Configuration"), this);
+    configureAct = new QAction(icon("settings.svg"), tr("Configuration"), this);
     configureAct->setStatusTip(tr("Open configuration dialog"));
     configureAct->setIconText(tr("Configure"));
     configureAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -6643,38 +6681,38 @@ void CsoundQt::createActions()
 
 
 
-    runAct = new QAction(icon("media-play.png"), tr("Run Csound"), this);
+    runAct = new QAction(icon("media-play.svg"), tr("Run Csound"), this);
     runAct->setStatusTip(tr("Run current file"));
     runAct->setIconText(tr("Run"));
     runAct->setCheckable(true);
     runAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(runAct, SIGNAL(triggered()), this, SLOT(play()));
 
-    runTermAct = new QAction(icon("terminal.png"), tr("Run in Terminal"), this);
+    runTermAct = new QAction(icon("terminal.svg"), tr("Run in Terminal"), this);
     runTermAct->setStatusTip(tr("Run in external shell"));
     runTermAct->setIconText(tr("Run in Term"));
     runTermAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(runTermAct, SIGNAL(triggered()), this, SLOT(runInTerm()));
 
-    stopAct = new QAction(icon("media-stop.png"), tr("Stop"), this);
+    stopAct = new QAction(icon("media-stop.svg"), tr("Stop"), this);
     stopAct->setStatusTip(tr("Stop"));
     stopAct->setIconText(tr("Stop"));
     stopAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(stopAct, SIGNAL(triggered()), this, SLOT(stop()));
 
-    pauseAct = new QAction(icon("media-pause.png"), tr("Pause"), this);
+    pauseAct = new QAction(icon("media-pause.svg"), tr("Pause"), this);
     pauseAct->setStatusTip(tr("Pause"));
     pauseAct->setIconText(tr("Pause"));
     pauseAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(pauseAct, SIGNAL(triggered()), this, SLOT(pause()));
 
-    stopAllAct = new QAction(icon("media-stop.png"), tr("Stop All"), this);
+    stopAllAct = new QAction(icon("media-stop.svg"), tr("Stop All"), this);
     stopAllAct->setStatusTip(tr("Stop all running documents"));
     stopAllAct->setIconText(tr("Stop All"));
     stopAllAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(stopAllAct, SIGNAL(triggered()), this, SLOT(stopAll()));
 
-    recAct = new QAction(icon("media-record.png"), tr("Record"), this);
+    recAct = new QAction(icon("media-record.svg"), tr("Record"), this);
     recAct->setStatusTip(tr("Record"));
     recAct->setIconText(tr("Record"));
     recAct->setCheckable(true);
@@ -6699,7 +6737,7 @@ void CsoundQt::createActions()
     renderHistoryAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(renderHistoryAct, SIGNAL(triggered()), this, SLOT(showRenderHistory()));
 
-    showWidgetsAct = new QAction(icon("widgets.png"),
+    showWidgetsAct = new QAction(icon("widgets.svg"),
                                  tr("Widgets"), this);
     showWidgetsAct->setCheckable(true);
     //showWidgetsAct->setChecked(true);
@@ -6714,7 +6752,7 @@ void CsoundQt::createActions()
     connect(focusWidgetsAct, SIGNAL(triggered()), this, SLOT(focusWidgets()));
     this->addAction(focusWidgetsAct);
 
-    showInspectorAct = new QAction(icon("edit-find.png"), tr("Inspector"), this);
+    showInspectorAct = new QAction(icon("edit-find.svg"), tr("Inspector"), this);
     showInspectorAct->setCheckable(true);
     showInspectorAct->setStatusTip(tr("Show Inspector"));
     showInspectorAct->setIconText(tr("Inspector"));
@@ -6729,7 +6767,7 @@ void CsoundQt::createActions()
     connect(focusInspectorAct, SIGNAL(triggered()), this, SLOT(focusInspector()));
     this->addAction(focusInspectorAct);
 
-    showEditorAct = new QAction(icon("editor.png"), tr("Editor"), this);
+    showEditorAct = new QAction(icon("editor.svg"), tr("Editor"), this);
     showEditorAct->setCheckable(true);
     showEditorAct->setChecked(true);
     showEditorAct->setStatusTip(tr("Show the text editor"));
@@ -6743,7 +6781,7 @@ void CsoundQt::createActions()
     connect(focusEditorAct, SIGNAL(triggered()), this, SLOT(focusEditor()));
     this->addAction(focusEditorAct);
 
-    showHelpAct = new QAction(icon("info.png"), tr("Help Panel"), this);
+    showHelpAct = new QAction(icon("info.svg"), tr("Help Panel"), this);
     showHelpAct->setCheckable(true);
     showHelpAct->setChecked(true);
     showHelpAct->setStatusTip(tr("Show the Csound Manual Panel"));
@@ -6762,7 +6800,7 @@ void CsoundQt::createActions()
     connect(focusMapper, SIGNAL(mappedInt(int)), this, SLOT(focusToTab(int)));
     this->addAction(focusHelpAct);
 
-    showScratchPadAct = new QAction(icon("scratchpad.png"), tr("Codepad"), this);
+    showScratchPadAct = new QAction(icon("scratchpad.svg"), tr("Codepad"), this);
     showScratchPadAct->setCheckable(true);
     //  showPythonConsoleAct->setChecked(true);  // Unnecessary because it is set by options
     showScratchPadAct->setStatusTip(tr("Show Codepad"));
@@ -6805,7 +6843,7 @@ void CsoundQt::createActions()
     showOpcodeQuickRefAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showOpcodeQuickRefAct, SIGNAL(triggered()), helpPanel, SLOT(showOpcodeQuickRef()));
 
-    showConsoleAct = new QAction(icon("terminal.png"), tr("Console"), this);
+    showConsoleAct = new QAction(icon("terminal.svg"), tr("Console"), this);
     showConsoleAct->setCheckable(true);
     showConsoleAct->setChecked(true);
     showConsoleAct->setStatusTip(tr("Show Csound's message console"));
@@ -6844,7 +6882,7 @@ void CsoundQt::createActions()
     showDebugAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showDebugAct, SIGNAL(toggled(bool)), this, SLOT(showDebugger(bool)));
 #endif
-    showVirtualKeyboardAct = new QAction(icon("midi-keyboard.png"), tr("MIDI Keyboard"), this);
+    showVirtualKeyboardAct = new QAction(icon("midi-keyboard.svg"), tr("MIDI Keyboard"), this);
     showVirtualKeyboardAct->setCheckable(true);
     showVirtualKeyboardAct->setChecked(false);
     showVirtualKeyboardAct->setStatusTip(tr("Show the MIDI Keyboard"));
@@ -6883,13 +6921,13 @@ void CsoundQt::createActions()
     midiLearnAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(midiLearnAct, SIGNAL(triggered()), this, SLOT(showMidiLearn()));
 
-    setHelpEntryAct = new QAction(icon("info.png"), tr("Opcode Entry"), this);
+    setHelpEntryAct = new QAction(icon("info.svg"), tr("Opcode Entry"), this);
     setHelpEntryAct->setStatusTip(tr("Show Opcode Entry in help panel"));
     setHelpEntryAct->setIconText(tr("Manual for opcode"));
     setHelpEntryAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(setHelpEntryAct, SIGNAL(triggered()), this, SLOT(setHelpEntry()));
 
-    quickReferenceAct = new QAction(icon("info.png"), tr("Quick Reference"), this);
+    quickReferenceAct = new QAction(icon("info.svg"), tr("Quick Reference"), this);
     quickReferenceAct->setStatusTip(
                 tr("Show a quick reference for the opcode, UDO or instrument under the cursor"));
     quickReferenceAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -6922,7 +6960,7 @@ void CsoundQt::createActions()
     openQuickRefAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(openQuickRefAct, SIGNAL(triggered()), this, SLOT(openQuickRef()));
 
-    showUtilitiesAct = new QAction(icon("devel.png"), tr("Utilities"), this);
+    showUtilitiesAct = new QAction(icon("devel.svg"), tr("Utilities"), this);
     showUtilitiesAct->setCheckable(true);
     showUtilitiesAct->setChecked(false);
     showUtilitiesAct->setStatusTip(tr("Show the Csound Utilities dialog"));
@@ -6972,6 +7010,12 @@ void CsoundQt::createActions()
     gotoLineAct->setStatusTip(tr("Go to a given line"));
     gotoLineAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(gotoLineAct, SIGNAL(triggered()), this, SLOT(gotoLineDialog()));
+
+    goToAnythingAct = new QAction(tr("Go to Anything"), this);
+    goToAnythingAct->setStatusTip(
+                tr("Jump to an opcode, instrument or the CsScore tag"));
+    goToAnythingAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(goToAnythingAct, &QAction::triggered, this, &CsoundQt::goToAnything);
 
     goBackAct = new QAction(tr("Go Back"), this);
     goBackAct->setStatusTip(tr("Go back to previous position"));
@@ -7183,6 +7227,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(openDocumentationAct);
     // m_keyActions.append(showOpcodeQuickRefAct);
     m_keyActions.append(infoAct);
+    m_keyActions.append(embeddedFilesAct);
     m_keyActions.append(viewFullScreenAct);
     m_keyActions.append(maximizePanelAct);
 #ifdef CSQT_DEBUGGER
@@ -7195,6 +7240,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(moveLineUpAct);
     m_keyActions.append(moveLineDownAct);
     m_keyActions.append(gotoLineAct);
+    m_keyActions.append(goToAnythingAct);
     m_keyActions.append(goBackAct);
     m_keyActions.append(goToSourceAct);
     m_keyActions.append(reloadDependenciesAct);
@@ -7251,7 +7297,7 @@ void CsoundQt::connectActions()
         autocompleteAct, insertOpcodeAct,
         inToGetAct, getToInAct,
         // Moving around the edited text.
-        gotoLineAct, goBackAct, goToSourceAct,
+        gotoLineAct, goBackAct, goToSourceAct, goToAnythingAct,
         // Editor modes and highlights.
         parameterModeAct, highlightWidgetChannelAct,
         highlightWidgetChannelsAct,
@@ -7321,6 +7367,11 @@ void CsoundQt::connectActions()
     connect(doc, SIGNAL(setHelpSignal()), this, SLOT(setHelpEntry()));
     connect(doc, &DocumentPage::goToSourceFileRequested,
             this, &CsoundQt::openFileAtLine);
+    // The embedded files of the current document feed the inspector tree.
+    connect(doc, &DocumentPage::embeddedFilesChanged, this, [this, doc]() {
+        if (documentPages.indexOf(doc) == curPage)
+            m_inspector->setEmbeddedFiles(doc->embeddedFileNames());
+    });
 
     connect(doc->getView(), SIGNAL(opcodeSyntaxSignal(QString)),
             this, SLOT(statusBarMessage(QString)));
@@ -7438,6 +7489,7 @@ void CsoundQt::createMenus()
     fileMenu->addAction(convertToCsdAct);
     fileMenu->addAction(closeTabAct);
     fileMenu->addAction(exportPdfAct);
+    fileMenu->addAction(embeddedFilesAct);
     fileMenu->addAction(infoAct);
     fileMenu->addSeparator();
     recentMenu = fileMenu->addMenu(tr("Recent files"));
@@ -7461,6 +7513,7 @@ void CsoundQt::createMenus()
     editMenu->addAction(findAct);
     editMenu->addAction(showOccurrencesAct);
     editMenu->addAction(gotoLineAct);
+    editMenu->addAction(goToAnythingAct);
     editMenu->addAction(goBackAct);
     editMenu->addAction(goToSourceAct);
     editMenu->addSeparator();
@@ -7684,7 +7737,6 @@ void CsoundQt::createToolBars()
     controlToolBar->addAction(stopAct);
     controlToolBar->addAction(recAct);
     controlToolBar->addSeparator();
-    controlToolBar->addAction(runTermAct);
     controlToolBar->addAction(renderAct);
     controlToolBar->addAction(configureAct);
     controlToolBar->setIconSize(QSize(iconSize, iconSize));
@@ -7864,8 +7916,9 @@ void CsoundQt::readSettings()
         m_options->themeMode = "auto";
     m_options->widgetStyle = settings.value("widgetStyle",
                                            defaultWidgetStyleName()).toString();
+    m_options->flatScrollBars = settings.value("flatScrollBars", true).toBool();
     m_options->tabFontSizeOffset =
-            qBound(-20, settings.value("tabFontSizeOffset", 0).toInt(), 0);
+            qBound(-20, settings.value("tabFontSizeOffset", -1).toInt(), 0);
     m_options->tooltipWakeUpDelay = qBound(
                 0, settings.value("tooltipWakeUpDelay", 500).toInt(), 5000);
     QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
@@ -7982,9 +8035,12 @@ void CsoundQt::readSettings()
                 MIN_EDITOR_FONT_POINT_SIZE,
                 settings.value("codepadfontsize", 10).toDouble(),
                 MAX_EDITOR_FONT_POINT_SIZE);
+    m_options->inspectorFontPointSize = qBound(
+                0, settings.value("inspectorfontsize", 0).toInt(), 48);
     m_options->consoleFont = settings.value("consolefont", "JetBrains Mono").toString();
     m_options->consoleFontPointSize = settings.value("consolefontsize", 8).toDouble();
     m_options->showLineNumberArea = settings.value("showLineNumberArea", true).toBool();
+    m_options->autoCloseBlocks = settings.value("autoCloseBlocks", true).toBool();
     m_options->lineNumberContrast = settings.value("lineNumberContrast", 50).toInt();
 
     //m_options->consoleFont = settings.value("consolefont", "Courier").toString();  // platform specific
@@ -8048,7 +8104,7 @@ void CsoundQt::readSettings()
     m_options->iconText = settings.value("iconText", false).toBool();
     m_options->showToolbar = settings.value("showToolbar", true).toBool();
     m_options->lockToolbar = settings.value("lockToolbar", false).toBool();
-    m_options->toolbarIconSize = settings.value("toolbarIconSize", 20).toInt();
+    m_options->toolbarIconSize = settings.value("toolbarIconSize", 16).toInt();
     m_options->wrapLines = settings.value("wrapLines", true).toBool();
     m_options->showScrollBar = settings.value("showScrollBar", true).toBool();
     m_options->autoComplete = settings.value("autoComplete", true).toBool();
@@ -8056,11 +8112,11 @@ void CsoundQt::readSettings()
     m_options->showVariableOccurrences =
             settings.value("showVariableOccurrences", true).toBool();
     m_options->quickHelpHoverDelay = settings.value("quickHelpHoverDelay", 500).toInt();
-    m_options->autoCompleteDelay = settings.value("autoCompleteDelay", 150).toInt();
+    m_options->autoCompleteDelay = settings.value("autoCompleteDelay", 250).toInt();
     m_options->autocompleteMenuWidth = settings.value("autocompleteMenuWidth", 42).toInt();
     m_options->autocompleteMenuMaxLines = settings.value("autocompleteMenuMaxLines", 20).toInt();
     m_options->autoParameterMode = settings.value("autoParameterMode", true).toBool();
-    m_options->antialiasScopes = settings.value("antialiasScopes", false).toBool();
+    m_options->antialiasScopes = settings.value("antialiasScopes", true).toBool();
     m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
     m_options->showTooltips = settings.value("showTooltips", true).toBool();
     m_options->openProperties = settings.value("openProperties", true).toBool();
@@ -8068,7 +8124,7 @@ void CsoundQt::readSettings()
     lastFiles = settings.value("lastfiles", QStringList()).toStringList();
     lastTabIndex = settings.value("lasttabindex", "").toInt();
     m_options->debugPort = settings.value("debugPort",34711).toInt();
-    m_options->tabShowCloseButton = settings.value("tabShowCloseButton", true).toBool();
+    m_options->tabShowCloseButton = settings.value("tabShowCloseButton", false).toBool();
 
     settings.endGroup();
     settings.beginGroup("Run");
@@ -8125,7 +8181,7 @@ void CsoundQt::readSettings()
     m_options->numChannels = settings.value("numChannels", 2).toInt();
     m_options->numInputChannels = settings.value("numInputChannels", 2).toInt();
 
-    m_options->useLimiter = settings.value("useLimiter", csoundGetVersion()>=6160).toBool();
+    m_options->useLimiter = settings.value("useLimiter", false).toBool();
     m_options->limitValue = settings.value("limitValue", 1.0).toDouble();
 
     m_options->realtimeFlag = settings.value("realtimeFlag", false).toBool();
@@ -8183,7 +8239,7 @@ void CsoundQt::readSettings()
     m_options->rtMidiInputDevice = settings.value("rtMidiInputDevice", "0").toString();
     m_options->rtMidiOutputDevice = settings.value("rtMidiOutputDevice", "").toString();
     m_options->useCsoundMidi = settings.value("useCsoundMidi", false).toBool();
-    m_options->simultaneousRun = settings.value("simultaneousRun", "").toBool();
+    m_options->simultaneousRun = settings.value("simultaneousRun", true).toBool();
     m_options->quitOnLastTabClosed = settings.value("quitOnLastTabClosed", false).toBool();
     m_options->includeActiveFileInTitle = settings.value("includeActiveFileInTitle", true).toBool();
     m_options->focusToggledPanel = settings.value("focusToggledPanel", false).toBool();
@@ -8287,6 +8343,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("theme", m_options->theme);
     settings.setValue("themeMode", m_options->themeMode);
     settings.setValue("widgetStyle", m_options->widgetStyle);
+    settings.setValue("flatScrollBars", m_options->flatScrollBars);
     settings.setValue("tabFontSizeOffset", m_options->tabFontSizeOffset);
     settings.setValue("tooltipWakeUpDelay", m_options->tooltipWakeUpDelay);
     settings.setValue("windowState", saveState());
@@ -8299,7 +8356,9 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("font", m_options->font );
     settings.setValue("fontsize", m_options->fontPointSize);
     settings.setValue("codepadfontsize", m_options->codePadFontPointSize);
+    settings.setValue("inspectorfontsize", m_options->inspectorFontPointSize);
     settings.setValue("showLineNumberArea", m_options->showLineNumberArea);
+    settings.setValue("autoCloseBlocks", m_options->autoCloseBlocks);
     settings.setValue("lineNumberContrast", m_options->lineNumberContrast);
     settings.setValue("consolefont", m_options->consoleFont );
     settings.setValue("consolefontsize", m_options->consoleFontPointSize);
@@ -8750,7 +8809,7 @@ int CsoundQt::loadFile(QString fileName, bool runNow, bool activate, int insertA
         else {
             // text += line;
             lines << line;
-            if (line.contains("</CsFileB>" && !line.contains("<CsFileB " )) ) {
+            if (line.contains("</CsFileB>") && !line.contains("<CsFileB ")) {
                 inEncFile = false;
             }
         }
@@ -8954,7 +9013,7 @@ bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
     if (saveWidgets)
         text = documentPages[curPage]->getFullText();
     else
-        text = documentPages[curPage]->getBasicText();
+        text = documentPages[curPage]->getTextWithoutWidgets();
     QApplication::restoreOverrideCursor();
 
     if (fileName != documentPages[curPage]->getFileName()) {
@@ -9040,6 +9099,11 @@ void CsoundQt::updateFileTypeActions()
         switchOrcScoAct->setEnabled(orc || sco);
     if (convertToCsdAct != nullptr)
         convertToCsdAct->setEnabled(orc);
+    if (embeddedFilesAct != nullptr) {
+        // <CsFileB> belongs to the CSD format; an unsaved page is a CSD.
+        embeddedFilesAct->setEnabled(fileName.isEmpty()
+                || fileName.endsWith(".csd"_L1, Qt::CaseInsensitive));
+    }
 
     // A disabled QAction also disables its shortcut, so the normal shortcut
     // never fires for a .udo. Install replacements for exactly those key
@@ -10060,6 +10124,12 @@ void CsoundQt::goToSource() {
     if (doc == nullptr)
         return;
     doc->goToSourceAtCursor();
+}
+
+void CsoundQt::goToAnything()
+{
+    if (DocumentPage *page = getCurrentDocumentPage())
+        page->showGoToAnything();
 }
 
 void CsoundQt::openFileAtLine(const QString &path, int line, int column)

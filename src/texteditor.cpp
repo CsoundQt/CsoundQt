@@ -25,6 +25,7 @@
 #include <QtWidgets>
 
 #include "texteditor.h"
+#include "widgetstyle.h"
 
 
 TextEditor::TextEditor(QWidget *parent) :
@@ -192,17 +193,73 @@ TextEditLineNumbers::TextEditLineNumbers(QWidget *parent)
     // stylesheet), so remove the frame itself instead of relying on CSS.
     setFrameShape(QFrame::NoFrame);
     this->setStyleSheet("QTextEdit { border: none !important; }");
+    updateScrollBarStyle();
+}
 
+void TextEditLineNumbers::updateScrollBarStyle()
+{
+    // Only Fusion gets the custom scrollbars, and only when the "Flat
+    // scrollbars" setting is on; every other style keeps its native ones
+    // (macOS overlay bars, windows11, Breeze, ...).
+    const bool fusion =
+            currentWidgetStyleName().compare(u"Fusion"_s, Qt::CaseInsensitive) == 0;
+    const bool flat = fusion && flatScrollBarsEnabled();
+    if (flat) {
+        // The corner between the two scrollbars is painted by the style with
+        // the window colour, which shows as a small square next to the
+        // background-coloured bar tracks. Use a corner widget that fills with
+        // the editor background instead (the palette is inherited, so it
+        // follows BaseView::setColors()).
+        if (m_scrollCorner == nullptr) {
+            m_scrollCorner = new QWidget(this);
+            m_scrollCorner->setAutoFillBackground(true);
+            m_scrollCorner->setBackgroundRole(QPalette::Base);
+        }
+        if (cornerWidget() != m_scrollCorner)
+            setCornerWidget(m_scrollCorner);
+    } else if (cornerWidget() != nullptr) {
+        // Back to the style-drawn corner.
+        setCornerWidget(nullptr);
+    }
+    const QString sheet = flat
+            ? flatScrollBarStyleSheet(palette().color(QPalette::Base))
+            : QString();
+    for (QScrollBar *bar : {verticalScrollBar(), horizontalScrollBar()}) {
+        // Avoid a needless re-polish (and a StyleChange storm) when unchanged.
+        if (bar->styleSheet() != sheet)
+            bar->setStyleSheet(sheet);
+    }
+}
+
+void TextEditLineNumbers::changeEvent(QEvent *e)
+{
+    QTextEdit::changeEvent(e);
+    // The widget style can change at runtime (Settings > General > Theme), and
+    // the editor background is set through the palette (BaseView::setColors).
+    // Keep the scrollbar look in sync; updateScrollBarStyle() does nothing when
+    // the stylesheet already matches.
+    if (e->type() == QEvent::StyleChange || e->type() == QEvent::PaletteChange)
+        updateScrollBarStyle();
+    // The gutter width depends on the font metrics: re-layout when the editor
+    // font changes (Settings > Editor > Font size), otherwise the enlarged line
+    // numbers are clipped by the old gutter width.
+    if (e->type() == QEvent::FontChange) {
+        updateMargins();
+        lineNumberArea->update();
+    }
 }
 
 int TextEditLineNumbers::getAreaWidth()
 {
-    qreal scaling = lineNumberArea->lineNumberSizeScaling();
     int right_padding = lineNumberArea->padding();
     int left_padding  = lineNumberArea->padding();
     int numDigits = 4;
-    int oneDigit = this->fontMetrics().horizontalAdvance(QLatin1Char('9'));
-    return oneDigit * scaling * numDigits + left_padding + right_padding;
+    // Use the same font the numbers are painted with, so the widest number
+    // always fits (hinting makes the scaled font not exactly 0.8x the editor
+    // font metrics).
+    QFontMetrics numberMetrics(lineNumberArea->lineNumberFont());
+    int oneDigit = numberMetrics.horizontalAdvance(QLatin1Char('9'));
+    return oneDigit * numDigits + left_padding + right_padding;
 }
 
 void TextEditLineNumbers::resizeEvent(QResizeEvent *e)
@@ -288,6 +345,16 @@ void EditorPaddingArea::paintEvent(QPaintEvent *)
     painter.fillRect(rect(), m_color);
 }
 
+QFont LineNumberArea::lineNumberFont() const
+{
+    QFont font = codeEditor->font();
+    if (font.pointSizeF() > 0.0)
+        font.setPointSizeF(qMax(1.0, font.pointSizeF() * m_lineNumbersSizeFactor));
+    else if (font.pixelSize() > 0)
+        font.setPixelSize(qMax(1, qRound(font.pixelSize() * m_lineNumbersSizeFactor)));
+    return font;
+}
+
 void LineNumberArea::paintEvent(QPaintEvent *)
 {
     if ( !codeEditor->lineAreaVisble() )
@@ -310,9 +377,8 @@ void LineNumberArea::paintEvent(QPaintEvent *)
                 qRound(m_background.blue()  + (m_foreground.blue()  - m_background.blue())  * contrast));
     painter.setPen(numberColor);
 
-    bool bold;
-	QFont font = painter.font();
-    font.setPointSizeF(font.pointSizeF() * m_lineNumbersSizeFactor);
+    bool bold = false;
+	QFont font = lineNumberFont();
     painter.setFont(font);
     auto width = codeEditor->getAreaWidth();
     auto metrics = codeEditor->fontMetrics();
@@ -330,7 +396,7 @@ void LineNumberArea::paintEvent(QPaintEvent *)
 				font.setBold(true);
 				painter.setFont(font);
 			}
-            int x = width - metrics.horizontalAdvance(number)*m_lineNumbersSizeFactor - m_padding;
+            int x = width - painter.fontMetrics().horizontalAdvance(number) - m_padding;
             painter.drawText(x, y, number);
 			if (bold) {
 				font.setBold(false);
@@ -345,8 +411,18 @@ void LineNumberArea::paintEvent(QPaintEvent *)
 				painter.setPen(QColor(Qt::darkGray).darker()); // not exactly black
 			}
 			if (m_currentDebugLine >= 0 && line_count == m_currentDebugLine) {
-				QImage image("://themes/boring/gtk-media-play-ltr.png");
-				painter.drawImage(position.x(), y, image);
+				// Small play marker for the current debug line. It used to be a
+				// PNG from the old "boring" icon theme, which no longer exists.
+				const qreal height = metrics.ascent();
+				QPolygonF marker;
+				marker << QPointF(position.x() + 1, y - height)
+					   << QPointF(position.x() + 1 + height * 0.7, y - height / 2.0)
+					   << QPointF(position.x() + 1, y);
+				painter.save();
+				painter.setPen(Qt::NoPen);
+				painter.setBrush(QColor(Qt::red));
+				painter.drawPolygon(marker);
+				painter.restore();
 			}
 		}
 		block = block.next();

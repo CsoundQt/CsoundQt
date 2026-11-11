@@ -58,7 +58,12 @@ public:
 	// built while the dock is visible; a scan that arrives while it is hidden
 	// is kept and the tree is built when the dock is shown.
 	void setScan(const CodeScan::ResultPtr &scan);
-	void clearScan() { setScan(CodeScan::empty()); }
+	void clearScan();
+	// Show the names of the document's <CsFileB> entries as one group in the
+	// tree. Pass an empty list when the document has none.
+	void setEmbeddedFiles(const QStringList &names);
+	// Font size of the tree, in points; 0 keeps the application font.
+	void setFontSize(int pointSize);
 	// Give keyboard focus to the inspector's tree, for the Focus Inspector
 	// action. Showing/raising the dock itself is the caller's job.
 	void focusTree();
@@ -90,7 +95,9 @@ private:
 	TreeItem *treeItem3;
 	TreeItem *treeItem4;
 	TreeItem *treeItem5;
+	TreeItem *treeItemEmbedded = nullptr;
 
+	QStringList m_embeddedFiles;
 	CodeScan::ResultPtr m_scan = CodeScan::empty();
 	bool m_treeDirty = true;
 	int m_scopeLine = -1;

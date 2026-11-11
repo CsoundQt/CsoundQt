@@ -82,7 +82,7 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
     numChannels = 2;
     numInputChannels = 2;
 
-    useLimiter = csoundGetVersion() >= 6160;
+    useLimiter = false;
     limitValue = 1.0;
 
 	useCsoundMidi = false;

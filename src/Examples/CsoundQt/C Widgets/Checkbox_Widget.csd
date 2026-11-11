@@ -1,16 +1,9 @@
 <CsoundSynthesizer>
-<CsOptions>
-</CsOptions>
 <CsInstruments>
 
-sr = 44100
-ksmps = 64
-nchnls = 2
-0dbfs = 1
-
 instr 1
-  khipass = chnget("hipass")
-  klowpass = chnget("lowpass")
+  khipass   = chnget("hipass")
+  klowpass  = chnget("lowpass")
   kbandpass = chnget("bandpass")
   asig = noise(1, 0)
   if (khipass == 1) then
@@ -24,7 +17,8 @@ instr 1
     asig = tone(asig, 8000)
   endif
   dispfft asig*20, 1/18, 1024
-  out(asig*0.1, asig*0.1)
+  asig *= 0.1
+  out(asig, asig)
 endin
 
 instr 2  ; set checkbox values
@@ -40,12 +34,13 @@ instr 2  ; set checkbox values
   endif
 endin
 
+schedule(1, 0, 1000)
+schedule(2, 0, 1000)
+
 </CsInstruments>
-<CsScore>
-i 1 0 1000
-i 2 0 1000
-</CsScore>
 </CsoundSynthesizer>
+
+
 
 
 

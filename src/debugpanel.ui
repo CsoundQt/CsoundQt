@@ -37,11 +37,6 @@
         <property name="text">
          <string>Run</string>
         </property>
-        <property name="icon">
-         <iconset resource="icons.qrc">
-          <normaloff>:/themes/boring/gtk-media-play-ltr.png</normaloff>
-          <normalon>:/themes/boring/gtk-media-stop.png</normalon>:/themes/boring/gtk-media-play-ltr.png</iconset>
-        </property>
         <property name="checkable">
          <bool>true</bool>
         </property>
@@ -52,20 +47,12 @@
         <property name="text">
          <string>Pause</string>
         </property>
-        <property name="icon">
-         <iconset resource="icons.qrc">
-          <normaloff>:/themes/boring/gtk-media-pause.png</normaloff>:/themes/boring/gtk-media-pause.png</iconset>
-        </property>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="continueButton">
         <property name="text">
          <string>Continue</string>
-        </property>
-        <property name="icon">
-         <iconset resource="icons.qrc">
-          <normaloff>:/themes/boring/gtk-reload.png</normaloff>:/themes/boring/gtk-reload.png</iconset>
         </property>
        </widget>
       </item>
@@ -219,20 +206,12 @@ font: 10pt &quot;Courier New&quot;;</string>
         <property name="text">
          <string>New</string>
         </property>
-        <property name="icon">
-         <iconset resource="icons.qrc">
-          <normaloff>:/themes/boring/gtk-new.png</normaloff>:/themes/boring/gtk-new.png</iconset>
-        </property>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="deleteBreakpointToolButton">
         <property name="text">
          <string>Delete</string>
-        </property>
-        <property name="icon">
-         <iconset resource="icons.qrc">
-          <normaloff>:/themes/boring/gtk-close.png</normaloff>:/themes/boring/gtk-close.png</iconset>
         </property>
        </widget>
       </item>

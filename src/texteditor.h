@@ -25,6 +25,7 @@
 
 #include <QTextEdit>
 #include <QAction>
+#include <QPointer>
 #include <QUrl>
 #include <QFontMetricsF>
 
@@ -85,7 +86,6 @@ protected:
     int  m_lastkey;
     bool m_pasteHappened;
 
-
 signals:
 	void showParameterInfo();
 	void escapePressed();
@@ -118,6 +118,10 @@ public:
     void setLineAreaColors(QColor foreground, QColor background, int contrast);
     void setEditorPadding(int padding);
     void setEditorBackground(const QColor &color);
+    // Re-apply the Fusion-only scrollbar look (thin, arrow-less, rounded
+    // handle) to this editor's scrollbars. Other widget styles keep their
+    // native ones. Called by BaseView when the settings are applied.
+    void updateScrollBarStyle();
 
 public slots:
 	void markDebugLine(int line);
@@ -126,6 +130,7 @@ public slots:
 
 protected:
 	void resizeEvent(QResizeEvent *e);
+	void changeEvent(QEvent *e) override;
 
 private:
 	LineNumberArea *lineNumberArea;
@@ -136,6 +141,9 @@ private:
 
 private:
 	void updateMargins();
+	// Fills the corner between the two scrollbars with the editor background
+	// (only used with Fusion; null when not installed).
+	QPointer<QWidget> m_scrollCorner;
 
 private slots:
 	void updateLineArea(int);
@@ -176,6 +184,10 @@ public:
     void setLineNumberSizeScaling(qreal factor) {m_lineNumbersSizeFactor = factor;}
     qreal lineNumberSizeScaling() { return m_lineNumbersSizeFactor; }
     int padding() { return m_padding; }
+    // The font the line numbers are drawn with: the editor font scaled by
+    // m_lineNumbersSizeFactor. Used both for painting and for the gutter width
+    // so the two always agree.
+    QFont lineNumberFont() const;
     void setColors(QColor foreground, QColor background, int contrast) {
         m_foreground = foreground;
         m_background = background;

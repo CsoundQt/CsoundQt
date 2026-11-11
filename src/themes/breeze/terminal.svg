@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+
+<svg
+   width="32"
+   height="32"
+   viewBox="0 0 0.96 0.96"
+   fill="none"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="terminal.svg"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="true"
+     inkscape:zoom="6.1953406"
+     inkscape:cx="40.756435"
+     inkscape:cy="51.167485"
+     inkscape:current-layer="svg1">
+    <inkscape:grid
+       id="grid1"
+       units="px"
+       originx="0"
+       originy="0"
+       spacingx="0.03"
+       spacingy="0.03"
+       empcolor="#0099e5"
+       empopacity="0.30196078"
+       color="#0099e5"
+       opacity="0.14901961"
+       empspacing="5"
+       enabled="true"
+       visible="true" />
+  </sodipodi:namedview>
+  <path
+     style="fill:#000000;fill-opacity:1;stroke-width:0.0642218"
+     d="m 0,0.03 v 0 h 0.96 v 0 0.86999998 0 H 0 v 0 z M 0.096,0.12666666 V 0.80333332 H 0.864 V 0.12666666 Z"
+     id="path3" />
+  <path
+     style="fill:#000000;fill-opacity:1;stroke-width:0.0681175"
+     d="M 0.44999999,0.69666665 H 0.71999998 V 0.59999995 H 0.44999999 Z"
+     id="path2" />
+  <path
+     style="fill:#000000;fill-opacity:1;stroke-width:0.0642218"
+     d="M 0.35999999,0.44999999 0.20194111,0.29084155 0.26982331,0.22248795 0.49576315,0.45000003 0.26982331,0.67750825 0.20194111,0.60915203 Z"
+     id="path1" />
+</svg>

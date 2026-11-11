@@ -151,12 +151,12 @@ WidgetWindow::WidgetWindow(CsoundQt *mainWindow, const QString &fileName,
         return ThemedIcons::forMenu(
                     QString(":/themes/%1/%2").arg(theme, name));
     };
-    m_runAction = new QAction(themedIcon("media-play.png"),
+    m_runAction = new QAction(themedIcon("media-play.svg"),
                               tr("Run Csound"), this);
     m_runAction->setCheckable(true);
-    m_pauseAction = new QAction(themedIcon("media-pause.png"),
+    m_pauseAction = new QAction(themedIcon("media-pause.svg"),
                                 tr("Pause"), this);
-    m_stopAction = new QAction(themedIcon("media-stop.png"),
+    m_stopAction = new QAction(themedIcon("media-stop.svg"),
                                tr("Stop"), this);
     connect(m_page, &DocumentPage::stopSignal, this,
             [this]() { setPlaying(false); });
@@ -174,7 +174,7 @@ WidgetWindow::WidgetWindow(CsoundQt *mainWindow, const QString &fileName,
     controlMenu->addAction(m_stopAction);
 
     m_consoleAction = m_consoleDock->toggleViewAction();
-    m_consoleAction->setIcon(themedIcon("terminal.png"));
+    m_consoleAction->setIcon(themedIcon("terminal.svg"));
     m_consoleAction->setIconText(tr("Console"));
     QMenu *viewMenu = menuBar()->addMenu(tr("View"));
     viewMenu->addAction(m_consoleAction);
@@ -289,13 +289,13 @@ void WidgetWindow::applyTheme()
                     QString(":/themes/%1/%2").arg(theme, name));
     };
     if (m_runAction != nullptr)
-        m_runAction->setIcon(themedIcon("media-play.png"));
+        m_runAction->setIcon(themedIcon("media-play.svg"));
     if (m_pauseAction != nullptr)
-        m_pauseAction->setIcon(themedIcon("media-pause.png"));
+        m_pauseAction->setIcon(themedIcon("media-pause.svg"));
     if (m_stopAction != nullptr)
-        m_stopAction->setIcon(themedIcon("media-stop.png"));
+        m_stopAction->setIcon(themedIcon("media-stop.svg"));
     if (m_consoleAction != nullptr)
-        m_consoleAction->setIcon(themedIcon("terminal.png"));
+        m_consoleAction->setIcon(themedIcon("terminal.svg"));
     if (m_toolBar != nullptr)
         m_toolBar->update();
 }

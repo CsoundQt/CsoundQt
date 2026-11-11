@@ -44,13 +44,22 @@
 // toolbars keep CsoundQt's own artwork and follow its theme setting.
 namespace ThemedIcons {
 
-// Returns `resourcePath` (e.g. ":/themes/breeze-dark/media-play.png") as an
+// Resolve a bundled theme icon path to the SVG file that should be loaded. The
+// icon set is vector-only; a path like ".../media-play.png" is mapped to
+// ".../media-play.svg" (a path without an extension gets ".svg" appended).
+// Returns `resourcePath` unchanged when the SVG does not exist.
+QString resolvePath(const QString &resourcePath);
+
+// QIcon for a bundled theme icon, loaded from resolvePath().
+QIcon icon(const QString &resourcePath);
+
+// Returns `resourcePath` (e.g. ":/themes/breeze-dark/media-play.svg") as an
 // icon that also carries the freedesktop name matching the file name, so the
 // desktop shell can resolve it in its own theme. Returns a plain icon when
 // there is no known name for the file or the resource does not exist.
 QIcon forMenu(const QString &resourcePath);
 
-// The freedesktop icon name for a CsoundQt icon file name (e.g. "media-play.png"
+// The freedesktop icon name for a CsoundQt icon file name (e.g. "media-play.svg"
 // -> "media-playback-start"), or an empty string if there is no equivalent.
 QString freedesktopName(const QString &fileName);
 

@@ -55,6 +55,7 @@ private slots:
     void testNewStyleOpcode();
     void testEmptyScan();
     void testIncludedSymbolsNotListed();
+    void testEmbeddedFiles();
 
 private:
     QTreeWidget *tree() const
@@ -219,6 +220,34 @@ void TestInspectorView::testIncludedSymbolsNotListed()
     QCOMPARE(opcodes->childCount(), 0);
     QCOMPARE(static_cast<TreeItem *>(opcodes)->getLine(), -1);
     QCOMPARE(static_cast<TreeItem *>(tree->topLevelItem(3))->getLine(), -1);
+}
+
+void TestInspectorView::testEmbeddedFiles()
+{
+    const QString text =
+        "<CsInstruments>\n"
+        "instr 1\n"
+        "endin\n"
+        "</CsInstruments>\n"
+        "<CsScore>\n"
+        "</CsScore>\n";
+
+    m_inspector->setScan(CodeScan::scanPtr(text, CodeScan::Mode::Csd));
+    QTreeWidget *tree = this->tree();
+    QCOMPARE(tree->topLevelItemCount(), 5);
+
+    m_inspector->setEmbeddedFiles({u"a.wav"_s, u"notes.txt"_s});
+    QCOMPARE(tree->topLevelItemCount(), 6);
+    QTreeWidgetItem *embedded = tree->topLevelItem(5);
+    QCOMPARE(embedded->text(0), QString("Embedded Files"));
+    QCOMPARE(embedded->childCount(), 2);
+    QCOMPARE(embedded->child(0)->text(0), QString("a.wav"));
+    QCOMPARE(embedded->child(1)->text(0), QString("notes.txt"));
+    QCOMPARE(static_cast<TreeItem *>(embedded->child(0))->getLine(), -1);
+
+    // Removing the last entry removes the group again.
+    m_inspector->setEmbeddedFiles({});
+    QCOMPARE(tree->topLevelItemCount(), 5);
 }
 
 QTEST_MAIN(TestInspectorView)

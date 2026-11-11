@@ -44,10 +44,9 @@ chn_S "_MBrowse", 1  ; declare string channel
 ; Opcodes for using strings as arrays
 ; (see http://www.csounds.com/journal/issue13/StringsAsArrays.html)
 
-opcode StrayGetEl, ii, Sijj
+opcode StrayGetEl (Stray:S, ielindx:i, isepA:j, isepB:j):(i, i)
   ; returns the startindex and the endindex (= the first space after the element) for
   ; ielindex in String. if startindex returns -1, the element has not been found
-  Stray, ielindx, isepA, isepB xin
   ; Define the separators
   isep1 = (isepA == -1 ? 32 : isepA)
   isep2 = (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
@@ -89,7 +88,7 @@ loop:
 end: xout istartsel, iendsel
 endop
 
-opcode StrayLen, i, Sjj
+opcode StrayLen (Stray:S, isepA:j, isepB:j):i
   ; returns the number of elements in Stray. elements are defined by two separators as
   ; ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab).
   ; if just one separator is used, isep2 equals isep1
@@ -843,13 +842,17 @@ i 1 0 36000
 
 
 
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>15</x>
- <y>69</y>
- <width>1350</width>
- <height>659</height>
+ <x>0</x>
+ <y>0</y>
+ <width>1309</width>
+ <height>681</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">#efefef</bgcolor>
@@ -1359,7 +1362,7 @@ Snapshot!</text>
   <eventLine/>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>10</fontsize>
   <font/>
   <flatStyle>false</flatStyle>
@@ -1822,7 +1825,7 @@ L = Live Input,
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <value>-1</value>
+  <value>0</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomx>1.00000000</zoomx>
