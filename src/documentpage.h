@@ -119,6 +119,7 @@ public:
     void showQuickHelpAt(const QString &title, const QString &html,
                          const QPoint &globalAnchor, bool passive = false);
     QStringList getWidgetChannels();
+    QStringList getWidgetAddresses();
     // Type of a local variable at the given 1-based editor line, from the last
     // scan. Empty when the name is not a variable in that instrument/opcode.
     QString variableTypeAt(int line, const QString &name) const;

@@ -322,7 +322,7 @@ static bool isIncludeFile(const QFileInfo &file)
 // set of candidates, so it must bypass the normal identifier/opcode completion.
 struct CompletionContext
 {
-    enum Kind { None, Schedule, Channel, Path, Property, Include, Option, EnvPath };
+    enum Kind { None, Schedule, Channel, WidgetAddress, Path, Property, Include, Option, EnvPath };
     Kind kind = None;
     bool quoted = false;
     QString prefix;
@@ -372,17 +372,23 @@ static CompletionContext completionContext(const QString &textBeforeCursor)
             context.kind = CompletionContext::Schedule;
         } else if (chngetQuotedRx.match(beforeQuote).hasMatch()
                    || chnsetLegacyQuotedRx.match(beforeQuote).hasMatch()
-                   || chnsetFunctionQuotedRx.match(beforeQuote).hasMatch()
-                   || invalueQuotedRx.match(beforeQuote).hasMatch()) {
+                   || chnsetFunctionQuotedRx.match(beforeQuote).hasMatch()) {
             context.kind = CompletionContext::Channel;
+        } else if (invalueQuotedRx.match(beforeQuote).hasMatch()) {
+            // invalue can read a widget property/method with a '/' path, just
+            // like outvalue. Offer properties once the slash is present.
+            const QString prefix = textBeforeCursor.mid(quote + 1);
+            context.kind = prefix.contains(QLatin1Char('/'))
+                    ? CompletionContext::Property
+                    : CompletionContext::WidgetAddress;
         } else if (outvalueQuotedRx.match(beforeQuote).hasMatch()) {
-            // The first outvalue argument is a widget channel. Once a '/'
-            // has been typed it is an addressable widget property instead.
+            // The first outvalue argument is a widget channel or name. Once a
+            // '/' has been typed it is an addressable widget property instead.
             // This deliberately takes precedence over path completion.
             const QString prefix = textBeforeCursor.mid(quote + 1);
             context.kind = prefix.contains(QLatin1Char('/'))
                     ? CompletionContext::Property
-                    : CompletionContext::Channel;
+                    : CompletionContext::WidgetAddress;
         } else {
             // A path-like string is useful in any opcode argument, not only
             // in diskin2. Absolute paths are included as well.
@@ -2208,6 +2214,9 @@ void DocumentView::autoCompleteAtCursor(bool force) {
         } else if (context.kind == CompletionContext::Option) {
             for (const QString &option : context.candidates)
                 addContextCompletion(option, false);
+        } else if (context.kind == CompletionContext::WidgetAddress) {
+            for (const QString &address : widgetAddresses())
+                addContextCompletion(address, false);
         } else {
             for (const QString &channel : widgetChannels())
                 addContextCompletion(channel, false);
@@ -2503,10 +2512,19 @@ void DocumentView::textChanged() {
         // by TextEditor for every paste path (Ctrl+V, context menu, paste()
         // API, middle-click, drag-and-drop) and consumed here.
         const bool wasPaste = m_mainEditor->consumePaste();
-        // Only identifier characters may open/refresh the popup automatically:
-        // parentheses, operators, commas, quotes and other punctuation never
-        // do. The keyboard shortcut still invokes completion anywhere.
-        if (!wasPaste && isIdentifierInput(m_mainEditor->getLastText())) {
+        // Only identifier characters may open/refresh the popup automatically.
+        // A '/' also opens it inside a widget property path (invalue/outvalue),
+        // where the property list follows the widget name.
+        const QString lastText = m_mainEditor->getLastText();
+        bool opensCompletion = isIdentifierInput(lastText);
+        if (!opensCompletion && lastText == "/"_L1) {
+            const QTextCursor cursor = m_mainEditor->textCursor();
+            const QString beforeCursor = cursor.block().text().left(
+                        cursor.positionInBlock());
+            const CompletionContext context = completionContext(beforeCursor);
+            opensCompletion = context.kind == CompletionContext::Property;
+        }
+        if (!wasPaste && opensCompletion) {
             // autoCompleteAtCursor decides whether an open quote belongs to a
             // context-aware completion (schedule/chnget/chnset) or not.
             // With the popup already open, a shorter pause is enough: the list
@@ -4104,6 +4122,16 @@ void DocumentView::setWidgetChannelsProvider(
 
 QStringList DocumentView::widgetChannels() const {
     return m_widgetChannelsProvider ? m_widgetChannelsProvider() : m_widgetChannels;
+}
+
+void DocumentView::setWidgetAddressesProvider(
+        const std::function<QStringList()> &provider) {
+    m_widgetAddressesProvider = provider;
+}
+
+QStringList DocumentView::widgetAddresses() const {
+    return m_widgetAddressesProvider ? m_widgetAddressesProvider()
+                                     : widgetChannels();
 }
 
 void DocumentView::setWidgetPropertiesProvider(

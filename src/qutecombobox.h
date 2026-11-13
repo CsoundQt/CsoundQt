@@ -77,6 +77,8 @@ public:
 	virtual void refreshWidget();
 	virtual void applyInternalProperties();
 	virtual bool applyProperty(const QString &name);
+	QStringList transitoryProperties() const override;
+	QHash<QString, QString> propertyDescriptions() const override;
 
 protected:
 	virtual void applyProperties();
@@ -85,6 +87,8 @@ protected:
 private:
 	QString itemList();
 	void updateFlatStyle();
+	void updateMenuItemsProperty();
+	void updateCurrentItemState();
 	QStringList stringValues;
 	//    int m_size;
 	QLineEdit *text;

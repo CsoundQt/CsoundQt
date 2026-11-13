@@ -198,6 +198,9 @@ public:
     // mirror every widget change into this view.
     void setWidgetChannelsProvider(const std::function<QStringList()> &provider);
     QStringList widgetChannels() const;
+    // Channels and widget names, used by invalue/outvalue, which accept both.
+    void setWidgetAddressesProvider(const std::function<QStringList()> &provider);
+    QStringList widgetAddresses() const;
     // Properties addressable as "<channel>/<property>" for a widget.
     void setWidgetPropertiesProvider(
             const std::function<QList<WidgetPropertyInfo>(const QString &)> &provider);
@@ -506,6 +509,7 @@ private:
 	QTextDocument *m_channelLineCacheDocument = nullptr;
 	int m_channelLineCacheRevision = -1;
 	std::function<QStringList()> m_widgetChannelsProvider;
+	std::function<QStringList()> m_widgetAddressesProvider;
 	std::function<QList<WidgetPropertyInfo>(const QString &)> m_widgetPropertiesProvider;
 	std::function<QString()> m_documentDirectoryProvider;
 	std::function<QStringList()> m_includeSearchPathsProvider;

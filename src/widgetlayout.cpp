@@ -1367,23 +1367,47 @@ QString WidgetLayout::getStringForChannel(QString channelName, bool *modified)
     if (snapshot == nullptr) {
         return QString();
     }
+
+    // "<channel>/<property>" addresses a string property; "<menu>/getitem" is
+    // the menu's current-item method.
+    QString path;
+    const int slash = channelName.indexOf(QLatin1Char('/'));
+    if (slash >= 0) {
+        path = channelName.mid(slash + 1);
+        channelName = channelName.left(slash);
+    }
+
+    QuteWidget *widget = nullptr;
     auto widgets = snapshot->channelNameToWidgets.constFind(channelName);
-    if(widgets == snapshot->channelNameToWidgets.constEnd()) {
+    if (widgets != snapshot->channelNameToWidgets.constEnd()
+            && !widgets.value().isEmpty()) {
+        widget = widgets.value().constFirst();
+    }
+    if (widget == nullptr) {
         const int count = qMin(snapshot->activeWidgets, snapshot->widgets.size());
-        for (int i = 0; i < count ; i++) {
+        for (int i = 0; i < count; ++i) {
             QuteWidget *w = snapshot->widgets[i];
-            if (w->getChannelName() == channelName) {
-                return w->getStringValue();
+            if (w->getChannelName() == channelName
+                    || w->getChannel2Name() == channelName
+                    || w->getWidgetName() == channelName) {
+                widget = w;
+                break;
             }
         }
-        return QString();
-    } else if(widgets.value().isEmpty()) {
-        return QString();
-    } else {
-        auto w = widgets.value().constFirst();
-        return w->getChannelName() == channelName ? w->getStringValue() : QString();
     }
-   
+    if (widget == nullptr) {
+        return QString();
+    }
+
+    if (!path.isEmpty()) {
+        if (path.compare("getitem", Qt::CaseInsensitive) == 0
+                && widget->getWidgetTypeID() == QuteWidgetType::DROPDOWN) {
+            return widget->getStringValue();
+        }
+        const QByteArray key = "CSQT_" + path.toLatin1();
+        return widget->property(key.constData()).toString();
+    }
+    return widget->getStringValue();
 }
 
 double WidgetLayout::getValueForChannel(QString channelName, bool *modified, double notfound)

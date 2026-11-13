@@ -26,7 +26,11 @@
 
 #include <QAbstractItemView>
 #include <QPainter>
+#include <QSignalBlocker>
 #include <QStyleOptionComboBox>
+#include <QTimer>
+
+using namespace Qt::StringLiterals;
 
 // Colour properties can be QColor (file/dialog) or strings (Csound outvalue).
 static QColor menuColorFromProperty(const QVariant &value)
@@ -153,6 +157,9 @@ QuteComboBox::QuteComboBox(QWidget *parent) : QuteWidget(parent)
     connect(static_cast<QComboBox *>(m_widget), SIGNAL(currentIndexChanged(int)),
             this, SLOT(indexChanged(int)));
 	setProperty("CSQT_selectedIndex", 0);
+	setProperty("CSQT_menuitems", QString());
+	setProperty("CSQT_getitem", QString()); // method-like, read with invalue()
+	setProperty("CSQT_setitem", QString()); // method-like, written with outvalue()
 	setProperty("CSQT_randomizable", false);
 	setProperty("CSQT_randomizableGroup", 0);
 
@@ -245,6 +252,25 @@ QString QuteComboBox::getWidgetType()
 	return QString("BSBDropdown");
 }
 
+QStringList QuteComboBox::transitoryProperties() const
+{
+	// Menu methods: invalue("<menu>/getitem") returns the current item text;
+	// outvalue("<menu>/setitem", "item") selects an item by text. Neither is
+	// stored in the widget file.
+	return { u"getitem"_s, u"setitem"_s };
+}
+
+QHash<QString, QString> QuteComboBox::propertyDescriptions() const
+{
+	return {
+		{ u"menuitems"_s, tr("Comma-separated item list. Readable and writable via "
+		                     "invalue/outvalue.") },
+		{ u"getitem"_s, tr("Method: current item text, read with invalue.") },
+		{ u"setitem"_s, tr("Method: select an item by text, written with outvalue.") },
+		{ u"selectedIndex"_s, tr("Zero-based index of the current item") },
+	};
+}
+
 QString QuteComboBox::getQml()
 {
 	QString qml = QString();
@@ -304,6 +330,18 @@ QString QuteComboBox::itemList()
 	return list;
 }
 
+void QuteComboBox::updateMenuItemsProperty()
+{
+	setProperty("CSQT_menuitems", itemList());
+}
+
+void QuteComboBox::updateCurrentItemState()
+{
+	auto *combo = static_cast<QComboBox *>(m_widget);
+	m_stringValue = combo->currentText();
+	setProperty("CSQT_selectedIndex", combo->currentIndex());
+}
+
 void QuteComboBox::setText(QString text)
 {
 #ifdef  USE_WIDGET_MUTEX
@@ -315,6 +353,8 @@ void QuteComboBox::setText(QString text)
 	foreach (QString item, items) {
 		addItem(item, counter++, "");
 	}
+	updateMenuItemsProperty();
+	updateCurrentItemState();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -325,6 +365,9 @@ void QuteComboBox::clearItems()
 	m_widget->blockSignals(true);
 	static_cast<QComboBox *>(m_widget)->clear();
 	m_widget->blockSignals(false);
+	stringValues.clear();
+	updateMenuItemsProperty();
+	updateCurrentItemState();
 }
 
 void QuteComboBox::addItem(QString text, double value, QString stringvalue)
@@ -333,6 +376,7 @@ void QuteComboBox::addItem(QString text, double value, QString stringvalue)
 	static_cast<QComboBox *>(m_widget)->addItem(text, value);
 	stringValues.append(stringvalue);
 	m_widget->blockSignals(false);
+	updateMenuItemsProperty();
 }
 
 void QuteComboBox::refreshWidget()
@@ -348,12 +392,48 @@ void QuteComboBox::refreshWidget()
 	m_widget->blockSignals(true);
 	static_cast<QComboBox *>(m_widget)->setCurrentIndex(val);
 	m_widget->blockSignals(false);
+	const int current = static_cast<QComboBox *>(m_widget)->currentIndex();
+	const QString currentText = static_cast<QComboBox *>(m_widget)->currentText();
+	setProperty("CSQT_selectedIndex", current);
+	m_stringValue = currentText;
 }
 
 bool QuteComboBox::applyProperty(const QString &name)
 {
 	if (name == "CSQT_selectedIndex") {
 		setValue(property("CSQT_selectedIndex").toInt());
+		return true;
+	}
+	if (name == "CSQT_menuitems") {
+		setText(property("CSQT_menuitems").toString());
+		return true;
+	}
+	if (name == "CSQT_setitem") {
+		const QString item = property("CSQT_setitem").toString();
+		auto *combo = static_cast<QComboBox *>(m_widget);
+		const int index = combo->findText(item, Qt::MatchExactly);
+		if (index >= 0) {
+			// outvalue is handled while WidgetLayout holds widgetsMutex. A
+			// direct setCurrentIndex() would emit newValue() re-entrantly and
+			// the numeric newValue() slot would try to lock widgetsMutex again.
+			// Update the UI silently and notify Csound after this call returns.
+			{
+				QSignalBlocker blocker(combo);
+				combo->setCurrentIndex(index);
+			}
+			m_value = index;
+			updateCurrentItemState();
+			m_valueChanged = true;
+			QTimer::singleShot(0, this, [this, index]() {
+				QPair<QString, double> channelValue(m_channel, index);
+				emit newValue(channelValue);
+			});
+		} else {
+			const QString widgetId = !m_widgetName.isEmpty() ? m_widgetName
+			                                                 : m_channel;
+			emit logMessage(tr("CsoundQt warning: menu \"%1\" has no item \"%2\".\n")
+			                .arg(widgetId, item), static_cast<int>(MessageRole::Warning));
+		}
 		return true;
 	}
 	if (name == "CSQT_flatStyle" || name == "CSQT_bgcolor"
@@ -541,9 +621,10 @@ void QuteComboBox::indexChanged(int value)
 	//  qDebug() << "QuteComboBox::indexChanged" << value;
 
 #ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForRead();
+	widgetLock.lockForWrite();
 #endif
 	m_value = value;
+	m_stringValue = static_cast<QComboBox *>(m_widget)->currentText();
 	setProperty("CSQT_selectedIndex", value);
 	m_valueChanged = true;
 	QPair<QString, double> channelValue(m_channel, m_value);

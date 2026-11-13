@@ -54,6 +54,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree,
 	// The widget layout is the source of truth for chnget/chnset completion;
 	// read it on demand so a renamed channel is picked up immediately.
 	m_view->setWidgetChannelsProvider([this]() { return getWidgetChannels(); });
+	m_view->setWidgetAddressesProvider([this]() { return getWidgetAddresses(); });
 	m_view->setWidgetPropertiesProvider([this](const QString &channelOrName) {
 		return getWidgetProperties(channelOrName);
 	});
@@ -1346,6 +1347,22 @@ QStringList DocumentPage::getWidgetChannels() {
     channels.removeDuplicates();
     channels.sort(Qt::CaseInsensitive);
     return channels;
+}
+
+QStringList DocumentPage::getWidgetAddresses() {
+    QStringList addresses = getWidgetChannels();
+    if (WidgetLayout *layout = getWidgetLayout()) {
+        for (QuteWidget *widget : layout->getWidgets()) {
+            if (widget == nullptr)
+                continue;
+            const QString name = widget->getWidgetName();
+            if (!name.isEmpty())
+                addresses.append(name);
+        }
+    }
+    addresses.removeDuplicates();
+    addresses.sort(Qt::CaseInsensitive);
+    return addresses;
 }
 
 QString DocumentPage::variableTypeAt(int line, const QString &name) const
