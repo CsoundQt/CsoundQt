@@ -127,6 +127,24 @@ static void applySliderCreationDefaults(QuteWidget *widget, bool darkPanel)
     }
 }
 
+// Visual defaults for a newly created flat menu. Menu colours follow the panel
+// background; the font family comes from the global widget-font option.
+static void applyMenuCreationDefaults(QuteWidget *widget, bool darkPanel)
+{
+    if (widget == nullptr)
+        return;
+    widget->setProperty("CSQT_borderWidth", 2);
+    if (darkPanel) {
+        widget->setProperty("CSQT_bgcolor", QColor("#434343"));
+        widget->setProperty("CSQT_foreground", QColor("#eff0f1"));
+        widget->setProperty("CSQT_bordercolor", QColor("#747f81"));
+    } else {
+        widget->setProperty("CSQT_bgcolor", QColor("#eff0f1"));
+        widget->setProperty("CSQT_foreground", QColor("#34393a"));
+        widget->setProperty("CSQT_bordercolor", QColor("#adbdc2"));
+    }
+}
+
 // Visual defaults for a newly created VU meter. The accent colour follows the
 // panel background; the dark meter face is the same in both cases.
 static void applyVUMeterCreationDefaults(QuteWidget *widget, bool darkPanel)
@@ -1705,6 +1723,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
                  || nodeName == "locked"
                  || nodeName == "flatStyle"
                  || nodeName == "antialias"
+                 || nodeName == "showArrows"
                  || nodeName == "instant" ) {  // BOOL type
             QDomNode n = node.firstChild();
             if (nodeName == "randomizable") {
@@ -3296,11 +3315,18 @@ QString WidgetLayout::createNewSpinBox(int x, int y, QString channel)
     } else {
         dialog = false;
     }
-    QColor fgColor = qApp->palette().color(QPalette::WindowText);
-    QColor bgColor = qApp->palette().color(QPalette::Window);
-    uuid = createSpinBox(posx, posy, 80, 25, channel,
-                         "left", defaultWidgetFontFamily(), 10, fgColor, bgColor,
-                         false, "noborder", 0.001, 0.0);
+    const bool darkPanel = panelBackgroundIsDark();
+    const QColor fgColor(darkPanel ? QColor("#f0f0f0") : QColor("#303030"));
+    const QColor bgColor(darkPanel ? QColor("#434343") : QColor("#eff0f1"));
+    const QColor borderColor(darkPanel ? QColor("#f0f0f0") : QColor("#303030"));
+    uuid = createSpinBox(posx, posy, 60, 25, channel,
+                         "left", defaultWidgetFontFamily(), 11, fgColor, bgColor,
+                         true, "noborder", 0.01, 0.0);
+    if (QuteWidget *spinBox = m_widgets.last()) {
+        spinBox->setProperty("CSQT_bordercolor", borderColor);
+        spinBox->setProperty("CSQT_showArrows", true);
+        spinBox->applyInternalProperties();
+    }
     widgetChanged();
     if (dialog && getOpenProperties()) {
         m_widgets.last()->openProperties();
@@ -3395,6 +3421,10 @@ QString WidgetLayout::createNewMenu(int x, int y, QString channel)
         dialog = false;
     }
     uuid = createMenu(posx, posy, 80, 30, channel, "item1,item2,item3", 1);
+    QuteWidget *menu = m_widgets.last();
+    menu->setProperty("CSQT_font", defaultWidgetFontFamily());
+    applyMenuCreationDefaults(menu, panelBackgroundIsDark());
+    applyFlatStyleToNewWidget(menu);
     widgetChanged();
     if (dialog && getOpenProperties()) {
         m_widgets.last()->openProperties();

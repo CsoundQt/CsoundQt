@@ -25,6 +25,38 @@
 
 #include "qutewidget.h"
 
+#include <QComboBox>
+#include <QColor>
+
+class SelectColorButton;
+
+// Self-painted combo box used by the flat Menu widget. The closed box and its
+// popup are drawn from explicit colours instead of the application style; the
+// selected popup row uses the inverted background/foreground pair.
+class FlatComboBox : public QComboBox
+{
+public:
+	explicit FlatComboBox(QWidget *parent = nullptr);
+
+	void setFlatProperties(bool flat, const QColor &background,
+	                       const QColor &foreground, int borderWidth,
+	                       int borderRadius, const QColor &borderColor);
+
+protected:
+	void paintEvent(QPaintEvent *event) override;
+	void showPopup() override;
+
+private:
+	void applyPopupStyle();
+	bool m_flat = false;
+	QColor m_background = QColor("#eff0f1");
+	QColor m_foreground = QColor("#34393a");
+	QColor m_borderColor = QColor("#aebdc2");
+	int m_borderWidth = 1;
+	int m_borderRadius = 0;
+	QPointer<QWidget> m_styledPopup;
+};
+
 class QuteComboBox : public QuteWidget
 {
 	Q_OBJECT
@@ -52,10 +84,19 @@ protected:
 
 private:
 	QString itemList();
+	void updateFlatStyle();
 	QStringList stringValues;
 	//    int m_size;
 	QLineEdit *text;
 	QLineEdit *line;
+	QComboBox *fontComboBox = nullptr;
+	QSpinBox *fontSizeSpinBox = nullptr;
+	QCheckBox *flatStyleCheckBox = nullptr;
+	SelectColorButton *backgroundColorButton = nullptr;
+	SelectColorButton *foregroundColorButton = nullptr;
+	SelectColorButton *borderColorButton = nullptr;
+	QSpinBox *borderWidthSpinBox = nullptr;
+	QSpinBox *borderRadiusSpinBox = nullptr;
 
 private slots:
 	void indexChanged(int value);

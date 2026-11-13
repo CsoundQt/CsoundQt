@@ -329,6 +329,8 @@ e
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -532,8 +534,8 @@ e
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>border</bordermode>
-  <borderColor>#00FF00</borderColor>
-  <borderWidth>1</borderWidth>
+  <borderColor>#00ff00</borderColor>
+  <borderWidth>0</borderWidth>
   <color>#ff4c11</color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>#191919</bgcolor>
@@ -574,6 +576,14 @@ e
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
+  <font>Liberation Sans</font>
+  <fontsize>10</fontsize>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#eff0f1</bgcolor>
+  <foreground>#34393a</foreground>
+  <bordercolor>#adbdc2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>0</borderRadius>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -843,7 +853,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>-53.81718468</yValue>
   <type>fill</type>
   <pointsize>3</pointsize>
   <exponent>1.00000000</exponent>
@@ -876,7 +886,7 @@ e
   <eventLine/>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>24</fontsize>
   <font/>
   <flatStyle>true</flatStyle>
@@ -907,7 +917,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>0.36164677</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <exponent>1.00000000</exponent>
@@ -1388,8 +1398,8 @@ e
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>border</bordermode>
-  <borderColor>#00FF00</borderColor>
-  <borderWidth>1</borderWidth>
+  <borderColor>#00ff00</borderColor>
+  <borderWidth>0</borderWidth>
   <color>#009ae7</color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>#191919</bgcolor>
@@ -1440,6 +1450,7 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#f3f3f3</color>
   <bgcolor mode="background">#272727</bgcolor>
@@ -1464,7 +1475,7 @@ e
   <minimum>-60.00000000</minimum>
   <maximum>0.00000000</maximum>
   <exponent>0.42000000</exponent>
-  <value>-29.21881661</value>
+  <value>-28.53264623</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1496,6 +1507,7 @@ e
   <font>JetBrains Mono</font>
   <fontsize>16</fontsize>
   <precision>0</precision>
+  <format/>
   <padding>2</padding>
   <color>#f57c00</color>
   <bgcolor mode="nobackground">#ffffff</bgcolor>
@@ -1523,6 +1535,7 @@ e
   <font>JetBrains Mono</font>
   <fontsize>16</fontsize>
   <precision>0</precision>
+  <format/>
   <padding>5</padding>
   <color>#f57c00</color>
   <bgcolor mode="nobackground">#ffffff</bgcolor>
@@ -1677,6 +1690,14 @@ e
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
+  <font>Liberation Sans</font>
+  <fontsize>10</fontsize>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#eff0f1</bgcolor>
+  <foreground>#34393a</foreground>
+  <bordercolor>#adbdc2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>0</borderRadius>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -1732,6 +1753,7 @@ e
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
+  <padding>4</padding>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -1793,6 +1815,14 @@ e
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
+  <font>Liberation Sans</font>
+  <fontsize>10</fontsize>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#eff0f1</bgcolor>
+  <foreground>#34393a</foreground>
+  <bordercolor>#adbdc2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>0</borderRadius>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
@@ -1814,6 +1844,7 @@ e
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#f3f3f3</color>
   <bgcolor mode="background">#272727</bgcolor>
@@ -2035,12 +2066,13 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-14</label>
+  <label>-10</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
+  <format/>
   <padding>5</padding>
   <color>#55ff7f</color>
   <bgcolor mode="background">#31363b</bgcolor>
@@ -2062,12 +2094,13 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-13</label>
+  <label>-8</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
+  <format/>
   <padding>5</padding>
   <color>#55ff7f</color>
   <bgcolor mode="background">#31363b</bgcolor>
@@ -2095,6 +2128,7 @@ e
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
+  <format/>
   <padding>5</padding>
   <color>#55ff7f</color>
   <bgcolor mode="background">#31363b</bgcolor>
@@ -2122,6 +2156,7 @@ e
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
+  <format/>
   <padding>5</padding>
   <color>#55ff7f</color>
   <bgcolor mode="background">#31363b</bgcolor>
@@ -2149,6 +2184,7 @@ e
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
+  <format/>
   <padding>5</padding>
   <color>#55ff7f</color>
   <bgcolor mode="background">#31363b</bgcolor>
@@ -2176,6 +2212,7 @@ e
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
+  <format/>
   <padding>5</padding>
   <color>#55ff7f</color>
   <bgcolor mode="background">#31363b</bgcolor>
@@ -2203,6 +2240,7 @@ e
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
+  <format/>
   <padding>5</padding>
   <color>#55ff7f</color>
   <bgcolor mode="background">#31363b</bgcolor>
@@ -2230,6 +2268,7 @@ e
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>0</precision>
+  <format/>
   <padding>5</padding>
   <color>#55ff7f</color>
   <bgcolor mode="background">#31363b</bgcolor>
@@ -2257,6 +2296,7 @@ e
   <font>JetBrains Mono</font>
   <fontsize>16</fontsize>
   <precision>0</precision>
+  <format/>
   <padding>5</padding>
   <color>#f57c00</color>
   <bgcolor mode="nobackground">#ffffff</bgcolor>

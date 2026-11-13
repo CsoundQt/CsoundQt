@@ -42,11 +42,12 @@ QuteSpinBox::QuteSpinBox(QWidget* parent) : QuteText(parent)
     m_type = "editnum";
 
 	setProperty("CSQT_value", (double) 0.0);
-	setProperty("CSQT_resolution", (double) 0.1);
+	setProperty("CSQT_resolution", (double) 0.01);
 	setProperty("CSQT_minimum",(double)  -999999999999.0);
 	setProperty("CSQT_maximum", (double) 999999999999.0);
 	setProperty("CSQT_randomizable", false);
 	setProperty("CSQT_randomizableGroup", 0);
+	setProperty("CSQT_showArrows", true);
     // For numbers with fixed resolution it makes more sense to align to the right
     setProperty("CSQT_alignment", "right");
 
@@ -56,6 +57,10 @@ QuteSpinBox::QuteSpinBox(QWidget* parent) : QuteText(parent)
     setProperty("CSQT_color", QVariant());
     setProperty("CSQT_borderradius", QVariant());
     setProperty("CSQT_borderwidth", QVariant());
+    // The spin box always has a background. An unset colour means "use the
+    // panel background"; applyInternalProperties() resolves that.
+    setProperty("CSQT_bgcolor", QVariant());
+    setProperty("CSQT_bgcolormode", true);
 }
 
 QuteSpinBox::~QuteSpinBox() {}
@@ -194,6 +199,7 @@ QString QuteSpinBox::getWidgetXmlText()
 
 	s.writeTextElement("minimum", QString::number(property("CSQT_minimum").toDouble()));
 	s.writeTextElement("maximum", QString::number(property("CSQT_maximum").toDouble()));
+	s.writeTextElement("showArrows", property("CSQT_showArrows").toBool() ? "true" : "false");
 	//  s.writeTextElement("bordermode", property("CSQT_bordermode").toString());
 	//  s.writeTextElement("borderradius", QString::number(property("CSQT_borderradius").toInt()));
 	//  s.writeTextElement("borderwidth", QString::number(property("CSQT_borderwidth").toInt()));
@@ -247,6 +253,17 @@ bool QuteSpinBox::applyProperty(const QString &name)
 		m_valueChanged = true;
 		return true;
 	}
+	if (name == "CSQT_showArrows") {
+		w->setButtonSymbols(property("CSQT_showArrows").toBool()
+		                    ? QAbstractSpinBox::UpDownArrows
+		                    : QAbstractSpinBox::NoButtons);
+		return true;
+	}
+	if (name == "CSQT_color" || name == "CSQT_bgcolor"
+			|| name == "CSQT_bordercolor") {
+		applyInternalProperties();
+		return true;
+	}
 	return QuteWidget::applyProperty(name);
 }
 
@@ -285,13 +302,45 @@ void QuteSpinBox::applyInternalProperties()
 		align = Qt::AlignRight|Qt::AlignVCenter;
 	}
     w->setAlignment(align);
-	setTextColor(property("CSQT_color").value<QColor>());
+    w->setButtonSymbols(property("CSQT_showArrows").toBool()
+                        ? QAbstractSpinBox::UpDownArrows
+                        : QAbstractSpinBox::NoButtons);
 
-	double fontSize = property("CSQT_fontsize").toDouble();
+    // Resolve colours. The spin box always has a background; when the file did
+    // not provide one, use the panel surface behind it.
+    QWidget *surface = nullptr;
+    for (QWidget *ancestor = parentWidget(); ancestor != nullptr;
+         ancestor = ancestor->parentWidget()) {
+        if (ancestor->autoFillBackground()) {
+            surface = ancestor;
+            break;
+        }
+    }
+    if (surface == nullptr)
+        surface = parentWidget();
+    const QColor fallbackBg = surface != nullptr
+            ? surface->palette().color(QPalette::Window)
+            : palette().color(QPalette::Window);
+    const QColor fallbackFg = surface != nullptr
+            ? surface->palette().color(QPalette::WindowText)
+            : palette().color(QPalette::WindowText);
 
-    auto bgstr = property("CSQT_bgcolormode").toBool() ?
-        QString("background-color:")+property("CSQT_bgcolor").value<QColor>().name()+";" :
-        QString("");
+    QColor textColor = property("CSQT_color").value<QColor>();
+    if (!textColor.isValid())
+        textColor = fallbackFg;
+    setTextColor(textColor);
+
+    QColor bgColor = property("CSQT_bgcolor").value<QColor>();
+    if (!bgColor.isValid())
+        bgColor = fallbackBg;
+    QColor borderColor = property("CSQT_bordercolor").value<QColor>();
+    if (!borderColor.isValid())
+        borderColor = textColor;
+    setProperty("CSQT_bgcolor", bgColor);
+    setProperty("CSQT_bgcolormode", true);
+    setProperty("CSQT_bordercolor", borderColor);
+
+    double fontSize = property("CSQT_fontsize").toDouble();
 
 #ifdef USEFONTPIXELSIZE
     auto sheet = QString(
@@ -299,11 +348,11 @@ void QuteSpinBox::applyInternalProperties()
         "font-family: \"%1\";"
         "font-size: %2px;"
         "color: %3;"
-        "%4 }")
+        "background-color: %4; }")
         .arg(property("CSQT_font").toString())
         .arg(QString::number(fontSize))
-        .arg(property("CSQT_color").value<QColor>().name())
-        .arg(bgstr);
+        .arg(textColor.name())
+        .arg(bgColor.name());
 #else
     int new_fontSize = 0;
     int totalHeight = 0;
@@ -318,16 +367,16 @@ void QuteSpinBox::applyInternalProperties()
         "font-family: \"%1\";"
         "font-size: %2pt;"
         "color: %3;"
-        "%4 }")
+        "background-color: %4; }")
         .arg(property("CSQT_font").toString())
         .arg(QString::number(new_fontSize))
-        .arg(property("CSQT_color").value<QColor>().name())
-        .arg(bgstr);
+        .arg(textColor.name())
+        .arg(bgColor.name());
 
 #endif
     // A stylesheet color would otherwise survive setEnabled(false).
     sheet += QString(" QDoubleSpinBox:disabled { color:%1; }")
-                 .arg(disabledColor(property("CSQT_color").value<QColor>()).name());
+                 .arg(disabledColor(textColor).name());
     m_widget->setStyleSheet(sheet);
 
 #ifdef  USE_WIDGET_MUTEX
@@ -377,6 +426,36 @@ void QuteSpinBox::createPropertiesDialog()
 	if (labelPtrs.contains("text"))
 		labelPtrs["text"]->hide();
 
+	showArrowsCheckBox = new QCheckBox(tr("Show Arrows"), dialog);
+	showArrowsCheckBox->setChecked(property("CSQT_showArrows").toBool());
+	layout->addWidget(showArrowsCheckBox, 5, 1, 1, 2,
+	                  Qt::AlignLeft|Qt::AlignVCenter);
+
+	// Background is always enabled for a spin box; keep the colour control but
+	// replace the old checkbox with a plain label.
+	bg->hide();
+	label = new QLabel(tr("Background"), dialog);
+	layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
+	{
+		QColor bgValue = property("CSQT_bgcolor").value<QColor>();
+		if (!bgValue.isValid()) {
+			QWidget *surface = nullptr;
+			for (QWidget *ancestor = parentWidget(); ancestor != nullptr;
+			     ancestor = ancestor->parentWidget()) {
+				if (ancestor->autoFillBackground()) {
+					surface = ancestor;
+					break;
+				}
+			}
+			if (surface == nullptr)
+				surface = parentWidget();
+			bgValue = surface != nullptr
+			        ? surface->palette().color(QPalette::Window)
+			        : palette().color(QPalette::Window);
+		}
+		bgColor->setColor(bgValue);
+	}
+
 	borderRadius->hide();
     labelPtrs["borderRadius"]->hide();
 	borderWidth->hide();
@@ -412,9 +491,14 @@ void QuteSpinBox::applyProperties()
 	}
 	setProperty("CSQT_font", font->currentText());
 	setProperty("CSQT_fontsize", fontSize->value());
-	setProperty("CSQT_bgcolor", bgColor->palette().color(QPalette::Window));
-	setProperty("CSQT_bgcolormode", bg->isChecked());
-	setProperty("CSQT_color", textColor->palette().color(QPalette::Window));
+	QColor selectedBg = bgColor->getColor();
+	if (!selectedBg.isValid())
+		selectedBg = m_widget->palette().color(QPalette::Window);
+	setProperty("CSQT_bgcolor", selectedBg);
+	setProperty("CSQT_bgcolormode", true);
+	setProperty("CSQT_color", textColor->getColor());
+	setProperty("CSQT_bordercolor", borderColor->getColor());
+	setProperty("CSQT_showArrows", showArrowsCheckBox->isChecked());
     setProperty("CSQT_resolution", resolutionSpinBox->value());
 	setProperty("CSQT_value", text->toPlainText().toDouble());
 	setProperty("CSQT_maximum", maxSpinBox->value());

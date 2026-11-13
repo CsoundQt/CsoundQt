@@ -25,6 +25,8 @@
 
 #include "qutetext.h"
 
+#include <QDoubleSpinBox>
+
 class QuteSpinBox : public QuteText
 {
 	Q_OBJECT
@@ -62,6 +64,7 @@ private:
 	QDoubleSpinBox *minSpinBox;
 	QDoubleSpinBox *maxSpinBox;
 	QDoubleSpinBox* resolutionSpinBox;
+	QCheckBox *showArrowsCheckBox = nullptr;
 };
 
 #endif
