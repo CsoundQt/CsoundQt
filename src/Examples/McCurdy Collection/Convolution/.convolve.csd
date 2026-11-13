@@ -8,9 +8,10 @@
 
 
 ; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+; 2026: Not working
 <CsoundSynthesizer>
 <CsOptions>
---env:SADIR+= ../../SourceMaterials --env:SSDIR+=../../SourceMaterials
+--env:SADIR+=../../SourceMaterials --env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
 sr     = 44100  ; Sample rate
@@ -108,6 +109,8 @@ i 10 0 3600  ; GUI
 i 2 0 3600
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -117,11 +120,7 @@ i 2 0 3600
  <height>324</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>239</r>
-  <g>239</g>
-  <b>239</b>
- </bgcolor>
+ <bgcolor mode="background">#efefef</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
@@ -129,7 +128,9 @@ i 2 0 3600
   <width>520</width>
   <height>322</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -138,22 +139,11 @@ i 2 0 3600
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>244</r>
-   <g>248</g>
-   <b>200</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="background">#f4f8c8</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -165,7 +155,9 @@ i 2 0 3600
   <width>100</width>
   <height>30</height>
   <uuid>{487d5181-d838-4cce-9628-317fefc350cb}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -173,18 +165,14 @@ i 2 0 3600
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>ON / OFF</text>
-  <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -199,17 +187,35 @@ i 2 0 3600
   <width>500</width>
   <height>27</height>
   <uuid>{086a860c-b45b-47f3-978f-2f6daac6338b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00100000</minimum>
   <maximum>3.00000000</maximum>
-  <value>1.17553294</value>
+  <exponent>1.00000000</exponent>
+  <value>3.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f3f3f3</bgcolor>
+  <foreground>#202020</foreground>
+  <fillcolor/>
+  <bordercolor>#adadad</bordercolor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>12</thumbWidth>
+  <thumbPadding>2</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#6d6d6d</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -218,7 +224,9 @@ i 2 0 3600
   <width>100</width>
   <height>30</height>
   <uuid>{109a592d-ca0d-4b82-bf17-3b42c0ff503a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -227,17 +235,11 @@ i 2 0 3600
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -249,26 +251,23 @@ i 2 0 3600
   <width>57</width>
   <height>30</height>
   <uuid>{30f36f54-9085-46d0-8f1f-4a4b89881919}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>1.176</label>
+  <label>3.000</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <format/>
+  <padding>5</padding>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -280,17 +279,35 @@ i 2 0 3600
   <width>500</width>
   <height>27</height>
   <uuid>{de47f47d-bcea-4c1c-ab4b-a323452b1f7e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.21200000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f3f3f3</bgcolor>
+  <foreground>#202020</foreground>
+  <fillcolor/>
+  <bordercolor>#adadad</bordercolor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>12</thumbWidth>
+  <thumbPadding>2</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#6d6d6d</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -299,7 +316,9 @@ i 2 0 3600
   <width>100</width>
   <height>30</height>
   <uuid>{0200a063-5db8-4668-bc2d-2d989a083f6e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -308,17 +327,11 @@ i 2 0 3600
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -330,7 +343,9 @@ i 2 0 3600
   <width>57</width>
   <height>30</height>
   <uuid>{ab191e3a-430d-4f1d-88aa-9840342cd2d3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -340,16 +355,11 @@ i 2 0 3600
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <format/>
+  <padding>5</padding>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -361,7 +371,9 @@ i 2 0 3600
   <width>445</width>
   <height>322</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -370,22 +382,11 @@ i 2 0 3600
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>244</r>
-   <g>248</g>
-   <b>200</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="background">#f4f8c8</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -397,7 +398,9 @@ i 2 0 3600
   <width>436</width>
   <height>295</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -412,17 +415,11 @@ Furthermore there does not seem to be a noticable drop in fidelity in pconvolve.
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>65</r>
-   <g>65</g>
-   <b>65</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#414141</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -434,7 +431,9 @@ Furthermore there does not seem to be a noticable drop in fidelity in pconvolve.
   <width>57</width>
   <height>30</height>
   <uuid>{732b2008-7445-4893-a260-e68561cf8e71}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -444,16 +443,11 @@ Furthermore there does not seem to be a noticable drop in fidelity in pconvolve.
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <format/>
+  <padding>5</padding>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -465,7 +459,9 @@ Furthermore there does not seem to be a noticable drop in fidelity in pconvolve.
   <width>100</width>
   <height>30</height>
   <uuid>{b57ba536-8f28-4986-9bf7-8eb84262d8ca}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -474,17 +470,11 @@ Furthermore there does not seem to be a noticable drop in fidelity in pconvolve.
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -496,17 +486,35 @@ Furthermore there does not seem to be a noticable drop in fidelity in pconvolve.
   <width>500</width>
   <height>27</height>
   <uuid>{b8fa76b9-3d04-4156-a2f2-a413d3864da3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.46600000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f3f3f3</bgcolor>
+  <foreground>#202020</foreground>
+  <fillcolor/>
+  <bordercolor>#adadad</bordercolor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>12</thumbWidth>
+  <thumbPadding>2</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#6d6d6d</rulercolor>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
@@ -515,7 +523,9 @@ Furthermore there does not seem to be a noticable drop in fidelity in pconvolve.
   <width>120</width>
   <height>30</height>
   <uuid>{9b81a1f2-bcb8-4582-925b-9ae56def3865}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -532,6 +542,14 @@ Furthermore there does not seem to be a noticable drop in fidelity in pconvolve.
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
+  <font>Liberation Sans</font>
+  <fontsize>10</fontsize>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#eff0f1</bgcolor>
+  <foreground>#34393a</foreground>
+  <bordercolor>#adbdc2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>0</borderRadius>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
@@ -541,7 +559,9 @@ Furthermore there does not seem to be a noticable drop in fidelity in pconvolve.
   <width>120</width>
   <height>30</height>
   <uuid>{4f12eb6a-c071-4199-8bad-bfe11a917032}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -558,6 +578,14 @@ Furthermore there does not seem to be a noticable drop in fidelity in pconvolve.
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
+  <font>Liberation Sans</font>
+  <fontsize>10</fontsize>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#eff0f1</bgcolor>
+  <foreground>#34393a</foreground>
+  <bordercolor>#adbdc2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>0</borderRadius>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -567,7 +595,9 @@ Furthermore there does not seem to be a noticable drop in fidelity in pconvolve.
   <width>72</width>
   <height>30</height>
   <uuid>{62eeb695-9b83-42da-81cd-8000c232d9b9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -576,17 +606,11 @@ Furthermore there does not seem to be a noticable drop in fidelity in pconvolve.
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -598,7 +622,9 @@ Furthermore there does not seem to be a noticable drop in fidelity in pconvolve.
   <width>127</width>
   <height>30</height>
   <uuid>{f0042687-944f-4ab5-a258-074f2aca5510}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -607,17 +633,11 @@ Furthermore there does not seem to be a noticable drop in fidelity in pconvolve.
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -629,7 +649,9 @@ Furthermore there does not seem to be a noticable drop in fidelity in pconvolve.
   <width>170</width>
   <height>30</height>
   <uuid>{c678b2fb-b1ce-4b9c-b45c-c297eeab2e2e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -637,18 +659,14 @@ Furthermore there does not seem to be a noticable drop in fidelity in pconvolve.
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>808loop.wav</stringvalue>
   <text>Browse Audio File</text>
-  <image>/</image>
   <eventLine/>
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -663,26 +681,25 @@ Furthermore there does not seem to be a noticable drop in fidelity in pconvolve.
   <width>330</width>
   <height>28</height>
   <uuid>{aabef4b4-4458-4810-b57a-85c5336535f2}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
   <label>808loop.wav</label>
+  <instant>true</instant>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>239</r>
-   <g>240</g>
-   <b>241</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#eff0f1</bgcolor>
   <background>nobackground</background>
+  <bordercolor>#000000</bordercolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>0</borderradius>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -691,7 +708,9 @@ Furthermore there does not seem to be a noticable drop in fidelity in pconvolve.
   <width>330</width>
   <height>30</height>
   <uuid>{a63909ac-6fa4-41c8-a84b-ba08e76132ab}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -700,17 +719,11 @@ Furthermore there does not seem to be a noticable drop in fidelity in pconvolve.
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>

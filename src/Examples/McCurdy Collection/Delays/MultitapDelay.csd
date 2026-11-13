@@ -148,6 +148,12 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
 
 
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+
+
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -157,11 +163,7 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
  <height>552</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>239</r>
-  <g>239</g>
-  <b>239</b>
- </bgcolor>
+ <bgcolor mode="background">#efefef</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
@@ -180,24 +182,11 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>158</r>
-   <g>220</g>
-   <b>217</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#9edcd9</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -219,18 +208,14 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>Short Impulse Sound</text>
-  <image>/</image>
   <eventLine>i 1 0 0.1</eventLine>
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -241,9 +226,9 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Live_Input_Gain</objectName>
   <x>10</x>
-  <y>48</y>
+  <y>51</y>
   <width>500</width>
-  <height>27</height>
+  <height>16</height>
   <uuid>{de47f47d-bcea-4c1c-ab4b-a323452b1f7e}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -253,11 +238,27 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#838e9e</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>2</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -277,24 +278,11 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -318,22 +306,11 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -357,24 +334,11 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>158</r>
-   <g>220</g>
-   <b>217</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#9edcd9</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -392,34 +356,20 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>-----------------------------------------------------------------
-This example is an implementation of a typical multitap delay. This is a four-tap delay but as it is stereo there are actually two separate delay buffers, one for each channel with four taps on each.
+  <label>This example is an implementation of a typical multitap delay. This is a four-tap delay but as it is stereo there are actually two separate delay buffers, one for each channel with four taps on each.
 Input for this example can be either the computers live input (raise the input gain control) or a short noise impulse sound triggered by clicking the on-screen button.
 The feedback signal for the feedback loop is taken from the fourth delay tap. For this reason the delay time for the fourth tap must be longest.
 In the design of this GUI, the fourth tap is the only one where the user specifies a delay time in seconds, the other three are expressed as percentages of the fourth, thus ensuring that they can not exceed the fourth.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Liberation Sans</font>
-  <fontsize>14</fontsize>
-  <precision>3</precision>
+  <font>Noto Sans</font>
+  <fontsize>12</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>65</r>
-   <g>65</g>
-   <b>65</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
-  <bordermode>noborder</bordermode>
+  <color>#414141</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
@@ -436,28 +386,17 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.840</label>
+  <label>0.936</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -480,24 +419,11 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -505,9 +431,9 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Dry_Wet_Ratio</objectName>
   <x>10</x>
-  <y>396</y>
+  <y>399</y>
   <width>500</width>
-  <height>27</height>
+  <height>16</height>
   <uuid>{b8fa76b9-3d04-4156-a2f2-a413d3864da3}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -517,11 +443,27 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.84000000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.93600000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#838e9e</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>2</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Feedback_Ratio</objectName>
@@ -536,28 +478,17 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.872</label>
+  <label>0.910</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -565,9 +496,9 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Feedback_Ratio</objectName>
   <x>10</x>
-  <y>436</y>
+  <y>439</y>
   <width>500</width>
-  <height>27</height>
+  <height>16</height>
   <uuid>{1920efdc-fe11-4010-a22c-50efec0c27d3}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -577,11 +508,27 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.87200000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.91000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#838e9e</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>2</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -601,24 +548,11 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -626,9 +560,9 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Master_Gain</objectName>
   <x>10</x>
-  <y>476</y>
+  <y>479</y>
   <width>500</width>
-  <height>27</height>
+  <height>16</height>
   <uuid>{afe11ed2-eb11-423d-a391-3677ebeda4f1}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -638,11 +572,27 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>1.00000000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.58000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#838e9e</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>2</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Master_Gain</objectName>
@@ -657,28 +607,17 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>1.000</label>
+  <label>0.580</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -701,24 +640,11 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -728,7 +654,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <x>10</x>
   <y>88</y>
   <width>500</width>
-  <height>21</height>
+  <height>16</height>
   <uuid>{b9afae76-a81f-4aa0-bba9-b2b97eccb4cc}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -738,18 +664,34 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>100.00000000</maximum>
-  <value>31.00000000</value>
+  <exponent>1.00000000</exponent>
+  <value>15.20000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#838e9e</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>2</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Delay_Time2</objectName>
   <x>10</x>
   <y>108</y>
   <width>500</width>
-  <height>21</height>
+  <height>16</height>
   <uuid>{f152ae02-4ec2-4820-bb61-215c969c473f}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -759,18 +701,34 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <description/>
   <minimum>1.00000000</minimum>
   <maximum>100.00000000</maximum>
-  <value>39.01600000</value>
+  <exponent>1.00000000</exponent>
+  <value>28.91800000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#838e9e</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>2</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Delay_Time4</objectName>
   <x>10</x>
   <y>148</y>
   <width>500</width>
-  <height>21</height>
+  <height>16</height>
   <uuid>{da58bf25-2f86-4782-a5fa-fe106680df8b}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -780,18 +738,34 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.34600000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.28400000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#838e9e</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>2</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Delay_Time3</objectName>
   <x>10</x>
   <y>128</y>
   <width>500</width>
-  <height>21</height>
+  <height>16</height>
   <uuid>{5161fb3f-90e5-4713-bdf2-63f8ffc49b6f}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -801,11 +775,27 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <description/>
   <minimum>1.00000000</minimum>
   <maximum>100.00000000</maximum>
-  <value>36.04600000</value>
+  <exponent>1.00000000</exponent>
+  <value>39.80800000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#838e9e</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>2</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -825,24 +815,11 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -860,28 +837,17 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>31.000</label>
+  <label>15.200</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -899,28 +865,17 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>39.016</label>
+  <label>28.918</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -938,28 +893,17 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>36.046</label>
+  <label>39.808</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -977,28 +921,17 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>1.730</label>
+  <label>1.420</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1021,24 +954,11 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1061,24 +981,11 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1101,24 +1008,11 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1141,24 +1035,11 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1176,28 +1057,17 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.374</label>
+  <label>0.848</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1215,28 +1085,17 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.402</label>
+  <label>0.526</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1254,28 +1113,17 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.416</label>
+  <label>0.506</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1293,28 +1141,17 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.404</label>
+  <label>0.396</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1337,24 +1174,11 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1364,7 +1188,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <x>10</x>
   <y>230</y>
   <width>500</width>
-  <height>21</height>
+  <height>16</height>
   <uuid>{a7d138f1-c40b-4aa6-b5fc-a208d3a6f04b}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -1374,18 +1198,34 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.40200000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.52600000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#838e9e</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>2</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Tap_Gain4</objectName>
   <x>10</x>
   <y>250</y>
   <width>500</width>
-  <height>21</height>
+  <height>16</height>
   <uuid>{39cb041f-1f1e-4129-892a-50ec5f4448d3}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -1395,18 +1235,34 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.37400000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.84800000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#838e9e</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>2</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Tap_Gain2</objectName>
   <x>10</x>
   <y>210</y>
   <width>500</width>
-  <height>21</height>
+  <height>16</height>
   <uuid>{a682fdb3-33dd-4aed-9b02-f6d8deb7dc3b}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -1416,18 +1272,34 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.41600000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.50600000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#838e9e</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>2</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Tap_Gain1</objectName>
   <x>10</x>
   <y>190</y>
   <width>500</width>
-  <height>21</height>
+  <height>16</height>
   <uuid>{a93aa347-20eb-4f95-943f-9406c0525022}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -1437,11 +1309,27 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.40400000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.39600000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#838e9e</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>2</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Tap_Pan4</objectName>
@@ -1456,28 +1344,17 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.286</label>
+  <label>0.580</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1495,28 +1372,17 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.678</label>
+  <label>0.952</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1534,28 +1400,17 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.118</label>
+  <label>0.124</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1573,28 +1428,17 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.598</label>
+  <label>0.294</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1617,24 +1461,11 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1644,7 +1475,7 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <x>10</x>
   <y>332</y>
   <width>500</width>
-  <height>21</height>
+  <height>16</height>
   <uuid>{09e39593-09c7-4db4-8474-dbfd5bf4a03b}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -1654,18 +1485,34 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.67800000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.95200000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#838e9e</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>2</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Tap_Pan4</objectName>
   <x>10</x>
   <y>352</y>
   <width>500</width>
-  <height>21</height>
+  <height>16</height>
   <uuid>{d4cd6a95-bfdd-44a9-b7a0-099b3796961f}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -1675,18 +1522,34 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.28600000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.58000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#838e9e</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>2</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Tap_Pan2</objectName>
   <x>10</x>
   <y>312</y>
   <width>500</width>
-  <height>21</height>
+  <height>16</height>
   <uuid>{6e005919-a141-41cd-8823-489d821bef01}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -1696,18 +1559,34 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.11800000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.12400000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#838e9e</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>2</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Tap_Pan1</objectName>
   <x>10</x>
   <y>292</y>
   <width>500</width>
-  <height>21</height>
+  <height>16</height>
   <uuid>{43d26f0e-dc87-49fe-b43b-f093dfe376e0}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -1717,11 +1596,27 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.59800000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.29400000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#838e9e</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>2</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

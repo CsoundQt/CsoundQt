@@ -176,9 +176,9 @@ f 0 3600  ; 'Dummy' score event keeps realtime performance going for 1 hour
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Live_Input_Gain</objectName>
   <x>10</x>
-  <y>70</y>
+  <y>73</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{de47f47d-bcea-4c1c-ab4b-a323452b1f7e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -190,6 +190,19 @@ f 0 3600  ; 'Dummy' score event keeps realtime performance going for 1 hour
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -377,9 +390,9 @@ A gain control is provided to control the gain of the live input.</label>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Delay_Time</objectName>
   <x>10</x>
-  <y>109</y>
+  <y>112</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{b8fa76b9-3d04-4156-a2f2-a413d3864da3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -391,6 +404,19 @@ A gain control is provided to control the gain of the live input.</label>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
@@ -449,9 +475,9 @@ A gain control is provided to control the gain of the live input.</label>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Output_Gain</objectName>
   <x>10</x>
-  <y>200</y>
+  <y>203</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{b7e7b8ab-140d-45bf-8c52-607bbf726f46}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -463,6 +489,19 @@ A gain control is provided to control the gain of the live input.</label>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -583,9 +622,9 @@ A gain control is provided to control the gain of the live input.</label>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Mix</objectName>
   <x>10</x>
-  <y>161</y>
+  <y>164</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{ac0fd134-af88-448c-8e28-0198f559ba34}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -597,6 +636,19 @@ A gain control is provided to control the gain of the live input.</label>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>

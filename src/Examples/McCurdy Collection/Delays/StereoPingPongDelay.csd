@@ -137,6 +137,10 @@ i 2 0 -1   ; Instrument 2 (delay instrument) plays a held note
 f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
 </CsScore>
 </CsoundSynthesizer>
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -146,11 +150,7 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
  <height>200</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>239</r>
-  <g>239</g>
-  <b>239</b>
- </bgcolor>
+ <bgcolor mode="background">#efefef</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
@@ -171,21 +171,9 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <fontsize>18</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>158</r>
-   <g>220</g>
-   <b>217</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#9edcd9</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -207,18 +195,14 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>Short Impulse Sound</text>
-  <image>/</image>
   <eventLine>i 1 0 0.1</eventLine>
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -229,9 +213,9 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Live_Input_Gain</objectName>
   <x>10</x>
-  <y>69</y>
+  <y>72</y>
   <width>500</width>
-  <height>27</height>
+  <height>16</height>
   <uuid>{de47f47d-bcea-4c1c-ab4b-a323452b1f7e}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -241,11 +225,27 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00200000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#ffc7ff</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -267,21 +267,9 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <fontsize>10</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -299,28 +287,17 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.002</label>
+  <label>0.000</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -329,7 +306,7 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <objectName/>
   <x>527</x>
   <y>2</y>
-  <width>468</width>
+  <width>364</width>
   <height>310</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
   <widgetName/>
@@ -345,22 +322,10 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <fontsize>18</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>158</r>
-   <g>220</g>
-   <b>217</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
-  <bordermode>border</bordermode>
+  <color>#202020</color>
+  <bgcolor mode="background">#9edcd9</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
+  <bordermode>true</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
@@ -368,7 +333,7 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
   <objectName/>
   <x>530</x>
   <y>28</y>
-  <width>465</width>
+  <width>360</width>
   <height>279</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
   <widgetName/>
@@ -381,26 +346,14 @@ f 0 3600  ; Dummy score event keeps realtime performance going for 1 hour
 This example implements the classic ping-pong delay effect. To implement the effect a total of three delay buffers are required. One for the left channel with its own feedback loop, one for the right channel with its own feedback loop and a third one to create an initial delay offset in the right channel. The first echo we will hear will be in the left channel. The offsetting delay buffer has no feedback loop. The schematic is shown in the csd. The delay time for the offsetting delay is the same as that defined by the on-screen slider for delay time. The delay times for the other two delays with feedback are twice the value defined by the slider. When the echoes alternate the perceived delay time will be the same as that defined by the slider. The input sound for the effect in this example can be either a short synthesised impulse triggered by the button or the computer's live input controlled by the 'Input Gain' slider.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Liberation Sans</font>
-  <fontsize>14</fontsize>
+  <font>Noto Sans</font>
+  <fontsize>11</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>65</r>
-   <g>65</g>
-   <b>65</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
-  <bordermode>noborder</bordermode>
+  <color>#414141</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
@@ -417,28 +370,17 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.030</label>
+  <label>0.013</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -463,21 +405,9 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <fontsize>10</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -485,9 +415,9 @@ This example implements the classic ping-pong delay effect. To implement the eff
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Delay_Time</objectName>
   <x>10</x>
-  <y>109</y>
+  <y>112</y>
   <width>500</width>
-  <height>27</height>
+  <height>16</height>
   <uuid>{b8fa76b9-3d04-4156-a2f2-a413d3864da3}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -497,11 +427,27 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.17600000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.03800000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#fcffd5</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Mix</objectName>
@@ -516,38 +462,27 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.736</label>
+  <label>0.898</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Mix</objectName>
-  <x>10</x>
-  <y>149</y>
+  <x>8</x>
+  <y>154</y>
   <width>500</width>
-  <height>27</height>
+  <height>16</height>
   <uuid>{1920efdc-fe11-4010-a22c-50efec0c27d3}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -557,11 +492,27 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.73600000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.89800000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#55ff7f</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -583,21 +534,9 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <fontsize>10</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -605,9 +544,9 @@ This example implements the classic ping-pong delay effect. To implement the eff
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Feedback_Amount</objectName>
   <x>10</x>
-  <y>189</y>
+  <y>192</y>
   <width>500</width>
-  <height>27</height>
+  <height>16</height>
   <uuid>{afe11ed2-eb11-423d-a391-3677ebeda4f1}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -617,11 +556,27 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <description/>
   <minimum>-1.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.80400000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.95200000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#ffdecb</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Feedback_Amount</objectName>
@@ -636,28 +591,17 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.804</label>
+  <label>0.952</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -682,21 +626,9 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <fontsize>10</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -714,28 +646,17 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.844</label>
+  <label>0.382</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -760,21 +681,9 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <fontsize>10</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -782,9 +691,9 @@ This example implements the classic ping-pong delay effect. To implement the eff
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Output_Amplitude_Rescaling</objectName>
   <x>10</x>
-  <y>230</y>
+  <y>233</y>
   <width>500</width>
-  <height>27</height>
+  <height>16</height>
   <uuid>{f188ef98-8516-4b91-9a8e-7bf3a39b6227}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -794,11 +703,27 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.84400000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.38200000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#d9ffe1</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

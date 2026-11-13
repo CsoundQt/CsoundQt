@@ -7,6 +7,9 @@
 
 
 ; my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
+
+;; 2026 - This is a truly horrible and old example, no one should need to reed this
+
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
@@ -233,9 +236,9 @@ i 4 0 3600  ; Instrument 4 creates delays
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Input_Gain</objectName>
   <x>10</x>
-  <y>69</y>
+  <y>72</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{de47f47d-bcea-4c1c-ab4b-a323452b1f7e}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -250,6 +253,19 @@ i 4 0 3600  ; Instrument 4 creates delays
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -495,9 +511,9 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Pan_Depth</objectName>
   <x>10</x>
-  <y>498</y>
+  <y>501</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{b8fa76b9-3d04-4156-a2f2-a413d3864da3}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -512,6 +528,19 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Dry_Gain</objectName>
@@ -555,9 +584,9 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Dry_Gain</objectName>
   <x>10</x>
-  <y>538</y>
+  <y>541</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{1920efdc-fe11-4010-a22c-50efec0c27d3}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -572,6 +601,19 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -616,9 +658,9 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Delays_Gain</objectName>
   <x>10</x>
-  <y>578</y>
+  <y>581</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{afe11ed2-eb11-423d-a391-3677ebeda4f1}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -633,6 +675,19 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Delays_Gain</objectName>
@@ -796,9 +851,9 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Total_Time</objectName>
   <x>10</x>
-  <y>109</y>
+  <y>112</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{8fbaf396-5ad3-4de9-b5fe-cf9991b23868}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -813,6 +868,19 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Total_Time</objectName>
@@ -895,9 +963,9 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Amp_Env</objectName>
   <x>10</x>
-  <y>189</y>
+  <y>192</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{01ae35ea-9999-4552-9643-c8c7ea0bb59c}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -912,6 +980,19 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1035,9 +1116,9 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Time_Curve</objectName>
   <x>10</x>
-  <y>149</y>
+  <y>152</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{fdf77624-2665-499f-8b72-d6cbb2638117}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -1052,6 +1133,19 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Amp_Curve</objectName>
@@ -1135,9 +1229,9 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Amp_Curve</objectName>
   <x>10</x>
-  <y>230</y>
+  <y>233</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{f5f323eb-20ec-4442-976a-42ccd5860020}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -1152,13 +1246,26 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>LPF_Offset</objectName>
   <x>10</x>
-  <y>401</y>
+  <y>404</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{6cf25638-221a-46d7-a8e5-7f908964de74}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -1173,6 +1280,19 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1256,9 +1376,9 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
  <bsbObject type="BSBHSlider" version="2">
   <objectName>LPF_Resonance</objectName>
   <x>10</x>
-  <y>441</y>
+  <y>444</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{8c0f5eb2-4487-4910-b540-92f9c7977b23}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -1273,6 +1393,19 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>LPF_Resonance</objectName>
@@ -1355,9 +1488,9 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
  <bsbObject type="BSBHSlider" version="2">
   <objectName>LPF_Curve</objectName>
   <x>10</x>
-  <y>361</y>
+  <y>364</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{679f5118-a333-41e5-a3c8-ad0e4ef46216}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -1372,6 +1505,19 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1495,9 +1641,9 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
  <bsbObject type="BSBHSlider" version="2">
   <objectName>LPF_Env</objectName>
   <x>10</x>
-  <y>321</y>
+  <y>324</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{c3b93e51-b294-4779-a982-283e96fb07ea}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -1512,6 +1658,19 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>Filter</objectName>

@@ -142,6 +142,8 @@ i 10 0 3600  ; GUI
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -151,11 +153,7 @@ i 10 0 3600  ; GUI
  <height>432</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>239</r>
-  <g>239</g>
-  <b>239</b>
- </bgcolor>
+ <bgcolor mode="background">#efefef</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
@@ -174,24 +172,11 @@ i 10 0 3600  ; GUI
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>211</r>
-   <g>211</g>
-   <b>211</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#d3d3d3</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>true</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -221,20 +206,12 @@ i 10 0 3600  ; GUI
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00ff00</borderColor>
-  <color>
-   <r>208</r>
-   <g>208</g>
-   <b>208</b>
-  </color>
+  <borderWidth>0</borderWidth>
+  <color>#d0d0d0</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bgcolormode>true</bgcolormode>
+  <bgcolor>#343434</bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -254,24 +231,11 @@ i 10 0 3600  ; GUI
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -301,20 +265,12 @@ i 10 0 3600  ; GUI
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00ff00</borderColor>
-  <color>
-   <r>208</r>
-   <g>208</g>
-   <b>208</b>
-  </color>
+  <borderWidth>0</borderWidth>
+  <color>#d0d0d0</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bgcolormode>true</bgcolormode>
+  <bgcolor>#343434</bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -341,20 +297,12 @@ i 10 0 3600  ; GUI
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00ff00</borderColor>
-  <color>
-   <r>208</r>
-   <g>208</g>
-   <b>208</b>
-  </color>
+  <borderWidth>0</borderWidth>
+  <color>#d0d0d0</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bgcolormode>true</bgcolormode>
+  <bgcolor>#343434</bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -381,20 +329,12 @@ i 10 0 3600  ; GUI
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00ff00</borderColor>
-  <color>
-   <r>208</r>
-   <g>208</g>
-   <b>208</b>
-  </color>
+  <borderWidth>0</borderWidth>
+  <color>#d0d0d0</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bgcolormode>true</bgcolormode>
+  <bgcolor>#343434</bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -421,20 +361,12 @@ i 10 0 3600  ; GUI
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00ff00</borderColor>
-  <color>
-   <r>208</r>
-   <g>208</g>
-   <b>208</b>
-  </color>
+  <borderWidth>0</borderWidth>
+  <color>#d0d0d0</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bgcolormode>true</bgcolormode>
+  <bgcolor>#343434</bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -461,20 +393,12 @@ i 10 0 3600  ; GUI
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00ff00</borderColor>
-  <color>
-   <r>208</r>
-   <g>208</g>
-   <b>208</b>
-  </color>
+  <borderWidth>0</borderWidth>
+  <color>#d0d0d0</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bgcolormode>true</bgcolormode>
+  <bgcolor>#343434</bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -501,20 +425,12 @@ i 10 0 3600  ; GUI
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00ff00</borderColor>
-  <color>
-   <r>208</r>
-   <g>208</g>
-   <b>208</b>
-  </color>
+  <borderWidth>0</borderWidth>
+  <color>#d0d0d0</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bgcolormode>true</bgcolormode>
+  <bgcolor>#343434</bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -535,26 +451,18 @@ i 10 0 3600  ; GUI
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.59900000</yValue>
+  <yValue>0.83540625</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00ff00</borderColor>
-  <color>
-   <r>208</r>
-   <g>208</g>
-   <b>208</b>
-  </color>
+  <borderWidth>0</borderWidth>
+  <color>#d0d0d0</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bgcolormode>true</bgcolormode>
+  <bgcolor>#343434</bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -581,20 +489,12 @@ i 10 0 3600  ; GUI
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00ff00</borderColor>
-  <color>
-   <r>208</r>
-   <g>208</g>
-   <b>208</b>
-  </color>
+  <borderWidth>0</borderWidth>
+  <color>#d0d0d0</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bgcolormode>true</bgcolormode>
+  <bgcolor>#343434</bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -621,20 +521,12 @@ i 10 0 3600  ; GUI
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00ff00</borderColor>
-  <color>
-   <r>208</r>
-   <g>208</g>
-   <b>208</b>
-  </color>
+  <borderWidth>0</borderWidth>
+  <color>#d0d0d0</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bgcolormode>true</bgcolormode>
+  <bgcolor>#343434</bgcolor>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b1975</objectName>
@@ -654,18 +546,14 @@ i 10 0 3600  ; GUI
   <stringvalue/>
   <text>ON: GUI
 OFF: MIDI</text>
-  <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -678,7 +566,7 @@ OFF: MIDI</text>
   <x>254</x>
   <y>107</y>
   <width>341</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{086a860c-b45b-47f3-978f-2f6daac6338b}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -688,11 +576,27 @@ OFF: MIDI</text>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.41642229</value>
+  <exponent>1.00000000</exponent>
+  <value>0.36950147</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#989898</foreground>
+  <fillcolor>#00aaff</fillcolor>
+  <bordercolor>#00aaff</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>0</thumbWidth>
+  <thumbPadding>2</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#6d6d6d</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -712,32 +616,19 @@ OFF: MIDI</text>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Fund_Freq_Value</objectName>
-  <x>515</x>
-  <y>129</y>
+  <x>385</x>
+  <y>105</y>
   <width>80</width>
   <height>23</height>
   <uuid>{30f36f54-9085-46d0-8f1f-4a4b89881919}</uuid>
@@ -747,28 +638,17 @@ OFF: MIDI</text>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>61.923</label>
-  <alignment>right</alignment>
-  <valignment>top</valignment>
+  <label>198.8</label>
+  <alignment>center</alignment>
+  <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>1</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -778,7 +658,7 @@ OFF: MIDI</text>
   <x>254</x>
   <y>163</y>
   <width>341</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{de47f47d-bcea-4c1c-ab4b-a323452b1f7e}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -788,11 +668,27 @@ OFF: MIDI</text>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.31671554</value>
+  <exponent>1.00000000</exponent>
+  <value>0.12609971</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#989898</foreground>
+  <fillcolor>#00aaff</fillcolor>
+  <bordercolor>#00aaff</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>0</thumbWidth>
+  <thumbPadding>2</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#6d6d6d</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -812,32 +708,19 @@ OFF: MIDI</text>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
-  <x>515</x>
-  <y>185</y>
+  <x>385</x>
+  <y>161</y>
   <width>80</width>
   <height>23</height>
   <uuid>{ab191e3a-430d-4f1d-88aa-9840342cd2d3}</uuid>
@@ -847,29 +730,18 @@ OFF: MIDI</text>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.317</label>
-  <alignment>right</alignment>
-  <valignment>top</valignment>
+  <label>0.1</label>
+  <alignment>center</alignment>
+  <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <precision>3</precision>
+  <precision>1</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
-  <bordermode>noborder</bordermode>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
@@ -878,7 +750,7 @@ OFF: MIDI</text>
   <x>254</x>
   <y>218</y>
   <width>341</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{e4300af9-24c6-4b70-93ab-c970819d2c35}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -888,11 +760,27 @@ OFF: MIDI</text>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>1.00000000</value>
+  <exponent>1.00000000</exponent>
+  <value>1.02639296</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#989898</foreground>
+  <fillcolor>#00aaff</fillcolor>
+  <bordercolor>#00aaff</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>0</thumbWidth>
+  <thumbPadding>2</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#6d6d6d</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -912,32 +800,19 @@ OFF: MIDI</text>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Warp</objectName>
-  <x>551</x>
-  <y>242</y>
+  <x>403</x>
+  <y>218</y>
   <width>44</width>
   <height>21</height>
   <uuid>{9df2c1be-0396-40aa-bcb5-aae3a5654e10}</uuid>
@@ -947,29 +822,18 @@ OFF: MIDI</text>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>1.000</label>
-  <alignment>right</alignment>
-  <valignment>top</valignment>
+  <label>1.0</label>
+  <alignment>center</alignment>
+  <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <precision>3</precision>
+  <precision>1</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
-  <bordermode>noborder</bordermode>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
@@ -978,7 +842,7 @@ OFF: MIDI</text>
   <x>254</x>
   <y>273</y>
   <width>341</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{3fe7d249-f69e-4927-b101-437a44586552}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -988,11 +852,27 @@ OFF: MIDI</text>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00000000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.02052786</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#989898</foreground>
+  <fillcolor>#00aaff</fillcolor>
+  <bordercolor>#00aaff</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>0</thumbWidth>
+  <thumbPadding>2</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#6d6d6d</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1012,32 +892,19 @@ OFF: MIDI</text>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Rnd</objectName>
-  <x>515</x>
-  <y>295</y>
+  <x>385</x>
+  <y>272</y>
   <width>80</width>
   <height>23</height>
   <uuid>{604955bd-5b1c-457a-95ac-ff9bc1d7aaa0}</uuid>
@@ -1047,29 +914,18 @@ OFF: MIDI</text>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.000</label>
-  <alignment>right</alignment>
-  <valignment>top</valignment>
+  <label>0.0</label>
+  <alignment>center</alignment>
+  <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <precision>3</precision>
+  <precision>1</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
-  <bordermode>noborder</bordermode>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
@@ -1090,18 +946,14 @@ OFF: MIDI</text>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>Reset</text>
-  <image>/</image>
   <eventLine>i 4 0 0</eventLine>
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -1127,24 +979,11 @@ OFF: MIDI</text>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>211</r>
-   <g>211</g>
-   <b>211</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#d3d3d3</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>true</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -1168,24 +1007,11 @@ Additive synthesis is the technique whereby sine waves of different frequencies 
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>65</r>
-   <g>65</g>
-   <b>65</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#414141</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1208,24 +1034,11 @@ Additive synthesis is the technique whereby sine waves of different frequencies 
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>

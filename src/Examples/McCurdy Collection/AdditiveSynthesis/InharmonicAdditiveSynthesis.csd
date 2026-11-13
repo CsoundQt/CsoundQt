@@ -220,6 +220,8 @@ i 3 0 0      ; Init
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -229,11 +231,7 @@ i 3 0 0      ; Init
  <height>593</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>239</r>
-  <g>239</g>
-  <b>239</b>
- </bgcolor>
+ <bgcolor mode="background">#efefef</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
@@ -252,24 +250,11 @@ i 3 0 0      ; Init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>211</r>
-   <g>211</g>
-   <b>211</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#d3d3d3</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -299,20 +284,12 @@ i 3 0 0      ; Init
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00FF00</borderColor>
-  <color>
-   <r>208</r>
-   <g>208</g>
-   <b>208</b>
-  </color>
+  <borderWidth>0</borderWidth>
+  <color>#d0d0d0</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bgcolormode>true</bgcolormode>
+  <bgcolor>#343434</bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -332,24 +309,11 @@ i 3 0 0      ; Init
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -379,20 +343,12 @@ i 3 0 0      ; Init
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00FF00</borderColor>
-  <color>
-   <r>208</r>
-   <g>208</g>
-   <b>208</b>
-  </color>
+  <borderWidth>0</borderWidth>
+  <color>#d0d0d0</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bgcolormode>true</bgcolormode>
+  <bgcolor>#343434</bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -419,20 +375,12 @@ i 3 0 0      ; Init
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00FF00</borderColor>
-  <color>
-   <r>208</r>
-   <g>208</g>
-   <b>208</b>
-  </color>
+  <borderWidth>0</borderWidth>
+  <color>#d0d0d0</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bgcolormode>true</bgcolormode>
+  <bgcolor>#343434</bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -459,20 +407,12 @@ i 3 0 0      ; Init
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00FF00</borderColor>
-  <color>
-   <r>208</r>
-   <g>208</g>
-   <b>208</b>
-  </color>
+  <borderWidth>0</borderWidth>
+  <color>#d0d0d0</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bgcolormode>true</bgcolormode>
+  <bgcolor>#343434</bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -499,20 +439,12 @@ i 3 0 0      ; Init
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00FF00</borderColor>
-  <color>
-   <r>208</r>
-   <g>208</g>
-   <b>208</b>
-  </color>
+  <borderWidth>0</borderWidth>
+  <color>#d0d0d0</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bgcolormode>true</bgcolormode>
+  <bgcolor>#343434</bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -539,20 +471,12 @@ i 3 0 0      ; Init
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00FF00</borderColor>
-  <color>
-   <r>208</r>
-   <g>208</g>
-   <b>208</b>
-  </color>
+  <borderWidth>0</borderWidth>
+  <color>#d0d0d0</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bgcolormode>true</bgcolormode>
+  <bgcolor>#343434</bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -579,20 +503,12 @@ i 3 0 0      ; Init
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00FF00</borderColor>
-  <color>
-   <r>208</r>
-   <g>208</g>
-   <b>208</b>
-  </color>
+  <borderWidth>0</borderWidth>
+  <color>#d0d0d0</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bgcolormode>true</bgcolormode>
+  <bgcolor>#343434</bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -613,26 +529,18 @@ i 3 0 0      ; Init
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.06700000</yValue>
+  <yValue>0.52482812</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00FF00</borderColor>
-  <color>
-   <r>208</r>
-   <g>208</g>
-   <b>208</b>
-  </color>
+  <borderWidth>0</borderWidth>
+  <color>#d0d0d0</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bgcolormode>true</bgcolormode>
+  <bgcolor>#343434</bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -659,20 +567,12 @@ i 3 0 0      ; Init
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00FF00</borderColor>
-  <color>
-   <r>208</r>
-   <g>208</g>
-   <b>208</b>
-  </color>
+  <borderWidth>0</borderWidth>
+  <color>#d0d0d0</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bgcolormode>true</bgcolormode>
+  <bgcolor>#343434</bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -699,20 +599,12 @@ i 3 0 0      ; Init
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00FF00</borderColor>
-  <color>
-   <r>208</r>
-   <g>208</g>
-   <b>208</b>
-  </color>
+  <borderWidth>0</borderWidth>
+  <color>#d0d0d0</color>
   <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bgcolormode>true</bgcolormode>
+  <bgcolor>#343434</bgcolor>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b7712</objectName>
@@ -732,18 +624,14 @@ i 3 0 0      ; Init
   <stringvalue/>
   <text>ON  : GUI
 OFF : MIDI</text>
-  <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -756,7 +644,7 @@ OFF : MIDI</text>
   <x>92</x>
   <y>334</y>
   <width>440</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{086a860c-b45b-47f3-978f-2f6daac6338b}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -766,11 +654,27 @@ OFF : MIDI</text>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.49623450</value>
+  <exponent>1.00000000</exponent>
+  <value>0.39772727</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f3f3f3</bgcolor>
+  <foreground>#7a7a7a</foreground>
+  <fillcolor>#fffcd0</fillcolor>
+  <bordercolor>#adadad</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#6d6d6d</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -790,24 +694,11 @@ OFF : MIDI</text>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -825,28 +716,17 @@ OFF : MIDI</text>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>436.998</label>
+  <label>236.879</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -856,7 +736,7 @@ OFF : MIDI</text>
   <x>92</x>
   <y>372</y>
   <width>440</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{de47f47d-bcea-4c1c-ab4b-a323452b1f7e}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -866,11 +746,27 @@ OFF : MIDI</text>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.30000000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.51363636</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f3f3f3</bgcolor>
+  <foreground>#7a7a7a</foreground>
+  <fillcolor>#fffcd0</fillcolor>
+  <bordercolor>#adadad</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#6d6d6d</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -890,24 +786,11 @@ OFF : MIDI</text>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -925,28 +808,17 @@ OFF : MIDI</text>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.300</label>
+  <label>0.514</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -969,24 +841,11 @@ OFF : MIDI</text>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>211</r>
-   <g>211</g>
-   <b>211</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#d3d3d3</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -1012,24 +871,11 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>65</r>
-   <g>65</g>
-   <b>65</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#414141</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1052,24 +898,11 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1092,24 +925,11 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1132,24 +952,11 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1172,24 +979,11 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -1210,21 +1004,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.0001</minimum>
   <maximum>8</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.0001</value>
+  <value>0.003</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack2</objectName>
@@ -1242,21 +1029,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.0001</minimum>
   <maximum>8</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.0001</value>
+  <value>0.003</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack4</objectName>
@@ -1274,21 +1054,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.0001</minimum>
   <maximum>8</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.0001</value>
+  <value>0.003</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack3</objectName>
@@ -1306,21 +1079,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.0001</minimum>
   <maximum>8</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.0001</value>
+  <value>0.003</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack7</objectName>
@@ -1338,21 +1104,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.0001</minimum>
   <maximum>8</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.0001</value>
+  <value>0.003</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack8</objectName>
@@ -1370,21 +1129,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.0001</minimum>
   <maximum>8</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.0001</value>
+  <value>0.003</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack6</objectName>
@@ -1402,21 +1154,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.0001</minimum>
   <maximum>8</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.0001</value>
+  <value>0.003</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack5</objectName>
@@ -1434,21 +1179,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.0001</minimum>
   <maximum>8</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.0001</value>
+  <value>0.003</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack10</objectName>
@@ -1466,21 +1204,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.0001</minimum>
   <maximum>8</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.0001</value>
+  <value>0.003</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack9</objectName>
@@ -1498,21 +1229,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.0001</minimum>
   <maximum>8</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.0001</value>
+  <value>0.003</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Ratio9</objectName>
@@ -1530,19 +1254,12 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.125</minimum>
   <maximum>15</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
   <value>11.0343</value>
  </bsbObject>
@@ -1562,19 +1279,12 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.125</minimum>
   <maximum>15</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
   <value>12.0252</value>
  </bsbObject>
@@ -1594,19 +1304,12 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.125</minimum>
   <maximum>15</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
   <value>4.01602</value>
  </bsbObject>
@@ -1626,19 +1329,12 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.125</minimum>
   <maximum>15</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
   <value>5.18078</value>
  </bsbObject>
@@ -1658,19 +1354,12 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.125</minimum>
   <maximum>15</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
   <value>7.75515</value>
  </bsbObject>
@@ -1690,19 +1379,12 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.125</minimum>
   <maximum>15</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
   <value>6.43707</value>
  </bsbObject>
@@ -1722,19 +1404,12 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.125</minimum>
   <maximum>15</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
@@ -1754,19 +1429,12 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.125</minimum>
   <maximum>15</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
   <value>2.93135</value>
  </bsbObject>
@@ -1786,19 +1454,12 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.125</minimum>
   <maximum>15</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
   <value>1.23112</value>
  </bsbObject>
@@ -1818,19 +1479,12 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.125</minimum>
   <maximum>15</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
   <value>0.622426</value>
  </bsbObject>
@@ -1850,21 +1504,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>8</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.001</value>
+  <value>0.01</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release10</objectName>
@@ -1882,21 +1529,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>8</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.001</value>
+  <value>0.005</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release5</objectName>
@@ -1914,21 +1554,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>8</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.001</value>
+  <value>0.25</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release6</objectName>
@@ -1946,21 +1579,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>8</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.001</value>
+  <value>0.1</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release8</objectName>
@@ -1978,21 +1604,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>8</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.001</value>
+  <value>0.02</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release7</objectName>
@@ -2010,21 +1629,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>8</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.001</value>
+  <value>0.04</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release3</objectName>
@@ -2042,21 +1654,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>8</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.001</value>
+  <value>0.5</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release4</objectName>
@@ -2074,21 +1679,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>8</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.001</value>
+  <value>0.32</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release2</objectName>
@@ -2106,21 +1704,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>8</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.001</value>
+  <value>0.4</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release1</objectName>
@@ -2138,21 +1729,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>8</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.001</value>
+  <value>0.3</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay1</objectName>
@@ -2170,21 +1754,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>30</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.001</value>
+  <value>4.5</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay2</objectName>
@@ -2202,21 +1779,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>30</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.001</value>
+  <value>7.22</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay4</objectName>
@@ -2234,21 +1804,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>30</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.001</value>
+  <value>9.42</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay3</objectName>
@@ -2266,21 +1829,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>30</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.001</value>
+  <value>9.26</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay7</objectName>
@@ -2298,21 +1854,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>30</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.001</value>
+  <value>4.5</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay8</objectName>
@@ -2330,21 +1879,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>30</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.001</value>
+  <value>2.22</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay6</objectName>
@@ -2362,21 +1904,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>30</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.001</value>
+  <value>4.98</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay5</objectName>
@@ -2394,21 +1929,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>30</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.001</value>
+  <value>8.7</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay10</objectName>
@@ -2426,21 +1954,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>30</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.001</value>
+  <value>1.34</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay9</objectName>
@@ -2458,21 +1979,14 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>0.00010000</resolution>
   <minimum>0.001</minimum>
   <maximum>30</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>0.001</value>
+  <value>2.42</value>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

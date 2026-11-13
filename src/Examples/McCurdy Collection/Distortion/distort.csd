@@ -137,9 +137,9 @@ i 1 0 3600  ; GUI
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Distortion_Amount</objectName>
   <x>8</x>
-  <y>43</y>
+  <y>46</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{de47f47d-bcea-4c1c-ab4b-a323452b1f7e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -151,6 +151,19 @@ i 1 0 3600  ; GUI
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -309,9 +322,9 @@ An output gain control can be used to compensate for a loss in power when half p
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Half_Point</objectName>
   <x>8</x>
-  <y>83</y>
+  <y>86</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{8fbaf396-5ad3-4de9-b5fe-cf9991b23868}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -323,6 +336,19 @@ An output gain control can be used to compensate for a loss in power when half p
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Half_Point_Value</objectName>
@@ -519,9 +545,9 @@ An output gain control can be used to compensate for a loss in power when half p
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Output_Gain</objectName>
   <x>8</x>
-  <y>166</y>
+  <y>169</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{1cc8abab-d4c4-4e67-8bb5-ecff7667fe2e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -533,6 +559,19 @@ An output gain control can be used to compensate for a loss in power when half p
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>

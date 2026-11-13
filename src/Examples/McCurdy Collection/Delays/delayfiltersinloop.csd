@@ -213,9 +213,9 @@ f 0 3600  ; 'Dummy' score event keeps realtime performance going for 1 hour
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Live_Input_Gain</objectName>
   <x>10</x>
-  <y>45</y>
+  <y>48</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{de47f47d-bcea-4c1c-ab4b-a323452b1f7e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -227,6 +227,19 @@ f 0 3600  ; 'Dummy' score event keeps realtime performance going for 1 hour
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -415,9 +428,9 @@ These were frequently used in Dub Reggae. In this example the user can choose be
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Delay_Time</objectName>
   <x>10</x>
-  <y>88</y>
+  <y>91</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{b8fa76b9-3d04-4156-a2f2-a413d3864da3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -429,6 +442,19 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
@@ -487,9 +513,9 @@ These were frequently used in Dub Reggae. In this example the user can choose be
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Output_Amplitude_Rescaling</objectName>
   <x>10</x>
-  <y>217</y>
+  <y>220</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{b7e7b8ab-140d-45bf-8c52-607bbf726f46}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -501,6 +527,19 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -621,9 +660,9 @@ These were frequently used in Dub Reggae. In this example the user can choose be
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Mix</objectName>
   <x>10</x>
-  <y>131</y>
+  <y>134</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{ac0fd134-af88-448c-8e28-0198f559ba34}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -635,6 +674,19 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Portamento_Time</objectName>
@@ -697,9 +749,9 @@ These were frequently used in Dub Reggae. In this example the user can choose be
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Portamento_Time</objectName>
   <x>10</x>
-  <y>260</y>
+  <y>263</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{432d4976-cb71-4373-943b-6378da54ddb5}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -711,13 +763,26 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Feedback_Amount</objectName>
   <x>10</x>
-  <y>174</y>
+  <y>177</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{3e2b62e8-f887-4073-8258-caac477a80b0}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -729,6 +794,19 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -791,9 +869,9 @@ These were frequently used in Dub Reggae. In this example the user can choose be
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Low_Pass_Filter_Cutoff</objectName>
   <x>10</x>
-  <y>346</y>
+  <y>349</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{7a2faf9c-eae1-4f36-8c04-c3079903912d}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -805,6 +883,19 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -925,9 +1016,9 @@ These were frequently used in Dub Reggae. In this example the user can choose be
  <bsbObject type="BSBHSlider" version="2">
   <objectName>High_Pass_Filter_Cutoff</objectName>
   <x>10</x>
-  <y>303</y>
+  <y>306</y>
   <width>500</width>
-  <height>27</height>
+  <height>20</height>
   <uuid>{25c8b61d-77ce-4cdd-97e2-44086cffb042}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -939,6 +1030,19 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <rulercolor>#aebcd2</rulercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <rulermode>hide</rulermode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
