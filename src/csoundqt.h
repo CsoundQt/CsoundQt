@@ -598,6 +598,7 @@ private:
 	QAction *pasteAct;
 	QAction *duplicateAct;
 	QAction *toggleLockedWidgetAct;
+	QAction *newWidgetAct = nullptr;
 	QAction *evaluateAct;
 	QAction *selectInstrOpcodeAct;
 	QAction *getToInAct;

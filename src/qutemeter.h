@@ -95,9 +95,8 @@ private:
 	QDoubleSpinBox* m_yMinBox;
 	QDoubleSpinBox* m_yMaxBox;
     QCheckBox *flatCheckBox;
-    QCheckBox *borderCheckBox;
-    QCheckBox *bgColorCheckBox;
     QDoubleSpinBox *exponentSpinBox;
+    QSpinBox *borderWidthSpinBox;
 
 	double m_xMin = 0.0;
 	double m_xMax = 1.0;
@@ -130,13 +129,8 @@ public:
 	void setColor(QColor color);
     void setBgColor(QColor color);
     void setBorderColor(QColor color);
+    void setBorderWidth(int width);
     void showBackground(bool show);
-    void showBorder(bool show) {
-        if(show)
-            m_border->show();
-        else
-            m_border->hide();
-    }
 
     void setWidgetGeometry(int x,int y,int width,int height);
 
@@ -166,6 +160,7 @@ protected:
 
 private:
     
+    void updateBorderRect();
     
     enum class Axis { X, Y, Both };
     
@@ -182,6 +177,7 @@ private:
 	int m_pointSize;
 	bool m_mouseDown;
     bool m_showBackground;
+    int m_borderWidth = 1;
     QColor m_bgcolor;
 
 	QGraphicsScene* m_scene;

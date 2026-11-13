@@ -57,6 +57,11 @@ public:
 	virtual void setValue(double);  // These should only be reimplemented if something special needs to be done with the value.
 	virtual void setValue2(double);
 	virtual void setValue(QString);
+	// Value captured when the document was opened (or the widget created).
+	// Ctrl-clicking a widget restores this value.
+	void setDefaultValue(double value) { m_defaultValue = value; }
+	double defaultValue() const { return m_defaultValue; }
+	void resetToDefault();
 	virtual void setMidiValue(int value);
 	virtual void setMidiValue2(int value);
 	virtual bool acceptsMidi() {return false;}
@@ -181,6 +186,7 @@ protected:
 	QDialog *dialog;
 	QGridLayout *layout;  // For preference dialog
 	double m_value, m_value2;
+	double m_defaultValue = 0.0;
 	QString m_stringValue;
 	QString m_channel, m_channel2;
 	int m_midicc, m_midichan;

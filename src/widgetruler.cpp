@@ -193,17 +193,44 @@ int WidgetRuler::decimalsForStep(double step)
 	return 9;
 }
 
+QVector<double> WidgetRuler::dbMajorTicks()
+{
+	return { -120.0, -100.0, -90.0, -80.0, -70.0, -60.0, -50.0, -40.0,
+	         -30.0, -24.0, -20.0, -16.0, -12.0, -9.0, -6.0, -3.0,
+	         0.0, 3.0, 6.0, 9.0, 12.0, 18.0, 24.0, 30.0, 36.0, 42.0, 48.0 };
+}
+
+QString WidgetRuler::dbLabel(double db)
+{
+	// Ruler labels drop the minus sign and mark positive values with '+'.
+	const double a = qAbs(db);
+	const QString magnitude = (a == qRound(a)) ? QString::number(qRound(a))
+	                                            : QString::number(a, 'f', 1);
+	if (db > 0.0) {
+		return u"+"_s + magnitude;
+	}
+	return magnitude; // negative sign dropped, zero stays "0"
+}
+
 void WidgetRuler::draw(QPainter &painter, const Geometry &geometry, Mode mode,
                        const QColor &color, const ValueMapping &mapping,
                        const ValueFormatter &formatter,
                        const QVector<double> &candidates,
                        const QVector<double> &alwaysLabel,
                        const MinorGenerator &minorGenerator,
-                       double majorStep, int minorSubdivisions)
+                       double majorStep, int minorSubdivisions,
+                       bool discreteMinorTicks)
 {
 	if (!geometry.valid || mode == Hide) {
 		return;
 	}
+
+	// Rulers are drawn at pixel coordinates and must stay crisp. The slider
+	// paints with antialiasing for its rounded body, while the VU meter turns
+	// it off globally; disable it here so both widgets render identical ticks
+	// and labels regardless of their caller's painter state.
+	painter.save();
+	painter.setRenderHint(QPainter::Antialiasing, false);
 
 	const bool vertical = geometry.vertical;
 	const QRectF &full = geometry.full;
@@ -354,40 +381,72 @@ void WidgetRuler::draw(QPainter &painter, const Geometry &geometry, Mode mode,
 	} else {
 		// Candidate-based behaviour (used by the VU meter's dB scale).
 		if (mode == Full && labelled.size() > 1) {
-			QVector<double> minor;
-			for (int i = 0; i + 1 < labelled.size(); ++i) {
-				const double a = labelled[i];
-				const double b = labelled[i + 1];
-				if (minorGenerator) {
-					minor += minorGenerator(a, b);
-				} else {
-					for (int j = 1; j < 5; ++j) {
-						minor << a + (b - a) * j / 5.0;
+			if (discreteMinorTicks) {
+				// Legacy dB/VU ruler: use regular integer dB steps between two
+				// labelled values, choosing the finest divisor that keeps the
+				// ticks at least 8 pixels apart. This must stay separate from
+				// the adaptive, equal-pixel subdivisions used by the slider.
+				const double minTickSpacing = 8.0;
+				for (int i = 0; i + 1 < labelled.size(); ++i) {
+					const double a = labelled[i];
+					const double b = labelled[i + 1];
+					const int gapDb = qRound(b - a);
+					if (gapDb <= 1 || qAbs((b - a) - gapDb) > 1e-6) {
+						continue;
+					}
+					int step = 0;
+					for (int s = 1; s < gapDb; ++s) {
+						if (gapDb % s != 0) {
+							continue;
+						}
+						if (qAbs(tickPos(a + s) - tickPos(a)) >= minTickSpacing) {
+							step = s;
+							break;
+						}
+					}
+					if (step > 0) {
+						for (double value = a + step; value < b - 1e-6;
+						     value += step) {
+							drawTickAt(tickPos(value), 2);
+						}
 					}
 				}
-			}
-			std::sort(minor.begin(), minor.end());
+			} else {
+				QVector<double> minor;
+				for (int i = 0; i + 1 < labelled.size(); ++i) {
+					const double a = labelled[i];
+					const double b = labelled[i + 1];
+					if (minorGenerator) {
+						minor += minorGenerator(a, b);
+					} else {
+						for (int j = 1; j < 5; ++j) {
+							minor << a + (b - a) * j / 5.0;
+						}
+					}
+				}
+				std::sort(minor.begin(), minor.end());
 
-			const double minTickSpacing = 8.0;
-			double lastTick = -1e9;
-			for (double value : minor) {
-				if (value <= mapping.minimum + epsilon
-				        || value >= mapping.maximum - epsilon) {
-					continue;
-				}
-				const double t = tickPos(value);
-				bool nearLabel = false;
-				for (double p : labelledPos) {
-					if (qAbs(t - p) < 1.0) {
-						nearLabel = true;
-						break;
+				const double minTickSpacing = 8.0;
+				double lastTick = -1e9;
+				for (double value : minor) {
+					if (value <= mapping.minimum + epsilon
+					        || value >= mapping.maximum - epsilon) {
+						continue;
 					}
+					const double t = tickPos(value);
+					bool nearLabel = false;
+					for (double p : labelledPos) {
+						if (qAbs(t - p) < 1.0) {
+							nearLabel = true;
+							break;
+						}
+					}
+					if (nearLabel || qAbs(t - lastTick) < minTickSpacing) {
+						continue;
+					}
+					drawTickAt(t, 2);
+					lastTick = t;
 				}
-				if (nearLabel || qAbs(t - lastTick) < minTickSpacing) {
-					continue;
-				}
-				drawTickAt(t, 2);
-				lastTick = t;
 			}
 		}
 
@@ -419,4 +478,6 @@ void WidgetRuler::draw(QPainter &painter, const Geometry &geometry, Mode mode,
 			}
 		}
 	}
+
+	painter.restore();
 }

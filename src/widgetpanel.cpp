@@ -56,6 +56,9 @@ void WidgetPanel::addWidgetLayout(WidgetLayout *w)
 	scrollArea->setWidget(w);
 	scrollArea->setAutoFillBackground(true);
     scrollArea->setBackgroundRole(QPalette::Window);
+	// Empty panel background belongs to the viewport, not to the (smaller)
+	// contained layout. Forward its double click to the New Widget palette.
+	scrollArea->viewport()->installEventFilter(new WidgetLayoutViewportFilter(w));
 	m_stack->addWidget(scrollArea);
 	m_stack->setFocusProxy(w);
 	scrollArea->setFocusProxy(w);

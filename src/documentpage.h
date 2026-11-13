@@ -295,6 +295,8 @@ public slots:
 	void sendCodeToEngine(QString code);
 	//Passed directly to widget layout
 	void setWidgetEditMode(bool active);
+	void updateWidgetToolbar();
+	void updateWidgetScrollBars();
 	// Offline render: stop drawing widgets while keeping their values flowing.
 	void setWidgetDrawingEnabled(bool enabled);
 	void setWidgetFrameColors(const QColor &unselected, const QColor &selected);

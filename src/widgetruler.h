@@ -78,6 +78,14 @@ public:
 	// Number of decimals needed to print values spaced by `step`.
 	static int decimalsForStep(double step);
 
+	// The dB values that DAW-style meters commonly label (finer near 0 dB).
+	// Shared by the VU meter and the slider's dB ruler so both show the same
+	// major ticks.
+	static QVector<double> dbMajorTicks();
+	// Format a dB value for a ruler label: the negative sign is dropped, zero
+	// stays "0" and positive values get a '+' prefix.
+	static QString dbLabel(double db);
+
 	// Draw the ruler ticks and labels. `candidates` are the possible major tick
 	// values; the minimum and maximum are added automatically. Values listed in
 	// `alwaysLabel` are labelled even if they are close to another label. The
@@ -86,15 +94,20 @@ public:
 	// interval (the minimum and maximum are added as well). Minor ticks then
 	// subdivide each interval into `minorSubdivisions` equal parts; an interval
 	// whose minor ticks would be closer than 5 pixels is left without them.
-	// When `majorStep` is zero the caller's candidate values are used instead
-	// (the VU meter's dB scale).
+	// When `majorStep` is zero the caller's candidate values are used instead.
+	//
+	// `discreteMinorTicks` selects the legacy dB-style minor ticks: between two
+	// labelled values, use regular integer steps and pick the finest divisor
+	// that keeps at least 8 pixels between ticks. This is intentionally
+	// separate from the adaptive subdivisions used by the flat slider.
 	static void draw(QPainter &painter, const Geometry &geometry, Mode mode,
 	                 const QColor &color, const ValueMapping &mapping,
 	                 const ValueFormatter &formatter,
 	                 const QVector<double> &candidates,
 	                 const QVector<double> &alwaysLabel = {},
 	                 const MinorGenerator &minorGenerator = {},
-	                 double majorStep = 0.0, int minorSubdivisions = 0);
+	                 double majorStep = 0.0, int minorSubdivisions = 0,
+	                 bool discreteMinorTicks = false);
 };
 
 #endif // WIDGETRULER_H

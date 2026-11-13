@@ -25,11 +25,9 @@
 #include "qutebutton.h"
 #include "bundledfonts.h"
 #include "selectcolorbutton.h"
-#include "widgetlayout.h"
 
-#include <QDir>
-#include <QFileInfo>
 #include <QPainter>
+#include <QSettings>
 using namespace Qt::StringLiterals;
 
 // ---------------------------------------------------------------------------
@@ -85,11 +83,15 @@ void QutePushButton::paintEvent(QPaintEvent *event)
 	painter.drawText(rect(), Qt::AlignCenter | Qt::TextWordWrap, text());
 }
 
-// Pictorial buttons always use the native rendering; the flat style only
-// applies to text buttons.
-static bool isPictButtonType(const QString &type)
+// Older files may still contain pictorial button types. Images are no longer
+// supported, so keep them working by treating them as their text equivalents.
+static QString normalizedButtonType(const QString &type)
 {
-	return type == "pictevent" || type == "pictvalue" || type == "pict";
+	if (type == "pictevent")
+		return "event";
+	if (type == "pictvalue" || type == "pict")
+		return "value";
+	return type;
 }
 
 // Fill a combo box with the bundled font families, previewing each entry in its
@@ -149,7 +151,6 @@ QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
 	setProperty("CSQT_pressedValue", 1.0);
 	setProperty("CSQT_stringvalue", "");
 	setProperty("CSQT_text", "");
-	setProperty("CSQT_image", "");
 	setProperty("CSQT_eventLine", "");
 	setProperty("CSQT_latch", false);
 	setProperty("CSQT_momentaryMidiButton", false); // used for latched button if bound to MIDI controller
@@ -320,7 +321,7 @@ QString QuteButton::getQml()
 	}
 
 
-	if (type == "event" || type == "pictevent") {
+	if (type == "event" || type == "value") {
 		QString eventLine = property("CSQT_eventLine").toString();
         QString turnOffLine = QString();
 		if (property("CSQT_latch").toBool() && eventLine.size() > 0) {
@@ -377,7 +378,6 @@ QString QuteButton::getWidgetXmlText()
 	s.writeTextElement("pressedValue", QString::number(m_value,'f', 8));
 	s.writeTextElement("stringvalue", m_stringValue);
 	s.writeTextElement("text", property("CSQT_text").toString());
-	s.writeTextElement("image", property("CSQT_image").toString());
 	s.writeTextElement("eventLine", property("CSQT_eventLine").toString());
 	s.writeTextElement("latch", property("CSQT_latch").toString());
 	s.writeTextElement("momentaryMidiButton", property("CSQT_momentaryMidiButton").toString());
@@ -415,8 +415,7 @@ void QuteButton::applyProperties()
 	}
 	setProperty("CSQT_eventLine", eventLine);
     setProperty("CSQT_text", text->toPlainText());
-	setProperty("CSQT_image", storedImagePath(filenameLineEdit->text()));
-	setProperty("CSQT_type", typeComboBox->currentText());
+	setProperty("CSQT_type", typeComboBox->currentData().toString());
 	setProperty("CSQT_pressedValue", valueBox->value());
 	setProperty("CSQT_latch", latchCheckBox->isChecked());
 	setProperty("CSQT_momentaryMidiButton", useMomentaryMidiButtonCheckBox->isChecked());
@@ -463,12 +462,11 @@ void QuteButton::createPropertiesDialog()
 	label->setText("Type");
 	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	typeComboBox = new QComboBox(dialog);
-	typeComboBox->addItem("event");
-	typeComboBox->addItem("value");
-	typeComboBox->addItem("pictevent");
-	typeComboBox->addItem("pictvalue");
-	typeComboBox->addItem("pict");
-	typeComboBox->setCurrentIndex(typeComboBox->findText(property("CSQT_type").toString()));
+	typeComboBox->addItem(tr("Event"), "event");
+	typeComboBox->addItem(tr("Value"), "value");
+	const int currentType = typeComboBox->findData(
+	            normalizedButtonType(property("CSQT_type").toString()));
+	typeComboBox->setCurrentIndex(currentType >= 0 ? currentType : 0);
 	layout->addWidget(typeComboBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
 	label = new QLabel(dialog);
@@ -483,6 +481,36 @@ void QuteButton::createPropertiesDialog()
 	valueBox->setDecimals(4);
 	layout->addWidget(valueBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
 	++row;
+
+	label = new QLabel(dialog);
+	label->setText("Event");
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+	line = new QLineEdit(dialog);
+	line->setMinimumWidth(320);
+	line->setText(property("CSQT_eventLine").toString());
+	{
+		// Score events are code, so use the same monospaced family as the editor.
+		QSettings settings("csoundqt", "csoundqt");
+		settings.beginGroup("Options");
+		settings.beginGroup("Editor");
+		const QString editorFamily = settings.value("font", "JetBrains Mono").toString();
+		settings.endGroup();
+		settings.endGroup();
+		QFont eventFont(editorFamily);
+		eventFont.setStyleHint(QFont::Monospace);
+		eventFont.setFixedPitch(true);
+		line->setFont(eventFont);
+	}
+	layout->addWidget(line, row, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	++row;
+
+	auto updateTypeControls = [this]() {
+		const QString type = typeComboBox->currentData().toString();
+		line->setEnabled(type == "event");
+		valueBox->setEnabled(type == "value");
+	};
+	connect(typeComboBox, &QComboBox::currentIndexChanged, this, updateTypeControls);
+	updateTypeControls();
 
 	latchCheckBox = new QCheckBox(dialog);
 	latchCheckBox->setText(tr("Latch"));
@@ -499,6 +527,15 @@ void QuteButton::createPropertiesDialog()
 	text->setText(property("CSQT_text").toString());
     layout->addWidget(text, row, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
     ++row;
+
+	// --- Flat style (text buttons only) ---
+	m_flatControls.clear();
+	flatStyleCheckBox = new QCheckBox(tr("Flat"), dialog);
+	flatStyleCheckBox->setToolTip(tr("Draw the button with a flat, platform-independent "
+									 "appearance instead of the native style."));
+	flatStyleCheckBox->setChecked(property("CSQT_flatStyle").toBool());
+	layout->addWidget(flatStyleCheckBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	++row;
 
     label = new QLabel(dialog);
     label->setText(tr("Font Size"));
@@ -521,43 +558,10 @@ void QuteButton::createPropertiesDialog()
     fontComboBox->setCurrentText(BundledFonts::resolveFamily(property("CSQT_font").toString()));
     fontComboBox->setToolTip(fontFamilyLabel->toolTip());
     layout->addWidget(fontComboBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
-    ++row;
 
-	label = new QLabel(dialog);
-	label->setText("Image:");
-    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
-	filenameLineEdit = new QLineEdit(dialog);
-	filenameLineEdit->setMinimumWidth(320);
-	filenameLineEdit->setText(property("CSQT_image").toString());
-    layout->addWidget(filenameLineEdit, row, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
-
-	QPushButton *browseButton = new QPushButton(dialog);
-    browseButton->setText("Browse");
-	layout->addWidget(browseButton, row, 4, Qt::AlignLeft|Qt::AlignVCenter);
-	connect(browseButton, SIGNAL(released()), this, SLOT(browseFile()));
-	++row;
-
-	label = new QLabel(dialog);
-	label->setText("Event:");
-    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
-	line = new QLineEdit(dialog);
-	//   text->setText(((QuteLabel *)m_widget)->toPlainText());
-    layout->addWidget(line, row,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
-	line->setMinimumWidth(320);
-	line->setText(property("CSQT_eventLine").toString());
-	++row;
-
-	// --- Flat style (text buttons only) ---
-	m_flatControls.clear();
-	
 	// The font family only applies to the self-painted (flat) button.
 	m_flatControls << fontFamilyLabel << fontComboBox;
-	flatStyleCheckBox = new QCheckBox(tr("Flat"), dialog);
-	flatStyleCheckBox->setToolTip(tr("Draw the button with a flat, platform-independent "
-									 "appearance instead of the native style."));
-	flatStyleCheckBox->setChecked(property("CSQT_flatStyle").toBool());
-	layout->addWidget(flatStyleCheckBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
-	++row;
+    ++row;
 	
 	m_pressedColorSet = !property("CSQT_pressedColor").toString().isEmpty();
 	m_pressedTextColorSet = !property("CSQT_pressedTextColor").toString().isEmpty();
@@ -646,15 +650,12 @@ void QuteButton::createPropertiesDialog()
 	++row;
 
 	auto refreshFlatControls = [this]() {
-		const bool pict = isPictButtonType(typeComboBox->currentText());
-		flatStyleCheckBox->setEnabled(!pict);
-		const bool flat = flatStyleCheckBox->isChecked() && !pict;
+		const bool flat = flatStyleCheckBox->isChecked();
 		for (QWidget *w : m_flatControls) {
 			w->setEnabled(flat);
 		}
 	};
 	connect(flatStyleCheckBox, &QCheckBox::toggled, this, refreshFlatControls);
-	connect(typeComboBox, &QComboBox::currentTextChanged, this, refreshFlatControls);
 	refreshFlatControls();
 
 	// While a pressed color is unset it follows the base color.
@@ -676,11 +677,15 @@ void QuteButton::createPropertiesDialog()
 	});
 
 	useMomentaryMidiButtonCheckBox = new QCheckBox(dialog);
-	useMomentaryMidiButtonCheckBox->setText(tr("Momentary"));
-	useMomentaryMidiButtonCheckBox->setWhatsThis(tr("Check if you use MIDI push button (momentary button) to toggle the latch - \nFirst push switches on, second off."));
-	// TODO: enabling/disabling needs some signal->slot connection
-	//useMomentaryMidiButtonCheckBox->setEnabled( latchCheckBox->isChecked() );
+	useMomentaryMidiButtonCheckBox->setText(tr("Momentary (MIDI toggles latch)"));
+	const QString momentaryHelp = tr("Only active when Latch is enabled. Each MIDI press "
+	                                 "toggles the latch; the MIDI release is ignored.");
+	useMomentaryMidiButtonCheckBox->setToolTip(momentaryHelp);
+	useMomentaryMidiButtonCheckBox->setWhatsThis(momentaryHelp);
 	useMomentaryMidiButtonCheckBox->setChecked(property("CSQT_momentaryMidiButton").toBool());
+	useMomentaryMidiButtonCheckBox->setEnabled(latchCheckBox->isChecked());
+	connect(latchCheckBox, &QCheckBox::toggled,
+	        useMomentaryMidiButtonCheckBox, &QWidget::setEnabled);
 
 	const int midiRow = layout->rowCount()-2;
 	layout->removeWidget(midiLearnButton);
@@ -719,7 +724,7 @@ void QuteButton::setMidiValue(int value)
 
 	if (isLatch && useMomentaryMidiButton) {
 			if (value >0 ) {
-                if ( (type.contains("event") && m_isPlaying) ||  (type.contains("value") && m_currentValue > 0) ) {
+                if ( (type == "event" && m_isPlaying) ||  (type == "value" && m_currentValue > 0) ) {
                     qDebug() << "Toggle value to 0 / playing off from MIDI";
 					newValue = 0;
 				} else {
@@ -799,8 +804,7 @@ bool QuteButton::applyProperty(const QString &name)
 		return true;
 	}
 	if (name == "CSQT_flatStyle") {
-		const bool flat = property("CSQT_flatStyle").toBool()
-				&& !isPictButtonType(property("CSQT_type").toString());
+		const bool flat = property("CSQT_flatStyle").toBool();
 		button()->setFlatStyle(flat);
 		QFont f = button()->font();
 		f.setFamily(flat ? BundledFonts::resolveFamily(property("CSQT_font").toString())
@@ -809,8 +813,7 @@ bool QuteButton::applyProperty(const QString &name)
 		return true;
 	}
 	if (name == "CSQT_font") {
-		if (property("CSQT_flatStyle").toBool()
-				&& !isPictButtonType(property("CSQT_type").toString())) {
+		if (property("CSQT_flatStyle").toBool()) {
 			QFont f = button()->font();
 			f.setFamily(BundledFonts::resolveFamily(property("CSQT_font").toString()));
 			button()->setFont(f);
@@ -859,15 +862,14 @@ void QuteButton::applyInternalProperties()
     m_value = property("CSQT_pressedValue").toDouble();
 	//  m_value2 = property("CSQT_value2").toDouble();
 	m_stringValue = property("CSQT_stringvalue").toString();
-	QString type = property("CSQT_type").toString();
+	QString type = normalizedButtonType(property("CSQT_type").toString());
+	if (type != property("CSQT_type").toString())
+		setProperty("CSQT_type", type);
     auto w = static_cast<QPushButton*>(m_widget);
     QutePushButton *b = button();
     w->setCheckable(property("CSQT_latch").toBool());
 
-	// Flat style. Only text buttons take over the painting; pictorial buttons
-	// always use the native look.
-	const bool pict = isPictButtonType(type);
-	const bool flat = property("CSQT_flatStyle").toBool() && !pict;
+	const bool flat = property("CSQT_flatStyle").toBool();
 	QColor bg = property("CSQT_color").value<QColor>();
 	if (!bg.isValid()) {
 		bg = QColor(property("CSQT_color").toString());
@@ -882,8 +884,7 @@ void QuteButton::applyInternalProperties()
 	b->setFlatStyle(flat);
 
     if (type == "event" || type == "value") {
-        icon = QIcon();
-		w->setIcon(icon);
+		w->setIcon(QIcon());
         QFont f = w->font();
         // A custom family belongs to the self-painted flat style. Native buttons
         // keep the application font.
@@ -902,11 +903,6 @@ void QuteButton::applyInternalProperties()
         w->setFont(f);
         w->setText(property("CSQT_text").toString());
 
-    } else if (pict) {
-        w->setText("");
-		icon = QIcon(QPixmap(resolvedImagePath(property("CSQT_image").toString())));
-		w->setIcon(icon);
-		w->setIconSize(QSize(width(),height()));
     } else {
         qDebug() << "Warning! QuteButton::applyInternalProperties() unrecognized type:"
                  << type;
@@ -921,7 +917,7 @@ void QuteButton::performAction() {
     //bool isLatch = property("CSQT_latch").toBool();
     //bool useMomentaryMidiButton = property("CSQT_momentaryMidiButton").toBool();
 
-	if (type.contains("event") && !eventLine.isEmpty()) {
+	if (type == "event" && !eventLine.isEmpty()) {
         if ( hasIndefiniteDuration() ) {
             if ( m_currentValue == 0 ) { // turn off
                 QStringList lineElements = eventLine.split(QRegularExpression(uR"(\s)"_s),SKIP_EMPTY_PARTS);
@@ -953,7 +949,7 @@ void QuteButton::performAction() {
 			}
 		}
     }
-    else if (type == "value" || type == "pictvalue") {
+    else if (type == "value") {
         if(!name.startsWith("_")) {
             emit newValue(QPair<QString, double>(name, m_currentValue));
         }
@@ -1037,59 +1033,9 @@ void QuteButton::buttonReleased()
 	bool isLatch = property("CSQT_latch").toBool();
 	if (!isLatch ) {
         m_currentValue = 0;
-		if (property("CSQT_type").toString().contains("event") && hasIndefiniteDuration() ) {
+		if (property("CSQT_type").toString() == "event" && hasIndefiniteDuration() ) {
 			performAction(); // to stop the playing instrument
 		}
 	}
     emit newValue(QPair<QString, double>(m_channel, m_currentValue));
-}
-
-QString QuteButton::documentFileName() const
-{
-	if (auto *widgetLayout = qobject_cast<WidgetLayout *>(parentWidget()))
-		return widgetLayout->documentFileName();
-	return QString();
-}
-
-QString QuteButton::documentDirectory() const
-{
-	if (auto *widgetLayout = qobject_cast<WidgetLayout *>(parentWidget()))
-		return widgetLayout->documentDirectory();
-	return QDir::currentPath();
-}
-
-// A stored path may be relative to the .csd. Absolute paths are kept as-is so
-// older files continue to work.
-QString QuteButton::resolvedImagePath(const QString &path) const
-{
-	if (path.isEmpty() || path.startsWith(QLatin1String(":/")))
-		return path;
-	const QFileInfo info(path);
-	if (info.isAbsolute())
-		return info.filePath();
-	return QDir(documentDirectory()).absoluteFilePath(path);
-}
-
-// Store a selected image relative to the .csd. An unsaved document has no
-// stable directory, so keep the absolute path in that case.
-QString QuteButton::storedImagePath(const QString &path) const
-{
-	if (path.isEmpty() || path.startsWith(QLatin1String(":/"))
-			|| documentFileName().isEmpty()) {
-		return path;
-	}
-	const QFileInfo info(path);
-	const QString absolute = info.isAbsolute()
-			? info.absoluteFilePath()
-			: QDir(documentDirectory()).absoluteFilePath(path);
-	return QDir(documentDirectory()).relativeFilePath(absolute);
-}
-
-void QuteButton::browseFile()
-{
-	QString file = QFileDialog::getOpenFileName(this, tr("Select File"),
-												documentDirectory());
-	if (!file.isEmpty()) {
-		filenameLineEdit->setText(storedImagePath(file));
-	}
 }

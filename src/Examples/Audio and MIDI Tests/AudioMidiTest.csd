@@ -327,6 +327,8 @@ e
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -489,7 +491,6 @@ e
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>Generate note</text>
-  <image>/</image>
   <eventLine/>
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
@@ -530,12 +531,12 @@ e
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00FF00</borderColor>
+  <borderWidth>1</borderWidth>
   <color>#ff4c11</color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>#191919</bgcolor>
-  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>signaltype</objectName>
@@ -781,7 +782,6 @@ e
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>1</text>
-  <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
@@ -849,12 +849,12 @@ e
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#3c332e</borderColor>
+  <borderWidth>0</borderWidth>
   <color>#ff5500</color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>#272727</bgcolor>
-  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on2</objectName>
@@ -873,7 +873,6 @@ e
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>2</text>
-  <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
@@ -914,12 +913,12 @@ e
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
-  <borderColor>#00FF00</borderColor>
+  <bordermode>border</bordermode>
+  <borderColor>#00ff00</borderColor>
+  <borderWidth>0</borderWidth>
   <color>#ff5500</color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>#272727</bgcolor>
-  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on3</objectName>
@@ -938,7 +937,6 @@ e
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>3</text>
-  <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
@@ -979,12 +977,12 @@ e
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00ff00</borderColor>
+  <borderWidth>0</borderWidth>
   <color>#ff5500</color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>#272727</bgcolor>
-  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on4</objectName>
@@ -1003,7 +1001,6 @@ e
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>4</text>
-  <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
@@ -1044,12 +1041,12 @@ e
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00ff00</borderColor>
+  <borderWidth>0</borderWidth>
   <color>#ff5500</color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>#272727</bgcolor>
-  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on5</objectName>
@@ -1068,7 +1065,6 @@ e
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>5</text>
-  <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
@@ -1109,12 +1105,12 @@ e
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
-  <borderColor>#00FF00</borderColor>
+  <bordermode>border</bordermode>
+  <borderColor>#00ff00</borderColor>
+  <borderWidth>0</borderWidth>
   <color>#ff5500</color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>#272727</bgcolor>
-  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on6</objectName>
@@ -1133,7 +1129,6 @@ e
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>6</text>
-  <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
@@ -1174,12 +1169,12 @@ e
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
-  <borderColor>#00FF00</borderColor>
+  <bordermode>border</bordermode>
+  <borderColor>#00ff00</borderColor>
+  <borderWidth>0</borderWidth>
   <color>#ff5500</color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>#272727</bgcolor>
-  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on7</objectName>
@@ -1198,7 +1193,6 @@ e
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>7</text>
-  <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
@@ -1239,12 +1233,12 @@ e
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
-  <borderColor>#00FF00</borderColor>
+  <bordermode>border</bordermode>
+  <borderColor>#00ff00</borderColor>
+  <borderWidth>0</borderWidth>
   <color>#ff5500</color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>#272727</bgcolor>
-  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on8</objectName>
@@ -1263,7 +1257,6 @@ e
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>8</text>
-  <image>/</image>
   <eventLine/>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
@@ -1304,12 +1297,12 @@ e
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
-  <borderColor>#00FF00</borderColor>
+  <bordermode>border</bordermode>
+  <borderColor>#00ff00</borderColor>
+  <borderWidth>0</borderWidth>
   <color>#ff5500</color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>#272727</bgcolor>
-  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1367,6 +1360,7 @@ e
   <enableTables>false</enableTables>
   <enableDisplays>true</enableDisplays>
   <all>true</all>
+  <bgcolor>#000000</bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -1393,12 +1387,12 @@ e
   <exponent>1.00000000</exponent>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#00FF00</borderColor>
+  <borderWidth>1</borderWidth>
   <color>#009ae7</color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>#191919</bgcolor>
-  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1620,6 +1614,7 @@ e
   <enableTables>false</enableTables>
   <enableDisplays>true</enableDisplays>
   <all>true</all>
+  <bgcolor>#000000</bgcolor>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>spmenu</objectName>
@@ -2040,7 +2035,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-22</label>
+  <label>-14</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
@@ -2067,7 +2062,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-21</label>
+  <label>-13</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>

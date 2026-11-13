@@ -58,6 +58,10 @@ public:
 	void setParameterMode(bool on) {m_parameterMode = on; setCursorWidth(on ? 8 : 1);}
 	bool getParameterMode() {return m_parameterMode;}
     int getLastKey() {return m_lastkey;}
+    // The text produced by the last key press (empty for arrows, modifiers,
+    // backspace, delete, etc.). Autocomplete uses this to react only to actual
+    // identifier characters.
+    QString getLastText() const {return m_lastText;}
     // The cursor at the given position of the editor's viewport, which is
     // what a context menu request gives. The position must not be converted
     // again: the line number area is a viewport margin, so subtracting it a
@@ -84,6 +88,7 @@ protected:
 	bool m_parameterMode;
 	bool m_commaTyped;
     int  m_lastkey;
+    QString m_lastText;
     bool m_pasteHappened;
 
 signals:

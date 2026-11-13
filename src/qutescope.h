@@ -31,6 +31,7 @@ class DataDisplay;
 class ScopeData;
 class LissajouData;
 class PoincareData;
+class SelectColorButton;
 
 
 enum TriggerMode {
@@ -68,6 +69,7 @@ public:
 	virtual void createPropertiesDialog();
 	void setType(QString type);
 	void setValue(double value); //Value for this widget indicates zoom level
+	void setBackgroundColor(const QColor &color);
 	//    void setChannel(int channel);
 	void setUd(CsoundUserData *ud);
 
@@ -88,6 +90,7 @@ protected:
 	QCheckBox *antialiasCheckBox = nullptr;
 	QDoubleSpinBox *zoomxBox;
 	QDoubleSpinBox *zoomyBox;
+	SelectColorButton *backgroundColorButton = nullptr;
 	AudioChannelMonitor *m_monitor = nullptr; // acquired for m_channel2
 	QString m_activeMonitorName;
 	ScopeParams *m_params;

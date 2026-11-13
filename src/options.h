@@ -82,6 +82,9 @@ public:
     // When a panel is toggled on, move the keyboard focus to it. Off (the
     // default) keeps the focus where it was, e.g. in the editor.
     bool focusToggledPanel;
+    // Docked panels normally show their title bar. When enabled, the title is
+    // hidden for every docked panel (floating panels keep theirs).
+    bool hideDockedPanelTitles;
 	bool rememberFile;
 	bool iconText;
 	bool showToolbar;
@@ -109,7 +112,14 @@ public:
     int tooltipWakeUpDelay; // milliseconds before a tooltip appears
 
 	bool showWidgetsOnRun;
+	bool showWidgetToolbar;
 	bool showTooltips;
+	// Font family assigned to new widgets that carry a font.
+	QString defaultWidgetFont;
+	// Create new flat-style-capable widgets with the flat style enabled.
+	bool flatStyleNewWidgets;
+	// Allow entering widget edit mode while a document is playing.
+	bool editModeWhilePlaying;
     int graphUpdateRate;
 	bool openProperties;  // Open properties automatically when creating a widget
 	// Edit-mode widget frame border colours (Settings/Widgets). The unselected

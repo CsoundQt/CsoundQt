@@ -1,12 +1,6 @@
 <CsoundSynthesizer>
-<CsOptions>
--odac
-</CsOptions>
 <CsInstruments>
 
-sr = 44100
-ksmps = 64
-nchnls = 2
 0dbfs = 1
 
 ; Drives the two VU meters with chnset. The meters are output only: they just
@@ -31,11 +25,16 @@ instr 1
   out asig
 endin
 
+schedule 1, 0, -1
+
 </CsInstruments>
-<CsScore>
-i 1 0 3600
-</CsScore>
 </CsoundSynthesizer>
+
+
+
+
+
+
 
 
 <bsbPanel>
@@ -47,11 +46,7 @@ i 1 0 3600
  <height>595</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>231</r>
-  <g>231</g>
-  <b>231</b>
- </bgcolor>
+ <bgcolor mode="background">#eaeaea</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
@@ -70,24 +65,11 @@ i 1 0 3600
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>22</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>230</r>
-   <g>230</g>
-   <b>230</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#000000</color>
+  <bgcolor mode="nobackground">#e6e6e6</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -95,9 +77,9 @@ i 1 0 3600
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>15</x>
-  <y>50</y>
-  <width>441</width>
-  <height>76</height>
+  <y>46</y>
+  <width>440</width>
+  <height>86</height>
   <uuid>{693b9425-a8c0-4502-a99e-50594ba159ec}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -105,29 +87,17 @@ i 1 0 3600
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>The VU Meter is output only: it follows the dB value written to its channel with chnset (or outvalue). It always works in dB; min/max are configurable (default -90 to 0).  The bar can be vertical or horizontal, according to its width/height.</label>
+  <label>The VU Meter is output only: it follows the dB value written to its channel with chnset (or outvalue). It always works in dB; min/max are configurable (default -90 to 0).  The bar can be vertical or horizontal, according to its width/height.
+It has a cursor which can also be set via a channel.  The ruler can be hidden or set to "full" to show more precise ticks</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>49</r>
-   <g>54</g>
-   <b>59</b>
-  </color>
-  <bgcolor mode="background">
-   <r>185</r>
-   <g>185</g>
-   <b>185</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#31363b</color>
+  <bgcolor mode="background">#b9b9b9</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -153,17 +123,9 @@ i 1 0 3600
   <exponent>0.50000000</exponent>
   <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
-  <bgcolor>
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
+  <bgcolor>#141414</bgcolor>
   <bgcolormode>true</bgcolormode>
-  <bordercolor>
-   <r>128</r>
-   <g>128</g>
-   <b>128</b>
-  </bordercolor>
+  <bordercolor>#808080</bordercolor>
  </bsbObject>
  <bsbObject type="BSBVUMeter" version="2">
   <objectName>vudb_horiz</objectName>
@@ -181,22 +143,14 @@ i 1 0 3600
   <minimum>-90.00000000</minimum>
   <maximum>6.00000000</maximum>
   <objectName2/>
-  <rulermode>full</rulermode>
+  <rulermode>compact</rulermode>
   <rulercolor>#6d6d6d</rulercolor>
   <exponent>0.50000000</exponent>
   <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
-  <bgcolor>
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
+  <bgcolor>#141414</bgcolor>
   <bgcolormode>true</bgcolormode>
-  <bordercolor>
-   <r>128</r>
-   <g>128</g>
-   <b>128</b>
-  </bordercolor>
+  <bordercolor>#808080</bordercolor>
  </bsbObject>
  <bsbObject type="BSBVUMeter" version="2">
   <objectName>vudb_vert</objectName>
@@ -219,22 +173,14 @@ i 1 0 3600
   <exponent>0.50000000</exponent>
   <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
-  <bgcolor>
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
+  <bgcolor>#141414</bgcolor>
   <bgcolormode>true</bgcolormode>
-  <bordercolor>
-   <r>128</r>
-   <g>128</g>
-   <b>128</b>
-  </bordercolor>
+  <bordercolor>#808080</bordercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>125</x>
-  <y>199</y>
+  <x>116</x>
+  <y>210</y>
   <width>174</width>
   <height>41</height>
   <uuid>{90725201-c304-4dfb-abe3-e52ace00da1e}</uuid>
@@ -249,24 +195,11 @@ i 1 0 3600
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>49</r>
-   <g>54</g>
-   <b>59</b>
-  </color>
-  <bgcolor mode="background">
-   <r>213</r>
-   <g>255</g>
-   <b>206</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#31363b</color>
+  <bgcolor mode="background">#d5ffce</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -289,24 +222,11 @@ i 1 0 3600
   <valignment>top</valignment>
   <font>Inter</font>
   <fontsize>16</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>212</r>
-   <g>212</g>
-   <b>212</b>
-  </color>
-  <bgcolor mode="background">
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#d4d4d4</color>
+  <bgcolor mode="background">#343434</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -327,22 +247,14 @@ i 1 0 3600
   <minimum>-80.00000000</minimum>
   <maximum>0.00000000</maximum>
   <objectName2/>
-  <rulermode>full</rulermode>
+  <rulermode>compact</rulermode>
   <rulercolor>#d4d4d4</rulercolor>
   <exponent>0.30000000</exponent>
   <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
-  <bgcolor>
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
+  <bgcolor>#141414</bgcolor>
   <bgcolormode>true</bgcolormode>
-  <bordercolor>
-   <r>212</r>
-   <g>212</g>
-   <b>212</b>
-  </bordercolor>
+  <bordercolor>#d4d4d4</bordercolor>
  </bsbObject>
  <bsbObject type="BSBVUMeter" version="2">
   <objectName>vudb_vert</objectName>
@@ -360,22 +272,14 @@ i 1 0 3600
   <minimum>-80.00000000</minimum>
   <maximum>0.00000000</maximum>
   <objectName2/>
-  <rulermode>full</rulermode>
+  <rulermode>compact</rulermode>
   <rulercolor>#d4d4d4</rulercolor>
   <exponent>0.55000000</exponent>
   <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
-  <bgcolor>
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
+  <bgcolor>#141414</bgcolor>
   <bgcolormode>true</bgcolormode>
-  <bordercolor>
-   <r>212</r>
-   <g>212</g>
-   <b>212</b>
-  </bordercolor>
+  <bordercolor>#d4d4d4</bordercolor>
  </bsbObject>
  <bsbObject type="BSBVUMeter" version="2">
   <objectName>vudb_vert</objectName>
@@ -393,22 +297,14 @@ i 1 0 3600
   <minimum>-80.00000000</minimum>
   <maximum>0.00000000</maximum>
   <objectName2/>
-  <rulermode>compact</rulermode>
+  <rulermode>full</rulermode>
   <rulercolor>#d4d4d4</rulercolor>
   <exponent>0.80000000</exponent>
   <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
-  <bgcolor>
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
+  <bgcolor>#141414</bgcolor>
   <bgcolormode>true</bgcolormode>
-  <bordercolor>
-   <r>212</r>
-   <g>212</g>
-   <b>212</b>
-  </bordercolor>
+  <bordercolor>#d4d4d4</bordercolor>
  </bsbObject>
  <bsbObject type="BSBVUMeter" version="2">
   <objectName>vudb_vert</objectName>
@@ -431,17 +327,9 @@ i 1 0 3600
   <exponent>0.80000000</exponent>
   <cursorcolor>#000000</cursorcolor>
   <cursorwidth>1</cursorwidth>
-  <bgcolor>
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
+  <bgcolor>#141414</bgcolor>
   <bgcolormode>true</bgcolormode>
-  <bordercolor>
-   <r>212</r>
-   <g>212</g>
-   <b>212</b>
-  </bordercolor>
+  <bordercolor>#d4d4d4</bordercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -461,24 +349,11 @@ i 1 0 3600
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>49</r>
-   <g>54</g>
-   <b>59</b>
-  </color>
-  <bgcolor mode="background">
-   <r>213</r>
-   <g>255</g>
-   <b>206</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#31363b</color>
+  <bgcolor mode="background">#d5ffce</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
@@ -504,17 +379,9 @@ i 1 0 3600
   <exponent>0.50000000</exponent>
   <cursorcolor>#ffffff</cursorcolor>
   <cursorwidth>2</cursorwidth>
-  <bgcolor>
-   <r>20</r>
-   <g>20</g>
-   <b>20</b>
-  </bgcolor>
+  <bgcolor>#141414</bgcolor>
   <bgcolormode>true</bgcolormode>
-  <bordercolor>
-   <r>128</r>
-   <g>128</g>
-   <b>128</b>
-  </bordercolor>
+  <bordercolor>#808080</bordercolor>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>gain</objectName>
@@ -532,16 +399,12 @@ i 1 0 3600
   <minimum>-24.00000000</minimum>
   <maximum>24.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>6.98400000</value>
+  <value>-22.01760000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
-  <color>
-   <r>245</r>
-   <g>124</g>
-   <b>0</b>
-  </color>
+  <color>#f57c00</color>
   <textcolor>#653f19</textcolor>
   <border>1</border>
   <borderColor>#512900</borderColor>
@@ -567,24 +430,11 @@ i 1 0 3600
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>74</r>
-   <g>38</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>49</r>
-   <g>54</g>
-   <b>59</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#4a2600</color>
+  <bgcolor mode="nobackground">#31363b</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>

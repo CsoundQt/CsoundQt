@@ -37,6 +37,9 @@ public:
 	explicit QuteSliderControl(QWidget *parent = nullptr);
 
 	enum BackgroundMode { Nudge, Jump };
+	// How the ruler's tick values are interpreted and labelled. Linear wraps
+	// ordinary numbers; Decibel reproduces the VU meter's dB ruler.
+	enum RulerScale { Linear, Decibel };
 
 	void setFlatStyle(bool enable);
 	void setBackgroundColor(const QColor &color);
@@ -48,6 +51,7 @@ public:
 	void setFillMode(bool fill);
 	void setBackgroundMode(BackgroundMode mode);
 	void setRuler(WidgetRuler::Mode mode, const QColor &color);
+	void setRulerScale(RulerScale scale);
 	void setDisplayRange(double minimum, double maximum);
 	void setExponent(double exponent);
 
@@ -68,6 +72,7 @@ private:
 	double majorTickStep(double axisLength) const;
 	int minorSubdivisions(double axisLength, double majorStep) const;
 	QString widestRulerLabel(double majorStep) const;
+	QString widestDbRulerLabel() const;
 	WidgetRuler::Geometry rulerGeometry() const;
 	QRectF sliderRect() const;
 	QRectF innerRect(const QRectF &body) const;
@@ -92,6 +97,7 @@ private:
 	bool m_fillMode = true;
 	BackgroundMode m_backgroundMode = Jump;
 	WidgetRuler::Mode m_rulerMode = WidgetRuler::Hide;
+	RulerScale m_rulerScale = Linear;
 	QColor m_rulerColor = QColor(109, 109, 109);
 
 	double m_minimum = 0.0;
@@ -170,6 +176,7 @@ private:
 	QComboBox *fillModeComboBox = nullptr;
 	QComboBox *backgroundModeComboBox = nullptr;
 	QComboBox *rulerComboBox = nullptr;
+	QComboBox *rulerScaleComboBox = nullptr;
 	SelectColorButton *rulerColorButton = nullptr;
 	QDoubleSpinBox *exponentSpinBox = nullptr;
 	QList<QWidget *> m_flatControls;

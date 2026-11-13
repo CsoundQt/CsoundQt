@@ -50,6 +50,7 @@
 #include <QLockFile>
 #include <QRegularExpression>
 #include <QClipboard>
+#include <QCursor>
 #include <QMimeData>
 #include <QMouseEvent>
 #include <QtConcurrent/QtConcurrentRun>
@@ -59,6 +60,7 @@
 #include "configdialog.h"
 #include "console.h"
 #include "dockhelp.h"
+#include "dockpanelutils.h"
 #include "codescan.h"
 #include "markdown.h"
 #include "scanservice.h"
@@ -579,6 +581,8 @@ CsoundQt::CsoundQt(QStringList fileNames, bool noRecentFiles,
     m_inspector->setObjectName("Inspector");
     m_inspector->clearScan();
     addDockWidget(Qt::LeftDockWidgetArea, m_inspector);
+    DockPanelUtils::installPanelContextMenu(m_inspector);
+    new DockPanelUtils::TitleBarController(m_inspector);
     m_inspector->hide();
 
     // The scan of the document being edited feeds the panels: the inspector
@@ -618,11 +622,15 @@ CsoundQt::CsoundQt(QStringList fileNames, bool noRecentFiles,
     connect(m_debugPanel, SIGNAL(removeBreakpoint(int, int)),
             this, SLOT(removeBreakpoint(int, int)));
     addDockWidget(Qt::RightDockWidgetArea, m_debugPanel);
+    DockPanelUtils::installPanelContextMenu(m_debugPanel);
+    new DockPanelUtils::TitleBarController(m_debugPanel);
     m_debugEngine = NULL;
 #endif
 
     m_scratchPad = new QDockWidget(this);
     addDockWidget(Qt::LeftDockWidgetArea, m_scratchPad);
+    DockPanelUtils::installPanelContextMenu(m_scratchPad);
+    new DockPanelUtils::TitleBarController(m_scratchPad);
     // Keep the internal object name stable so existing saved dock layouts
     // still find the panel; only the visible title changes.
     m_scratchPad->setObjectName("Interactive Code Pad");
@@ -672,6 +680,8 @@ CsoundQt::CsoundQt(QStringList fileNames, bool noRecentFiles,
     csoundHtmlView->setWindowTitle(tr("HTML View"));
     csoundHtmlView->setOptions(m_options);
     addDockWidget(Qt::LeftDockWidgetArea, csoundHtmlView);
+    DockPanelUtils::installPanelContextMenu(csoundHtmlView);
+    new DockPanelUtils::TitleBarController(csoundHtmlView);
     csoundHtmlView->hide();
 
 #endif
@@ -1888,9 +1898,27 @@ void CsoundQt::setWidgetEditMode(bool active)
             editAct->setChecked(false);
         return;
     }
+    if (active && !m_options->editModeWhilePlaying
+            && curPage >= 0 && curPage < documentPages.size()
+            && documentPages.at(curPage) != nullptr
+            && documentPages.at(curPage)->isRunning()) {
+        if (editAct != nullptr)
+            editAct->setChecked(false);
+        QWidget *context = widgetPanel;
+        if (WidgetLayout *layout = documentPages.at(curPage)->getWidgetLayout())
+            context = layout;
+        Notification::showTransient(context, tr("Edit mode disabled while playing"), 2000);
+        return;
+    }
     for (int i = 0; i < documentPages.size(); i++) {
         documentPages[i]->setWidgetEditMode(active);
     }
+    if (active) {
+        statusBar()->showMessage(
+                    tr("To add a widget: press N or double-click on the widget panel"),
+                    8000);
+    }
+    onFocusChanged(nullptr, QApplication::focusWidget());
 }
 
 void CsoundQt::onFocusChanged(QWidget *old, QWidget *now)
@@ -1900,6 +1928,28 @@ void CsoundQt::onFocusChanged(QWidget *old, QWidget *now)
     // the editor's "Go Back" shortcut is only active elsewhere.
     if (goBackAct)
         goBackAct->setEnabled(!(now && widgetPanel && widgetPanel->isAncestorOf(now)));
+    if (newWidgetAct != nullptr && qobject_cast<QMenu *>(now) == nullptr) {
+        bool focusInWidgetPanel = false;
+        bool editModeActive = false;
+        if (now != nullptr) {
+            focusInWidgetPanel = widgetPanel != nullptr
+                    && (now == widgetPanel || widgetPanel->isAncestorOf(now));
+            if (curPage >= 0 && curPage < documentPages.size()) {
+                DocumentPage *page = documentPages.at(curPage);
+                WidgetLayout *layout = page != nullptr ? page->getWidgetLayout() : nullptr;
+                editModeActive = layout != nullptr && layout->isEditMode();
+                if (!focusInWidgetPanel && layout != nullptr) {
+                    focusInWidgetPanel = now == layout || layout->isAncestorOf(now);
+                    if (!focusInWidgetPanel) {
+                        auto *scrollArea = qobject_cast<QScrollArea *>(now);
+                        focusInWidgetPanel = scrollArea != nullptr
+                                && scrollArea->widget() == layout;
+                    }
+                }
+            }
+        }
+        newWidgetAct->setEnabled(focusInWidgetPanel && editModeActive);
+    }
 }
 
 void CsoundQt::duplicate()
@@ -5539,6 +5589,8 @@ void CsoundQt::applyPaletteToChrome()
 
 void CsoundQt::applySettings()
 {
+    DockPanelUtils::TitleBarController::setHideDockedPanelTitles(
+                m_options->hideDockedPanelTitles);
     m_realtimeAudioValidated = false;
     // The editor's flat scrollbars are a Fusion-only extra: remember the
     // setting before the style is applied, so the editors' StyleChange
@@ -5549,6 +5601,16 @@ void CsoundQt::applySettings()
     if (m_options->widgetsIndependent != m_appliedWidgetsIndependent)
         applyWidgetModeChange();
     applyWidgetStyle();
+    qApp->setProperty("flatStyleNewWidgets", m_options->flatStyleNewWidgets);
+    qApp->setProperty("editModeWhilePlaying", m_options->editModeWhilePlaying);
+    qApp->setProperty("showWidgetToolbar", m_options->showWidgetToolbar);
+    qApp->setProperty("defaultWidgetFont", m_options->defaultWidgetFont);
+    for (DocumentPage *page : documentPages) {
+        if (page != nullptr) {
+            page->updateWidgetToolbar();
+            page->updateWidgetScrollBars();
+        }
+    }
     DialogButtonStyle::setToolTipWakeUpDelay(m_options->tooltipWakeUpDelay);
 
     // Document tabs: use the application font plus the configured relative
@@ -6250,6 +6312,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     pasteAct->setShortcut(tr("Ctrl+V"));
     duplicateAct->setShortcut(tr("Ctrl+D"));
     toggleLockedWidgetAct->setShortcut(tr("Ctrl+L"));
+    newWidgetAct->setShortcut(tr("N"));
     inToGetAct->setShortcut(tr(""));
     getToInAct->setShortcut(tr(""));
     highlightWidgetChannelAct->setShortcut(tr("Ctrl+Shift+H"));
@@ -7081,6 +7144,44 @@ void CsoundQt::createActions()
     connect(toggleLockedWidgetAct, &QAction::triggered,
             this, &CsoundQt::toggleLockedWidgets);
 
+    newWidgetAct = new QAction(icon("widgets.svg"), tr("Add Widget"), this);
+    newWidgetAct->setStatusTip(tr("Show the New Widget palette"));
+    // Registered on the current widget layout in connectActions(); N is safe
+    // there because the panel does not accept text input.
+    newWidgetAct->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    newWidgetAct->setProperty("shortcutScope", "widgetPanel");
+    newWidgetAct->setEnabled(false);
+    connect(newWidgetAct, &QAction::triggered, this, [this]() {
+        if (curPage < 0 || curPage >= documentPages.size())
+            return;
+        DocumentPage *page = documentPages.at(curPage);
+        if (page == nullptr)
+            return;
+        WidgetLayout *layout = page->getWidgetLayout();
+        if (layout == nullptr)
+            return;
+        if (!layout->isEditMode())
+            return;
+        if (!m_options->widgetsIndependent && widgetPanel != nullptr) {
+            widgetPanel->show();
+            widgetPanel->raise();
+        }
+        QPoint pos = QCursor::pos();
+        QWidget *panelSurface = layout;
+        for (QWidget *ancestor = layout->parentWidget(); ancestor != nullptr;
+             ancestor = ancestor->parentWidget()) {
+            if (auto *scrollArea = qobject_cast<QScrollArea *>(ancestor)) {
+                panelSurface = scrollArea->viewport();
+                break;
+            }
+        }
+        const QRect panelRect(panelSurface->mapToGlobal(QPoint(0, 0)),
+                              panelSurface->size());
+        if (!panelRect.contains(pos))
+            pos = panelRect.center();
+        layout->showNewWidgetPopup(pos);
+    });
+
     lineNumbersAct = new QAction(tr("Toggle line numbers"),this);
     // Editor action: scoped to the editor by applyEditorActions().
     lineNumbersAct->setShortcutContext(Qt::WidgetWithChildrenShortcut);
@@ -7175,6 +7276,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(pasteAct);
     m_keyActions.append(duplicateAct);
     m_keyActions.append(toggleLockedWidgetAct);
+    m_keyActions.append(newWidgetAct);
     m_keyActions.append(inToGetAct);
     m_keyActions.append(getToInAct);
     m_keyActions.append(highlightWidgetChannelAct);
@@ -7326,7 +7428,10 @@ void CsoundQt::connectActions()
         };
         registerWidgetPanelAction(duplicateAct);
         registerWidgetPanelAction(toggleLockedWidgetAct);
+        registerWidgetPanelAction(newWidgetAct);
         layout->setToggleLockedAction(toggleLockedWidgetAct);
+        layout->setEditModeAction(editAct);
+        layout->updateCreateOverlayVisibility();
     }
 
     // line and column number connection
@@ -7528,6 +7633,8 @@ void CsoundQt::createMenus()
     transformMenu->addAction(getToInAct);
     transformMenu->addAction(tabsToSpacesAct);
     editMenu->addSeparator();
+    editMenu->addAction(newWidgetAct);
+    editMenu->addSeparator();
     editMenu->addAction(configureAct);
 
     controlMenu = menuBar()->addMenu(tr("Control"));
@@ -7540,8 +7647,8 @@ void CsoundQt::createMenus()
     controlMenu->addAction(stopAllAct);
     controlMenu->addSeparator();
     controlMenu->addAction(renderHistoryAct);
-    controlMenu->addAction(editAct);
     controlMenu->addAction(checkSyntaxAct);
+    controlMenu->addAction(editAct);
 
 
     viewMenu = menuBar()->addMenu(tr("View"));
@@ -8118,7 +8225,12 @@ void CsoundQt::readSettings()
     m_options->autoParameterMode = settings.value("autoParameterMode", true).toBool();
     m_options->antialiasScopes = settings.value("antialiasScopes", true).toBool();
     m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
+    m_options->showWidgetToolbar = settings.value("showWidgetToolbar", true).toBool();
     m_options->showTooltips = settings.value("showTooltips", true).toBool();
+    m_options->defaultWidgetFont =
+            settings.value("defaultWidgetFont", "Liberation Sans").toString();
+    m_options->flatStyleNewWidgets = settings.value("flatStyleNewWidgets", true).toBool();
+    m_options->editModeWhilePlaying = settings.value("editModeWhilePlaying", false).toBool();
     m_options->openProperties = settings.value("openProperties", true).toBool();
     m_options->graphUpdateRate = settings.value("graphUpdateRate", 30).toInt();
     lastFiles = settings.value("lastfiles", QStringList()).toStringList();
@@ -8243,6 +8355,8 @@ void CsoundQt::readSettings()
     m_options->quitOnLastTabClosed = settings.value("quitOnLastTabClosed", false).toBool();
     m_options->includeActiveFileInTitle = settings.value("includeActiveFileInTitle", true).toBool();
     m_options->focusToggledPanel = settings.value("focusToggledPanel", false).toBool();
+    m_options->hideDockedPanelTitles =
+            settings.value("hideDockedPanelTitles", false).toBool();
     m_options->sampleFormat = settings.value("sampleFormat", 0).toInt();
     settings.endGroup();
     settings.beginGroup("Environment");
@@ -8396,8 +8510,12 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("autoParameterMode", m_options->autoParameterMode);
     settings.setValue("antialiasScopes", m_options->antialiasScopes);
     settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);
+    settings.setValue("showWidgetToolbar", m_options->showWidgetToolbar);
     settings.setValue("graphUpdateRate", m_options->graphUpdateRate);
     settings.setValue("showTooltips", m_options->showTooltips);
+    settings.setValue("defaultWidgetFont", m_options->defaultWidgetFont);
+    settings.setValue("flatStyleNewWidgets", m_options->flatStyleNewWidgets);
+    settings.setValue("editModeWhilePlaying", m_options->editModeWhilePlaying);
     settings.setValue("openProperties", m_options->openProperties);
     settings.setValue("debugPort", m_options->debugPort);
     settings.setValue("tabShowCloseButton", m_options->tabShowCloseButton);
@@ -8464,6 +8582,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("quitOnLastTabClosed", m_options->quitOnLastTabClosed);
     settings.setValue("includeActiveFileInTitle", m_options->includeActiveFileInTitle);
     settings.setValue("focusToggledPanel", m_options->focusToggledPanel);
+    settings.setValue("hideDockedPanelTitles", m_options->hideDockedPanelTitles);
     settings.setValue("sampleFormat", m_options->sampleFormat);
     settings.setValue("checkSyntaxBeforeRun", m_options->checkSyntaxBeforeRun);
     settings.endGroup(); // Options/Run

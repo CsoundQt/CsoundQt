@@ -66,7 +66,7 @@ import re
 import sys
 import xml.etree.ElementTree as ET
 
-REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DEFAULT_PATHS = [os.path.join(REPO_ROOT, "src", "Examples",
                               "McCurdy Collection")]
 OPCODES_XML = os.path.join(REPO_ROOT, "src", "opcodes.xml")

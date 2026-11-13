@@ -38,6 +38,7 @@ TextEditor::TextEditor(QWidget *parent) :
     m_tabUseSpaces = false;
     m_tabSpaces = 2;
     m_lastkey = 0;
+    m_lastText.clear();
     m_pasteHappened = false;
     //  qDebug() << "TextEditor::TextEditor" << acceptDrops();
 }
@@ -45,6 +46,7 @@ TextEditor::TextEditor(QWidget *parent) :
 void TextEditor::keyPressEvent (QKeyEvent * event)
 {
     m_lastkey = event->key();
+    m_lastText = event->text();
     // A read-only editor must not insert text through the custom Tab/Backtab
     // handling below (QTextEdit's own read-only mode only covers its built-in
     // editing paths).

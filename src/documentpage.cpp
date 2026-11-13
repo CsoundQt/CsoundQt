@@ -1110,6 +1110,20 @@ void DocumentPage::setWidgetEditMode(bool active)
 	}
 }
 
+void DocumentPage::updateWidgetToolbar()
+{
+	foreach (WidgetLayout *wl, m_widgetLayouts) {
+		wl->updateCreateOverlayVisibility();
+	}
+}
+
+void DocumentPage::updateWidgetScrollBars()
+{
+	foreach (WidgetLayout *wl, m_widgetLayouts) {
+		wl->updateScrollBarStyle();
+	}
+}
+
 void DocumentPage::setWidgetDrawingEnabled(bool enabled)
 {
 	foreach (WidgetLayout *wl, m_widgetLayouts) {

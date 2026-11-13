@@ -1085,7 +1085,7 @@ void QuteWaveform::createPropertiesDialog()
 	layout->addWidget(label, row, 0, Qt::AlignRight | Qt::AlignVCenter);
 	name2LineEdit = new QLineEdit(dialog);
 	name2LineEdit->setText(getChannel2Name());
-	name2LineEdit->setMinimumWidth(320);
+	name2LineEdit->setFixedWidth(160);
 	layout->addWidget(name2LineEdit, row, 1, 1, 3, Qt::AlignLeft | Qt::AlignVCenter);
 	++row;
 

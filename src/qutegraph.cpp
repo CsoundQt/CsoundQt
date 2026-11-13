@@ -150,6 +150,7 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
     setProperty("CSQT_showScrollbars", true);
     setProperty("CSQT_enableTables", true);
     setProperty("CSQT_enableDisplays", true);
+    setProperty("CSQT_bgcolor", QColor(Qt::black));
     // Transitory ("method-like") graph methods (see transitoryProperties()).
     // They are created here so that they can be addressed as
     // "<channel>/<method>"; the values are neither saved nor restored.
@@ -184,6 +185,33 @@ QuteGraph::~QuteGraph()
 {
 }
 
+void QuteGraph::setBackgroundColor(const QColor &color)
+{
+    const QColor bg = color.isValid() ? color : QColor(Qt::black);
+    m_backgroundColor = bg;
+
+    QPalette pal = palette();
+    pal.setColor(QPalette::Window, bg);
+    setPalette(pal);
+
+    if (m_widget != nullptr) {
+        m_widget->setPalette(pal);
+        m_widget->setAutoFillBackground(true);
+        if (auto *stack = qobject_cast<StackedLayoutWidget *>(m_widget)) {
+            for (int i = 0; i < stack->count(); ++i) {
+                if (auto *view = qobject_cast<QGraphicsView *>(stack->widget(i))) {
+                    if (view->scene() != nullptr)
+                        view->scene()->setBackgroundBrush(QBrush(bg));
+                    view->setBackgroundBrush(QBrush(bg));
+                    view->setPalette(pal);
+                    view->setAutoFillBackground(true);
+                }
+            }
+        }
+    }
+    update();
+}
+
 QString QuteGraph::getWidgetXmlText()
 {
 	// Graphs are not implemented in blue
@@ -214,6 +242,7 @@ QString QuteGraph::getWidgetXmlText()
                        property("CSQT_enableTables").toBool() ? "true" : "false");
     s.writeTextElement("enableDisplays", m_enableDisplays ? "true" : "false");
 	s.writeTextElement("all", property("CSQT_all").toBool() ? "true" : "false");
+	writeColorElement(s, "bgcolor", colorFromProperty(property("CSQT_bgcolor")));
 	s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -466,7 +495,7 @@ void QuteGraph::createPropertiesDialog()
     layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	name2LineEdit = new QLineEdit(dialog);
 	name2LineEdit->setText(getChannel2Name());
-	name2LineEdit->setMinimumWidth(320);
+	name2LineEdit->setFixedWidth(160);
 	layout->addWidget(name2LineEdit, row, 1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
     ++row;
 
@@ -485,6 +514,15 @@ void QuteGraph::createPropertiesDialog()
 	zoomyBox->setDecimals(1);
 	zoomyBox->setSingleStep(0.1);
 	layout->addWidget(zoomyBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+
+    label = new QLabel("Background", dialog);
+    layout->addWidget(label, row, 4, Qt::AlignRight|Qt::AlignVCenter);
+    backgroundColorButton = new SelectColorButton(dialog);
+    {
+        QColor bg = colorFromProperty(property("CSQT_bgcolor"));
+        backgroundColorButton->setColor(bg.isValid() ? bg : QColor(Qt::black));
+    }
+    layout->addWidget(backgroundColorButton, row, 5, Qt::AlignLeft|Qt::AlignVCenter);
     ++row;
 
     acceptTablesCheckBox = new QCheckBox(dialog);
@@ -548,6 +586,7 @@ void QuteGraph::applyProperties()
 	setProperty("CSQT_objectName2", name2LineEdit->text());
 	setProperty("CSQT_zoomx", zoomxBox->value());
 	setProperty("CSQT_zoomy", zoomyBox->value());
+    setProperty("CSQT_bgcolor", backgroundColorButton->getColor());
     setProperty("CSQT_dispx", 1);
 	setProperty("CSQT_dispy", 1);
 	setProperty("CSQT_modex", "lin");
@@ -818,7 +857,9 @@ void QuteGraph::addCurve(Curve * curve)
                                                                    : Qt::ScrollBarAlwaysOff;
     view->setHorizontalScrollBarPolicy(scrollbarPolicy);
     view->show();
-    scene->setBackgroundBrush(QBrush(Qt::black));
+    scene->setBackgroundBrush(QBrush(m_backgroundColor));
+    view->setBackgroundBrush(QBrush(m_backgroundColor));
+    view->setAutoFillBackground(true);
     QVector<QGraphicsLineItem *> gridLinesVector;
     QVector<QGraphicsTextItem *> gridTextVectorX;
     QVector<QGraphicsTextItem *> gridTextVectorY;
@@ -1024,6 +1065,10 @@ QStringList QuteGraph::transitoryProperties() const
 
 bool QuteGraph::applyProperty(const QString &name)
 {
+	if (name == "CSQT_bgcolor") {
+		setBackgroundColor(colorFromProperty(property("CSQT_bgcolor")));
+		return true;
+	}
 	if (name == "CSQT_showGrid") {
 		m_drawGrid = property("CSQT_showGrid").toBool();
 		update();
@@ -1094,6 +1139,7 @@ void QuteGraph::applyInternalProperties()
     m_drawTableInfo = property("CSQT_showTableInfo").toBool();
     m_zoomx = property("CSQT_zoomx").toDouble();
     m_zoomy = property("CSQT_zoomy").toDouble();
+    setBackgroundColor(colorFromProperty(property("CSQT_bgcolor")));
     showScrollbars(property("CSQT_showScrollbars").toBool());
 }
 

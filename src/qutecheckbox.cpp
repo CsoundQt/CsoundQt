@@ -177,19 +177,16 @@ QuteCheckBox::QuteCheckBox(QWidget *parent) : QuteWidget(parent)
 	setProperty("CSQT_randomizable", false);
 	setProperty("CSQT_randomizableGroup", 0);
 
-	// Flat style. Disabled by default, so existing checkboxes keep the native
-	// look. The colours follow the same light/dark convention as flat buttons.
-	setProperty("CSQT_flatStyle", false);
-	const bool darkPanel = isDarkTheme();
-	auto shade = [darkPanel](int r, int g, int b) {
-		return darkPanel ? QColor(255 - r, 255 - g, 255 - b) : QColor(r, g, b);
-	};
-	setProperty("CSQT_color", shade(0xf3, 0xf3, 0xf3));            // background
-	setProperty("CSQT_borderColor", shade(0xad, 0xad, 0xad).name());
-	setProperty("CSQT_textColor", shade(0x20, 0x20, 0x20).name()); // foreground
+	// Flat style. The defaults are chosen to match the flat slider/scroll
+	// number family; the global "Use flat style for new widgets" option still
+	// decides whether new widgets actually start flat.
+	setProperty("CSQT_flatStyle", true);
+	setProperty("CSQT_color", QColor(0xf3, 0xf3, 0xf3));            // background
+	setProperty("CSQT_borderColor", QColor(0xad, 0xad, 0xad).name());
+	setProperty("CSQT_textColor", QColor(0x30, 0x30, 0x30).name()); // foreground
 	setProperty("CSQT_borderWidth", 1);
 	setProperty("CSQT_borderRadius", 3);
-	setProperty("CSQT_padding", 0);
+	setProperty("CSQT_padding", 3);
 	setProperty("CSQT_checkstyle", "x");
 
 	m_currentValue = 0;
@@ -499,12 +496,12 @@ void QuteCheckBox::createPropertiesDialog()
 
 	QLabel * label = new QLabel(dialog);
 	label->setText("Pressed Value");
-	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     valueBox = new QDoubleSpinBox(dialog);
 	valueBox->setDecimals(6);
 	valueBox->setRange(-9999999.0, 9999999.0);
-	layout->addWidget(valueBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(valueBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();

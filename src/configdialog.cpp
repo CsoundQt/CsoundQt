@@ -50,6 +50,7 @@
 #include "csoundqt.h"
 #include "configdialog.h"
 #include "options.h"
+#include "bundledfonts.h"
 #include "widgetstyle.h"
 #include "types.h"
 #include "configlists.h"
@@ -455,8 +456,15 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	autoParameterModeCheckBox->setChecked(m_options->autoParameterMode);
 	midiCcToCurrentPageOnlyCheckBox->setChecked(m_options->midiCcToCurrentPageOnly);
 	antialiasScopesCheckBox->setChecked(m_options->antialiasScopes);
+	defaultFontComboBox->clear();
+	defaultFontComboBox->addItems(BundledFonts::allFamilies());
+	defaultFontComboBox->setCurrentText(
+	            BundledFonts::resolveFamily(m_options->defaultWidgetFont));
 	showWidgetsOnRunCheckBox->setChecked(m_options->showWidgetsOnRun);
+	showWidgetToolbarCheckBox->setChecked(m_options->showWidgetToolbar);
 	showTooltipsCheckBox->setChecked(m_options->showTooltips);
+	flatStyleNewWidgetsCheckBox->setChecked(m_options->flatStyleNewWidgets);
+	editModeWhilePlayingCheckBox->setChecked(m_options->editModeWhilePlaying);
     graphUpdateRateSpinBox->setValue(m_options->graphUpdateRate);
 	openPropertiesCheckBox->setChecked(m_options->openProperties);
     tabCloseButtonCheckBox->setChecked(m_options->tabShowCloseButton);
@@ -468,6 +476,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
 	//  threadCheckBox->setChecked(m_options->thread);
 	keyRepeatCheckBox->setChecked(m_options->keyRepeat);
+    hideDockedPanelTitlesCheckBox->setChecked(m_options->hideDockedPanelTitles);
 	int bufferIndex = consoleBufferComboBox->findText(QString::number(m_options->consoleBufferSize));
 	if (bufferIndex < 0) {
 		bufferIndex = consoleBufferComboBox->count() - 1;
@@ -1092,7 +1101,11 @@ void ConfigDialog::apply()
 	m_options->midiCcToCurrentPageOnly = midiCcToCurrentPageOnlyCheckBox->isChecked();
 	m_options->antialiasScopes = antialiasScopesCheckBox->isChecked();
 	m_options->showWidgetsOnRun = showWidgetsOnRunCheckBox->isChecked();
+	m_options->showWidgetToolbar = showWidgetToolbarCheckBox->isChecked();
 	m_options->showTooltips = showTooltipsCheckBox->isChecked();
+	m_options->defaultWidgetFont = defaultFontComboBox->currentText();
+	m_options->flatStyleNewWidgets = flatStyleNewWidgetsCheckBox->isChecked();
+	m_options->editModeWhilePlaying = editModeWhilePlayingCheckBox->isChecked();
 	m_options->openProperties = openPropertiesCheckBox->isChecked();
     m_options->graphUpdateRate = graphUpdateRateSpinBox->value();
 	m_options->debugPort = debugPortSpinBox->value();
@@ -1100,6 +1113,7 @@ void ConfigDialog::apply()
     m_options->tooltipWakeUpDelay = tooltipDelaySpinBox->value();
 	//  m_options->thread = threadCheckBox->isChecked();
 	m_options->keyRepeat = keyRepeatCheckBox->isChecked();
+    m_options->hideDockedPanelTitles = hideDockedPanelTitlesCheckBox->isChecked();
 	m_options->consoleBufferSize = consoleBufferComboBox->itemText(consoleBufferComboBox->currentIndex()).toInt();
 	const bool internalMidi = internalMidiCheckBox->isChecked();
 	m_options->useCsoundMidi = !internalMidi;

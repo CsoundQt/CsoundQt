@@ -18,8 +18,10 @@
 #define DOCKPANELUTILS_H
 
 #include <QAction>
+#include <QContextMenuEvent>
 #include <QCoreApplication>
 #include <QDockWidget>
+#include <QList>
 #include <QMainWindow>
 #include <QMenu>
 #include <QPointer>
@@ -28,6 +30,15 @@
 #include <QWidget>
 
 namespace DockPanelUtils {
+
+// When enabled, docked panels use the zero-height title bar even when they are
+// not tabified. Floating panels always keep their normal title bar so they can
+// still be moved and closed.
+inline bool &hideDockedPanelTitles()
+{
+    static bool hide = false;
+    return hide;
+}
 
 // True when the dock is docked and shares a tab bar with another dock.
 inline bool isTabified(QDockWidget *dock)
@@ -76,7 +87,7 @@ inline void setKeepFloating(QDockWidget *dock, bool keep)
 
 // Adds the actions shared by the panel context menus. The actions are
 // deferred so that the menu is closed before the dock is floated or docked.
-inline void addPanelActions(QDockWidget *dock, QMenu &menu)
+inline void addPanelActions(QDockWidget *dock, QMenu &menu, bool separatorBeforeClose = true)
 {
     const QByteArray context = dock->metaObject()->className();
     const auto tr = [&context](const char *text) {
@@ -108,10 +119,34 @@ inline void addPanelActions(QDockWidget *dock, QMenu &menu)
             });
         });
     }
+
+    if (separatorBeforeClose)
+        menu.addSeparator();
+    QAction *closeAction = menu.addAction(tr("Close"));
+    QObject::connect(closeAction, &QAction::triggered, dock, [dock]() {
+        // Close after the menu has gone, like the float/dock actions above.
+        QTimer::singleShot(0, dock, [dock]() { dock->close(); });
+    });
 }
 
-// Keeps a dock's custom title bar hidden while it is tabified, and uses the
-// native (style-coloured) title bar when it is docked alone or floating.
+// Give a dock that does not build its own panel menu the shared actions
+// (including Close). Child widgets that provide their own context menu keep
+// it; the dock menu is shown for the remaining area and for events that
+// propagate up from the content.
+inline void installPanelContextMenu(QDockWidget *dock)
+{
+    dock->setContextMenuPolicy(Qt::CustomContextMenu);
+    QObject::connect(dock, &QWidget::customContextMenuRequested, dock,
+                     [dock](const QPoint &pos) {
+        QMenu menu;
+        addPanelActions(dock, menu);
+        menu.exec(dock->mapToGlobal(pos));
+    });
+}
+
+// Keeps a dock's custom title bar hidden while it is tabified (or while the
+// global "hide docked panel titles" option is on), and uses the native
+// (style-coloured) title bar when it is floating or when the option is off.
 // It also watches for tabify/untabify changes, which have no QDockWidget
 // signal of their own.
 class TitleBarController : public QObject
@@ -125,7 +160,22 @@ public:
         dock->installEventFilter(this);
         QObject::connect(dock, &QDockWidget::topLevelChanged, this,
                          [this](bool) { scheduleUpdate(); });
+        instances().append(this);
         scheduleUpdate();
+    }
+
+    // Update the global setting and re-evaluate every live title bar.
+    static void setHideDockedPanelTitles(bool hide)
+    {
+        hideDockedPanelTitles() = hide;
+        for (QPointer<QObject> &object : instances()) {
+            if (object != nullptr) {
+                static_cast<TitleBarController *>(object.data())->scheduleUpdate();
+            }
+        }
+        instances().removeIf([](const QPointer<QObject> &object) {
+            return object.isNull();
+        });
     }
 
 protected:
@@ -149,6 +199,12 @@ protected:
     }
 
 private:
+    static QList<QPointer<QObject>> &instances()
+    {
+        static QList<QPointer<QObject>> controllers;
+        return controllers;
+    }
+
     void scheduleUpdate()
     {
         if (m_updatePending)
@@ -164,7 +220,9 @@ private:
     {
         if (m_dock == nullptr)
             return;
-        if (!m_dock->isFloating() && isTabified(m_dock)) {
+        const bool hideTitle = !m_dock->isFloating()
+                && (hideDockedPanelTitles() || isTabified(m_dock));
+        if (hideTitle) {
             if (m_dock->titleBarWidget() != m_hiddenTitleBar)
                 m_dock->setTitleBarWidget(m_hiddenTitleBar);
         } else if (m_dock->titleBarWidget() != nullptr) {

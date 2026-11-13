@@ -40,14 +40,6 @@ using namespace Qt::StringLiterals;
 
 // ------------------------------------------------------ VUMeterWidget
 
-// dB values that DAW-style meters commonly label (finer near 0 dB). Only those
-// inside the configured range are shown; min and max are always labelled.
-static const double kNiceDbLabels[] = {
-	-120.0, -100.0, -90.0, -80.0, -70.0, -60.0, -50.0, -40.0, -30.0,
-	-24.0, -20.0, -16.0, -12.0, -9.0, -6.0, -3.0,
-	0.0, 3.0, 6.0, 9.0, 12.0, 18.0, 24.0, 30.0, 36.0, 42.0, 48.0
-};
-
 static WidgetRuler::Mode toWidgetRulerMode(VUMeterWidget::RulerMode mode)
 {
 	switch (mode) {
@@ -75,18 +67,6 @@ double VUMeterWidget::fractionForDb(double db) const
 	return ValueMapping{ m_min, m_max, m_exponent }.toPosition(db);
 }
 
-QString VUMeterWidget::rulerLabelForDb(double db) const
-{
-	// Ruler labels drop the minus sign and mark positive values with '+'.
-	const double a = qAbs(db);
-	const QString magnitude = (a == qRound(a)) ? QString::number(qRound(a))
-	                                            : QString::number(a, 'f', 1);
-	if (db > 0.0) {
-		return u"+"_s + magnitude;
-	}
-	return magnitude; // negative sign dropped, zero stays "0"
-}
-
 void VUMeterWidget::paintEvent(QPaintEvent * /*event*/)
 {
 	QPainter p(this);
@@ -95,14 +75,11 @@ void VUMeterWidget::paintEvent(QPaintEvent * /*event*/)
 	const bool vertical = isVertical();
 	const QRectF full = rect();
 
-	QVector<double> dbCandidates;
-	for (double db : kNiceDbLabels) {
-		dbCandidates << db;
-	}
+	const QVector<double> dbCandidates = WidgetRuler::dbMajorTicks();
 
 	// Reserve space for the widest candidate label, not only the two ends.
 	const QFontMetrics labelMetrics(WidgetRuler::rulerFont());
-	QString widestLabel = rulerLabelForDb(m_min);
+	QString widestLabel = WidgetRuler::dbLabel(m_min);
 	int widestWidth = labelMetrics.horizontalAdvance(widestLabel);
 	auto considerLabel = [&](const QString &text) {
 		const int width = labelMetrics.horizontalAdvance(text);
@@ -111,16 +88,16 @@ void VUMeterWidget::paintEvent(QPaintEvent * /*event*/)
 			widestWidth = width;
 		}
 	};
-	considerLabel(rulerLabelForDb(m_max));
+	considerLabel(WidgetRuler::dbLabel(m_max));
 	for (double db : dbCandidates) {
 		if (db >= m_min && db <= m_max) {
-			considerLabel(rulerLabelForDb(db));
+			considerLabel(WidgetRuler::dbLabel(db));
 		}
 	}
 
 	const WidgetRuler::Geometry rulerGeometry = WidgetRuler::layout(
 			full, vertical, toWidgetRulerMode(m_rulerMode),
-			rulerLabelForDb(m_min), rulerLabelForDb(m_max), widestLabel);
+			WidgetRuler::dbLabel(m_min), WidgetRuler::dbLabel(m_max), widestLabel);
 	if (!rulerGeometry.valid) {
 		return;
 	}
@@ -209,21 +186,10 @@ void VUMeterWidget::paintEvent(QPaintEvent * /*event*/)
 	// full mode, minor ticks between them. Min, max and 0 dB are always
 	// labelled. The drawing itself is shared with the flat slider.
 	if (m_rulerMode != RulerHide) {
-		auto minorDbTicks = [](double a, double b) {
-			QVector<double> ticks;
-			const int gapDb = qRound(b - a);
-			if (gapDb <= 1 || qAbs((b - a) - gapDb) > 1e-6) {
-				return ticks;
-			}
-			for (int i = 1; i < gapDb; ++i) {
-				ticks << a + i;
-			}
-			return ticks;
-		};
 		WidgetRuler::draw(p, rulerGeometry, toWidgetRulerMode(m_rulerMode),
 		                  m_rulerColor, ValueMapping{m_min, m_max, m_exponent},
-		                  [this](double db) { return rulerLabelForDb(db); },
-		                  dbCandidates, {0.0}, minorDbTicks);
+		                  [](double db) { return WidgetRuler::dbLabel(db); },
+		                  dbCandidates, {0.0}, {}, 0.0, 0, true);
 	}
 
 	// Cursor (second channel): a line across the meter at the cursor's dB value
@@ -263,12 +229,12 @@ QuteVUMeter::QuteVUMeter(QWidget *parent) : QuteWidget(parent)
 
 	setProperty("CSQT_minimum", -90.0);
 	setProperty("CSQT_maximum", 0.0);
-	setProperty("CSQT_rulermode", "full");
-	setProperty("CSQT_rulercolor", QColor(170, 170, 170).name());
+	setProperty("CSQT_rulermode", "compact");
+	setProperty("CSQT_rulercolor", QColor(90, 90, 90).name());
 	setProperty("CSQT_exponent", 0.5);
 	setProperty("CSQT_cursorcolor", QColor(255, 255, 255).name());
 	setProperty("CSQT_cursorwidth", 1);
-	setProperty("CSQT_bgcolor", QColor(20, 20, 20));
+	setProperty("CSQT_bgcolor", QColor(32, 32, 32));
 	setProperty("CSQT_bgcolormode", true);
 	setProperty("CSQT_bordercolor", QColor(90, 90, 90));
 	// Start empty (at the minimum) until the channel drives a value.
@@ -427,6 +393,7 @@ void QuteVUMeter::createPropertiesDialog()
 	minSpinBox = new QSpinBox(dialog);
 	minSpinBox->setRange(-200, 200);
 	minSpinBox->setValue(qRound(property("CSQT_minimum").toDouble()));
+	minSpinBox->setFixedWidth(80);
 	layout->addWidget(minSpinBox, row, 1, Qt::AlignLeft | Qt::AlignVCenter);
 
 	label = new QLabel("Max (dB) =", dialog);
@@ -435,6 +402,7 @@ void QuteVUMeter::createPropertiesDialog()
 	maxSpinBox = new QSpinBox(dialog);
 	maxSpinBox->setRange(-200, 200);
 	maxSpinBox->setValue(qRound(property("CSQT_maximum").toDouble()));
+	maxSpinBox->setFixedWidth(80);
 	layout->addWidget(maxSpinBox, row, 3, Qt::AlignLeft | Qt::AlignVCenter);
 	++row;
 
@@ -454,11 +422,11 @@ void QuteVUMeter::createPropertiesDialog()
 	}
 	layout->addWidget(rulerComboBox, row, 1, Qt::AlignLeft | Qt::AlignVCenter);
 
-	label = new QLabel("Scale exponent =", dialog);
+	label = new QLabel("Exponent =", dialog);
 	layout->addWidget(label, row, 2, Qt::AlignRight | Qt::AlignVCenter);
 
 	exponentSpinBox = new QDoubleSpinBox(dialog);
-	exponentSpinBox->setDecimals(2);
+	exponentSpinBox->setDecimals(3);
 	exponentSpinBox->setRange(0.10, 4.00);
 	exponentSpinBox->setSingleStep(0.05);
 	exponentSpinBox->setValue(property("CSQT_exponent").toDouble());
@@ -501,6 +469,7 @@ void QuteVUMeter::createPropertiesDialog()
 
 	cursorChannelLineEdit = new QLineEdit(dialog);
 	cursorChannelLineEdit->setText(m_channel2);
+	cursorChannelLineEdit->setFixedWidth(160);
 	cursorChannelLineEdit->setToolTip("Optional second channel (same dB range) shown as a "
 	                                  "cursor line: horizontal for a vertical meter, "
 	                                  "vertical otherwise");

@@ -53,6 +53,7 @@ public:
     virtual QString getWidgetType();
 	virtual void setWidgetGeometry(int x,int y,int width,int height);
 	void setValue(double value);
+    void setBackgroundColor(const QColor &color);
 
 	void clearCurves();
 	void addCurve(Curve *curve);
@@ -92,6 +93,8 @@ protected:
     QCheckBox *showGridCheckBox;
     QCheckBox *showTableInfoCheckBox;
     QCheckBox *showScrollbarsCheckBox;
+    SelectColorButton *backgroundColorButton = nullptr;
+    QColor m_backgroundColor = Qt::black;
 
 	QVector<Curve *> curves;
 	QVector<QGraphicsPolygonItem *> polygons;

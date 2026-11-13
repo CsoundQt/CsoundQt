@@ -24,9 +24,69 @@
 
 #include "qutetext.h"
 #include "bundledfonts.h"
+#include <QMessageBox>
 #include <math.h>
 
 #define USEFONTPIXELSIZE
+
+// Parse a printf-style format used by a Display widget. Exactly one numeric
+// conversion is allowed; %% pairs are literal percent signs. The conversion
+// character is returned so the value can be passed to asprintf with the
+// correct C type.
+static bool parseDisplayFormat(const QString &format, QChar *conversion = nullptr)
+{
+    if (format.isEmpty())
+        return false;
+    int conversions = 0;
+    for (int i = 0; i < format.size(); ++i) {
+        if (format.at(i) != '%')
+            continue;
+        if (i + 1 < format.size() && format.at(i + 1) == '%') {
+            ++i;
+            continue;
+        }
+        if (++conversions > 1)
+            return false;
+        int j = i + 1;
+        while (j < format.size() && QStringLiteral("-+ #0").contains(format.at(j)))
+            ++j;
+        while (j < format.size() && format.at(j).isDigit())
+            ++j;
+        if (j < format.size() && format.at(j) == '.') {
+            ++j;
+            while (j < format.size() && format.at(j).isDigit())
+                ++j;
+        }
+        if (j >= format.size())
+            return false;
+        const QChar c = format.at(j);
+        if (!QStringLiteral("diouxXfFeEgGaA").contains(c))
+            return false;
+        if (conversion != nullptr)
+            *conversion = c;
+        i = j;
+    }
+    return conversions == 1;
+}
+
+static QString formatDisplayValue(double value, const QString &format,
+                                  QChar conversion)
+{
+    const QByteArray fmt = format.toUtf8();
+    switch (conversion.unicode()) {
+    case u'd':
+    case u'i':
+        return QString::asprintf(fmt.constData(), static_cast<int>(qRound(value)));
+    case u'o':
+    case u'u':
+    case u'x':
+    case u'X':
+        return QString::asprintf(fmt.constData(),
+                                 static_cast<unsigned int>(qRound(value)));
+    default:
+        return QString::asprintf(fmt.constData(), value);
+    }
+}
 
 // Resolve a border color property: an explicit QColor, else a colour string
 // (as sent at runtime via outvalue). An invalid result means "follow the text
@@ -87,6 +147,8 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 	// the previous hard-coded QLabel margin; the property lets the user tighten
 	// or loosen the gap per widget.
 	setProperty("CSQT_padding", 5);
+	// Display widgets can use a printf-style value format instead of Precision.
+	setProperty("CSQT_format", QString());
 
 	m_type = "display";
 	m_typeid = QuteWidgetType::DISPLAY;
@@ -116,7 +178,12 @@ void QuteText::setValue(double value)
 	widgetLock.lockForWrite();
 #endif
 	m_value = value;
-    m_stringValue = QString::number(value, 'f', m_precision);
+    if (!m_displayFormat.isEmpty() && m_displayFormatValid) {
+        m_stringValue = formatDisplayValue(value, m_displayFormat,
+                                           m_displayFormatConversion);
+    } else {
+        m_stringValue = QString::number(value, 'f', m_precision);
+    }
     m_valueChanged = true;
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -274,6 +341,10 @@ void QuteText::applyInternalProperties()
 #endif
     static_cast<QLabel*>(m_widget)->setText(property("CSQT_label").toString());
     m_precision = property("CSQT_precision").toInt();
+    m_displayFormat = property("CSQT_format").toString();
+    m_displayFormatConversion = QChar();
+    m_displayFormatValid = parseDisplayFormat(m_displayFormat,
+                                              &m_displayFormatConversion);
     m_stringValue = property("CSQT_label").toString();
 	m_value = m_stringValue.toDouble();
 	m_valueChanged = true;
@@ -330,9 +401,10 @@ void QuteText::applyInternalProperties()
         (QString("; background-color:")+property("CSQT_bgcolor").value<QColor>().name()) :
         QString("");
 
-    // Padding only applies to labels and displays (the QLabel-based widgets).
+    // Padding only applies to the QLabel-based widgets.
     QString paddingStr;
-    if (m_typeid == QuteWidgetType::LABEL || m_typeid == QuteWidgetType::DISPLAY) {
+    if (m_typeid == QuteWidgetType::LABEL || m_typeid == QuteWidgetType::DISPLAY
+            || m_typeid == QuteWidgetType::SCROLLNUMBER) {
         paddingStr = "; padding:" + QString::number(property("CSQT_padding").toInt()) + "px";
     }
 
@@ -463,6 +535,8 @@ QString QuteText::getWidgetXmlText()
 	s.writeTextElement("fontsize", QString::number(property("CSQT_fontsize").toInt()));
 	if (m_type != "label") // labels have no numeric precision
 		s.writeTextElement("precision", QString::number(property("CSQT_precision").toInt()));
+	if (m_typeid == QuteWidgetType::DISPLAY)
+		s.writeTextElement("format", property("CSQT_format").toString());
 	s.writeTextElement("padding", QString::number(property("CSQT_padding").toInt()));
 	if (m_type == "label") {
 		s.writeTextElement("locked", property("CSQT_locked").toBool() ? "true" : "false");
@@ -502,6 +576,20 @@ void QuteText::createPropertiesDialog()
     // Each property group is one row; new properties are appended in order.
     int row = 5;
 
+    if (m_type == "display") {
+        QLabel *formatLabel = new QLabel(tr("Format"), dialog);
+        layout->addWidget(formatLabel, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
+        labelPtrs["format"] = formatLabel;
+        formatLineEdit = new QLineEdit(dialog);
+        formatLineEdit->setPlaceholderText(tr("e.g. %.2f or %.1f dB"));
+        formatLineEdit->setToolTip(
+                    tr("printf-style format for the displayed value. Leave empty "
+                       "to use the Precision setting. Use %% for a literal "
+                       "percent sign."));
+        formatLineEdit->setText(property("CSQT_format").toString());
+        layout->addWidget(formatLineEdit, 4, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    }
+
 	QLabel *label = new QLabel(dialog);
 	label->setText(tr("Text:"));
 	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignTop);
@@ -514,6 +602,12 @@ void QuteText::createPropertiesDialog()
     // text->setMinimumHeight(240);
     text->setMaximumWidth(8192);
     layout->addWidget(text, row, 1, 1, -1);
+
+    if (m_type == "display") {
+        // A display shows incoming values, so it has no editable label text.
+        label->hide();
+        text->hide();
+    }
     
     // ---------------------------------
     ++row;
@@ -561,7 +655,7 @@ void QuteText::createPropertiesDialog()
     layout->addWidget(font, row, 1, 1, 2, Qt::AlignLeft|Qt::AlignVCenter);
 
     label = new QLabel(dialog);
-	label->setText(tr("Font Size"));
+	label->setText(tr("Size"));
     layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
     labelPtrs["fontSize"] = label;
 
@@ -597,10 +691,49 @@ void QuteText::createPropertiesDialog()
     if (m_type != "label") {
         label = new QLabel("Precision", dialog);
         layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+        labelPtrs["precision"] = label;
         precisionSpinBox = new QSpinBox(dialog);
         precisionSpinBox->unsetLocale();
         precisionSpinBox->setValue(property("CSQT_precision").toInt());
         layout->addWidget(precisionSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    }
+
+    if (formatLineEdit != nullptr) {
+        const auto refreshPrecision = [this]() {
+            if (precisionSpinBox == nullptr)
+                return;
+            const QString fmt = formatLineEdit->text();
+            QChar conversion;
+            const bool useFormat = !fmt.trimmed().isEmpty()
+                    && parseDisplayFormat(fmt, &conversion);
+            precisionSpinBox->setEnabled(!useFormat);
+            if (QLabel *precisionLabel = labelPtrs.value("precision"))
+                precisionLabel->setEnabled(!useFormat);
+        };
+        connect(formatLineEdit, &QLineEdit::editingFinished, this,
+                [this, refreshPrecision]() {
+            const QString fmt = formatLineEdit->text();
+            QChar conversion;
+            const bool empty = fmt.trimmed().isEmpty();
+            const bool valid = empty || parseDisplayFormat(fmt, &conversion);
+            formatLineEdit->setStyleSheet(valid ? QString()
+                                                : QStringLiteral("color: red;"));
+            if (!valid) {
+                QMessageBox::warning(
+                            dialog, tr("Invalid format"),
+                            tr("The format must contain exactly one numeric "
+                               "conversion, for example %.2f, %d or %.1f dB. "
+                               "Use %% for a literal percent sign."));
+            }
+            refreshPrecision();
+        });
+        const QString initialFormat = formatLineEdit->text();
+        QChar conversion;
+        if (!initialFormat.trimmed().isEmpty()
+                && !parseDisplayFormat(initialFormat, &conversion)) {
+            formatLineEdit->setStyleSheet(QStringLiteral("color: red;"));
+        }
+        refreshPrecision();
     }
 
     // Labels have no precision field, so let the border colour use the full row.
@@ -680,7 +813,8 @@ void QuteText::createPropertiesDialog()
     // ---------------------------------
     ++row;
 
-    if (m_typeid == QuteWidgetType::LABEL || m_typeid == QuteWidgetType::DISPLAY) {
+    if (m_typeid == QuteWidgetType::LABEL || m_typeid == QuteWidgetType::DISPLAY
+            || m_typeid == QuteWidgetType::SCROLLNUMBER) {
         label = new QLabel(dialog);
         label->setText(tr("Padding"));
         label->setToolTip(tr("Space between the border and the text, in pixels."));
@@ -792,6 +926,14 @@ void QuteText::applyProperties()
     if (precisionSpinBox) {
         m_precision = precisionSpinBox->value();
         setProperty("CSQT_precision", m_precision);
+    }
+    if (formatLineEdit != nullptr) {
+        const QString fmt = formatLineEdit->text();
+        QChar conversion;
+        const bool empty = fmt.trimmed().isEmpty();
+        const bool valid = empty || parseDisplayFormat(fmt, &conversion);
+        // An invalid format falls back to the Precision setting.
+        setProperty("CSQT_format", valid ? fmt : QString());
     }
     if (paddingSpinBox) {
         setProperty("CSQT_padding", paddingSpinBox->value());
@@ -1182,7 +1324,9 @@ QuteScrollNumber::QuteScrollNumber(QWidget* parent) : QuteText(parent)
 	delete m_widget; //delete widget created by parent constructor
 	m_widget = new ScrollNumberWidget(this);
     auto w = static_cast<ScrollNumberWidget*>(m_widget);
-    w->setMargin(4);  // padding between border and start of contents
+    // The padding property (from the label widget) provides the text inset;
+    // no extra QLabel margin, otherwise padding would be applied twice.
+    w->setMargin(0);
 
 	//  connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
     connect(w, SIGNAL(addValue(double)),
@@ -1196,19 +1340,30 @@ QuteScrollNumber::QuteScrollNumber(QWidget* parent) : QuteText(parent)
 	m_typeid = QuteWidgetType::SCROLLNUMBER;
 
 	setProperty("CSQT_value", (double) 0.0);
-	setProperty("CSQT_resolution", (double) 0.01);
-	setProperty("CSQT_minimum",(double)  -999999999999.0);
-	setProperty("CSQT_maximum", (double) 99999999999999.0);
+	setProperty("CSQT_resolution", (double) 0.1);
+	setProperty("CSQT_minimum",(double)  -9999999.0);
+	setProperty("CSQT_maximum", (double) 9999999.0);
 	setProperty("CSQT_randomizable", false);
 	setProperty("CSQT_randomizableGroup", 0);
 	setProperty("CSQT_mouseControl", "continuous");
 	setProperty("CSQT_mouseControlAct", "jump");
 
+	// Defaults for new scroll numbers.
+	setProperty("CSQT_fontsize", 12.0);
+	setProperty("CSQT_borderradius", 7);
+	setProperty("CSQT_borderwidth", 2);
+	setProperty("CSQT_bordermode", "border");
+	setProperty("CSQT_bgcolormode", true);
+	setProperty("CSQT_bgcolor", QColor("#eff0f1"));
+	setProperty("CSQT_color", QColor("#34393a"));
+	setProperty("CSQT_bordercolor", QColor("#aebdc2"));
+	setProperty("CSQT_padding", 4);
+
 	setProperty("CSQT_label", QVariant()); // Remove this property which is part of parent class.
 	setProperty("CSQT_precision", QVariant()); // Remove this property which is part of parent class.
 	m_places = 2;
-	m_min = -999999999999.0;
-	m_max = 99999999999999.0;
+	m_min = -9999999.0;
+	m_max = 9999999.0;
 }
 
 QuteScrollNumber::~QuteScrollNumber()
@@ -1293,6 +1448,7 @@ QString QuteScrollNumber::getWidgetXmlText()
 	s.writeTextElement("bordermode", property("CSQT_bordermode").toString());
 	s.writeTextElement("borderradius", QString::number(property("CSQT_borderradius").toInt()));
 	s.writeTextElement("borderwidth", QString::number(property("CSQT_borderwidth").toInt()));
+	s.writeTextElement("padding", QString::number(property("CSQT_padding").toInt()));
 	s.writeStartElement("randomizable");
 	s.writeAttribute("group", QString::number(property("CSQT_randomizableGroup").toInt()));
 	s.writeCharacters(property("CSQT_randomizable").toBool() ? "true": "false");
@@ -1354,20 +1510,34 @@ void QuteScrollNumber::createPropertiesDialog()
 	text->setText(QString::number(m_value, 'f', 8));
 	dialog->setWindowTitle("Scroll Number");
 
+	// The scroll number has no editable text and does not use the inherited
+	// numeric precision; it formats its value according to its resolution.
+	text->hide();
+	if (labelPtrs.contains("text"))
+		labelPtrs["text"]->hide();
+	if (precisionSpinBox != nullptr) {
+		precisionSpinBox->hide();
+		if (QLabel *precisionLabel = labelPtrs.value("precision"))
+			precisionLabel->hide();
+		precisionSpinBox = nullptr;
+	}
+
 	int row = 2; // rows above the shared text widget block
 	QLabel *label = new QLabel(dialog);
 	label->setText("Min =");
 	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	minSpinBox = new QDoubleSpinBox(dialog);
-	minSpinBox->setDecimals(6);
+	minSpinBox->setDecimals(4);
 	minSpinBox->setRange(-999999999999.0, 999999999999.0);
+	minSpinBox->setMaximumWidth(100);
 	layout->addWidget(minSpinBox, row,1, Qt::AlignLeft|Qt::AlignVCenter);
 	label = new QLabel(dialog);
 	label->setText("Max =");
 	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 	maxSpinBox = new QDoubleSpinBox(dialog);
-	maxSpinBox->setDecimals(6);
+	maxSpinBox->setDecimals(4);
 	maxSpinBox->setRange(-999999999999.0, 999999999999.0);
+	maxSpinBox->setMaximumWidth(100);
 	layout->addWidget(maxSpinBox, row,3, Qt::AlignLeft|Qt::AlignVCenter);
 	++row;
 

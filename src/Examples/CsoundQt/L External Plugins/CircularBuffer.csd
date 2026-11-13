@@ -1,8 +1,4 @@
 <CsoundSynthesizer>
-<CsOptions>
--odac
--m0
-</CsOptions>
 <CsInstruments>
 
 /*
@@ -10,58 +6,57 @@ This example uses the external plugins klib and else in
 https://github.com/csound-plugins/csound-plugins
 */
 
-sr = 44100
-ksmps = 64
+ksmps  = 64
 nchnls = 2
-0dbfs = 1
+0dbfs  = 1
 
 gi_refreshRate = 20
 
-opcode makeCircBuffer, i, i
-  idur xin
+opcode makeCircBuffer(idur:i):i
+  /* creates a circular buffer
+  */
   ; quantize table length to ksmps
   inumsamples = ceil(sr*idur / ksmps) * ksmps
   itable = ftgen(0, 0, inumsamples, 2, 0)
-  iobj = dict_new("str:float", "table", itable, "writePointer", 0, "readPointer", 0, "recDur", 0)
-  xout iobj 
+  iobj = dict_new("str:float", 
+                  "table", itable, 
+                  "writePointer", 0, 
+                  "readPointer", 0, 
+                  "recDur", 0)
+  xout iobj
 endop
 
 instr recCircBuffer
   ibuf, ichan passign 4
-  itab = dict_get:i(ibuf, "table")
+  itab    = dict_get:i(ibuf, "table")
   itablen = ftlen(itab)
   imaxdur = itablen / sr
   ftset itab, 0
-  ktime = timeinsts()
-  asig = inch(ichan)
+  ktime  = timeinsts()
+  asig   = inch(ichan)
   aindex = accum:a(1) % itablen
-  tablew asig, aindex, itab
-  
-  if lastcycle() == 1 then
-    ; stop recording
-    dict_set ibuf, "recDur", min(ktime, imaxdur)
-    kwritePointer = aindex[ksmps-1]
-    dict_set ibuf, "writePointer", kwritePointer
-    dict_set ibuf, "readPointer", ktime < imaxdur ? 0 : kwritePointer
-  endif
+  tablew(asig, aindex, itab)
+  dict_set ibuf, "recDur", min(ktime, imaxdur)
+  kwritePointer = aindex[ksmps-1]
+  dict_set ibuf, "writePointer", kwritePointer
+  dict_set ibuf, "readPointer", ktime < imaxdur ? 0 : kwritePointer
 endin
 
 instr playCircBuffer
   ibuf, ispeed, ichan passign 4
-  idur    dict_get ibuf, "recDur"
-  itab    dict_get ibuf, "table"
-  ioffset dict_get ibuf, "readPointer"
-  ifade = 0.08
-  asig table3 line:a(0, idur/ispeed, idur*sr), itab, 0, ioffset, 1
+  idur    = dict_get(ibuf, "recDur")
+  itab    = dict_get(ibuf, "table")
+  ioffset = dict_get(ibuf, "readPointer")
+  ifade   = 0.08
+  asig = table3(line:a(0, idur/ispeed, idur*sr), itab, 0, ioffset, 1)
   asig *= linsegr:a(0, ifade, 1, ifade, 0)
   outch ichan, asig
-  if timeinsts() > idur/ispeed - ifade - 2*ksmps/sr then
+  if !isreleasing() && timeinsts:k() > (idur/ispeed - ifade - 2*ksmps/sr) then
     turnoff2 p1, 4, 1
   endif
 endin
 
-opcode toggleInstr, 0, SkiOOOOOO
-  Sname, kgate, idt, kp4, kp5, kp6, kp7, kp8, kp9 xin
+opcode toggleInstr(Sname:S, kgate:k, idt:i, kp4:O, kp5:O, kp6:O, kp7:O, kp8:O, kp9:O):()
   if changed2(kgate) == 0 kgoto skip
   if kgate == 1 then
     schedulek Sname, idt, -1, kp4, kp5, kp6, kp7, kp8, kp9
@@ -73,37 +68,26 @@ endop
 
 instr main
   ; a circular buffer with a max. recording duration of 20 secs
-  
-  ibuf = makeCircBuffer(20)
+
+  ibuf    = makeCircBuffer(20)
   itabnum = dict_get:i(ibuf, "table")
   prints("itabnum: %d\n", itabnum)
-  
-  krec = chnget("record")
+
+  krec  = chnget("record")
   kplay = 1 - krec
-  
-  toggleInstr "recCircBuffer",  krec,  0,    ibuf, 1
+
+  toggleInstr "recCircBuffer", krec, 0, ibuf, 1
   toggleInstr "playCircBuffer", kplay, 0.01, ibuf, /*speed*/ 1, /*outchannel*/ 1
-  
+
   chnset metro(gi_refreshRate) == 1 ? -1 : itabnum, "plot"
 
 endin
 
-
 schedule "main", 0, -1
 
+
 </CsInstruments>
-<CsScore>
-
-</CsScore>
 </CsoundSynthesizer>
-
-
-
-
-
-
-
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -113,11 +97,7 @@ schedule "main", 0, -1
  <height>288</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
+ <bgcolor mode="background">#343434</bgcolor>
  <bsbObject type="BSBButton" version="2">
   <objectName>record</objectName>
   <x>12</x>
@@ -125,7 +105,9 @@ schedule "main", 0, -1
   <width>80</width>
   <height>80</height>
   <uuid>{b8ffa76d-0f30-4672-a916-b7fd3942830f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
@@ -133,12 +115,21 @@ schedule "main", 0, -1
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>REC</text>
-  <image>/</image>
-  <eventLine>i1 0 -1</eventLine>
+  <image/>
+  <eventLine/>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
-  <fontsize>30</fontsize>
+  <fontsize>24</fontsize>
+  <font>Liberation Sans</font>
+  <flatStyle>true</flatStyle>
+  <color>#a23600</color>
+  <pressedColor>#ff0000</pressedColor>
+  <borderColor>#bd3f00</borderColor>
+  <textColor>#b0b0b0</textColor>
+  <pressedTextColor>#ffffff</pressedTextColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>6</borderRadius>
  </bsbObject>
  <bsbObject type="BSBTableDisplay" version="2">
   <objectName>plot</objectName>
@@ -147,16 +138,21 @@ schedule "main", 0, -1
   <width>598</width>
   <height>191</height>
   <uuid>{773494f8-6777-408a-89a3-0e7ad186ebda}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <color>
-   <r>255</r>
-   <g>193</g>
-   <b>3</b>
-  </color>
+  <foreground>#ffc103</foreground>
+  <background>#181818</background>
+  <gridcolor>#48a0a0a0</gridcolor>
+  <samplerate>1</samplerate>
   <range>1.00</range>
+  <linewidth>1</linewidth>
+  <plottype>line</plottype>
+  <pointradius>0</pointradius>
+  <zoom>1.000000</zoom>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

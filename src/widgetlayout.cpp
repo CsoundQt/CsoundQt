@@ -28,6 +28,15 @@
 #include <QDockWidget>
 #include <QDir>
 #include <QFileInfo>
+#include <QProxyStyle>
+#include <QPainter>
+#include <QPixmap>
+#include <QCursor>
+#include <QSettings>
+#include <QScreen>
+#include <QTimer>
+#include <QToolButton>
+#include <QVBoxLayout>
 #include <limits>
 
 #include "widgetlayout.h"
@@ -35,6 +44,7 @@
 #include "qutewidget.h"
 #include "bundledfonts.h"
 #include "notification.h"
+#include "widgetstyle.h"
 #include "quteslider.h"
 #include "qutetext.h"
 #include "qutespinbox.h"
@@ -52,6 +62,578 @@
 
 #include "csoundqt.h" // For passing the actions from button reserved channels
 using namespace Qt::StringLiterals;
+
+// Whether newly created flat-style-capable widgets should start flat. The
+// application mirrors the setting on qApp when options are applied; fall back
+// to the saved setting during startup (widgets may be created while loading
+// command-line files before applySettings() runs).
+static bool newWidgetsUseFlatStyle()
+{
+    const QVariant mirrored = qApp->property("flatStyleNewWidgets");
+    if (mirrored.isValid())
+        return mirrored.toBool();
+    QSettings settings("csoundqt", "csoundqt");
+    settings.beginGroup("Options");
+    settings.beginGroup("Editor");
+    return settings.value("flatStyleNewWidgets", true).toBool();
+}
+
+static QString defaultWidgetFontFamily()
+{
+    const QString family = qApp->property("defaultWidgetFont").toString().trimmed();
+    return family.isEmpty() ? u"Liberation Sans"_s : family;
+}
+
+static void applyFlatStyleToNewWidget(QuteWidget *widget)
+{
+    if (widget == nullptr)
+        return;
+    const bool flat = newWidgetsUseFlatStyle();
+    if (widget->property("CSQT_flatStyle").isValid()) {
+        widget->setProperty("CSQT_flatStyle", flat);
+        widget->applyInternalProperties();
+    } else if (widget->property("CSQT_flatstyle").isValid()) {
+        widget->setProperty("CSQT_flatstyle", flat);
+        widget->applyInternalProperties();
+    }
+}
+
+// Visual defaults for a newly created slider. The colours are chosen from the
+// panel background so the flat slider fits the panel instead of the app theme.
+static void applySliderCreationDefaults(QuteWidget *widget, bool darkPanel)
+{
+    if (widget == nullptr)
+        return;
+    widget->setProperty("CSQT_borderRadius", 3);
+    widget->setProperty("CSQT_borderWidth", 2);
+    widget->setProperty("CSQT_fillMode", "fill");
+    widget->setProperty("CSQT_rulermode", "hide");
+    widget->setProperty("CSQT_thumbWidth", 4);
+    widget->setProperty("CSQT_thumbPadding", 0);
+    widget->setProperty("CSQT_thumbRadius", 2);
+
+    if (darkPanel) {
+        widget->setProperty("CSQT_foreground", QColor("#daeff3"));
+        widget->setProperty("CSQT_bgcolor", QColor("#434343"));
+        widget->setProperty("CSQT_bordercolor", QColor("#a1a1a1"));
+        widget->setProperty("CSQT_fillcolor", QColor("#828282"));
+        widget->setProperty("CSQT_rulercolor", QColor("#a1a1a1"));
+    } else {
+        widget->setProperty("CSQT_foreground", QColor("#34393a"));
+        widget->setProperty("CSQT_bgcolor", QColor("#f0f0f0"));
+        widget->setProperty("CSQT_bordercolor", QColor("#aebcd2"));
+        widget->setProperty("CSQT_fillcolor", QColor("#dfdfdf"));
+        widget->setProperty("CSQT_rulercolor", QColor("#aebcd2"));
+    }
+}
+
+// Visual defaults for a newly created VU meter. The accent colour follows the
+// panel background; the dark meter face is the same in both cases.
+static void applyVUMeterCreationDefaults(QuteWidget *widget, bool darkPanel)
+{
+    if (widget == nullptr)
+        return;
+    widget->setProperty("CSQT_minimum", -90.0);
+    widget->setProperty("CSQT_maximum", 0.0);
+    widget->setProperty("CSQT_rulermode", "compact");
+    widget->setProperty("CSQT_bgcolormode", true);
+    widget->setProperty("CSQT_bgcolor", QColor("#202020"));
+    const QColor accent(darkPanel ? QColor("#bcbdbe") : QColor("#5a5a5a"));
+    widget->setProperty("CSQT_rulercolor", accent.name());
+    widget->setProperty("CSQT_bordercolor", accent);
+    widget->applyInternalProperties();
+}
+
+// Labels and displays are not interactive in performance mode. Let mouse
+// events pass through them so they can be used as overlays on top of sliders,
+// buttons, etc. In edit mode they must remain clickable/selectable.
+static void setWidgetMouseTransparency(QuteWidget *widget, bool editMode)
+{
+    if (widget == nullptr)
+        return;
+    const QuteWidgetType type = widget->getWidgetTypeID();
+    const bool passThrough = !editMode
+            && (type == QuteWidgetType::LABEL || type == QuteWidgetType::DISPLAY);
+    widget->setAttribute(Qt::WA_TransparentForMouseEvents, passThrough);
+}
+
+namespace {
+// A small grid of widget types, shown below the pointer on a double-click on
+// the panel background. Clicking an entry or pressing its shortcut triggers the
+// corresponding create action after the popup has closed.
+static QColor blendedColor(const QColor &foreground, const QColor &background,
+                           qreal foregroundWeight)
+{
+    return QColor::fromRgbF(
+        foreground.redF() * foregroundWeight
+            + background.redF() * (1.0 - foregroundWeight),
+        foreground.greenF() * foregroundWeight
+            + background.greenF() * (1.0 - foregroundWeight),
+        foreground.blueF() * foregroundWeight
+            + background.blueF() * (1.0 - foregroundWeight));
+}
+
+} // namespace
+
+namespace {
+constexpr int WidgetOverlayWidth = 28;
+constexpr int WidgetOverlayMinButtonHeight = 18;
+constexpr int WidgetOverlayMaxButtonHeight = 28;
+constexpr int WidgetOverlayMaxIconSize = 24;
+} // namespace
+
+// Compact widget-type strip shown along the right edge of the panel in edit
+// mode. It mirrors the New Widget palette, but is always visible while editing.
+class WidgetCreateOverlay : public QWidget
+{
+public:
+    WidgetCreateOverlay(WidgetLayout *layout, const QList<QAction *> &actions,
+                        QWidget *parent)
+        : QWidget(parent), m_layout(layout)
+    {
+        setObjectName("WidgetCreateOverlay");
+        setFixedWidth(WidgetOverlayWidth);
+        setFocusPolicy(Qt::NoFocus);
+
+        auto *column = new QVBoxLayout(this);
+        column->setContentsMargins(0, 2, 0, 2);
+        column->setSpacing(0);
+
+        for (QAction *action : actions) {
+            auto *button = new QToolButton(this);
+            button->setAutoRaise(true);
+            button->setToolButtonStyle(Qt::ToolButtonIconOnly);
+            button->setIconSize(QSize(WidgetOverlayMaxIconSize,
+                                      WidgetOverlayMaxIconSize));
+            button->setFixedSize(WidgetOverlayWidth,
+                                 WidgetOverlayMaxButtonHeight);
+            button->setFocusPolicy(Qt::NoFocus);
+            button->setCursor(Qt::PointingHandCursor);
+            connect(button, &QToolButton::clicked, this, [this, action]() {
+                if (m_layout != nullptr)
+                    m_layout->createWidgetFromOverlay(action);
+            });
+            connect(action, &QAction::changed, this, [this]() { updateIcons(); });
+            m_buttons.append(qMakePair(action, button));
+            column->addWidget(button, 0, Qt::AlignHCenter);
+        }
+        column->addStretch(1);
+        updateIcons();
+    }
+
+    void updateIcons()
+    {
+        for (const auto &entry : m_buttons) {
+            QAction *action = entry.first;
+            QToolButton *button = entry.second;
+            button->setIcon(m_layout != nullptr
+                            ? m_layout->iconForPanel(action)
+                            : action->icon());
+            QString tip = action->text();
+            if (!action->shortcut().isEmpty()) {
+                tip += u" (%1)"_s.arg(
+                            action->shortcut().toString(QKeySequence::NativeText));
+            }
+            button->setToolTip(tip);
+        }
+    }
+
+protected:
+    void resizeEvent(QResizeEvent *event) override
+    {
+        QWidget::resizeEvent(event);
+        updateButtonSizes();
+    }
+
+    void paintEvent(QPaintEvent *) override
+    {
+        QPainter painter(this);
+        QColor background = palette().color(QPalette::Window);
+        background.setAlpha(225);
+        painter.fillRect(rect(), background);
+        painter.setPen(QColor(128, 128, 128, 170));
+        painter.drawLine(0, 0, 0, height() - 1);
+    }
+
+private:
+    void updateButtonSizes()
+    {
+        if (m_buttons.isEmpty())
+            return;
+        const int available = qMax(0, height() - 4);
+        const int buttonHeight = qBound(WidgetOverlayMinButtonHeight,
+                                        available / m_buttons.size(),
+                                        WidgetOverlayMaxButtonHeight);
+        const int iconSize = qBound(12,
+                                    qMin(WidgetOverlayWidth - 4, buttonHeight - 4),
+                                    WidgetOverlayMaxIconSize);
+        for (const auto &entry : m_buttons) {
+            QToolButton *button = entry.second;
+            button->setFixedSize(WidgetOverlayWidth, buttonHeight);
+            button->setIconSize(QSize(iconSize, iconSize));
+        }
+    }
+
+    QPointer<WidgetLayout> m_layout;
+    QList<QPair<QAction *, QToolButton *>> m_buttons;
+};
+
+namespace {
+
+// One widget type in the New Widget palette. It is painted as a focusable card
+// with icon, name and shortcut; hover and keyboard focus share the same look.
+class WidgetPaletteButton : public QAbstractButton
+{
+public:
+    explicit WidgetPaletteButton(QAction *action, QWidget *parent = nullptr)
+        : QAbstractButton(parent), m_action(action)
+    {
+        setText(action->text());
+        setFocusPolicy(Qt::StrongFocus);
+        setAttribute(Qt::WA_Hover, true);
+        setCursor(Qt::PointingHandCursor);
+        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        QString tip = action->text();
+        if (!action->shortcut().isEmpty()) {
+            tip += u" (%1)"_s.arg(action->shortcut().toString(QKeySequence::NativeText));
+        }
+        setToolTip(tip);
+        connect(action, &QAction::changed, this, qOverload<>(&QWidget::update));
+    }
+
+    QAction *action() const { return m_action; }
+
+    QSize sizeHint() const override
+    {
+        const int textHeight = fontMetrics().height();
+        return QSize(104, 8 + 24 + 4 + textHeight + 2 + textHeight + 6);
+    }
+
+protected:
+    void paintEvent(QPaintEvent *) override
+    {
+        QPainter painter(this);
+        painter.setRenderHint(QPainter::Antialiasing);
+
+        const bool active = underMouse() || hasFocus();
+        const QColor windowColor = palette().color(QPalette::Window);
+        const QColor highlight = palette().color(QPalette::Highlight);
+        QColor background = windowColor;
+        if (active) {
+            background = blendedColor(highlight, windowColor, 0.25);
+            painter.setPen(QPen(highlight, 1.2));
+        } else {
+            painter.setPen(Qt::NoPen);
+        }
+        painter.setBrush(background);
+        painter.drawRoundedRect(rect().adjusted(1, 1, -1, -1), 4, 4);
+
+        const int iconSize = 24;
+        const qreal dpr = painter.device() ? painter.device()->devicePixelRatioF()
+                                           : qApp->devicePixelRatio();
+        const QPixmap pixmap = m_action->icon().pixmap(QSize(iconSize, iconSize), dpr);
+        const QSize logicalIcon = pixmap.deviceIndependentSize().toSize();
+        const QRect iconRect((width() - logicalIcon.width()) / 2, 8,
+                             logicalIcon.width(), logicalIcon.height());
+        painter.drawPixmap(iconRect.topLeft(), pixmap);
+
+        const QFontMetrics fm(font());
+        const QColor textColor = palette().color(
+                    isEnabled() ? QPalette::Normal : QPalette::Disabled,
+                    QPalette::WindowText);
+        const int labelTop = 8 + iconSize + 4;
+        const QString label = fm.elidedText(m_action->text(), Qt::ElideRight, width() - 8);
+        painter.setPen(textColor);
+        painter.drawText(QRect(4, labelTop, width() - 8, fm.height()),
+                         Qt::AlignHCenter | Qt::AlignVCenter, label);
+
+        const QString shortcut = m_action->shortcut().toString(QKeySequence::NativeText);
+        if (!shortcut.isEmpty()) {
+            painter.setPen(blendedColor(textColor, background, 0.65));
+            painter.drawText(QRect(4, labelTop + fm.height() + 2,
+                                   width() - 8, fm.height()),
+                             Qt::AlignHCenter | Qt::AlignVCenter, shortcut);
+        }
+    }
+
+    void enterEvent(QEnterEvent *event) override
+    {
+        QAbstractButton::enterEvent(event);
+        update();
+    }
+
+    void leaveEvent(QEvent *event) override
+    {
+        QAbstractButton::leaveEvent(event);
+        update();
+    }
+
+    void focusInEvent(QFocusEvent *event) override
+    {
+        QAbstractButton::focusInEvent(event);
+        update();
+    }
+
+    void focusOutEvent(QFocusEvent *event) override
+    {
+        QAbstractButton::focusOutEvent(event);
+        update();
+    }
+
+    void keyPressEvent(QKeyEvent *event) override
+    {
+        switch (event->key()) {
+        case Qt::Key_Return:
+        case Qt::Key_Enter:
+        case Qt::Key_Space:
+            animateClick();
+            event->accept();
+            return;
+        default:
+            // Let the popup handle shortcuts and arrow-key navigation.
+            event->ignore();
+            return;
+        }
+    }
+
+private:
+    QAction *m_action;
+};
+
+class NewWidgetPopup : public QDialog
+{
+public:
+    NewWidgetPopup(const QList<QAction *> &actions, const QPoint &globalPos, QWidget *parent)
+        : QDialog(parent, Qt::Popup | Qt::FramelessWindowHint)
+    {
+        setAttribute(Qt::WA_TranslucentBackground);
+        setAutoFillBackground(false);
+        setModal(true);
+        auto *grid = new QGridLayout(this);
+        grid->setContentsMargins(8, 8, 8, 8);
+        grid->setHorizontalSpacing(4);
+        grid->setVerticalSpacing(4);
+
+        int row = 0;
+        int column = 0;
+        for (QAction *action : actions) {
+            auto *button = new WidgetPaletteButton(action, this);
+            connect(button, &QAbstractButton::clicked, this, [this, action]() {
+                m_chosen = action;
+                accept();
+            });
+            m_buttons.append(button);
+            grid->addWidget(button, row, column);
+            if (++column == Columns) {
+                column = 0;
+                ++row;
+            }
+        }
+
+        adjustSize();
+        if (QScreen *screen = QGuiApplication::screenAt(globalPos)) {
+            const QRect available = screen->availableGeometry();
+            QPoint pos = globalPos + QPoint(0, 12);
+            if (pos.x() + width() > available.right())
+                pos.setX(qMax(available.left(), available.right() - width()));
+            if (pos.y() + height() > available.bottom())
+                pos.setY(qMax(available.top(), globalPos.y() - height() - 12));
+            move(pos);
+        } else {
+            move(globalPos + QPoint(0, 12));
+        }
+        connect(qApp, &QGuiApplication::paletteChanged, this,
+                [this](const QPalette &) { update(); });
+    }
+
+    QAction *chosenAction() const { return m_chosen; }
+
+protected:
+    void paintEvent(QPaintEvent *event) override
+    {
+        Q_UNUSED(event);
+        QPainter painter(this);
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.setPen(QPen(QColor(128, 128, 128), 1));
+        painter.setBrush(palette().color(QPalette::Window));
+        painter.drawRoundedRect(QRectF(rect()).adjusted(0.5, 0.5, -0.5, -0.5), 6, 6);
+    }
+
+    void showEvent(QShowEvent *event) override
+    {
+        QDialog::showEvent(event);
+        if (!m_buttons.isEmpty())
+            m_buttons.first()->setFocus(Qt::OtherFocusReason);
+    }
+
+    void keyPressEvent(QKeyEvent *event) override
+    {
+        const int key = event->key();
+        if (key == Qt::Key_Escape) {
+            reject();
+            return;
+        }
+        if (key == Qt::Key_Left || key == Qt::Key_Right
+                || key == Qt::Key_Up || key == Qt::Key_Down) {
+            int index = -1;
+            QWidget *focused = focusWidget();
+            for (int i = 0; i < m_buttons.size(); ++i) {
+                if (m_buttons.at(i) == focused) {
+                    index = i;
+                    break;
+                }
+            }
+            if (index < 0)
+                index = 0;
+            int target = index;
+            switch (key) {
+            case Qt::Key_Left:
+                target = index - 1;
+                break;
+            case Qt::Key_Right:
+                target = index + 1;
+                break;
+            case Qt::Key_Up:
+                target = index - Columns;
+                break;
+            case Qt::Key_Down:
+                target = index + Columns;
+                break;
+            default:
+                break;
+            }
+            if (target >= 0 && target < m_buttons.size())
+                m_buttons.at(target)->setFocus(Qt::TabFocusReason);
+            event->accept();
+            return;
+        }
+
+        const QKeySequence pressed(event->modifiers() | event->key());
+        for (WidgetPaletteButton *button : m_buttons) {
+            const QKeySequence shortcut = button->action()->shortcut();
+            if (!shortcut.isEmpty() && shortcut == pressed) {
+                button->setFocus(Qt::OtherFocusReason);
+                button->animateClick();
+                event->accept();
+                return;
+            }
+        }
+        QDialog::keyPressEvent(event);
+    }
+
+private:
+    static constexpr int Columns = 4;
+    QList<WidgetPaletteButton *> m_buttons;
+    QAction *m_chosen = nullptr;
+};
+
+// The New Widget icons are detailed, so render them larger than Qt's default
+// menu icon size.
+class LargeMenuIconStyle : public QProxyStyle
+{
+public:
+    int pixelMetric(PixelMetric metric, const QStyleOption *option = nullptr,
+                    const QWidget *widget = nullptr) const override
+    {
+        if (metric == QStyle::PM_SmallIconSize)
+            return 24;
+        return QProxyStyle::pixelMetric(metric, option, widget);
+    }
+
+    QSize sizeFromContents(ContentsType type, const QStyleOption *option,
+                           const QSize &size, const QWidget *widget) const override
+    {
+        QSize result = QProxyStyle::sizeFromContents(type, option, size, widget);
+        if (type == CT_MenuItem) {
+            const auto *menuItem = qstyleoption_cast<const QStyleOptionMenuItem *>(option);
+            if (menuItem != nullptr && !menuItem->icon.isNull()
+                    && menuItem->menuItemType != QStyleOptionMenuItem::Separator) {
+                // The styles add generous vertical padding around menu icons.
+                // Keep just a little breathing room around our 24px icons.
+                result.setHeight(qMax(24, menuItem->fontMetrics.height()) + 2);
+            }
+        }
+        return result;
+    }
+
+    // Some styles (notably Klassy/Breeze) use their own fixed menu icon metric
+    // when drawing CE_MenuItem, even when the widget's style reports a larger
+    // PM_SmallIconSize. Paint the item background with the base style, then
+    // draw the icon and text ourselves so the icon size is always honoured.
+    void drawControl(ControlElement element, const QStyleOption *option,
+                     QPainter *painter, const QWidget *widget) const override
+    {
+        if (element != CE_MenuItem) {
+            QProxyStyle::drawControl(element, option, painter, widget);
+            return;
+        }
+        const auto *menuItem = qstyleoption_cast<const QStyleOptionMenuItem *>(option);
+        if (menuItem == nullptr || menuItem->icon.isNull()
+                || menuItem->menuItemType == QStyleOptionMenuItem::Separator) {
+            QProxyStyle::drawControl(element, option, painter, widget);
+            return;
+        }
+
+        QStyleOptionMenuItem background = *menuItem;
+        background.icon = QIcon();
+        background.text.clear();
+        QProxyStyle::drawControl(element, &background, painter, widget);
+
+        const int iconSize = 24;
+        const int iconLeft = menuItem->rect.left() + 6;
+        const QRect iconRect(iconLeft,
+                             menuItem->rect.top() + (menuItem->rect.height() - iconSize) / 2,
+                             iconSize, iconSize);
+        const bool enabled = menuItem->state & State_Enabled;
+        const bool selected = enabled && (menuItem->state & State_Selected);
+        const QIcon::Mode mode = !enabled ? QIcon::Disabled
+                                          : (selected ? QIcon::Active : QIcon::Normal);
+        const qreal dpr = painter->device() ? painter->device()->devicePixelRatioF()
+                                            : qApp->devicePixelRatio();
+        const QPixmap pixmap = menuItem->icon.pixmap(
+                    QSize(iconSize, iconSize), dpr, mode,
+                    menuItem->state & State_On ? QIcon::On : QIcon::Off);
+        painter->drawPixmap(iconRect.topLeft(), pixmap);
+
+        const int tabPos = menuItem->text.indexOf(u'\t');
+        const QString label = tabPos >= 0 ? menuItem->text.left(tabPos) : menuItem->text;
+        const QString shortcut = tabPos >= 0 ? menuItem->text.mid(tabPos + 1) : QString();
+
+        QRect textRect = menuItem->rect.adjusted(iconLeft + iconSize + 8, 0, -8, 0);
+        QRect shortcutRect;
+        if (!shortcut.isEmpty()) {
+            const int shortcutWidth = menuItem->fontMetrics.horizontalAdvance(shortcut);
+            shortcutRect = QRect(textRect.right() - shortcutWidth, textRect.top(),
+                                 shortcutWidth, textRect.height());
+            textRect.setRight(shortcutRect.left() - 12);
+        }
+
+        painter->setFont(menuItem->font);
+        const QPalette::ColorGroup group = enabled ? QPalette::Normal : QPalette::Disabled;
+        const QColor textColor = menuItem->palette.color(
+                            group, selected ? QPalette::HighlightedText : QPalette::Text);
+        painter->setPen(textColor);
+        painter->drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
+                          label);
+        if (!shortcut.isEmpty()) {
+            const QColor shortcutBackground = menuItem->palette.color(
+                        selected ? QPalette::Highlight : QPalette::Window);
+            constexpr qreal foregroundWeight = 0.65;
+            const QColor shortcutColor = QColor::fromRgbF(
+                        textColor.redF() * foregroundWeight
+                            + shortcutBackground.redF() * (1.0 - foregroundWeight),
+                        textColor.greenF() * foregroundWeight
+                            + shortcutBackground.greenF() * (1.0 - foregroundWeight),
+                        textColor.blueF() * foregroundWeight
+                            + shortcutBackground.blueF() * (1.0 - foregroundWeight));
+            painter->setPen(shortcutColor);
+            painter->drawText(shortcutRect,
+                              Qt::AlignRight | Qt::AlignVCenter | Qt::TextSingleLine,
+                              shortcut);
+        }
+    }
+};
+}
 
 
 static void installHoverFilter(QObject *filter, QWidget *root)
@@ -143,6 +725,46 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 
     createVUMeterAct = new QAction(tr("VU Meter"), this);
     connect(createVUMeterAct, SIGNAL(triggered()), this, SLOT(createNewVUMeter()));
+
+    m_createWidgetIcons = {
+        {createSliderAct, u"slider"_s},
+        {createLabelAct, u"label"_s},
+        {createDisplayAct, u"display"_s},
+        {createScrollNumberAct, u"scroll-number"_s},
+        {createLineEditAct, u"line-edit"_s},
+        {createSpinBoxAct, u"spinbox"_s},
+        {createButtonAct, u"button"_s},
+        {createKnobAct, u"knob"_s},
+        {createCheckBoxAct, u"checkbox"_s},
+        {createMenuAct, u"menu"_s},
+        {createMeterAct, u"controller"_s},
+        {createConsoleAct, u"console"_s},
+        {createGraphAct, u"graph"_s},
+        {createScopeAct, u"scope"_s},
+        {createTableDisplayAct, u"table-plot"_s},
+        {createWaveformAct, u"waveform"_s},
+        {createVUMeterAct, u"vu-meter"_s},
+    };
+    updateCreateActionIcons();
+
+    // The panel handles creation from its keyPressEvent(), but the shortcuts
+    // are also attached to the actions so the New Widget submenu shows them.
+    createButtonAct->setShortcut(QKeySequence(Qt::Key_B));
+    createSliderAct->setShortcut(QKeySequence(Qt::Key_S));
+    createVUMeterAct->setShortcut(QKeySequence(Qt::Key_V));
+    createKnobAct->setShortcut(QKeySequence(Qt::Key_K));
+    createCheckBoxAct->setShortcut(QKeySequence(Qt::Key_X));
+    createMenuAct->setShortcut(QKeySequence(Qt::Key_M));
+    createLabelAct->setShortcut(QKeySequence(Qt::Key_L));
+    createDisplayAct->setShortcut(QKeySequence(Qt::Key_D));
+    createSpinBoxAct->setShortcut(QKeySequence(Qt::Key_P));
+    createScrollNumberAct->setShortcut(QKeySequence(Qt::Key_U));
+    createMeterAct->setShortcut(QKeySequence(Qt::Key_C));
+    createScopeAct->setShortcut(QKeySequence(Qt::SHIFT | Qt::Key_S));
+    createGraphAct->setShortcut(QKeySequence(Qt::SHIFT | Qt::Key_G));
+    createTableDisplayAct->setShortcut(QKeySequence(Qt::Key_T));
+    createWaveformAct->setShortcut(QKeySequence(Qt::SHIFT | Qt::Key_W));
+    createLineEditAct->setShortcut(QKeySequence(Qt::SHIFT | Qt::Key_L));
 
     propertiesAct = new QAction(tr("Properties"),this);
     connect(propertiesAct, SIGNAL(triggered()), this, SLOT(propertiesDialog()));
@@ -273,7 +895,13 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
     // been installed instead of letting the theme alter the design.
     if (qApp) {
         connect(qApp, &QGuiApplication::paletteChanged, this,
-                [this](const QPalette &) { restoreBackgroundFromProperties(); });
+                [this](const QPalette &) {
+                    updateCreateActionIcons();
+                    restoreBackgroundFromProperties();
+                    updateScrollBarStyle();
+                    if (m_createOverlay != nullptr)
+                        m_createOverlay->updateIcons();
+                });
     }
     m_updating = true;
     QTimer::singleShot(500, this, SLOT(updateData())); // Delay first update
@@ -309,6 +937,8 @@ QString WidgetLayout::documentDirectory() const
 
 WidgetLayout::~WidgetLayout()
 {
+    if (m_createOverlay != nullptr)
+        delete m_createOverlay;
     clearChannelHighlights();
     disconnect(this, 0,0,0);
     layoutMutex.lock();
@@ -1269,6 +1899,7 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
             this, SLOT(newValue(QPair<QString,double>)));
     connect(widget, SIGNAL(newValue(QPair<QString,QString>)),
             this, SLOT(newValue(QPair<QString,QString>)));
+    widget->setDefaultValue(widget->getValue());
     m_widgets.append(widget);
     installHoverFilter(this, widget);
     channelNameToWidgets.clear();
@@ -1287,6 +1918,7 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
     }
     widgetsMutex.unlock();
     adjustLayoutSize();
+    setWidgetMouseTransparency(widget, m_editMode);
 	widget->show();
 }
 
@@ -1417,8 +2049,8 @@ QString WidgetLayout::getMidiControllerInstrument()
 		if (registeredControllers[i].cc >= 0 && registeredControllers[i].chan>0) {
 			QuteWidget * widget = registeredControllers[i].widget;
 
-			// bool isEventButton = (widget->getWidgetType()=="BSBButton"  && widget->property("CSQT_type").toString().contains("event") ); // type "event" or "pictevent"
-			bool isEventButton = (widget->getWidgetTypeID() == QuteWidgetType::BUTTON  && widget->property("CSQT_type").toString().contains("event") ); // type "event" or "pictevent"
+			// bool isEventButton = (widget->getWidgetType()=="BSBButton"  && widget->property("CSQT_type").toString() == "event" ); // type "event"
+			bool isEventButton = (widget->getWidgetTypeID() == QuteWidgetType::BUTTON  && widget->property("CSQT_type").toString() == "event" ); // type "event"
 			if ( isEventButton) {
 				QString eventLine = widget->property("CSQT_eventLine").toString();
 
@@ -1631,6 +2263,12 @@ void WidgetLayout::setContained(bool contained)
     else {
         this->selectionFrame->setParent(this); // To Avoid having it destroyed by parent
     }
+    if (m_createOverlay != nullptr) {
+        if (m_editMode)
+            updateCreateOverlayVisibility();
+        else
+            m_createOverlay->hide();
+    }
 }
 
 void WidgetLayout::setCurrentPosition(QPoint pos)
@@ -1653,6 +2291,11 @@ void WidgetLayout::setToggleLockedAction(QAction *action)
     if (toggleLockedAct != nullptr) {
         toggleLockedAct->setEnabled(m_editMode && !getSelectedWidgets().isEmpty());
     }
+}
+
+void WidgetLayout::setEditModeAction(QAction *action)
+{
+    m_editModeAction = action;
 }
 
 void WidgetLayout::appendCurve(WINDAT *windat)
@@ -1997,24 +2640,198 @@ bool WidgetLayout::isModified()
     return m_modified;
 }
 
+void WidgetLayout::updateCreateActionIcons()
+{
+    const QPalette currentPalette = qApp->palette();
+    const bool isLight = currentPalette.text().color().lightness()
+            < currentPalette.window().color().lightness();
+    auto widgetIcon = [isLight](const QString &name) {
+        const QString darkPath = u":/themes/breeze-dark/widgets/%1.svg"_s.arg(name);
+        if (!isLight && QFileInfo::exists(darkPath))
+            return QIcon(darkPath);
+        return QIcon(u":/themes/breeze/widgets/%1.svg"_s.arg(name));
+    };
+    for (const auto &entry : m_createWidgetIcons)
+        entry.first->setIcon(widgetIcon(entry.second));
+}
+
+void WidgetLayout::ensureCreateOverlay()
+{
+    QWidget *targetParent = (m_contained && parentWidget() != nullptr)
+            ? parentWidget() : this;
+    if (m_createOverlay == nullptr) {
+        QList<QAction *> overlayActions;
+        for (QAction *action : createWidgetActionList()) {
+            // The console is only available through the palette and context menu.
+            if (action == createConsoleAct)
+                continue;
+            overlayActions.append(action);
+        }
+        m_createOverlay = new WidgetCreateOverlay(this, overlayActions,
+                                                  targetParent);
+        targetParent->installEventFilter(this);
+    } else if (m_createOverlay->parentWidget() != targetParent) {
+        if (m_createOverlay->parentWidget() != nullptr)
+            m_createOverlay->parentWidget()->removeEventFilter(this);
+        m_createOverlay->setParent(targetParent);
+        targetParent->installEventFilter(this);
+    }
+    updateCreateOverlayGeometry();
+    m_createOverlay->raise();
+}
+
+void WidgetLayout::updateCreateOverlayVisibility()
+{
+    const QVariant option = qApp->property("showWidgetToolbar");
+    const bool show = !option.isValid() || option.toBool();
+    if (!m_editMode || !show) {
+        if (m_createOverlay != nullptr)
+            m_createOverlay->hide();
+        return;
+    }
+    ensureCreateOverlay();
+    m_createOverlay->show();
+    m_createOverlay->raise();
+}
+
+void WidgetLayout::updateScrollBarStyle()
+{
+    QScrollArea *area = nullptr;
+    for (QWidget *ancestor = parentWidget(); ancestor != nullptr;
+         ancestor = ancestor->parentWidget()) {
+        if (auto *scrollArea = qobject_cast<QScrollArea *>(ancestor)) {
+            area = scrollArea;
+            break;
+        }
+    }
+    if (area != nullptr)
+        updateFlatScrollBarStyle(area);
+}
+
+QIcon WidgetLayout::iconForPanel(QAction *action) const
+{
+    QString iconName;
+    for (const auto &entry : m_createWidgetIcons) {
+        if (entry.first == action) {
+            iconName = entry.second;
+            break;
+        }
+    }
+    if (iconName.isEmpty())
+        return action != nullptr ? action->icon() : QIcon();
+
+    // Light panel background -> dark artwork, dark panel -> light artwork.
+    const QString path = panelBackgroundIsDark()
+            ? u":/themes/breeze-dark/widgets/%1.svg"_s.arg(iconName)
+            : u":/themes/breeze/widgets/%1.svg"_s.arg(iconName);
+    if (!QFileInfo::exists(path))
+        return QIcon(u":/themes/breeze/widgets/%1.svg"_s.arg(iconName));
+    return QIcon(path);
+}
+
+bool WidgetLayout::panelBackgroundIsDark() const
+{
+    QColor background;
+    if (property("CSQT_bg").toBool())
+        background = property("CSQT_bgcolor").value<QColor>();
+    if (!background.isValid()) {
+        const QWidget *surface = (m_contained && parentWidget() != nullptr)
+                ? parentWidget() : this;
+        background = surface->palette().color(QPalette::Window);
+    }
+    return background.lightness() < 128;
+}
+
+void WidgetLayout::updateCreateOverlayGeometry()
+{
+    if (m_createOverlay == nullptr)
+        return;
+    QWidget *targetParent = (m_contained && parentWidget() != nullptr)
+            ? parentWidget() : this;
+    m_createOverlay->setGeometry(targetParent->width() - WidgetOverlayWidth, 0,
+                                 WidgetOverlayWidth, targetParent->height());
+    m_createOverlay->raise();
+}
+
+void WidgetLayout::createWidgetFromOverlay(QAction *action)
+{
+    if (action == nullptr)
+        return;
+    QWidget *targetParent = (m_contained && parentWidget() != nullptr)
+            ? parentWidget() : this;
+    const QPoint center = mapFromGlobal(targetParent->mapToGlobal(
+                                            targetParent->rect().center()));
+
+    // Place the widget so that its own centre is at the centre of the visible
+    // panel rather than its top-left corner.
+    QSize size(80, 25);
+    if (action == createSliderAct)
+        size = QSize(20, 100);
+    else if (action == createButtonAct)
+        size = QSize(100, 30);
+    else if (action == createKnobAct)
+        size = QSize(80, 80);
+    else if (action == createCheckBoxAct)
+        size = QSize(20, 20);
+    else if (action == createMenuAct)
+        size = QSize(80, 30);
+    else if (action == createMeterAct)
+        size = QSize(30, 80);
+    else if (action == createLineEditAct)
+        size = QSize(100, 25);
+    else if (action == createGraphAct || action == createScopeAct
+             || action == createTableDisplayAct)
+        size = QSize(350, 150);
+    else if (action == createWaveformAct)
+        size = QSize(500, 160);
+    else if (action == createConsoleAct)
+        size = QSize(320, 400);
+    currentPosition = QPoint(qMax(0, center.x() - size.width() / 2),
+                             qMax(0, center.y() - size.height() / 2));
+    QTimer::singleShot(0, action, &QAction::trigger);
+}
+
+QList<QAction *> WidgetLayout::createWidgetActionList() const
+{
+    return {
+        createButtonAct,
+        createSliderAct,
+        createVUMeterAct,
+        createKnobAct,
+        createCheckBoxAct,
+        createMenuAct,
+        createLabelAct,
+        createDisplayAct,
+        createSpinBoxAct,
+        createScrollNumberAct,
+        createMeterAct,
+        createScopeAct,
+        createGraphAct,
+        createTableDisplayAct,
+        createWaveformAct,
+        createLineEditAct,
+        createConsoleAct,
+    };
+}
+
 void WidgetLayout::addCreateWidgetActionsToMenu(QMenu &menu) {
-    menu.addAction(createSliderAct);
-    menu.addAction(createLabelAct);
-    menu.addAction(createDisplayAct);
-    menu.addAction(createScrollNumberAct);
-    menu.addAction(createLineEditAct);
-    menu.addAction(createSpinBoxAct);
-    menu.addAction(createButtonAct);
-    menu.addAction(createKnobAct);
-    menu.addAction(createCheckBoxAct);
-    menu.addAction(createMenuAct);
-    menu.addAction(createMeterAct);
-    menu.addAction(createConsoleAct);
-    menu.addAction(createGraphAct);
-    menu.addAction(createScopeAct);
-    menu.addAction(createTableDisplayAct);
-    menu.addAction(createWaveformAct);
-    menu.addAction(createVUMeterAct);
+    for (QAction *action : createWidgetActionList()) {
+        QAction *proxy = menu.addAction(action->icon(), action->text());
+        proxy->setShortcut(action->shortcut());
+        connect(proxy, &QAction::triggered, this, [this, action]() {
+            // Creating from the panel context menu may enter edit mode. This
+            // only happens when the action is enabled (see createContextMenu).
+            if (!m_editMode) {
+                if (m_editModeAction == nullptr)
+                    return;
+                if (!m_editModeAction->isChecked())
+                    m_editModeAction->trigger();
+                if (!m_editMode)
+                    return;
+            }
+            action->trigger();
+        });
+    }
 }
 
 void WidgetLayout::createContextMenu(QContextMenuEvent *event)
@@ -2024,12 +2841,29 @@ void WidgetLayout::createContextMenu(QContextMenuEvent *event)
     const bool hasSelection = !getSelectedWidgets().isEmpty();
     const bool hasWidgets = !m_widgets.isEmpty();
 
-    // Creating a widget from the panel background is also how edit mode is
-    // entered in practice, so this submenu must always be available. The
-    // editing commands below only make sense in edit mode.
+    // The New Widget submenu is available in edit mode, and outside edit mode
+    // when the options allow entering it automatically (see below). The editing
+    // commands that follow only make sense in edit mode.
     QMenu newMenu(tr("New Widget", "New Widget submenu in widget layout popup"), &menu);
+    auto *newMenuStyle = new LargeMenuIconStyle;
+    newMenuStyle->setParent(&newMenu);
+    newMenu.setStyle(newMenuStyle);
+    // Outside edit mode, creating a widget enters edit mode. That is only
+    // offered when the "Enable Edit Mode while playing" setting allows it.
+    newMenu.setEnabled(editing
+                       || (m_editModeAction != nullptr
+                           && qApp->property("editModeWhilePlaying").toBool()));
     this->addCreateWidgetActionsToMenu(newMenu);
     menu.addMenu(&newMenu);
+    if (m_editModeAction != nullptr) {
+        QAction *toggleEditAct = menu.addAction(tr("Toggle Edit Mode"));
+        toggleEditAct->setShortcut(m_editModeAction->shortcut());
+        toggleEditAct->setShortcutVisibleInContextMenu(true);
+        toggleEditAct->setCheckable(true);
+        toggleEditAct->setChecked(m_editModeAction->isChecked());
+        connect(toggleEditAct, &QAction::triggered,
+                m_editModeAction, &QAction::trigger);
+    }
     menu.addSeparator();
 
     if (editing) {
@@ -2056,7 +2890,7 @@ void WidgetLayout::createContextMenu(QContextMenuEvent *event)
 
     // Always available: mark the editor lines that refer to the widget under
     // the mouse, or to the current selection when there is no hover.
-    QAction *highlightChannelsAct = menu.addAction(tr("Highlight Widget Channels"));
+    QAction *highlightChannelsAct = menu.addAction(tr("Show Channel usages in Editor"));
     connect(highlightChannelsAct, &QAction::triggered,
             this, [this]() { highlightWidgetChannels(nullptr); });
     menu.addSeparator();
@@ -2097,7 +2931,7 @@ void WidgetLayout::createContextMenu(QContextMenuEvent *event)
         }
     }
     if (dock != nullptr)
-        DockPanelUtils::addPanelActions(dock, menu);
+        DockPanelUtils::addPanelActions(dock, menu, false);
 
     currentPosition = event->pos();
     //  if (m_sbActive) {
@@ -2255,6 +3089,8 @@ void WidgetLayout::adjustLayoutSize()
             this->resize(s);
         }
     }
+    if (m_createOverlay != nullptr)
+        updateCreateOverlayGeometry();
 }
 
 void WidgetLayout::adjustWidgetSize()
@@ -2321,6 +3157,8 @@ QString WidgetLayout::createNewSlider(int x, int y, QString channel)
         dialog = false;
     }
     uuid = createSlider(posx, posy, 20, 100, channel, 0.0, 1.0, 0.0);
+    applySliderCreationDefaults(m_widgets.last(), panelBackgroundIsDark());
+    applyFlatStyleToNewWidget(m_widgets.last());
     widgetChanged();
     if (dialog && getOpenProperties()) {
         m_widgets.last()->openProperties();
@@ -2346,7 +3184,7 @@ QString WidgetLayout::createNewLabel(int x, int y, QString channel)
     QColor fgColor = qApp->palette().color(QPalette::WindowText);
     QColor bgColor = qApp->palette().color(QPalette::Window);
     uuid = createText(posx, posy, 80, 25, "label", QString(),
-                      "left", "Arial", 10, fgColor, bgColor,
+                      "left", defaultWidgetFontFamily(), 10, fgColor, bgColor,
                       false, "noborder", channel);
     widgetChanged();
     if (dialog && getOpenProperties()) {
@@ -2369,11 +3207,22 @@ QString WidgetLayout::createNewDisplay(int x, int y, QString channel)
     } else {
         dialog = false;
     }
-    QColor fgColor = qApp->palette().color(QPalette::WindowText);
-    QColor bgColor = qApp->palette().color(QPalette::Window);
-    uuid = createText(posx, posy, 80, 25, "display", channel,
-                      "left", "Arial", 10, fgColor, bgColor,
-                      false, "border", "Display");
+    QColor fgColor("#34393a");
+    QColor bgColor("#eff0f1");
+    uuid = createText(posx, posy, 60, 25, "display", channel,
+                      "left", defaultWidgetFontFamily(), 12, fgColor, bgColor,
+                      true, "border", "Display");
+    if (QuteWidget *widget = m_widgets.last()) {
+        widget->setProperty("CSQT_borderradius", 4);
+        widget->setProperty("CSQT_borderwidth", 1);
+        widget->setProperty("CSQT_bordermode", "border");
+        widget->setProperty("CSQT_bordercolor", QColor("#aebdc2"));
+        widget->setProperty("CSQT_bgcolormode", true);
+        widget->setProperty("CSQT_bgcolor", QColor("#eff0f1"));
+        widget->setProperty("CSQT_color", QColor("#34393a"));
+        widget->setProperty("CSQT_padding", 4);
+        widget->applyInternalProperties();
+    }
     widgetChanged();
     if (dialog && getOpenProperties()) {
         m_widgets.last()->openProperties();
@@ -2395,11 +3244,11 @@ QString WidgetLayout::createNewScrollNumber(int x, int y, QString channel)
     } else {
         dialog = false;
     }
-    QColor fgColor = qApp->palette().color(QPalette::WindowText);
-    QColor bgColor = qApp->palette().color(QPalette::Window);
-    uuid = createScrollNumber(posx, posy, 80, 25, channel,
-                              "left", "Arial", 10, fgColor, bgColor,
-                              true, "border", 0.001, 0.0);
+    QColor fgColor("#34393a");
+    QColor bgColor("#eff0f1");
+    uuid = createScrollNumber(posx, posy, 60, 25, channel,
+                              "left", defaultWidgetFontFamily(), 12, fgColor, bgColor,
+                              true, "border", 0.1, 0.0);
     widgetChanged();
     if (dialog && getOpenProperties()) {
         m_widgets.last()->openProperties();
@@ -2424,7 +3273,7 @@ QString WidgetLayout::createNewLineEdit(int x, int y, QString channel)
     QColor fgColor = qApp->palette().color(QPalette::WindowText);
     QColor bgColor = qApp->palette().color(QPalette::Window);
     uuid = createLineEdit(posx, posy, 100, 25, channel,
-                          "left", "Arial", 10, fgColor, bgColor,
+                          "left", defaultWidgetFontFamily(), 10, fgColor, bgColor,
                           true, "border", "Type here");
     widgetChanged();
     if (dialog && getOpenProperties()) {
@@ -2450,7 +3299,7 @@ QString WidgetLayout::createNewSpinBox(int x, int y, QString channel)
     QColor fgColor = qApp->palette().color(QPalette::WindowText);
     QColor bgColor = qApp->palette().color(QPalette::Window);
     uuid = createSpinBox(posx, posy, 80, 25, channel,
-                         "left", "Arial", 10, fgColor, bgColor,
+                         "left", defaultWidgetFontFamily(), 10, fgColor, bgColor,
                          false, "noborder", 0.001, 0.0);
     widgetChanged();
     if (dialog && getOpenProperties()) {
@@ -2475,7 +3324,9 @@ QString WidgetLayout::createNewButton(int x, int y, QString channel)
         dialog = false;
     }
     //IS IT OK if the channel name is alsoset as the text of the button?
-    uuid = createButton(posx, posy, 100, 30, channel, "event", 1.0, channel, "/", "i1 0 10");
+    uuid = createButton(posx, posy, 100, 30, channel, "event", 1.0, channel, "i1 0 10");
+    m_widgets.last()->setProperty("CSQT_font", defaultWidgetFontFamily());
+    applyFlatStyleToNewWidget(m_widgets.last());
     widgetChanged();
     if (dialog && getOpenProperties()) {
         m_widgets.last()->openProperties();
@@ -2498,6 +3349,7 @@ QString WidgetLayout::createNewKnob(int x, int y, QString channel)
         dialog = false;
     }
     uuid = createKnob(posx, posy, 80, 80, channel, 0.0, 1.0, 0.01, 0.0);
+    applyFlatStyleToNewWidget(m_widgets.last());
     widgetChanged();
     if (dialog && getOpenProperties()) {
         m_widgets.last()->openProperties();
@@ -2520,6 +3372,7 @@ QString WidgetLayout::createNewCheckBox(int x, int y, QString channel)
         dialog = false;
     }
     uuid = createCheckBox(posx, posy, 20, 20, channel, false);
+    applyFlatStyleToNewWidget(m_widgets.last());
     widgetChanged();
     if (dialog && getOpenProperties()) {
         m_widgets.last()->openProperties();
@@ -2663,12 +3516,8 @@ QString WidgetLayout::createNewVUMeter(int x, int y, QString channel)
     const int posx = x >= 0 ? x : currentPosition.x();
     const int posy = y >= 0 ? y : currentPosition.y();
     deselectAll();
-    // Default: vertical meter with a 20x100 bar, plus room for the ruler
-    // labels (to the right) and the value (below), so nothing is cropped.
-    QFontMetrics fm(font());
-    const int width = 20 + fm.horizontalAdvance(QStringLiteral("-000")) + 10;
-    const int height = 100 + fm.height() + 2;
-    QString uuid = createVUMeter(posx, posy, width, height);
+    QString uuid = createVUMeter(posx, posy, 32, 140);
+    applyVUMeterCreationDefaults(m_widgets.last(), panelBackgroundIsDark());
     widgetChanged();
     if (getOpenProperties()) {
         m_widgets.last()->openProperties();
@@ -2786,25 +3635,10 @@ void WidgetLayout::propertiesDialog()
     dialog->setModal(true);
     dialog->setWindowTitle("Widget Panel");
     QGridLayout *layout = new QGridLayout(dialog);
-    bgCheckBox = new QCheckBox(dialog);
-    bgCheckBox->setText("Enable Background");
-    // Use the saved panel properties, not the live auto-fill state: the latter
-    // can depend on the current Qt style or on whether the panel is docked, and
-    // must never silently change the document's background.
-    if (property("CSQT_bg").isValid()) {
-        bgCheckBox->setChecked(property("CSQT_bg").toBool());
-    }
-    else if (m_contained) {
-        bgCheckBox->setChecked(parentWidget()->autoFillBackground());
-    }
-    else {
-        bgCheckBox->setChecked(this->autoFillBackground());
-    }
-    layout->addWidget(bgCheckBox, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
     QLabel *label = new QLabel(dialog);
     label->setText("Color");
     label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
-    layout->addWidget(label, 1, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
     bgButton = new QPushButton(dialog);
     QPixmap pixmap = QPixmap(64,64);
     QColor color = property("CSQT_bgcolor").value<QColor>();
@@ -2815,13 +3649,13 @@ void WidgetLayout::propertiesDialog()
     bgButton->setProperty("CSQT_color",QVariant(color));
     pixmap.fill(color);
     bgButton->setIcon(pixmap);
-    layout->addWidget(bgButton, 1, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(bgButton, 0, 1, Qt::AlignLeft|Qt::AlignVCenter);
     QPushButton *applyButton = new QPushButton(tr("Apply"));
-    layout->addWidget(applyButton, 9, 1, Qt::AlignCenter|Qt::AlignVCenter);
+    layout->addWidget(applyButton, 1, 1, Qt::AlignCenter|Qt::AlignVCenter);
     QPushButton *cancelButton = new QPushButton(tr("Cancel"));
-    layout->addWidget(cancelButton, 9, 2, Qt::AlignCenter|Qt::AlignVCenter);
+    layout->addWidget(cancelButton, 1, 2, Qt::AlignCenter|Qt::AlignVCenter);
     QPushButton *acceptButton = new QPushButton(tr("Ok"));
-    layout->addWidget(acceptButton, 9, 3, Qt::AlignCenter|Qt::AlignVCenter);
+    layout->addWidget(acceptButton, 1, 3, Qt::AlignCenter|Qt::AlignVCenter);
     connect(acceptButton, SIGNAL(released()), dialog, SLOT(accept()));
     connect(dialog, SIGNAL(accepted()), this, SLOT(applyProperties()));
     connect(applyButton, SIGNAL(released()), this, SLOT(applyProperties()));
@@ -2833,7 +3667,7 @@ void WidgetLayout::propertiesDialog()
 void WidgetLayout::applyProperties()
 {
     QColor color = bgButton->property("CSQT_color").value<QColor>();
-    setBackground(bgCheckBox->isChecked(), color);
+    setBackground(true, color);
     widgetChanged();
     mouseBut2 = 0;  // Button un clicked is not propagated after opening the edit dialog. Do it artificially here
 }
@@ -3195,6 +4029,24 @@ void WidgetLayout::keyPressEvent(QKeyEvent *event)
     int key = event->key();
     if(m_editMode) {
         int quant = (event->modifiers() & Qt::AltModifier) ? 1 : 5;
+        // Keyboard-created widgets appear at the mouse pointer when it is over
+        // the visible panel; otherwise use the last context-menu position.
+        const QPoint cursorGlobal = QCursor::pos();
+        QWidget *panelSurface = this;
+        for (QWidget *ancestor = parentWidget(); ancestor != nullptr;
+             ancestor = ancestor->parentWidget()) {
+            if (auto *scrollArea = qobject_cast<QScrollArea *>(ancestor)) {
+                panelSurface = scrollArea->viewport();
+                break;
+            }
+        }
+        const QRect panelRect(panelSurface->mapToGlobal(QPoint(0, 0)),
+                              panelSurface->size());
+        const QPoint newPos = panelRect.contains(cursorGlobal)
+                ? mapFromGlobal(cursorGlobal) : currentPosition;
+        const bool plainKey = (event->modifiers()
+                               & (Qt::ControlModifier | Qt::AltModifier | Qt::MetaModifier)) == 0;
+        const bool noMods = event->modifiers() == Qt::NoModifier;
         switch(key) {
         case Qt::Key_Escape:
             // Escape clears the selection and any widget-derived line
@@ -3232,17 +4084,109 @@ void WidgetLayout::keyPressEvent(QKeyEvent *event)
             event->accept();
             return;
         case Qt::Key_S:
-            this->createNewSlider();
-            event->accept();
-            return;
+            if (plainKey) {
+                if (event->modifiers() & Qt::ShiftModifier)
+                    this->createNewScope(newPos.x(), newPos.y());
+                else
+                    this->createNewSlider(newPos.x(), newPos.y());
+                event->accept();
+                return;
+            }
+            break;
         case Qt::Key_K:
-            this->createNewKnob();
-            event->accept();
-            return;
+            if (noMods) {
+                this->createNewKnob(newPos.x(), newPos.y());
+                event->accept();
+                return;
+            }
+            break;
         case Qt::Key_B:
-            this->createNewButton();
-            event->accept();
-            return;
+            if (noMods) {
+                this->createNewButton(newPos.x(), newPos.y());
+                event->accept();
+                return;
+            }
+            break;
+        case Qt::Key_P:
+            if (noMods) {
+                this->createNewSpinBox(newPos.x(), newPos.y());
+                event->accept();
+                return;
+            }
+            break;
+        case Qt::Key_U:
+            if (noMods) {
+                this->createNewScrollNumber(newPos.x(), newPos.y());
+                event->accept();
+                return;
+            }
+            break;
+        case Qt::Key_C:
+            if (noMods) {
+                this->createNewMeter(newPos.x(), newPos.y());
+                event->accept();
+                return;
+            }
+            break;
+        case Qt::Key_T:
+            if (noMods) {
+                this->createNewTableDisplay(newPos.x(), newPos.y());
+                event->accept();
+                return;
+            }
+            break;
+        case Qt::Key_G:
+            if (plainKey && (event->modifiers() & Qt::ShiftModifier)) {
+                this->createNewGraph(newPos.x(), newPos.y());
+                event->accept();
+                return;
+            }
+            break;
+        case Qt::Key_W:
+            if (plainKey && (event->modifiers() & Qt::ShiftModifier)) {
+                this->createNewWaveform(newPos.x(), newPos.y());
+                event->accept();
+                return;
+            }
+            break;
+        case Qt::Key_L:
+            if (plainKey) {
+                if (event->modifiers() & Qt::ShiftModifier)
+                    this->createNewLineEdit(newPos.x(), newPos.y());
+                else
+                    this->createNewLabel(newPos.x(), newPos.y());
+                event->accept();
+                return;
+            }
+            break;
+        case Qt::Key_V:
+            if (plainKey) {
+                this->createNewVUMeter(newPos.x(), newPos.y());
+                event->accept();
+                return;
+            }
+            break;
+        case Qt::Key_X:
+            if (plainKey) {
+                this->createNewCheckBox(newPos.x(), newPos.y());
+                event->accept();
+                return;
+            }
+            break;
+        case Qt::Key_M:
+            if (plainKey) {
+                this->createNewMenu(newPos.x(), newPos.y());
+                event->accept();
+                return;
+            }
+            break;
+        case Qt::Key_D:
+            if (plainKey) {
+                this->createNewDisplay(newPos.x(), newPos.y());
+                event->accept();
+                return;
+            }
+            break;
         case Qt::Key_A:
             if(event->modifiers() & Qt::ControlModifier) {
                 this->selectAll();
@@ -3509,6 +4453,36 @@ void WidgetLayout::clearChannelHighlights()
 
 bool WidgetLayout::eventFilter(QObject *watched, QEvent *event)
 {
+	if (!m_editMode && event->type() == QEvent::MouseButtonPress) {
+		auto *mouseEvent = static_cast<QMouseEvent *>(event);
+		if (mouseEvent->button() == Qt::LeftButton
+				&& (mouseEvent->modifiers() & Qt::ControlModifier)) {
+			QuteWidget *widget = hoveredWidgetFor(watched);
+			if (widget != nullptr) {
+				switch (widget->getWidgetTypeID()) {
+				case QuteWidgetType::SPINBOX:
+				case QuteWidgetType::LINEEDIT:
+				case QuteWidgetType::CHECKBOX:
+				case QuteWidgetType::SLIDER:
+				case QuteWidgetType::KNOB:
+				case QuteWidgetType::SCROLLNUMBER:
+				case QuteWidgetType::BUTTON:
+				case QuteWidgetType::DROPDOWN:
+				case QuteWidgetType::CONTROLLER:
+				case QuteWidgetType::VUMETER:
+				case QuteWidgetType::DISPLAY:
+					widget->resetToDefault();
+					return true;
+				default:
+					break;
+				}
+			}
+		}
+	}
+	if (m_createOverlay != nullptr && event->type() == QEvent::Resize
+			&& watched == m_createOverlay->parentWidget()) {
+		updateCreateOverlayGeometry();
+	}
 	if (event->type() == QEvent::Enter || event->type() == QEvent::Leave) {
 		QuteWidget *widget = hoveredWidgetFor(watched);
 		if (widget) {
@@ -3884,14 +4858,26 @@ void WidgetLayout::mouseReleaseEvent(QMouseEvent *event)
     //  QWidget::mouseReleaseEvent(event);
 }
 
+void WidgetLayout::showNewWidgetPopup(const QPoint &globalPos)
+{
+    NewWidgetPopup popup(createWidgetActionList(), globalPos, this);
+    if (popup.exec() == QDialog::Accepted) {
+        if (QAction *action = popup.chosenAction()) {
+            // Create at the point where the palette was opened (the double-click
+            // position, or the pointer for the keyboard shortcut).
+            currentPosition = mapFromGlobal(globalPos);
+            QTimer::singleShot(0, action, &QAction::trigger);
+        }
+    }
+}
+
 void WidgetLayout::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    // A double click on the panel background opens the panel properties, like
-    // double-clicking a widget opens its own properties. Widgets and their edit
-    // frames receive their own double-click events, so this only runs for the
-    // empty background.
+    // A double click on the empty panel background opens a small widget
+    // palette below the pointer. Widgets and their edit frames receive their
+    // own double-click events, so this only runs for the empty background.
     if (m_editMode && event->button() == Qt::LeftButton) {
-        propertiesDialog();
+        showNewWidgetPopup(event->globalPosition().toPoint());
         event->accept();
         return;
     }
@@ -3951,8 +4937,9 @@ int WidgetLayout::parseXmlNode(QDomNode node)
     }
     else if (name == "bgcolor") {
         auto nodeElement = node.toElement();
-        setBackground(nodeElement.attribute("mode") == "background",
-                      getColorFromElement(nodeElement));
+        // Widget panels always have a background colour; ignore legacy
+        // "nobackground" settings.
+        setBackground(true, getColorFromElement(nodeElement));
     }
     else if (name == "bsbObject") {
         ret = newXmlWidget(node);
@@ -4120,7 +5107,6 @@ QString WidgetLayout::createButton(int x, int y, int width, int height,
                                    const QString &buttonType,
                                    double pressedValue,
                                    const QString &text,
-                                   const QString &image,
                                    const QString &eventLine)
 {
     qDebug("WidgetPanel::createButton");
@@ -4133,7 +5119,6 @@ QString WidgetLayout::createButton(int x, int y, int width, int height,
     widget->setProperty("CSQT_type", buttonType);
     widget->setProperty("CSQT_pressedValue", pressedValue);
     widget->setText(text);
-    widget->setProperty("CSQT_image", image);
     widget->setProperty("CSQT_eventLine", eventLine);
     connect(widget, SIGNAL(queueEventSignal(QString)), this, SLOT(queueEvent(QString)));
     emit registerButton(widget);
@@ -4340,6 +5325,11 @@ void WidgetLayout::setBackground(bool bg, QColor bgColor)
     this->setProperty("CSQT_bg", QVariant(bg));
     this->setProperty("CSQT_bgcolor", QVariant(bgColor));
 
+    if (m_createOverlay != nullptr)
+        m_createOverlay->updateIcons();
+
+    updateScrollBarStyle();
+
     m_restoringBackground = wasRestoring;
 }
 
@@ -4367,6 +5357,7 @@ void WidgetLayout::changeEvent(QEvent *event)
     // re-entering setBackground() from the palette events it generates itself.
     if (event->type() == QEvent::StyleChange) {
         restoreBackgroundFromProperties();
+        updateScrollBarStyle();
     }
 }
 
@@ -4865,6 +5856,11 @@ void WidgetLayout::setEditMode(bool active)
         widgetsMutex.unlock();
     }
     m_editMode = active;
+    widgetsMutex.lock();
+    for (QuteWidget *widget : m_widgets)
+        setWidgetMouseTransparency(widget, active);
+    widgetsMutex.unlock();
+    updateCreateOverlayVisibility();
     if (changed)
         emit editModeChanged(active);
     // These shortcuts are only meaningful while editing; disabling them outside

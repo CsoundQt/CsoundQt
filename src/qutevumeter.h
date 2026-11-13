@@ -64,7 +64,6 @@ protected:
 private:
 	bool isVertical() const { return height() >= width(); }
 	double fractionForDb(double db) const;
-	QString rulerLabelForDb(double db) const;
 
 	double m_value = -90.0;
 	double m_min = -90.0;

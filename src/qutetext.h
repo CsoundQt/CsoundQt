@@ -78,12 +78,16 @@ protected:
 	QSpinBox *borderWidth;
     QSpinBox *paddingSpinBox = nullptr;
     QSpinBox *precisionSpinBox;
+    QLineEdit *formatLineEdit = nullptr; // Display widgets only
 	QComboBox  *font;
 	QSpinBox * fontSize;
 	QComboBox * alignment;
     QComboBox * vertAlignmentComboBox;
     QHash<QString, QLabel *>labelPtrs;
     int m_precision;
+    QString m_displayFormat;
+    QChar m_displayFormatConversion;
+    bool m_displayFormatValid = false;
     QuteWidgetType m_typeid;
 
 private slots:
@@ -162,6 +166,10 @@ public slots:
     void setValueFromDialog();
 };
 
+// Increase this to make Alt-dragging a scroll number slower. 4.0 means
+// Alt-drag changes the value at 25% of the normal speed.
+constexpr double scrollNumberAltSlowFactor = 4.0;
+
 class ScrollNumberWidget : public QLabel
 {
 	Q_OBJECT
@@ -183,6 +191,8 @@ protected:
 	{
 		if (pressed) {
 			double delta = (oldy - event->y()) * m_resolution;
+			if (event->modifiers() & Qt::AltModifier)
+				delta /= scrollNumberAltSlowFactor;
 			emit addValue(delta);
 			oldy = event->y();
 		}
@@ -190,9 +200,6 @@ protected:
 	virtual void mousePressEvent(QMouseEvent * event)
 	{
 		if (event->button() & Qt::LeftButton) {
-			if (event->modifiers() & Qt::AltModifier) {
-				emit setValue(0);
-			}
 			oldy = event->y();
 			pressed = true;
 		}

@@ -71,6 +71,7 @@ private:
 
 class QuteConsole;
 class QuteGraph;
+class WidgetCreateOverlay;
 class QuteScope;
 class QuteButton;
 class FrameWidget;
@@ -157,6 +158,9 @@ public:
 	// The action is owned by the application (so it can be configured in the
 	// shortcuts dialog); the layout only reflects its enabled state.
 	void setToggleLockedAction(QAction *action);
+	// The application's widget edit mode action. Used by the panel context menu
+	// to turn edit mode on before creating a widget.
+	void setEditModeAction(QAction *action);
     void setUpdateRate(int rate) { m_updateRate = rate; }
 
 	// Experimental channel probe: outline every widget whose channel (or
@@ -256,6 +260,7 @@ public:
     QAction *createTableDisplayAct;
 	QAction *createWaveformAct;
 	QAction *createVUMeterAct;
+	QList<QPair<QAction *, QString>> m_createWidgetIcons;
 
 	// Alignment Actions
 	QAction *alignLeftAct;
@@ -294,6 +299,19 @@ public:
 
     QuteWidgetType widgetNameToType(QString widgetName);
     void addCreateWidgetActionsToMenu(QMenu &menu);
+    QList<QAction *> createWidgetActionList() const;
+    void updateCreateActionIcons();
+    void showNewWidgetPopup(const QPoint &globalPos);
+    // Create a widget from the edit-mode overlay, centred in the visible panel.
+    void createWidgetFromOverlay(QAction *action);
+    // Icon for the edit-mode overlay, chosen from the panel background rather
+    // than from the application theme.
+    QIcon iconForPanel(QAction *action) const;
+    // Show or hide the edit-mode overlay according to the current option and
+    // edit-mode state.
+    void updateCreateOverlayVisibility();
+    // Re-apply the flat scrollbar look to the scroll area containing this panel.
+    void updateScrollBarStyle();
     
     QHash<QString, QList<QuteWidget *>> channelNameToWidgets;
     
@@ -442,6 +460,10 @@ protected:
 private:
 	void updateWindowTitle();
 	void restoreBackgroundFromProperties();
+	void ensureCreateOverlay();
+	void updateCreateOverlayGeometry();
+	bool panelBackgroundIsDark() const;
+	QPointer<WidgetCreateOverlay> m_createOverlay;
 
 	QMutex widgetsMutex;
 	QMutex layoutMutex;
@@ -468,6 +490,7 @@ private:
 	bool m_trackMouse;
 	bool m_openProperties; // Open widget properties when creating widgets
 	bool m_enableEdit; // Enable editing and properties dialog
+	QAction *m_editModeAction = nullptr;
 	bool m_tooltips;  // Show widget tooltips
 	int mouseX, mouseY, mouseRelX, mouseRelY, mouseBut1, mouseBut2;
 	int xOffset, yOffset;
@@ -476,7 +499,6 @@ private:
 
 	// For the properties dialog - they store the configuration data for the widget panel
 	QPoint currentPosition;  //TODO use proper variables instead of storing data in the widgets...
-	QCheckBox *bgCheckBox;
 	QPushButton *bgButton;
 	bool m_restoringBackground = false; // guards re-applying the panel palette
 	int closing; // to control timer when destroying this object
@@ -595,7 +617,7 @@ private:
 	QString createScrollNumber(int x, int y, int width, int height, const QString &channel, const QString &alignment, const QString &font, int fontSize, const QColor &fgColor, const QColor &bgColor, bool bgMode, const QString &borderMode, double resolution, double value);
 	QString createLineEdit(int x, int y, int width, int height, const QString &channel, const QString &alignment, const QString &font, int fontSize, const QColor &fgColor, const QColor &bgColor, bool bgMode, const QString &borderMode, const QString &labelText);
 	QString createSpinBox(int x, int y, int width, int height, const QString &channel, const QString &alignment, const QString &font, int fontSize, const QColor &fgColor, const QColor &bgColor, bool bgMode, const QString &borderMode, double resolution, double value);
-	QString createButton(int x, int y, int width, int height, const QString &channel, const QString &buttonType, double pressedValue, const QString &text, const QString &image, const QString &eventLine);
+	QString createButton(int x, int y, int width, int height, const QString &channel, const QString &buttonType, double pressedValue, const QString &text, const QString &eventLine);
 	QString createKnob(int x, int y, int width, int height, const QString &channel, double minimum, double maximum, double resolution, double value);
 	QString createCheckBox(int x, int y, int width, int height, const QString &channel, bool checked);
 	QString createMenu(int x, int y, int width, int height, const QString &channel, const QString &items, int selectedIndex);
@@ -652,6 +674,43 @@ signals:
 	void editingEscapePressed();
 	void editModeChanged(bool active);
 	//    void setWidgetClipboardSignal(QString text);  // To propagate clipboard for sharing between pages
+};
+
+// The contained layout is often smaller than the scroll area viewport, so a
+// double click on the empty panel background goes to the viewport rather than
+// to WidgetLayout. Install this filter on the viewport to keep the panel
+// background double-click the same as double-clicking the layout itself.
+class WidgetLayoutViewportFilter : public QObject
+{
+public:
+	explicit WidgetLayoutViewportFilter(WidgetLayout *layout)
+		: QObject(layout), m_layout(layout)
+	{}
+
+protected:
+	bool eventFilter(QObject *watched, QEvent *event) override
+	{
+		if (m_layout != nullptr) {
+			if (event->type() == QEvent::MouseButtonPress
+					&& m_layout->isEditMode()) {
+				auto *mouseEvent = static_cast<QMouseEvent *>(event);
+				if (mouseEvent->button() == Qt::LeftButton)
+					m_layout->setFocus(Qt::MouseFocusReason);
+			}
+			if (event->type() == QEvent::MouseButtonDblClick
+					&& m_layout->isEditMode()) {
+				auto *mouseEvent = static_cast<QMouseEvent *>(event);
+				if (mouseEvent->button() == Qt::LeftButton) {
+					m_layout->showNewWidgetPopup(mouseEvent->globalPosition().toPoint());
+					return true;
+				}
+			}
+		}
+		return QObject::eventFilter(watched, event);
+	}
+
+private:
+	QPointer<WidgetLayout> m_layout;
 };
 
 #endif // WIDGETLAYOUT_H

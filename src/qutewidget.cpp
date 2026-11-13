@@ -238,6 +238,13 @@ void QuteWidget::setValue(QString value)
 	m_valueChanged = true;
 }
 
+void QuteWidget::resetToDefault()
+{
+	setValue(m_defaultValue);
+	QPair<QString, double> channelValue(m_channel, m_defaultValue);
+	emit newValue(channelValue);
+}
+
 void QuteWidget::setMidiValue(int /* value */)
 {
     qDebug() << "Not available for this widget." << this;
@@ -597,6 +604,7 @@ QString QuteWidget::propertyType(const QString &name) const
         {u"fillMode"_s, u"string"_s},
         {u"backgroundMode"_s, u"string"_s},
         {u"rulermode"_s, u"string"_s},
+        {u"rulerscale"_s, u"string"_s},
         {u"plottype"_s, u"string"_s},
         {u"checkstyle"_s, u"string"_s},
         {u"randomizable"_s, u"boolean"_s},
@@ -662,7 +670,6 @@ QString QuteWidget::propertyDescription(const QString &name) const
         {u"value"_s, u"Current numeric value"_s},
         {u"description"_s, u"Description shown as a tooltip"_s},
         {u"eventLine"_s, u"Score event triggered"_s},
-        {u"image"_s, u"Image file used by the widget"_s},
         {u"mode"_s, u"Display or behaviour mode"_s},
         {u"minimum"_s, u"Minimum value"_s},
         {u"maximum"_s, u"Maximum value"_s},
@@ -677,6 +684,7 @@ QString QuteWidget::propertyDescription(const QString &name) const
         {u"fillMode"_s, u"Slider mode: thumb only or fill up to the thumb"_s},
         {u"backgroundMode"_s, u"Behaviour when the slider background is clicked"_s},
         {u"rulermode"_s, u"Value ruler: hide, full or compact"_s},
+        {u"rulerscale"_s, u"Ruler scale: linear or db (VU-meter style)"_s},
         {u"rulercolor"_s, u"Ruler tick and label colour"_s},
         {u"exponent"_s, u"Skew of the value curve (1 = linear)"_s},
         {u"flatStyle"_s, u"Use a flat, platform-independent style"_s},
@@ -1071,9 +1079,41 @@ void QuteWidget::setTabOrderFromGrid()
 	}
 }
 
+// Keep the generated property dialogs tidy: integer spin boxes get a width
+// based on the number of digits needed by their maximum, and all combo boxes
+// share a usable minimum width.
+static void tidyPropertyDialog(QDialog *dialog)
+{
+	for (QLabel *label : dialog->findChildren<QLabel *>()) {
+		QString text = label->text().trimmed();
+		if (text.endsWith(u'=')) {
+			label->setText(text.chopped(1).trimmed());
+		}
+	}
+	for (QSpinBox *spinBox : dialog->findChildren<QSpinBox *>()) {
+		// Respect widths that a widget dialog has set deliberately (e.g. the
+		// slider's flat-style controls all use the same width).
+		if (spinBox->minimumWidth() == spinBox->maximumWidth())
+			continue;
+		int digits = 1;
+		for (int value = qAbs(spinBox->maximum()); value >= 10; value /= 10)
+			++digits;
+		if (digits <= 3)
+			spinBox->setFixedWidth(60);
+		else if (digits == 4)
+			spinBox->setFixedWidth(80);
+		else if (digits <= 6)
+			spinBox->setFixedWidth(100);
+	}
+	for (QComboBox *comboBox : dialog->findChildren<QComboBox *>()) {
+		comboBox->setMinimumWidth(qMax(90, comboBox->minimumWidth()));
+	}
+}
+
 void QuteWidget::openProperties()
 {
 	createPropertiesDialog();
+	tidyPropertyDialog(dialog);
 
 	// Qt shows plain tooltips as a single line until they exceed the screen
 	// width. Wrap the long property help texts before the dialog is shown.
@@ -1175,11 +1215,20 @@ void QuteWidget::createPropertiesDialog()
     nameLineEdit = new QLineEdit(dialog);
 	nameLineEdit->setFocus(Qt::OtherFocusReason);
 	nameLineEdit->selectAll();
-    layout->addWidget(nameLineEdit, row, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	nameLineEdit->setFixedWidth(160);
+    layout->addWidget(nameLineEdit, row, 1, 1, 2, Qt::AlignLeft|Qt::AlignVCenter);
     ++row;
 
     // Subclasses add their own property rows here, up to row 14.
     row = firstFooterRow;
+
+    label = new QLabel(tr("Name ="), dialog);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    widgetNameLineEdit = new QLineEdit(dialog);
+    widgetNameLineEdit->setToolTip(tr("Optional unique name to address this widget (must be unique within the file)"));
+    widgetNameLineEdit->setFixedWidth(160);
+    layout->addWidget(widgetNameLineEdit, row, 1, 1, 2, Qt::AlignLeft|Qt::AlignVCenter);
 
     enabledCheckBox = new QCheckBox(tr("Enabled"), dialog);
     enabledCheckBox->setToolTip(tr("When unchecked the widget is disabled: it ignores "
@@ -1187,22 +1236,7 @@ void QuteWidget::createPropertiesDialog()
                                    "drawn greyed out. It can also be toggled from Csound "
                                    "with outvalue \"<channel>/enabled\", <0 or 1>."));
     enabledCheckBox->setChecked(property("CSQT_enabled").toBool());
-    layout->addWidget(enabledCheckBox, row, 1, 1, 2, Qt::AlignLeft|Qt::AlignVCenter);
-
-    // Keep one empty row between the enabled checkbox and the name.
-    row += 2;
-
-    label = new QLabel(tr("Name ="), dialog);
-    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
-
-    widgetNameLineEdit = new QLineEdit(dialog);
-    widgetNameLineEdit->setToolTip(tr("Optional unique name to address this widget (must be unique within the file)"));
-    layout->addWidget(widgetNameLineEdit, row, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
-
-    QPushButton *showPropertiesButton = new QPushButton(tr("Show Properties"), dialog);
-    showPropertiesButton->setToolTip(tr("List the properties that can be addressed via \"channel/property\""));
-    layout->addWidget(showPropertiesButton, row, 4, Qt::AlignLeft|Qt::AlignVCenter);
-    connect(showPropertiesButton, SIGNAL(released()), this, SLOT(showAvailableProperties()));
+    layout->addWidget(enabledCheckBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
     ++row;
 
     label = new QLabel(tr("Description ="), dialog);
@@ -1239,15 +1273,29 @@ void QuteWidget::createPropertiesDialog()
 	}
     ++row;
 	
+    QPushButton *showPropertiesButton = new QPushButton(tr("Show Properties"), dialog);
+    showPropertiesButton->setToolTip(tr("List the properties that can be addressed via \"channel/property\""));
+    connect(showPropertiesButton, SIGNAL(released()), this, SLOT(showAvailableProperties()));
+
+    QWidget *buttonBar = new QWidget(dialog);
+    auto *buttonLayout = new QHBoxLayout(buttonBar);
+    buttonLayout->setContentsMargins(0, 0, 0, 0);
+    buttonLayout->setSpacing(12);
+    buttonLayout->addStretch();
+    buttonLayout->addWidget(showPropertiesButton);
+
     applyButton = new QPushButton(tr("Apply"));
-    layout->addWidget(applyButton, row, 1, Qt::AlignCenter|Qt::AlignVCenter);
-	
-	cancelButton = new QPushButton(tr("Cancel"));
-    layout->addWidget(cancelButton, row, 2, Qt::AlignCenter|Qt::AlignVCenter);
-    
+    buttonLayout->addWidget(applyButton);
+
+    cancelButton = new QPushButton(tr("Cancel"));
+    buttonLayout->addWidget(cancelButton);
+
     acceptButton = new QPushButton(tr("Ok"));
-	acceptButton->setDefault(true);
-    layout->addWidget(acceptButton, row, 3, Qt::AlignCenter|Qt::AlignVCenter);
+    acceptButton->setDefault(true);
+    buttonLayout->addWidget(acceptButton);
+
+    buttonLayout->addStretch();
+    layout->addWidget(buttonBar, row, 0, 1, -1);
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();

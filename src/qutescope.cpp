@@ -22,11 +22,22 @@
 */
 
 #include "qutescope.h"
+#include "selectcolorbutton.h"
 #include <cmath>
 #include "types.h"  //necessary for the userdata struct
 #include "csoundqt.h"  //necessary for the userdata struct
 
 bool ScopeWidget::s_globalAntialias = false;
+
+// Colour properties are QColor when they come from the file or the dialog, and
+// strings when they are sent from Csound via outvalue.
+static QColor scopeColorFromProperty(const QVariant &value)
+{
+    QColor color = value.value<QColor>();
+    if (!color.isValid())
+        color = QColor(value.toString());
+    return color.isValid() ? color : QColor("#161616");
+}
 
 void ScopeWidget::paintEvent(QPaintEvent *event)
 {
@@ -98,6 +109,7 @@ QuteScope::QuteScope(QWidget *parent) : QuteWidget(parent)
 	// outvalue "<scope channel>/channel2", "myaudio".
 	setProperty("CSQT_objectName2", QString());
 	setProperty("CSQT_channel2", QString());
+	setProperty("CSQT_bgcolor", QColor("#161616"));
 
 	// Release the monitored audio channel when the widget is deleted at
 	// runtime (the engine is still alive here; only teardown skips this).
@@ -161,9 +173,11 @@ QString QuteScope::getWidgetXmlText()
 	s.writeTextElement("dispy", QString::number(property("CSQT_dispy").toDouble(), 'f', 8));
     s.writeTextElement("mode",  QString::number(property("CSQT_mode").toDouble(), 'f', 8));
     s.writeTextElement("triggermode", property("CSQT_triggermode").toString());
-    if (property("CSQT_antialias").isValid())
+    if (property("CSQT_antialias").isValid()) {
         s.writeTextElement("antialias",
                            property("CSQT_antialias").toBool() ? "true" : "false");
+    }
+	writeColorElement(s, "bgcolor", scopeColorFromProperty(property("CSQT_bgcolor")));
 	s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -196,6 +210,22 @@ void QuteScope::setValue(double value)
 {
 	QuteWidget::setValue(value);
 	updateLabel();
+}
+
+void QuteScope::setBackgroundColor(const QColor &color)
+{
+    const QColor bg = color.isValid() ? color : QColor("#161616");
+    if (m_params != nullptr && m_params->scene != nullptr)
+        m_params->scene->setBackgroundBrush(QBrush(bg));
+    if (m_widget != nullptr) {
+        auto *view = static_cast<ScopeWidget *>(m_widget);
+        view->setBackgroundBrush(QBrush(bg));
+        QPalette pal = view->palette();
+        pal.setColor(QPalette::Window, bg);
+        view->setPalette(pal);
+        view->setAutoFillBackground(true);
+        view->viewport()->update();
+    }
 }
 
 void QuteScope::setUd(CsoundUserData *ud)
@@ -246,6 +276,10 @@ bool QuteScope::applyProperty(const QString &name)
 		            property("CSQT_antialias").toBool() ? 1 : 0);
 		return true;
 	}
+	if (name == "CSQT_bgcolor") {
+		setBackgroundColor(scopeColorFromProperty(property("CSQT_bgcolor")));
+		return true;
+	}
 	return QuteWidget::applyProperty(name);
 }
 
@@ -256,6 +290,7 @@ void QuteScope::applyInternalProperties()
 	setProperty("CSQT_channel2", m_channel2);
 	setType(property("CSQT_type").toString());
 	setValue(property("CSQT_value").toDouble());
+	setBackgroundColor(scopeColorFromProperty(property("CSQT_bgcolor")));
     m_params->triggerMode = triggerNameToMode(property("CSQT_triggermode").toString());
 	const QVariant antialias = property("CSQT_antialias");
 	static_cast<ScopeWidget *>(m_widget)->setAntialiasOverride(
@@ -301,6 +336,7 @@ void QuteScope::createPropertiesDialog()
 	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	name2LineEdit = new QLineEdit(dialog);
 	name2LineEdit->setToolTip(label->toolTip());
+	name2LineEdit->setFixedWidth(160);
 	layout->addWidget(name2LineEdit, row, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
 	++row;
 	label = new QLabel(dialog);
@@ -332,6 +368,15 @@ void QuteScope::createPropertiesDialog()
     triggerBox->addItem("Trigger Up", "TriggerUp");
     triggerBox->setCurrentIndex(triggerBox->findData(property("CSQT_triggermode").toString()));
     layout->addWidget(triggerBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
+    label = new QLabel("Background", dialog);
+    layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
+    backgroundColorButton = new SelectColorButton(dialog);
+    {
+        QColor bg = scopeColorFromProperty(property("CSQT_bgcolor"));
+        backgroundColorButton->setColor(bg.isValid() ? bg : QColor("#161616"));
+    }
+    layout->addWidget(backgroundColorButton, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
 	++row;
     antialiasCheckBox = new QCheckBox(tr("Antialias"), dialog);
     antialiasCheckBox->setToolTip(
@@ -361,6 +406,7 @@ void QuteScope::applyProperties()
 	setProperty("CSQT_channel2", monitorChannel);
     auto triggerModeStr = triggerBox->currentData().toString();
     setProperty("CSQT_triggermode", triggerModeStr);
+    setProperty("CSQT_bgcolor", backgroundColorButton->getColor());
     m_params->triggerMode = triggerNameToMode(triggerModeStr);
     if (antialiasCheckBox != nullptr) {
         const bool checked = antialiasCheckBox->isChecked();

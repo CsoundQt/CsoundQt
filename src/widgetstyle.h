@@ -26,6 +26,8 @@
 #include <QDebug>
 #include <QFontMetrics>
 #include <QProxyStyle>
+#include <QScrollArea>
+#include <QScrollBar>
 #include <QStringList>
 #include <QStyle>
 #include <QStyleFactory>
@@ -271,6 +273,27 @@ inline void installWidgetStyle(QStyle *style, const QString &name)
     qApp->setStyle(new DialogButtonStyle(style));
     installedWidgetStyleName() = installedName.isEmpty()
             ? currentWidgetStyleName() : installedName;
+}
+
+// Apply or remove the flat scrollbar look on a widget panel's scroll area.
+// Only Fusion gets it, and only when the "Flat scrollbars" option is on, so
+// every other style keeps its native scrollbars.
+inline void updateFlatScrollBarStyle(QScrollArea *area)
+{
+    if (area == nullptr)
+        return;
+    const bool flat =
+            currentWidgetStyleName().compare(u"Fusion"_s, Qt::CaseInsensitive) == 0
+            && flatScrollBarsEnabled();
+    QWidget *viewport = area->viewport();
+    const QColor background = viewport != nullptr
+            ? viewport->palette().color(QPalette::Window)
+            : area->palette().color(QPalette::Window);
+    const QString sheet = flat ? flatScrollBarStyleSheet(background) : QString();
+    for (QScrollBar *bar : {area->verticalScrollBar(), area->horizontalScrollBar()}) {
+        if (bar->styleSheet() != sheet)
+            bar->setStyleSheet(sheet);
+    }
 }
 
 #endif // WIDGETSTYLE_H

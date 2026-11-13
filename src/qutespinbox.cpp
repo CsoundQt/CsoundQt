@@ -347,15 +347,17 @@ void QuteSpinBox::createPropertiesDialog()
 	label->setText("Min =");
 	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	minSpinBox = new QDoubleSpinBox(dialog);
-	minSpinBox->setDecimals(6);
+	minSpinBox->setDecimals(4);
 	minSpinBox->setRange(-999999999999.0, 999999999999.0);
+	minSpinBox->setMaximumWidth(100);
 	layout->addWidget(minSpinBox, row,1, Qt::AlignLeft|Qt::AlignVCenter);
 	label = new QLabel(dialog);
 	label->setText("Max =");
 	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 	maxSpinBox = new QDoubleSpinBox(dialog);
-	maxSpinBox->setDecimals(6);
+	maxSpinBox->setDecimals(4);
 	maxSpinBox->setRange(-999999999999.0, 999999999999.0);
+	maxSpinBox->setMaximumWidth(100);
 	layout->addWidget(maxSpinBox, row,3, Qt::AlignLeft|Qt::AlignVCenter);
 	++row;
 
@@ -367,8 +369,13 @@ void QuteSpinBox::createPropertiesDialog()
 	resolutionSpinBox = new QDoubleSpinBox(dialog);
 	resolutionSpinBox->setDecimals(6);
 	resolutionSpinBox->setRange(0,999999999999.0);
+	resolutionSpinBox->setMaximumWidth(100);
 	layout->addWidget(resolutionSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 	++row;
+
+	text->hide();
+	if (labelPtrs.contains("text"))
+		labelPtrs["text"]->hide();
 
 	borderRadius->hide();
     labelPtrs["borderRadius"]->hide();

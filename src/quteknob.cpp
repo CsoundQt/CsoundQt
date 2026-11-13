@@ -187,7 +187,7 @@ QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
     w->setBorder(0, borderColor);
 
     setProperty("CSQT_showvalue", true);
-    setProperty("CSQT_flatstyle", true);
+    setProperty("CSQT_flatstyle", false);
     setProperty("CSQT_integerMode", false);
     setProperty("CSQT_exponent", 1.0);
     connect(w, SIGNAL(valueChanged(int)),
@@ -468,6 +468,7 @@ void QuteKnob::createPropertiesDialog()
 	minSpinBox = new QDoubleSpinBox(dialog);
     minSpinBox->setDecimals(4);
 	minSpinBox->setRange(-99999.0, 99999.0);
+	minSpinBox->setMaximumWidth(100);
 	minSpinBox->setValue(property("CSQT_minimum").toDouble());
 	layout->addWidget(minSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
@@ -477,6 +478,7 @@ void QuteKnob::createPropertiesDialog()
     maxSpinBox = new QDoubleSpinBox(dialog);
     maxSpinBox->setDecimals(4);
 	maxSpinBox->setRange(-99999.0, 99999.0);
+	maxSpinBox->setMaximumWidth(100);
 	maxSpinBox->setValue(property("CSQT_maximum").toDouble());
     layout->addWidget(maxSpinBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
     ++row;
@@ -488,7 +490,7 @@ void QuteKnob::createPropertiesDialog()
     layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     exponentSpinBox = new QDoubleSpinBox(dialog);
-    exponentSpinBox->setDecimals(4);
+    exponentSpinBox->setDecimals(3);
     exponentSpinBox->setRange(0.001, 100.0);
     exponentSpinBox->setSingleStep(0.1);
     exponentSpinBox->setValue(property("CSQT_exponent").toDouble());

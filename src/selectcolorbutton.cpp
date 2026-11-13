@@ -26,7 +26,14 @@ void SelectColorButton::changeEvent(QEvent *event) {
 
 void SelectColorButton::paintColor(QColor color) {
 #ifndef Q_OS_MAC
-    setStyleSheet( "background-color: " + color.name() );
+    // A bare background-color is not enough: some styles (notably Fusion)
+    // still paint the native button bevel with its gradient on top, so the
+    // swatch no longer matches the color the user picked. Adding an explicit
+    // border makes the stylesheet take over the whole button and fill it with
+    // the exact color.
+    setStyleSheet(QString("QPushButton { background: %1;"
+                          " border: 1px solid palette(mid); border-radius: 2px; }")
+                      .arg(color.name()));
 #else
     QPixmap pixmap(64, 64);
     pixmap.fill(color);
@@ -38,8 +45,11 @@ void SelectColorButton::paintColor(QColor color) {
 }
 
 void SelectColorButton::selectColor() {
-    QColor newColor = QColorDialog::getColor(color, parentWidget());
-    setColor(newColor);
+    const QColor newColor = QColorDialog::getColor(color, parentWidget());
+    // getColor() returns an invalid color when the dialog is cancelled or
+    // dismissed with Escape; keep the previous color in that case.
+    if (newColor.isValid())
+        setColor(newColor);
 }
 
 void SelectColorButton::setColor( const QColor& color ) {

@@ -98,7 +98,7 @@ protected:
 
 private:
 	//    QString m_eventLine;
-	//    QString m_type;  // can be event, value, pictevent, pictvalue, pict
+	//    QString m_type;  // can be event or value
 	//    QString m_filename;
 	//    QString m_imageFilename;
 	double m_currentValue;
@@ -107,7 +107,6 @@ private:
 	QCheckBox *latchCheckBox;
 	QDoubleSpinBox *valueBox;
 	QTextEdit *text;
-	QLineEdit *filenameLineEdit;
 	QLineEdit *line;
     QSpinBox  *fontSizeSpinBox;
     QComboBox *fontComboBox = nullptr;
@@ -126,8 +125,7 @@ private:
 	bool m_pressedColorSet = false;
 	bool m_pressedTextColorSet = false;
 
-	QIcon icon;
-    QIcon onIcon;
+	QIcon onIcon;
 
 	bool m_isPlaying;
 	bool m_latched;
@@ -136,16 +134,9 @@ private:
 	bool hasIndefiniteDuration();
 	QutePushButton *button() const { return static_cast<QutePushButton *>(m_widget); }
 
-	// Image paths are stored relative to the .csd that owns the widget panel.
-	QString documentFileName() const;
-	QString documentDirectory() const;
-	QString resolvedImagePath(const QString &path) const;
-	QString storedImagePath(const QString &path) const;
-
 private slots:
 	void buttonPressed();
 	void buttonReleased();
-	void browseFile();
 
 signals:
 	void queueEventSignal(QString eventLine);

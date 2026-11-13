@@ -52,13 +52,12 @@ QuteMeter::QuteMeter(QWidget *parent) : QuteWidget(parent)
 
     setProperty("CSQT_color", QColor(Qt::green));
     setProperty("CSQT_bgcolor", QColor(30, 30, 30));
-    setProperty("CSQT_bgcolormode", true);
     setProperty("CSQT_randomizable", false);
     setProperty("CSQT_randomizableGroup", 0);
     setProperty("CSQT_randomizableMode", "both");
 
-    setProperty("CSQT_bordermode", "noborder");
     setProperty("CSQT_borderColor", "#00FF00");
+    setProperty("CSQT_borderWidth", 1);
 
     connect(static_cast<MeterWidget *>(m_widget), SIGNAL(newValue1(double)),
             this, SLOT(valueChanged(double)));
@@ -114,8 +113,9 @@ QString QuteMeter::getWidgetXmlText()
     s.writeCharacters(property("CSQT_mouseControl").toString());
     s.writeEndElement();
 
-    s.writeTextElement("bordermode", property("CSQT_bordermode").toString());
+    s.writeTextElement("bordermode", "border");
     s.writeTextElement("borderColor", property("CSQT_borderColor").toString());
+    s.writeTextElement("borderWidth", QString::number(property("CSQT_borderWidth").toInt()));
 
     QColor color = property("CSQT_color").value<QColor>();
     writeColorElement(s, "color", color);
@@ -127,8 +127,6 @@ QString QuteMeter::getWidgetXmlText()
 
     QColor bgcolor = property("CSQT_bgcolor").value<QColor>();
     writeColorElement(s, "bgcolor", bgcolor);
-
-    s.writeTextElement("bgcolormode", property("CSQT_bgcolormode").toBool()?"true":"false");
 
     s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
@@ -221,7 +219,7 @@ QString QuteMeter::getQml()
                     height: %4 * scaleItem.scale
                     color: "black"
                     border.color: "black"
-                    border.width: 2
+                    border.width: 1
                     property double min: %5
                     property double max: %6
                     property double value: %7
@@ -293,7 +291,7 @@ void QuteMeter::createPropertiesDialog()
 
     name2LineEdit = new QLineEdit(dialog);
     name2LineEdit->setText(getChannel2Name());
-    // name2LineEdit->setMinimumWidth(320);
+    name2LineEdit->setFixedWidth(160);
     layout->addWidget(name2LineEdit, row, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
     ++row;
     //  if (static_cast<MeterWidget *>(m_widget)->getType() != "point" and ((MeterWidget *)m_widget)->getType() != "crosshair") {
@@ -315,20 +313,15 @@ void QuteMeter::createPropertiesDialog()
     colorButton->setColor(static_cast<MeterWidget *>(m_widget)->getColor());
     layout->addWidget(colorButton, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
-    bgColorCheckBox = new QCheckBox("Background", dialog);
-    bgColorCheckBox->setChecked(property("CSQT_bgcolormode").toBool());
-    layout->addWidget(bgColorCheckBox, row, 2, Qt::AlignVCenter);
+    label = new QLabel("Background", dialog);
+    layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 
     bgColorButton = new SelectColorButton(dialog);
     bgColorButton->setColor(static_cast<MeterWidget *>(m_widget)->getBgColor());
     layout->addWidget(bgColorButton, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
-    connect(bgColorCheckBox, SIGNAL(toggled(bool)), bgColorButton, SLOT(setEnabled(bool)));
-
-    borderCheckBox = new QCheckBox(tr("Border"), dialog);
-    borderCheckBox->setCheckState(
-        property("CSQT_bordermode").toString()=="border" ? Qt::Checked : Qt::Unchecked);
-    layout->addWidget(borderCheckBox, row, 4, Qt::AlignLeft|Qt::AlignVCenter);
+    label = new QLabel(tr("Border"), dialog);
+    layout->addWidget(label, row, 4, Qt::AlignRight|Qt::AlignVCenter);
 
     borderColorButton = new SelectColorButton(dialog);
     borderColorButton->setColor(QColor(property("CSQT_borderColor").toString()));
@@ -348,18 +341,27 @@ void QuteMeter::createPropertiesDialog()
     typeComboBox->addItem("point");
     typeComboBox->setCurrentIndex(typeComboBox->findText(w->getType()));
     layout->addWidget(typeComboBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
-    ++row;
 
     label = new QLabel(dialog);
     label->setText("Point/Line Width:");
     label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
-    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 
     pointSizeSpinBox = new QSpinBox(dialog);
     pointSizeSpinBox->unsetLocale();
     pointSizeSpinBox->setValue(w->getPointSize());
     pointSizeSpinBox->setToolTip("Size of the point / line if applicable");
-    layout->addWidget(pointSizeSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(pointSizeSpinBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+
+    label = new QLabel(tr("Border width"), dialog);
+    layout->addWidget(label, row, 4, Qt::AlignRight|Qt::AlignVCenter);
+
+    borderWidthSpinBox = new QSpinBox(dialog);
+    borderWidthSpinBox->unsetLocale();
+    borderWidthSpinBox->setRange(0, 64);
+    borderWidthSpinBox->setValue(property("CSQT_borderWidth").toInt());
+    borderWidthSpinBox->setToolTip(tr("Border width in pixels. Set to 0 to hide the border."));
+    layout->addWidget(borderWidthSpinBox, row, 5, Qt::AlignLeft|Qt::AlignVCenter);
 
     if(w->getMeterType() != MeterWidgetType::Point &&
             w->getMeterType() != MeterWidgetType::Line) {
@@ -369,16 +371,17 @@ void QuteMeter::createPropertiesDialog()
 
     connect(typeComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(checkTypeComboBox()));
+    ++row;
 
     label = new QLabel(dialog);
     label->setText("Fade speed:");
     label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
-    layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
     fadeSpeedSpinBox = new QSpinBox(dialog);
     fadeSpeedSpinBox->unsetLocale();
     fadeSpeedSpinBox->setValue(property("CSQT_fadeSpeed").toDouble());
     fadeSpeedSpinBox->setRange(0, 1000);
-    layout->addWidget(fadeSpeedSpinBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(fadeSpeedSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
     ++row;
     label->setEnabled(false);
     fadeSpeedSpinBox->setEnabled(false);
@@ -404,7 +407,9 @@ void QuteMeter::createPropertiesDialog()
     layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     m_xMinBox = new QDoubleSpinBox(dialog);
+    m_xMinBox->setDecimals(4);
     m_xMinBox->setRange(-999999999.0, 999999999.0);
+    m_xMinBox->setMaximumWidth(100);
     m_xMinBox->setValue(property("CSQT_xMin").toDouble());
     layout->addWidget(m_xMinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
@@ -413,7 +418,9 @@ void QuteMeter::createPropertiesDialog()
     layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 
     m_xMaxBox = new QDoubleSpinBox(dialog);
+    m_xMaxBox->setDecimals(4);
     m_xMaxBox->setRange(-999999999.0, 999999999.0);
+    m_xMaxBox->setMaximumWidth(100);
     m_xMaxBox->setValue(property("CSQT_xMax").toDouble());
     layout->addWidget(m_xMaxBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
     ++row;
@@ -423,7 +430,9 @@ void QuteMeter::createPropertiesDialog()
     layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     m_yMinBox = new QDoubleSpinBox(dialog);
+    m_yMinBox->setDecimals(4);
     m_yMinBox->setRange(-999999999.0, 999999999.0);
+    m_yMinBox->setMaximumWidth(100);
     m_yMinBox->setValue(property("CSQT_yMin").toDouble());
     layout->addWidget(m_yMinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
@@ -432,7 +441,9 @@ void QuteMeter::createPropertiesDialog()
     layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 
     m_yMaxBox = new QDoubleSpinBox(dialog);
+    m_yMaxBox->setDecimals(4);
     m_yMaxBox->setRange(-999999999.0, 999999999.0);
+    m_yMaxBox->setMaximumWidth(100);
     m_yMaxBox->setValue(property("CSQT_yMax").toDouble());
     layout->addWidget(m_yMaxBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
     ++row;
@@ -441,7 +452,7 @@ void QuteMeter::createPropertiesDialog()
     layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     exponentSpinBox = new QDoubleSpinBox(dialog);
-    exponentSpinBox->setDecimals(4);
+    exponentSpinBox->setDecimals(3);
     exponentSpinBox->setRange(0.001, 100.0);
     exponentSpinBox->setSingleStep(0.1);
     exponentSpinBox->setValue(property("CSQT_exponent").toDouble());
@@ -513,7 +524,6 @@ void QuteMeter::applyProperties()
     setProperty("CSQT_color", colorButton->getColor());
     // setProperty("CSQT_bgcolor", bgColorButton->palette().color(QPalette::Window));
     setProperty("CSQT_bgcolor", bgColorButton->getColor());
-    setProperty("CSQT_bgcolormode", bgColorCheckBox->isChecked());
     setProperty("CSQT_type", typeComboBox->currentText());
     setProperty("CSQT_pointsize", pointSizeSpinBox->value());
     setProperty("CSQT_exponent", exponentSpinBox->value());
@@ -523,8 +533,8 @@ void QuteMeter::applyProperties()
     setProperty("CSQT_xMax", m_xMaxBox->value());
     setProperty("CSQT_yMin", m_yMinBox->value());
     setProperty("CSQT_yMax", m_yMaxBox->value());
-    setProperty("CSQT_bordermode", borderCheckBox->checkState()?"border":"noborder");
     setProperty("CSQT_borderColor", borderColorButton->getColor().name());
+    setProperty("CSQT_borderWidth", borderWidthSpinBox->value());
 #ifdef  USE_WIDGET_MUTEX
     widgetLock.unlock();
 #endif
@@ -575,7 +585,7 @@ void QuteMeter::applyInternalProperties()
     auto meter = static_cast<MeterWidget *>(m_widget);
     meter->setColor(property("CSQT_color").value<QColor>());
     meter->setBgColor(property("CSQT_bgcolor").value<QColor>());
-    meter->showBackground(property("CSQT_bgcolormode").toBool());
+    meter->showBackground(true);
     meter->setType(property("CSQT_type").toString());
     meter->setPointSize(property("CSQT_pointsize").toInt());
     meter->setRanges(property("CSQT_xMin").toDouble(),
@@ -583,8 +593,8 @@ void QuteMeter::applyInternalProperties()
                      property("CSQT_yMin").toDouble(),
                      property("CSQT_yMax").toDouble());
     meter->setExponent(property("CSQT_exponent").toDouble());
-    meter->showBorder(property("CSQT_bordermode").toString()=="border");
     meter->setBorderColor(QColor(property("CSQT_borderColor").toString()));
+    meter->setBorderWidth(property("CSQT_borderWidth").toInt());
 
     m_value = property("CSQT_xValue").toDouble();
     m_value2 = property("CSQT_yValue").toDouble();
@@ -663,7 +673,7 @@ MeterWidget::MeterWidget(QWidget *parent) : QGraphicsView(parent)
     m_pointSize = 1;
     m_vertical = false;
     m_exponent = 1.0;
-    auto borderPen = QPen(QColor(Qt::green).darker(150), 2);
+    auto borderPen = QPen(QColor(Qt::green).darker(150), 1);
     auto blockPen = Qt::NoPen;
     m_block = m_scene->addRect(0, 0, 0, 0, blockPen, QBrush(Qt::green));
     m_point = m_scene->addEllipse(0, 0, 0, 0, QPen(Qt::green) , QBrush(Qt::green));
@@ -880,6 +890,25 @@ void MeterWidget::setBorderColor(QColor color) {
     m_border->setPen(pen);
 }
 
+void MeterWidget::setBorderWidth(int width)
+{
+    m_borderWidth = width;
+    auto pen = m_border->pen();
+    pen.setWidth(width);
+    m_border->setPen(pen);
+    updateBorderRect();
+    if (width > 0)
+        m_border->show();
+    else
+        m_border->hide();
+}
+
+void MeterWidget::updateBorderRect()
+{
+    const qreal inset = m_borderWidth / 2.0;
+    m_border->setRect(m_scene->sceneRect().adjusted(inset, inset, -inset, -inset));
+}
+
 void MeterWidget::showBackground(bool show) {
     if(!show) {
         m_scene->setBackgroundBrush(Qt::NoBrush);
@@ -895,7 +924,7 @@ void MeterWidget::setWidgetGeometry(int x,int y,int width,int height)
 {
     m_scene->setSceneRect(0,0, width, height);
     // m_border->setRect(0, 0, width-1, height-1);
-    m_border->setRect(0, 0, width, height);
+    updateBorderRect();
     setSceneRect(0,0, width, height);
     setGeometry(x,y,width, height);
     setMaximumSize(width, height);

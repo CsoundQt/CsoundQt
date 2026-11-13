@@ -42,6 +42,12 @@ static QColor colorFromVariant(const QVariant &value)
 	return color;
 }
 
+static QuteSliderControl::RulerScale rulerScaleFromString(const QString &scale)
+{
+	return scale.trimmed().compare(u"db"_s, Qt::CaseInsensitive) == 0
+			? QuteSliderControl::Decibel : QuteSliderControl::Linear;
+}
+
 // ---------------------------------------------------------------------------
 //  QuteSliderControl
 // ---------------------------------------------------------------------------
@@ -113,6 +119,12 @@ void QuteSliderControl::setRuler(WidgetRuler::Mode mode, const QColor &color)
 {
 	m_rulerMode = mode;
 	m_rulerColor = color;
+	update();
+}
+
+void QuteSliderControl::setRulerScale(RulerScale scale)
+{
+	m_rulerScale = scale;
 	update();
 }
 
@@ -234,30 +246,68 @@ QString QuteSliderControl::widestRulerLabel(double majorStep) const
 	return widest;
 }
 
+QString QuteSliderControl::widestDbRulerLabel() const
+{
+	// Match the VU meter: reserve room for the widest dB label in range, not
+	// only for the two ends.
+	const QFontMetrics metrics(WidgetRuler::rulerFont());
+	QString widest = WidgetRuler::dbLabel(m_minimum);
+	int widestWidth = metrics.horizontalAdvance(widest);
+	auto consider = [&](const QString &text) {
+		const int width = metrics.horizontalAdvance(text);
+		if (width > widestWidth) {
+			widest = text;
+			widestWidth = width;
+		}
+	};
+	consider(WidgetRuler::dbLabel(m_maximum));
+	for (double db : WidgetRuler::dbMajorTicks()) {
+		if (db >= m_minimum && db <= m_maximum) {
+			consider(WidgetRuler::dbLabel(db));
+		}
+	}
+	return widest;
+}
+
 WidgetRuler::Geometry QuteSliderControl::rulerGeometry() const
 {
-	// A preliminary layout gives the length available for the scale, which
-	// determines how dense the tick grid can be. For a vertical ruler this
-	// length does not depend on the label width, so it is exact; horizontally
-	// the small end margins make it a close approximation.
-	const WidgetRuler::Geometry preliminary = WidgetRuler::layout(
-			rect(), isVertical(), m_rulerMode,
-			formatValue(m_minimum), formatValue(m_maximum));
-	const double axisLength = preliminary.valid
-			? (isVertical() ? preliminary.scale.height()
-			                : preliminary.scale.width())
-			: 0.0;
-	const double step = majorTickStep(axisLength);
-	const QString minLabel = formatValue(m_minimum, step);
-	const QString maxLabel = formatValue(m_maximum, step);
+	const bool dbScale = m_rulerScale == Decibel;
+	QString minLabel;
+	QString maxLabel;
+	QString widestLabel;
+	if (dbScale) {
+		// The dB ruler is candidate-based, so its layout does not depend on an
+		// estimated axis length: use the same labels and reserved width as the
+		// VU meter.
+		minLabel = WidgetRuler::dbLabel(m_minimum);
+		maxLabel = WidgetRuler::dbLabel(m_maximum);
+		widestLabel = widestDbRulerLabel();
+	} else {
+		// A preliminary layout gives the length available for the scale, which
+		// determines how dense the tick grid can be. For a vertical ruler this
+		// length does not depend on the label width, so it is exact; horizontally
+		// the small end margins make it a close approximation.
+		const WidgetRuler::Geometry preliminary = WidgetRuler::layout(
+				rect(), isVertical(), m_rulerMode,
+				formatValue(m_minimum), formatValue(m_maximum));
+		const double axisLength = preliminary.valid
+				? (isVertical() ? preliminary.scale.height()
+				                : preliminary.scale.width())
+				: 0.0;
+		const double step = majorTickStep(axisLength);
+		minLabel = formatValue(m_minimum, step);
+		maxLabel = formatValue(m_maximum, step);
+		widestLabel = widestRulerLabel(step);
+	}
 
 	WidgetRuler::Geometry geometry = WidgetRuler::layout(
-			rect(), isVertical(), m_rulerMode, minLabel, maxLabel,
-			widestRulerLabel(step));
-	if (geometry.valid && m_borderWidth > 0) {
+			rect(), isVertical(), m_rulerMode, minLabel, maxLabel, widestLabel);
+	if (!dbScale && geometry.valid && m_borderWidth > 0) {
 		// The ticks should span the inside of the border, not its outer edge.
 		// Without this the maximum tick sits half a border beyond the visible
-		// top (and looks one pixel too high).
+		// top (and looks one pixel too high). The dB ruler keeps the bare
+		// layout scale so that it stays identical to the VU meter's ruler,
+		// whose ticks also span the bar's border rows.
 		QRectF scale = geometry.bar.adjusted(m_borderWidth, m_borderWidth,
 		                                     -m_borderWidth, -m_borderWidth);
 		if (scale.width() >= 1 && scale.height() >= 1) {
@@ -478,14 +528,24 @@ void QuteSliderControl::paintEvent(QPaintEvent *event)
 	if (m_rulerMode != WidgetRuler::Hide) {
 		const WidgetRuler::Geometry ruler = rulerGeometry();
 		if (ruler.valid) {
-			const double axisLength = isVertical() ? ruler.scale.height()
-			                                       : ruler.scale.width();
-			const double step = majorTickStep(axisLength);
-			const int subdivisions = minorSubdivisions(axisLength, step);
-			WidgetRuler::draw(
-					painter, ruler, m_rulerMode, m_rulerColor, mapping(),
-					[this, step](double value) { return formatValue(value, step); },
-					QVector<double>(), {}, {}, step, subdivisions);
+			if (m_rulerScale == Decibel) {
+				// Reproduce the VU meter ruler exactly: the shared dB candidate
+				// list and label format, 0 dB always labelled, and the discrete
+				// integer-dB minor ticks.
+				WidgetRuler::draw(
+						painter, ruler, m_rulerMode, m_rulerColor, mapping(),
+						[](double db) { return WidgetRuler::dbLabel(db); },
+						WidgetRuler::dbMajorTicks(), {0.0}, {}, 0.0, 0, true);
+			} else {
+				const double axisLength = isVertical() ? ruler.scale.height()
+				                                       : ruler.scale.width();
+				const double step = majorTickStep(axisLength);
+				const int subdivisions = minorSubdivisions(axisLength, step);
+				WidgetRuler::draw(
+						painter, ruler, m_rulerMode, m_rulerColor, mapping(),
+						[this, step](double value) { return formatValue(value, step); },
+						QVector<double>(), {}, {}, step, subdivisions);
+			}
 		}
 	}
 }
@@ -641,6 +701,7 @@ QuteSlider::QuteSlider(QWidget *parent) : QuteWidget(parent)
 	setProperty("CSQT_fillMode", "fill");
 	setProperty("CSQT_backgroundMode", "jump");
 	setProperty("CSQT_rulermode", "hide");
+	setProperty("CSQT_rulerscale", "linear");
 	setProperty("CSQT_rulercolor", shade(0x6d, 0x6d, 0x6d));
 }
 
@@ -785,6 +846,10 @@ bool QuteSlider::applyProperty(const QString &name)
 		            colorFromVariant(property("CSQT_rulercolor")));
 		return true;
 	}
+	if (name == "CSQT_rulerscale") {
+		w->setRulerScale(rulerScaleFromString(property("CSQT_rulerscale").toString()));
+		return true;
+	}
 	return QuteWidget::applyProperty(name);
 }
 
@@ -827,6 +892,7 @@ void QuteSlider::applyInternalProperties()
 	                     : QuteSliderControl::Jump);
 	w->setRuler(WidgetRuler::modeFromString(property("CSQT_rulermode").toString()),
 	            colorFromVariant(property("CSQT_rulercolor")));
+	w->setRulerScale(rulerScaleFromString(property("CSQT_rulerscale").toString()));
 
 	setInternalValue(property("CSQT_value").toDouble());
 	// Sync the QSlider position immediately so the first click after loading or
@@ -969,6 +1035,7 @@ QString QuteSlider::getWidgetXmlText()
 	s.writeTextElement("fillMode", property("CSQT_fillMode").toString());
 	s.writeTextElement("backgroundMode", property("CSQT_backgroundMode").toString());
 	s.writeTextElement("rulermode", property("CSQT_rulermode").toString());
+	s.writeTextElement("rulerscale", property("CSQT_rulerscale").toString());
 	writeColorElement(s, "rulercolor", colorFromVariant(property("CSQT_rulercolor")));
 
 	s.writeEndElement();
@@ -1001,6 +1068,7 @@ QHash<QString, QString> QuteSlider::propertyDescriptions() const
 		{u"backgroundMode"_s, u"Background click mode: \"nudge\" or \"jump\""_s},
 		{u"exponent"_s, u"Skew of the value curve (1 = linear)"_s},
 		{u"rulermode"_s, u"Value ruler: hide, full or compact"_s},
+		{u"rulerscale"_s, u"Ruler scale: linear or db (VU-meter style)"_s},
 		{u"rulercolor"_s, u"Ruler tick and label colour"_s}
 	};
 }
@@ -1014,15 +1082,17 @@ void QuteSlider::createPropertiesDialog()
 	label->setText("Min =");
 	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	minSpinBox = new QDoubleSpinBox(dialog);
-	minSpinBox->setDecimals(6);
+	minSpinBox->setDecimals(4);
 	minSpinBox->setRange(-99999.0, 99999.0);
+	minSpinBox->setMaximumWidth(100);
 	layout->addWidget(minSpinBox, row,1, Qt::AlignLeft|Qt::AlignVCenter);
 	label = new QLabel(dialog);
 	label->setText("Max =");
 	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 	maxSpinBox = new QDoubleSpinBox(dialog);
-	maxSpinBox->setDecimals(6);
+	maxSpinBox->setDecimals(4);
 	maxSpinBox->setRange(-99999.0, 99999.0);
+	maxSpinBox->setMaximumWidth(100);
 	layout->addWidget(maxSpinBox, row,3, Qt::AlignLeft|Qt::AlignVCenter);
 	++row;
 #ifdef  USE_WIDGET_MUTEX
@@ -1103,6 +1173,7 @@ void QuteSlider::createPropertiesDialog()
 	borderWidthSpinBox->unsetLocale();
 	borderWidthSpinBox->setRange(0, 64);
 	borderWidthSpinBox->setValue(property("CSQT_borderWidth").toInt());
+	borderWidthSpinBox->setFixedWidth(60);
 	layout->addWidget(borderWidthSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 	m_flatControls << borderWidthSpinBox;
 
@@ -1113,6 +1184,7 @@ void QuteSlider::createPropertiesDialog()
 	borderRadiusSpinBox->unsetLocale();
 	borderRadiusSpinBox->setRange(0, 1000);
 	borderRadiusSpinBox->setValue(property("CSQT_borderRadius").toInt());
+	borderRadiusSpinBox->setFixedWidth(60);
 	layout->addWidget(borderRadiusSpinBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
 	m_flatControls << borderRadiusSpinBox;
 	++row;
@@ -1125,6 +1197,7 @@ void QuteSlider::createPropertiesDialog()
 	thumbWidthSpinBox->unsetLocale();
 	thumbWidthSpinBox->setRange(0, 1000); // 0 hides the thumb in fill mode
 	thumbWidthSpinBox->setValue(property("CSQT_thumbWidth").toInt());
+	thumbWidthSpinBox->setFixedWidth(60);
 	layout->addWidget(thumbWidthSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 	m_flatControls << thumbWidthSpinBox;
 
@@ -1136,6 +1209,7 @@ void QuteSlider::createPropertiesDialog()
 	thumbPaddingSpinBox->unsetLocale();
 	thumbPaddingSpinBox->setRange(0, 1000);
 	thumbPaddingSpinBox->setValue(property("CSQT_thumbPadding").toInt());
+	thumbPaddingSpinBox->setFixedWidth(60);
 	layout->addWidget(thumbPaddingSpinBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
 	m_flatControls << thumbPaddingSpinBox;
 	++row;
@@ -1148,6 +1222,7 @@ void QuteSlider::createPropertiesDialog()
 	thumbRadiusSpinBox->unsetLocale();
 	thumbRadiusSpinBox->setRange(0, 1000);
 	thumbRadiusSpinBox->setValue(property("CSQT_thumbRadius").toInt());
+	thumbRadiusSpinBox->setFixedWidth(60);
 	layout->addWidget(thumbRadiusSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 	m_flatControls << thumbRadiusSpinBox;
 
@@ -1157,7 +1232,7 @@ void QuteSlider::createPropertiesDialog()
 	                     "control near the maximum."));
 	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 	exponentSpinBox = new QDoubleSpinBox(dialog);
-	exponentSpinBox->setDecimals(4);
+	exponentSpinBox->setDecimals(3);
 	exponentSpinBox->setRange(0.001, 100.0);
 	exponentSpinBox->setSingleStep(0.1);
 	exponentSpinBox->setValue(property("CSQT_exponent").toDouble());
@@ -1228,6 +1303,21 @@ void QuteSlider::createPropertiesDialog()
 	m_flatControls << rulerColorButton;
 	++row;
 
+	label = new QLabel(tr("Ruler mode"), dialog);
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+	m_flatControls << label;
+	rulerScaleComboBox = new QComboBox(dialog);
+	rulerScaleComboBox->addItem(tr("Linear"), u"linear"_s);
+	rulerScaleComboBox->addItem(tr("dB"), u"db"_s);
+	{
+		const int index = rulerScaleComboBox->findData(
+				property("CSQT_rulerscale").toString());
+		rulerScaleComboBox->setCurrentIndex(index >= 0 ? index : 0);
+	}
+	layout->addWidget(rulerScaleComboBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	m_flatControls << rulerScaleComboBox;
+	++row;
+
 	auto refreshFlatControls = [this]() {
 		const bool flat = flatStyleCheckBox->isChecked();
 		for (QWidget *widget : m_flatControls) {
@@ -1292,10 +1382,20 @@ void QuteSlider::applyProperties()
 	setProperty("CSQT_fillMode", fillModeComboBox->currentData().toString());
 	setProperty("CSQT_backgroundMode", backgroundModeComboBox->currentData().toString());
 	setProperty("CSQT_rulermode", rulerComboBox->currentData().toString());
+	setProperty("CSQT_rulerscale", rulerScaleComboBox->currentData().toString());
 	setProperty("CSQT_rulercolor", rulerColorButton->getColor());
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
+	// A visible ruler needs some room beside the slider. Enforce the minimum
+	// cross-axis dimension when applying the dialog.
+	if (rulerComboBox->currentData().toString() != "hide") {
+		const bool vertical = wSpinBox->value() <= hSpinBox->value();
+		if (vertical && wSpinBox->value() < 28)
+			wSpinBox->setValue(28);
+		else if (!vertical && hSpinBox->value() < 28)
+			hSpinBox->setValue(28);
+	}
 	QuteWidget::applyProperties();  // Must be last to make sure the widgetChanged signal is last
 }
 

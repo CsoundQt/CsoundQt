@@ -66,6 +66,7 @@ Options::Options(ConfigLists *configlists) :
     quitOnLastTabClosed = false;
     includeActiveFileInTitle = true;
     focusToggledPanel = false;
+    hideDockedPanelTitles = false;
     rememberFile = true;
     // iconText = true;
     iconText = false;
@@ -87,7 +88,11 @@ Options::Options(ConfigLists *configlists) :
     tabShowCloseButton = false;
 
     showWidgetsOnRun = true;
+    showWidgetToolbar = true;
     showTooltips = false;
+    defaultWidgetFont = QStringLiteral("Liberation Sans");
+    flatStyleNewWidgets = true;
+    editModeWhilePlaying = false;
     openProperties = true;  // Open properties automatically when creating a widget
     graphUpdateRate = 30;
 
