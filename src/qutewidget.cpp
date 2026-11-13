@@ -34,13 +34,25 @@
 using namespace Qt::StringLiterals;
 
 // Copied widget styles, keyed by widget type. A copied style holds all dynamic
-// "CSQT_*" properties except position, size, channel(s), text and identity, so
-// it can be applied to another widget of the same type.
+// "CSQT_*" properties except position, channel(s), text and identity, plus the
+// size separately so Apply Style can optionally include it. Values and
+// selection state are never copied.
 static QHash<int, QVariantMap> widgetStyleClipboard;
+
+static bool isStyleValueProperty(const QString &name)
+{
+	// Values and selection state belong to the widget instance, never to its
+	// appearance. Copy Style stores size, but never these.
+	return name == "CSQT_value" || name == "CSQT_value2"
+	        || name == "CSQT_stringValue"
+	        || name == "CSQT_selected" || name == "CSQT_selectedIndex"
+	        || name == "CSQT_xValue" || name == "CSQT_yValue";
+}
 
 static bool isStylePropertyExcluded(const QString &name)
 {
-	// Position and size
+	// Position. Size is added explicitly after the copy loop so Apply Style
+	// can decide whether to use it.
 	if (name == "CSQT_x" || name == "CSQT_y"
 		|| name == "CSQT_width" || name == "CSQT_height") {
 		return true;
@@ -80,13 +92,20 @@ QuteWidget(QWidget *parent):
 
 	copyStyleAct = new QAction(tr("Copy Style"), this);
 	copyStyleAct->setStatusTip(tr("Copy the appearance of this widget (everything except "
-								  "position, size, channel and text)"));
+								  "position, channel and text; size is stored for "
+								  "Apply Style and Geometry)"));
 	connect(copyStyleAct, SIGNAL(triggered()), this, SLOT(copyStyle()));
 
 	applyStyleAct = new QAction(tr("Apply Style"), this);
 	applyStyleAct->setStatusTip(tr("Apply the previously copied appearance of a widget "
-								   "of the same type"));
+								   "of the same type, keeping its position and size"));
 	connect(applyStyleAct, SIGNAL(triggered()), this, SLOT(applyStyle()));
+
+	applyStyleGeometryAct = new QAction(tr("Apply Style and Geometry"), this);
+	applyStyleGeometryAct->setStatusTip(tr("Apply the copied appearance and the copied "
+	                                       "width and height, keeping the position"));
+	connect(applyStyleGeometryAct, SIGNAL(triggered()),
+	        this, SLOT(applyStyleAndGeometry()));
 
 	m_value = 0.0;
 	m_value2 = 0.0;
@@ -214,6 +233,7 @@ void QuteWidget::setValue(double value)
 	widgetLock.lockForWrite();
 #endif
 	m_value = value;
+	setProperty("CSQT_value", value);
 	m_valueChanged = true;
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -954,6 +974,7 @@ void QuteWidget::popUpMenu(QPoint pos)
 	if (hasCopiedStyle(getWidgetTypeID())
 			&& (selection.isEmpty() || sameTypeSelection)) {
 		menu.addAction(applyStyleAct);
+		menu.addAction(applyStyleGeometryAct);
 	}
 	menu.addSeparator();
 
@@ -989,27 +1010,54 @@ void QuteWidget::copyStyle()
 	const QList<QByteArray> names = dynamicPropertyNames();
 	for (const QByteArray &name : names) {
 		const QString propertyName = QString::fromLatin1(name);
-		if (isStylePropertyExcluded(propertyName)) {
+		if (isStylePropertyExcluded(propertyName)
+				|| isStyleValueProperty(propertyName)) {
 			continue;
 		}
 		style.insert(propertyName, property(name.constData()));
 	}
+	// Size is copied too, but Apply Style ignores it; Apply Style and Geometry
+	// uses it. Position and channel remain with the destination widget.
+	style.insert("CSQT_width", property("CSQT_width"));
+	style.insert("CSQT_height", property("CSQT_height"));
 	widgetStyleClipboard.insert(static_cast<int>(getWidgetTypeID()), style);
 	emit logMessage(tr("CsoundQt: copied style of \"%1\".\n").arg(m_channel),
 					static_cast<int>(MessageRole::Info));
 }
 
-void QuteWidget::applyStyleMap(const QVariantMap &style)
+void QuteWidget::applyStyleMap(const QVariantMap &style, bool applyGeometry)
 {
+	// Style application must not change the destination widget's value. Keep
+	// the live values and put them back into the value properties before
+	// applyInternalProperties() reads them.
+	const double liveValue = getValue();
+	const double liveValue2 = getValue2();
+	const QString liveString = getStringValue();
+
 	for (auto p = style.constBegin(); p != style.constEnd(); ++p) {
+		if (isStyleValueProperty(p.key()))
+			continue;
+		if (!applyGeometry
+				&& (p.key() == "CSQT_width" || p.key() == "CSQT_height")) {
+			continue;
+		}
 		setPropertyIfExists(p.key(), p.value());
 	}
+
+	setPropertyIfExists("CSQT_value", liveValue);
+	setPropertyIfExists("CSQT_value2", liveValue2);
+	setPropertyIfExists("CSQT_stringValue", liveString);
+	setPropertyIfExists("CSQT_xValue", liveValue);
+	setPropertyIfExists("CSQT_yValue", liveValue2);
+	setPropertyIfExists("CSQT_selectedIndex", static_cast<int>(liveValue));
+	setPropertyIfExists("CSQT_selected", liveValue != 0.0);
+
 	applyInternalProperties();
 	emit widgetChanged(this);
 	m_valueChanged = true;
 }
 
-void QuteWidget::applyStyle()
+void QuteWidget::applyStyleWithGeometry(bool applyGeometry)
 {
 	auto it = widgetStyleClipboard.constFind(static_cast<int>(getWidgetTypeID()));
 	if (it == widgetStyleClipboard.constEnd() || it->isEmpty()) {
@@ -1027,10 +1075,20 @@ void QuteWidget::applyStyle()
 		if (w->getWidgetTypeID() != getWidgetTypeID()) {
 			continue;
 		}
-		w->applyStyleMap(*it);
+		w->applyStyleMap(*it, applyGeometry);
 	}
 	// One undo entry / history update for the whole operation.
 	emit propertiesAccepted();
+}
+
+void QuteWidget::applyStyle()
+{
+	applyStyleWithGeometry(false);
+}
+
+void QuteWidget::applyStyleAndGeometry()
+{
+	applyStyleWithGeometry(true);
 }
 
 // QGridLayout does not define the focus chain: by default it follows the

@@ -539,5 +539,6 @@ void QuteSpinBox::editingFinishedSlot()
 void QuteSpinBox::setInternalValue(double value)
 {
 	m_value = value;
+	setProperty("CSQT_value", value);
     m_valueChanged = true;
 }

@@ -544,6 +544,7 @@ void QuteComboBox::indexChanged(int value)
 	widgetLock.lockForRead();
 #endif
 	m_value = value;
+	setProperty("CSQT_selectedIndex", value);
 	m_valueChanged = true;
 	QPair<QString, double> channelValue(m_channel, m_value);
 #ifdef  USE_WIDGET_MUTEX

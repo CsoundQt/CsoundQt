@@ -98,35 +98,6 @@ static void applyFlatStyleToNewWidget(QuteWidget *widget)
     }
 }
 
-// Visual defaults for a newly created slider. The colours are chosen from the
-// panel background so the flat slider fits the panel instead of the app theme.
-static void applySliderCreationDefaults(QuteWidget *widget, bool darkPanel)
-{
-    if (widget == nullptr)
-        return;
-    widget->setProperty("CSQT_borderRadius", 3);
-    widget->setProperty("CSQT_borderWidth", 2);
-    widget->setProperty("CSQT_fillMode", "fill");
-    widget->setProperty("CSQT_rulermode", "hide");
-    widget->setProperty("CSQT_thumbWidth", 4);
-    widget->setProperty("CSQT_thumbPadding", 0);
-    widget->setProperty("CSQT_thumbRadius", 2);
-
-    if (darkPanel) {
-        widget->setProperty("CSQT_foreground", QColor("#daeff3"));
-        widget->setProperty("CSQT_bgcolor", QColor("#434343"));
-        widget->setProperty("CSQT_bordercolor", QColor("#a1a1a1"));
-        widget->setProperty("CSQT_fillcolor", QColor("#828282"));
-        widget->setProperty("CSQT_rulercolor", QColor("#a1a1a1"));
-    } else {
-        widget->setProperty("CSQT_foreground", QColor("#34393a"));
-        widget->setProperty("CSQT_bgcolor", QColor("#f0f0f0"));
-        widget->setProperty("CSQT_bordercolor", QColor("#aebcd2"));
-        widget->setProperty("CSQT_fillcolor", QColor("#dfdfdf"));
-        widget->setProperty("CSQT_rulercolor", QColor("#aebcd2"));
-    }
-}
-
 // Visual defaults for a newly created flat menu. Menu colours follow the panel
 // background; the font family comes from the global widget-font option.
 static void applyMenuCreationDefaults(QuteWidget *widget, bool darkPanel)
@@ -1535,6 +1506,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
     QDomNodeList childNodes = mainnode.childNodes();
     QString type = element.attribute("type");
     bool forceBackground = false;
+    bool hasBorderWidth = false;
     ret = element.attribute("version").toInt();
     if (type == "BSBLabel" || type == "BSBDisplay") {
 
@@ -1704,6 +1676,8 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
                  || nodeName == "pointradius"
                  || nodeName == "selectedIndex" ) {  // INT type
             QDomNode n = node.firstChild();
+            if (nodeName == "borderWidth" || nodeName == "borderwidth")
+                hasBorderWidth = true;
             nodeName.prepend("CSQT_");
             widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toInt());
         }
@@ -1777,6 +1751,24 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
             QDomNode n = node.firstChild();
             nodeName.prepend("CSQT_");
             widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue());
+        }
+    }
+
+    // Older controller files used a boolean <border> property or a
+    // <bordermode>border|noborder</bordermode> tag. Current files use
+    // <borderWidth>, where 0 means no border. Convert the old forms so old
+    // panels do not suddenly grow a border.
+    if (widget->getWidgetTypeID() == QuteWidgetType::CONTROLLER) {
+        const QVariant oldBorder = widget->property("CSQT_border");
+        if (oldBorder.isValid()) {
+            widget->setProperty("CSQT_borderWidth", oldBorder.toBool() ? 1 : 0);
+        } else {
+            const QString oldMode = widget->property("CSQT_bordermode")
+                    .toString().trimmed().toLower();
+            if (oldMode == "noborder")
+                widget->setProperty("CSQT_borderWidth", 0);
+            else if (oldMode == "border" && !hasBorderWidth)
+                widget->setProperty("CSQT_borderWidth", 1);
         }
     }
 
@@ -3176,7 +3168,6 @@ QString WidgetLayout::createNewSlider(int x, int y, QString channel)
         dialog = false;
     }
     uuid = createSlider(posx, posy, 20, 100, channel, 0.0, 1.0, 0.0);
-    applySliderCreationDefaults(m_widgets.last(), panelBackgroundIsDark());
     applyFlatStyleToNewWidget(m_widgets.last());
     widgetChanged();
     if (dialog && getOpenProperties()) {

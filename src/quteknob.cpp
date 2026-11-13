@@ -640,6 +640,7 @@ void QuteKnob::knobChanged(int value)
             / (double) (w->maximum() - w->minimum());
 	m_value = w->mapping().toValue(normalized);
     // setInternalValue(scaledValue);
+	setProperty("CSQT_value", m_value);
     m_valueChanged = true;
 	QPair<QString, double> channelValue(m_channel, m_value);
 #ifdef  USE_WIDGET_MUTEX

@@ -225,7 +225,8 @@ protected slots:
 private:
 
 	static bool hasCopiedStyle(QuteWidgetType type);
-	void applyStyleMap(const QVariantMap &style);
+	void applyStyleMap(const QVariantMap &style, bool applyGeometry);
+	void applyStyleWithGeometry(bool applyGeometry);
 	// Put the properties dialog's focus chain in grid order (left to right,
 	// top to bottom) instead of the widget creation order.
 	void setTabOrderFromGrid();
@@ -233,6 +234,7 @@ private:
 	QAction *propertiesAct;
 	QAction *copyStyleAct;
 	QAction *applyStyleAct;
+	QAction *applyStyleGeometryAct;
 
 
 	QPushButton *applyButton;
@@ -243,6 +245,7 @@ private slots:
     void showAvailableProperties(); // Opens a filterable list of the widget's addressable properties
     void copyStyle();
     void applyStyle();
+    void applyStyleAndGeometry();
 
 signals:
 	void newValue(QPair<QString,double> channelValue);

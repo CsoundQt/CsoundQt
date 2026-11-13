@@ -1726,6 +1726,7 @@ void QuteScrollNumber::setValue(double value)
 		displayValue = m_max;
 	}
 	m_stringValue = QString::number(displayValue, 'f', m_places);
+	setProperty("CSQT_value", m_value);
 	m_valueChanged = true;
 	//   qDebug("QuteScrollNumber::setValue places = %i value = %f", m_places, m_value);
 #ifdef  USE_WIDGET_MUTEX

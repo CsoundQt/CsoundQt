@@ -42,6 +42,61 @@ static QColor colorFromVariant(const QVariant &value)
 	return color;
 }
 
+// Flat slider defaults follow the widget panel, not the application palette.
+static bool panelBackgroundIsDark(const QWidget *widget)
+{
+	for (const QWidget *ancestor = widget != nullptr ? widget->parentWidget() : nullptr;
+	     ancestor != nullptr; ancestor = ancestor->parentWidget()) {
+		if (ancestor->property("CSQT_bg").toBool()) {
+			const QColor color = ancestor->property("CSQT_bgcolor").value<QColor>();
+			if (color.isValid())
+				return color.lightness() < 128;
+		}
+	}
+	return QuteWidget::isDarkTheme();
+}
+
+static void applyFlatSliderDefaults(QuteWidget *widget, bool darkPanel)
+{
+	widget->setProperty("CSQT_bgcolor", QColor(darkPanel ? "#434343" : "#f0f0f0"));
+	widget->setProperty("CSQT_foreground", QColor(darkPanel ? "#daeff3" : "#34393a"));
+	widget->setProperty("CSQT_fillcolor", QColor(darkPanel ? "#828282" : "#dfdfdf"));
+	widget->setProperty("CSQT_bordercolor", QColor(darkPanel ? "#a1a1a1" : "#aebcd2"));
+	widget->setProperty("CSQT_borderWidth", 2);
+	widget->setProperty("CSQT_borderRadius", 3);
+	widget->setProperty("CSQT_thumbWidth", 4);
+	widget->setProperty("CSQT_thumbPadding", 0);
+	widget->setProperty("CSQT_thumbRadius", 2);
+	widget->setProperty("CSQT_fillMode", "fill");
+	widget->setProperty("CSQT_rulermode", "hide");
+	widget->setProperty("CSQT_rulerscale", "linear");
+	widget->setProperty("CSQT_rulercolor", QColor(darkPanel ? "#a1a1a1" : "#aebcd2"));
+}
+
+// Sliders saved before the current flat defaults used a fixed set of colours
+// and dimensions. If those exact values were stored while the slider was not
+// flat, they are only dormant copies of the old defaults: replace them with
+// the current panel-aware defaults. Custom flat settings do not match and are
+// preserved.
+static bool hasOldFlatDefaults(const QuteWidget *widget)
+{
+	const QColor bg = colorFromVariant(widget->property("CSQT_bgcolor"));
+	const QColor fg = colorFromVariant(widget->property("CSQT_foreground"));
+	const QColor border = colorFromVariant(widget->property("CSQT_bordercolor"));
+	const QColor ruler = colorFromVariant(widget->property("CSQT_rulercolor"));
+	const bool oldLight = bg == QColor("#f3f3f3") && fg == QColor("#202020")
+	        && border == QColor("#adadad") && ruler == QColor("#6d6d6d");
+	const bool oldDark = bg == QColor("#0c0c0c") && fg == QColor("#dfdfdf")
+	        && border == QColor("#525252") && ruler == QColor("#929292");
+	return (oldLight || oldDark)
+	        && widget->property("CSQT_borderWidth").toInt() == 1
+	        && widget->property("CSQT_thumbWidth").toInt() == 12
+	        && widget->property("CSQT_thumbPadding").toInt() == 2
+	        && widget->property("CSQT_thumbRadius").toInt() == 0
+	        && widget->property("CSQT_fillMode").toString() == "fill"
+	        && widget->property("CSQT_rulermode").toString() == "hide";
+}
+
 static QuteSliderControl::RulerScale rulerScaleFromString(const QString &scale)
 {
 	return scale.trimmed().compare(u"db"_s, Qt::CaseInsensitive) == 0
@@ -682,27 +737,12 @@ QuteSlider::QuteSlider(QWidget *parent) : QuteWidget(parent)
 	setProperty("CSQT_exponent", 1.0);
 
 	// Flat style. Disabled by default, so existing sliders keep the native
-	// look. The defaults follow the panel background (light/dark), as the flat
-	// button does.
+	// look. The defaults are the same ones used for newly created sliders and
+	// follow the widget panel's light/dark background.
 	setProperty("CSQT_flatStyle", false);
-	const bool darkPanel = isDarkTheme();
-	auto shade = [darkPanel](int r, int g, int b) {
-		return darkPanel ? QColor(255 - r, 255 - g, 255 - b) : QColor(r, g, b);
-	};
-	setProperty("CSQT_bgcolor", shade(0xf3, 0xf3, 0xf3));
-	setProperty("CSQT_foreground", shade(0x20, 0x20, 0x20));
-	setProperty("CSQT_fillcolor", QString()); // empty = use foreground
-	setProperty("CSQT_bordercolor", shade(0xad, 0xad, 0xad));
-	setProperty("CSQT_borderWidth", 1);
-	setProperty("CSQT_borderRadius", 3);
-	setProperty("CSQT_thumbWidth", 12);
-	setProperty("CSQT_thumbPadding", 2);
-	setProperty("CSQT_thumbRadius", 0);
-	setProperty("CSQT_fillMode", "fill");
+	const bool darkPanel = panelBackgroundIsDark(this);
+	applyFlatSliderDefaults(this, darkPanel);
 	setProperty("CSQT_backgroundMode", "jump");
-	setProperty("CSQT_rulermode", "hide");
-	setProperty("CSQT_rulerscale", "linear");
-	setProperty("CSQT_rulercolor", shade(0x6d, 0x6d, 0x6d));
 }
 
 QuteSlider::~QuteSlider()
@@ -856,6 +896,9 @@ bool QuteSlider::applyProperty(const QString &name)
 void QuteSlider::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();
+
+	if (!property("CSQT_flatStyle").toBool() && hasOldFlatDefaults(this))
+		applyFlatSliderDefaults(this, panelBackgroundIsDark(this));
 
 	double min = property("CSQT_minimum").toDouble();
 	double max = property("CSQT_maximum").toDouble();
@@ -1427,6 +1470,7 @@ void QuteSlider::setInternalValue(double value)
 		m_value = min;
 	else
 		m_value = value;
+	setProperty("CSQT_value", m_value);
 	m_valueChanged = true;
 	//  setProperty("CSQT_value", m_value);
 }
