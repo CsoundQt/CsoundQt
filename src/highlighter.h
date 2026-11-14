@@ -135,6 +135,9 @@ public:
 	Highlighter(QTextDocument *parent = 0);
 	~Highlighter();
 	void setOpcodeNameList(const QStringList& list);
+    // Replace the opcode set without rebuilding the syntax rules. Used when
+    // external plugin opcodes are added after the editor was created.
+    void updateOpcodeNames(const QStringList &list);
     void setDisabledOpcodes(QStringList list);
 	void setColorVariables(bool color);
 	void setMode(int mode);
@@ -203,6 +206,7 @@ private:
     QVector<QTextCharFormat *> allFormats();
     QTextCharFormat *formatForName(const QString &name);
     QString localVariableType(int line, const QString &name) const;
+    void setOpcodeNames(const QStringList &list);
 
 	struct HighlightingRule
 	{

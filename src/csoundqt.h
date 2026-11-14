@@ -153,6 +153,11 @@ public:
 	void initRisset();
 	// GUI-thread part: applies the (background) detection result.
 	void applyRisset();
+	// Probe again after the Plugins window installed risset.
+	void recheckRisset();
+	bool rissetDetectionReady() const { return m_rissetReady; }
+	bool rissetIsInstalled() const;
+	QString rissetVersion() const;
 	// Loads the manual start page the first time the help panel is shown.
 	void loadHelpOnce();
 	// Returns the Csound manual directory: the configured path when valid, else
@@ -224,6 +229,9 @@ public slots:
     void setEditorScrollBarVisible(bool visible);
 
 
+signals:
+    void rissetDetectionFinished();
+
 protected:
 	virtual void closeEvent(QCloseEvent *event);
 	virtual void showEvent(QShowEvent *event);
@@ -245,6 +253,7 @@ private slots:
 	bool saveNoWidgets();
 	void info();
 	void showEmbeddedFiles();
+	void showPlugins();
 	// Edition
 	void copy();
 	void cut();
@@ -543,6 +552,7 @@ public: CsoundHtmlView *csoundHtmlView;
     };
     QVector<RenderJob> m_renderHistory;
     QPointer<QDialog> m_renderHistoryDialog;
+    QPointer<QDialog> m_pluginsDialog;
     QTableWidget *m_renderHistoryTable = nullptr;
     void refreshRenderHistoryTable();
 
@@ -589,6 +599,7 @@ private:
 	QAction *exportPdfAct;
 	QAction *infoAct;
 	QAction *embeddedFilesAct = nullptr;
+	QAction *pluginsAct = nullptr;
 	QAction *exitAct;
 	QList<QAction *> openRecentAct;
 	QAction *undoAct;
@@ -734,6 +745,7 @@ private:
     bool m_editorWasMaximized = false; // main window state before editor full screen
     QDir m_rissetDataPath;
     bool m_rissetInitialized = false;
+    bool m_rissetDetecting = false;
     bool m_rissetReady = false;
     bool m_audioMidiDiscovered = false;
     bool m_realtimeAudioValidated = false;

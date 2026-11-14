@@ -13,8 +13,17 @@ enum class RissetError { Ok, Error, HtmlError, RissetNotInstalled };
 class Risset
 {
 public:
-    // An empty pythonExe lets Risset look for python3 itself.
-    Risset(QString pythonExe = QString());
+    Risset();
+
+    // User-writable CsoundQt data root and the managed plugin installation
+    // locations used by the Plugins window.
+    static QDir userDataRoot();
+    static QDir pluginRootDir();
+    static QDir pluginBinDir();
+    static QDir pluginToolDir();
+    static QDir pluginPythonDir();
+    static QString localRissetExecutable();
+    static QString executableSuffix();
 
     QString htmlManpage(QString opcodeName);
     RissetError generateDocumentation(std::function<void(int)> callback=nullptr);
@@ -44,7 +53,6 @@ public:
 
 private:
     QString m_infoText;
-    QString m_pythonExe;
     QString m_rissetPath;
     QJsonDocument m_jsonInfo;
     bool opcodeIndexDone;

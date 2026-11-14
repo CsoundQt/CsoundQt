@@ -65,6 +65,9 @@ public:
 	void setBackgroundColor(QColor color);
     void setTextColor(QColor color);
     void setColors(QColor text, QColor background);
+    // Re-read the opcode tree's names (e.g. after external plugin opcodes were
+    // added) and rehighlight the document.
+    void refreshOpcodeNames();
     //    void setOpcodeNameList(QStringList list);
 	//    void setOpcodeTree(OpEntryParser *opcodeTree);
 	void setOrc(QString text);

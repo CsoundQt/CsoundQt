@@ -77,6 +77,13 @@ BaseView::~BaseView()
 {
 }
 
+void BaseView::refreshOpcodeNames()
+{
+    if (m_opcodeTree == nullptr)
+        return;
+    m_highlighter.updateOpcodeNames(m_opcodeTree->opcodeNameList());
+}
+
 void BaseView::setFullText(QString text, bool goToTop)
 {
 	// Load Embedded Files ------------------------

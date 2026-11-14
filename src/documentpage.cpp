@@ -1373,6 +1373,12 @@ QStringList DocumentPage::getWidgetAddresses() {
     return addresses;
 }
 
+void DocumentPage::refreshOpcodeNames()
+{
+    if (m_view != nullptr)
+        m_view->refreshOpcodeNames();
+}
+
 QString DocumentPage::variableTypeAt(int line, const QString &name) const
 {
     if (!m_scan || line < 1 || name.isEmpty())

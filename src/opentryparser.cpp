@@ -29,6 +29,7 @@
 using namespace Qt::StringLiterals;
 
 void OpEntryParser::parseOpcodesXml(QString opcodeFile) {
+    clearOpcodeNameCache();
     QDomDocument m_doc("opcodes");
     QFile file(opcodeFile);
     if (!file.open(QIODevice::ReadOnly)) {
@@ -206,13 +207,20 @@ void OpEntryParser::addExtraOpcodes()
     addFlag("use-system-sr", "Use the samplerate defined by the realtime audio backend");
     addFlag("omacro", "--omacro:XXX=YYY set orchestra macro XXX to value YYY");
     addFlag("port", "--port=N. listen to UDP port N for instruments/orchestra code");
+    clearOpcodeNameCache();
 
 }
 
 void OpEntryParser::sortOpcodes()
 {
+    clearOpcodeNameCache();
     std::sort(opcodeList.begin(), opcodeList.end(),
               [](const Opcode &a, const Opcode &b) -> bool { return a.opcodeName < b.opcodeName; });
+}
+
+void OpEntryParser::clearOpcodeNameCache()
+{
+    m_opcodeNameListCache.clear();
 }
 
 QStringList OpEntryParser::opcodeNameList(bool includeDisabled)

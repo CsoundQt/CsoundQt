@@ -39,6 +39,7 @@ HEADERS = "src/about.h" \
     "src/documentview.h" \
     "src/embeddedfiles.h" \
     "src/embeddedfilesdialog.h" \
+    "src/pluginsdialog.h" \
     "src/externallauncher.h" \
     "src/eventsheet.h" \
     "src/findbar.h" \
@@ -119,6 +120,7 @@ SOURCES = "src/about.cpp" \
     "src/documentview.cpp" \
     "src/embeddedfiles.cpp" \
     "src/embeddedfilesdialog.cpp" \
+    "src/pluginsdialog.cpp" \
     "src/externallauncher.cpp" \
     "src/eventsheet.cpp" \
     "src/findbar.cpp" \

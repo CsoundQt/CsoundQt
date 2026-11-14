@@ -39,6 +39,9 @@ public:
     void parseOpcodesXml(QString opcodeFile);
     void sortOpcodes();
 	void addExtraOpcodes();
+    // Drop the cached name list after adding/removing opcodes (e.g. external
+    // plugin opcodes parsed from risset's opcodes.xml).
+    void clearOpcodeNameCache();
     QStringList opcodeNameList(bool includeDisabled=false);
 	QString getSyntax(QString opcodeName);
     // The body of a quick-reference page for an opcode, built from what was

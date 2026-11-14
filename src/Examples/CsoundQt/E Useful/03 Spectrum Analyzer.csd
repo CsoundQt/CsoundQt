@@ -144,6 +144,8 @@ schedule "PostInit", 16384/sr + 0.01, -1
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -169,8 +171,8 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <description>Spectrum - Press mouse to show/play peak</description>
   <value>0</value>
   <objectName2/>
-  <zoomx>2.00000000</zoomx>
-  <zoomx>2.00000000</zoomx>
+  <zoomx>8.00000000</zoomx>
+  <zoomx>8.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
@@ -183,6 +185,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <enableTables>false</enableTables>
   <enableDisplays>true</enableDisplays>
   <all>true</all>
+  <bgcolor>#000000</bgcolor>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>ch1</objectName>
@@ -290,7 +293,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>fftsize</objectName>
-  <x>150</x>
+  <x>145</x>
   <y>570</y>
   <width>80</width>
   <height>30</height>
@@ -299,7 +302,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description>FFT size</description>
   <bsbDropdownItemList>
    <bsbDropdownItem>
@@ -324,6 +327,14 @@ schedule "PostInit", 16384/sr + 0.01, -1
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>2</selectedIndex>
+  <font>Liberation Sans</font>
+  <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#3e3e3e</bgcolor>
+  <foreground>#bed0d4</foreground>
+  <bordercolor>#4e5658</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>0</borderRadius>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -393,7 +404,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description>Enable Channel 1</description>
-  <selected>false</selected>
+  <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
@@ -610,7 +621,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <description>Refresh Rate</description>
+  <description>FFT size</description>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>10</name>
@@ -649,6 +660,14 @@ schedule "PostInit", 16384/sr + 0.01, -1
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>4</selectedIndex>
+  <font>Liberation Sans</font>
+  <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#3e3e3e</bgcolor>
+  <foreground>#bed0d4</foreground>
+  <bordercolor>#4e5658</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>0</borderRadius>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">

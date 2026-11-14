@@ -67,6 +67,7 @@
 #include "includecache.h"
 #include "documentpage.h"
 #include "embeddedfilesdialog.h"
+#include "pluginsdialog.h"
 #include "externallauncher.h"
 #include "inspector.h"
 #include "opentryparser.h"
@@ -1227,9 +1228,10 @@ void CsoundQt::applyManualDirectory(bool reload)
 
 void CsoundQt::initRisset()
 {
-    if (m_rissetInitialized)
+    if (m_rissetInitialized || m_rissetDetecting)
         return;
     m_rissetInitialized = true;
+    m_rissetDetecting = true;
 
     // Risset detection spawns external processes (and may generate/fetch data),
     // so run it in the background and apply the results on the GUI thread once
@@ -1239,6 +1241,7 @@ void CsoundQt::initRisset()
     auto *watcher = new QFutureWatcher<Risset *>(this);
     connect(watcher, &QFutureWatcher<Risset *>::finished, this, [this, watcher]() {
         risset = watcher->result();
+        m_rissetDetecting = false;
         applyRisset();
         watcher->deleteLater();
     });
@@ -1254,11 +1257,34 @@ void CsoundQt::initRisset()
     }));
 }
 
+void CsoundQt::recheckRisset()
+{
+    if (m_rissetDetecting)
+        return;
+    delete risset;
+    risset = nullptr;
+    m_rissetInitialized = false;
+    m_rissetReady = false;
+    initRisset();
+}
+
+bool CsoundQt::rissetIsInstalled() const
+{
+    return m_rissetReady && risset != nullptr && risset->isInstalled;
+}
+
+QString CsoundQt::rissetVersion() const
+{
+    return risset != nullptr ? risset->rissetVersion : QString();
+}
+
 void CsoundQt::applyRisset()
 {
     m_rissetReady = true;
-    if (!risset || !risset->isInstalled)
+    if (!risset || !risset->isInstalled) {
+        emit rissetDetectionFinished();
         return;
+    }
 
     const QString rissetOpcodesXml = risset->rissetOpcodesXml;
     if (!rissetOpcodesXml.isEmpty() && QFile::exists(rissetOpcodesXml)) {
@@ -1266,6 +1292,22 @@ void CsoundQt::applyRisset()
         m_opcodeTree->parseOpcodesXml(rissetOpcodesXml);
         m_opcodeTree->sortOpcodes();
         risset->markOpcodeTree(m_opcodeTree);
+        // Editors built their opcode set before risset was detected. Refresh
+        // the cached names and rehighlight every open editor so external plugin
+        // opcodes are coloured like the built-ins.
+        m_opcodeTree->clearOpcodeNameCache();
+        for (DocumentPage *page : documentPages) {
+            if (page != nullptr)
+                page->refreshOpcodeNames();
+        }
+        for (WidgetWindow *window : m_widgetWindows) {
+            if (window != nullptr && window->page() != nullptr)
+                window->page()->refreshOpcodeNames();
+        }
+        if (m_scratchPad != nullptr) {
+            if (auto *editor = qobject_cast<LiveCodeEditor *>(m_scratchPad->widget()))
+                editor->getDocumentView()->refreshOpcodeNames();
+        }
     } else {
         QDEBUG << "Risset's opcodes.xml not found: " << rissetOpcodesXml;
     }
@@ -1274,6 +1316,8 @@ void CsoundQt::applyRisset()
     QString rissetSite = risset->rissetHtmlDocs.path();
     if (QFile::exists(rissetSite + "/search/search_index.json"))
         helpPanel->addSearchRoot(rissetSite, tr("Risset"));
+
+    emit rissetDetectionFinished();
 }
 
 void CsoundQt::applyThemeFromSystem(Qt::ColorScheme scheme)
@@ -2939,6 +2983,17 @@ void CsoundQt::showEmbeddedFiles()
     EmbeddedFilesDialog dialog(page->getView(), fileName,
                                page->workingDirectory(), this);
     dialog.exec();
+}
+
+void CsoundQt::showPlugins()
+{
+    if (m_pluginsDialog == nullptr) {
+        m_pluginsDialog = new PluginsDialog(this, this);
+        m_pluginsDialog->setAttribute(Qt::WA_DeleteOnClose);
+    }
+    m_pluginsDialog->show();
+    m_pluginsDialog->raise();
+    m_pluginsDialog->activateWindow();
 }
 
 bool CsoundQt::closeTab(bool forceCloseApp, int index)
@@ -6627,6 +6682,12 @@ void CsoundQt::createActions()
     connect(embeddedFilesAct, &QAction::triggered,
             this, &CsoundQt::showEmbeddedFiles);
 
+    pluginsAct = new QAction(tr("Plugins..."), this);
+    pluginsAct->setStatusTip(tr("Manage external opcode plugins"));
+    pluginsAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(pluginsAct, &QAction::triggered,
+            this, &CsoundQt::showPlugins);
+
     exitAct = new QAction(tr("E&xit"), this);
     exitAct->setStatusTip(tr("Exit the application"));
     //   exitAct->setIconText(tr("Exit"));
@@ -7619,6 +7680,7 @@ void CsoundQt::createMenus()
     fileMenu->addAction(closeTabAct);
     fileMenu->addAction(exportPdfAct);
     fileMenu->addAction(embeddedFilesAct);
+    fileMenu->addAction(pluginsAct);
     fileMenu->addAction(infoAct);
     fileMenu->addSeparator();
     recentMenu = fileMenu->addMenu(tr("Recent files"));

@@ -58,46 +58,83 @@ bool is_running_in_flatpak() {
 }
 
 
-Risset::Risset(QString pythonExe)
+QString Risset::executableSuffix()
+{
+#ifdef Q_OS_WIN
+    return QStringLiteral(".exe");
+#else
+    return QString();
+#endif
+}
+
+QDir Risset::userDataRoot()
+{
+#if defined(Q_OS_LINUX)
+    return QDir(QDir::home().filePath(".local/share/csoundqt"));
+#elif defined(Q_OS_WIN)
+    return QDir(QDir(QProcessEnvironment::systemEnvironment()
+                     .value("LOCALAPPDATA")).filePath("csoundqt"));
+#elif defined(Q_OS_MACOS)
+    return QDir(QDir::home().filePath("Library/Application Support/csoundqt"));
+#else
+    return QDir(QDir::home().filePath(".csoundqt"));
+#endif
+}
+
+QDir Risset::pluginRootDir()
+{
+    return QDir(userDataRoot().filePath("plugins"));
+}
+
+QDir Risset::pluginBinDir()
+{
+    return QDir(pluginRootDir().filePath("bin"));
+}
+
+QDir Risset::pluginToolDir()
+{
+    return QDir(pluginRootDir().filePath("tools"));
+}
+
+QDir Risset::pluginPythonDir()
+{
+    return QDir(pluginRootDir().filePath("python"));
+}
+
+QString Risset::localRissetExecutable()
+{
+    return pluginBinDir().filePath(QStringLiteral("risset") + executableSuffix());
+}
+
+Risset::Risset()
 {
     opcodeIndexDone = false;
-#if defined(Q_OS_LINUX)
-    csoundqtDataRoot.setPath(QDir::home().filePath(".local/share/csoundqt"));
-#elif defined(Q_OS_WIN)
-    csoundqtDataRoot.setPath(QDir(QProcessEnvironment::systemEnvironment().value("LOCALAPPDATA")).filePath("csoundqt"));
-#elif defined(Q_OS_MACOS)
-    csoundqtDataRoot.setPath(QDir::home().filePath("Library/Application Support/csoundqt"));
-#else
-    csoundqtDataRoot.setPath(QDir::home().filePath(".csoundqt"));
-#endif
+    csoundqtDataRoot = userDataRoot();
     // local path to download the html docs from github.com//csound-plugins/risset-docs
     rissetDocsRepoPath.setPath(csoundqtDataRoot.filePath("risset-docs"));
-    // Try the risset script
-    QString rissetScriptPath = which("risset", "risset");
+    // Prefer the copy installed by the Plugins window. The process PATH of a
+    // GUI application may not include the shell's local bin directory.
+    QString rissetScriptPath = localRissetExecutable();
+    if (!QFile::exists(rissetScriptPath))
+        rissetScriptPath = which("risset", QString());
+    if (rissetScriptPath.isEmpty() || !QFile::exists(rissetScriptPath)) {
+        isInstalled = false;
+        QDEBUG << "Risset script not found in the path or at"
+               << localRissetExecutable();
+        return;
+    }
+
     QStringList args = {"info", "--full"};
     QProcess proc;
     proc.start(rissetScriptPath, args);
     auto finishok = proc.waitForFinished();
     if (!finishok) {
-        QDEBUG << "Risset script not installed" << proc.errorString();
-        m_rissetPath = "";
-        if(QFile::exists(pythonExe))
-            m_pythonExe = pythonExe;
-        else
-            m_pythonExe = which(!pythonExe.isEmpty() ? pythonExe: "python3", "python3");
-
-        QDEBUG << "Python binary: " << m_pythonExe;
-
-        proc.start(m_pythonExe, {"-m", "risset", "info", "--full"});
-        finishok = proc.waitForFinished();
-        if (!finishok) {
-            isInstalled = false;
-            QDEBUG << "Risset not installed for python " << m_pythonExe << ", error: " << proc.errorString();
-            return;
-        }
-    } else {
-        m_rissetPath = rissetScriptPath;
+        isInstalled = false;
+        QDEBUG << "Risset script not runnable" << rissetScriptPath
+               << proc.errorString();
+        return;
     }
+    m_rissetPath = rissetScriptPath;
 
     auto procOut = proc.readAllStandardOutput();
     m_infoText = QString::fromLocal8Bit(procOut);
@@ -197,29 +234,17 @@ QString Risset::htmlManpage(QString opcodeName) {
 }
 
 RissetError Risset::generateOpcodesXml() {
-    if (!isInstalled) {
+    if (!isInstalled || m_rissetPath.isEmpty()) {
         QDEBUG << "Risset is not installed";
         return RissetError::RissetNotInstalled;
     }
-    QString executable;
-    QStringList args;
     QString path = this->defaultOpcodesXmlPath();
-
-    if (!m_rissetPath.isEmpty()) {
-        executable = m_rissetPath;
-        args = QStringList({"--debug", "dev", "--outfile", path, "opcodesxml"});
-    } else if(!m_pythonExe.isEmpty()) {
-        executable = m_pythonExe;
-        args = QStringList({"-m", "risset", "--debug", "dev", "--outfile", path, "opcodesxml"});
-    } else {
-        QDEBUG << "Either the risset script should be known or the python executable "
-                  "should be known...";
-        return RissetError::RissetNotInstalled;
-    }
+    QStringList args = {"--debug", "dev", "--outfile", path, "opcodesxml"};
 
     QProcess proc;
-    QDEBUG << "Calling risset to generate opcodes.xml. exec: " << executable << ", args: " << args;
-    proc.start(executable, args);
+    QDEBUG << "Calling risset to generate opcodes.xml. exec: " << m_rissetPath
+           << ", args: " << args;
+    proc.start(m_rissetPath, args);
     proc.waitForFinished();
     if(proc.exitCode() != 0) {
         QDEBUG << "Error while generating opcodesxml";
@@ -232,21 +257,13 @@ RissetError Risset::generateOpcodesXml() {
 
 
 RissetError Risset::generateDocumentation(std::function<void(int)> callback) {
-    if (!isInstalled) {
+    if (!isInstalled || m_rissetPath.isEmpty()) {
         QDEBUG << "Risset is not installed";
         return RissetError::RissetNotInstalled;
     }
 
-    QString executable;
-    QStringList args;
-
-    if (!m_rissetPath.isEmpty()) {
-        executable = m_rissetPath;
-        args = QStringList({"makedocs"});
-    } else {
-        executable = m_pythonExe;
-        args = QStringList({"-m", "risset", "makedocs"});
-    }
+    QStringList args = {"makedocs"};
+    const QString executable = m_rissetPath;
 
     if(callback == nullptr) {
         QProcess proc;

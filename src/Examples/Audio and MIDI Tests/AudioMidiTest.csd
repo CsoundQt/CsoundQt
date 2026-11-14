@@ -331,6 +331,12 @@ e
 
 
 
+
+
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -543,16 +549,16 @@ e
  <bsbObject type="BSBDropdown" version="2">
   <objectName>signaltype</objectName>
   <x>547</x>
-  <y>244</y>
-  <width>110</width>
+  <y>245</y>
+  <width>105</width>
   <height>28</height>
   <uuid>{6d7e91db-0e40-4c78-8ff3-e01a436b45af}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
+  <midicc>0</midicc>
+  <description>FFT size</description>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>whitenoise</name>
@@ -578,11 +584,11 @@ e
   <selectedIndex>0</selectedIndex>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <flatStyle>false</flatStyle>
-  <bgcolor>#eff0f1</bgcolor>
-  <foreground>#34393a</foreground>
-  <bordercolor>#adbdc2</bordercolor>
-  <borderWidth>2</borderWidth>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#3e3e3e</bgcolor>
+  <foreground>#bed0d4</foreground>
+  <bordercolor>#758284</bordercolor>
+  <borderWidth>1</borderWidth>
   <borderRadius>0</borderRadius>
   <randomizable group="0">false</randomizable>
  </bsbObject>
@@ -853,7 +859,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-53.81718468</yValue>
+  <yValue>-5.22925718</yValue>
   <type>fill</type>
   <pointsize>3</pointsize>
   <exponent>1.00000000</exponent>
@@ -886,7 +892,7 @@ e
   <eventLine/>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>24</fontsize>
   <font/>
   <flatStyle>true</flatStyle>
@@ -917,7 +923,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.36164677</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <exponent>1.00000000</exponent>
@@ -1370,7 +1376,7 @@ e
   <enableTables>false</enableTables>
   <enableDisplays>true</enableDisplays>
   <all>true</all>
-  <bgcolor>#000000</bgcolor>
+  <bgcolor>#272727</bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -1475,7 +1481,7 @@ e
   <minimum>-60.00000000</minimum>
   <maximum>0.00000000</maximum>
   <exponent>0.42000000</exponent>
-  <value>-28.53264623</value>
+  <value>-21.47242188</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1611,7 +1617,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <value>1</value>
+  <value>0</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomx>1.00000000</zoomx>
@@ -1641,7 +1647,7 @@ e
   <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <description/>
+  <description>FFT size</description>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>None</name>
@@ -1692,17 +1698,17 @@ e
   <selectedIndex>1</selectedIndex>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <flatStyle>false</flatStyle>
-  <bgcolor>#eff0f1</bgcolor>
-  <foreground>#34393a</foreground>
-  <bordercolor>#adbdc2</bordercolor>
-  <borderWidth>2</borderWidth>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#3e3e3e</bgcolor>
+  <foreground>#bed0d4</foreground>
+  <bordercolor>#758284</bordercolor>
+  <borderWidth>1</borderWidth>
   <borderRadius>0</borderRadius>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>547</x>
+  <x>550</x>
   <y>223</y>
   <width>97</width>
   <height>22</height>
@@ -1714,7 +1720,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <label>Signal Type</label>
-  <alignment>left</alignment>
+  <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
@@ -1729,10 +1735,10 @@ e
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>signalfreq</objectName>
-  <x>657</x>
+  <x>653</x>
   <y>245</y>
-  <width>32</width>
-  <height>26</height>
+  <width>36</width>
+  <height>28</height>
   <uuid>{53268cff-714e-423a-902b-7351141be7ec}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -1741,25 +1747,25 @@ e
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>11</fontsize>
+  <font>Noto Sans</font>
+  <fontsize>10</fontsize>
   <color>#f57c00</color>
   <bgcolor mode="background">#272727</bgcolor>
-  <value>1018.00000000</value>
+  <value>1000.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>50.00000000</minimum>
   <maximum>4000.00000000</maximum>
-  <bordercolor>#000000</bordercolor>
-  <bordermode>false</bordermode>
-  <borderradius>3</borderradius>
-  <borderwidth>0</borderwidth>
+  <bordercolor>#758284</bordercolor>
+  <bordermode>true</bordermode>
+  <borderradius>0</borderradius>
+  <borderwidth>1</borderwidth>
   <padding>4</padding>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>658</x>
+  <x>656</x>
   <y>223</y>
   <width>30</width>
   <height>22</height>
@@ -1771,7 +1777,7 @@ e
   <midicc>-3</midicc>
   <description/>
   <label>Hz</label>
-  <alignment>left</alignment>
+  <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
@@ -1817,11 +1823,11 @@ e
   <selectedIndex>0</selectedIndex>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <flatStyle>false</flatStyle>
-  <bgcolor>#eff0f1</bgcolor>
-  <foreground>#34393a</foreground>
-  <bordercolor>#adbdc2</bordercolor>
-  <borderWidth>2</borderWidth>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#3e3e3e</bgcolor>
+  <foreground>#bed0d4</foreground>
+  <bordercolor>#758284</bordercolor>
+  <borderWidth>1</borderWidth>
   <borderRadius>0</borderRadius>
   <randomizable group="0">false</randomizable>
  </bsbObject>
@@ -2066,7 +2072,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-10</label>
+  <label>-7</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
@@ -2094,7 +2100,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-8</label>
+  <label>-7</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>

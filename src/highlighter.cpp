@@ -631,7 +631,21 @@ Highlighter::~Highlighter()
 
 void Highlighter::setOpcodeNameList(const QStringList &list)
 {
-	m_opcodeList = list;
+    setOpcodeNames(list);
+	//   setFirstRules();
+	setLastRules();
+}
+
+void Highlighter::updateOpcodeNames(const QStringList &list)
+{
+    setOpcodeNames(list);
+    if (document() != nullptr)
+        rehighlight();
+}
+
+void Highlighter::setOpcodeNames(const QStringList &list)
+{
+    m_opcodeList = list;
     m_opcodesSet = QSet<QString>(list.begin(), list.end());
     // Opcodes added after src/opcodes.xml was generated. Keep the highlighter
     // in step with the current Csound 7 built-ins until the XML is regenerated.
@@ -659,8 +673,6 @@ void Highlighter::setOpcodeNameList(const QStringList &list)
         u"trigExpseg"_s,     u"trigLinseg"_s
     };
     m_opcodesSet.unite(extraBuiltinOpcodes);
-	//   setFirstRules();
-	setLastRules();
 }
 
 
