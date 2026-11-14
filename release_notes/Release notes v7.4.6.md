@@ -173,7 +173,9 @@ The source and binaries can be downloaded from:
 * **Realtime MIDI:** RtMidi is the default and is built from the bundled
   submodule. The input/output menus are shared between internal MIDI and
   Csound MIDI, and the Internal MIDI checkbox now clearly enables widget MIDI
-  controls.
+  controls. If the host has no MIDI subsystem (for example a headless machine
+  without an ALSA sequencer), CsoundQt now starts without MIDI instead of
+  aborting.
 * **Recording is always available**, and the old `record_support` build
   switch is a deprecated no-op.
 * **Render settings** now follow the document's Csound options, have a
@@ -281,7 +283,9 @@ The source and binaries can be downloaded from:
   benchmarks in CI, including the Markdown renderer, embedded files, scanner,
   Inspector, bracket matcher, Go to Source and external launcher. A new
   `risset` test covers the managed plugin paths, script-only detection, the
-  absence of a Python-module fallback and the `opcodes.xml` command line.
+  absence of a Python-module fallback and the `opcodes.xml` command line. On
+  macOS arm64 the script forces `<arm_acle.h>` into the compiler, because Qt
+  up to 6.10.3 calls `__yield()` from `qyieldcpu.h` without including it.
 * The opt-in `workflow_dispatch` test in `testbuild-qt6.yml` runs the built
   CsoundQt with `--self-test-risset-install` on Linux, macOS and Windows. The
   application itself downloads uv, installs risset into a throw-away data

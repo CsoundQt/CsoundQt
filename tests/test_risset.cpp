@@ -29,8 +29,10 @@ private:
                                   const QString &name,
                                   const QString &version,
                                   const QString &opcodesPath);
+    void useFakePath(const QString &directory);
     QTemporaryDir m_home;
     QTemporaryDir m_emptyBin;
+    QString m_originalPath;
 };
 
 void TestRisset::initTestCase()
@@ -41,6 +43,7 @@ void TestRisset::initTestCase()
     // Risset's plugin installation lives under the user's CsoundQt data root.
     // Redirect that root to the temporary directory, and keep PATH free of a
     // real risset installation.
+    m_originalPath = qEnvironmentVariable("PATH");
     qputenv("HOME", m_home.path().toUtf8());
     qputenv("LOCALAPPDATA", m_home.path().toUtf8());
     qputenv("PATH", m_emptyBin.path().toUtf8());
@@ -81,6 +84,15 @@ QString TestRisset::installFakeExecutable(const QString &directory,
     json.write(payload.toUtf8());
     json.close();
     return target;
+}
+
+void TestRisset::useFakePath(const QString &directory)
+{
+    // Keep the original PATH so a copied fake executable still finds Qt's
+    // DLLs on Windows, but put the fake directory first so it wins over a real
+    // risset that may be installed further down PATH.
+    qputenv("PATH", (directory + QDir::listSeparator() + m_originalPath)
+            .toUtf8());
 }
 
 void TestRisset::pluginPaths()
@@ -136,7 +148,7 @@ void TestRisset::detectsRissetScript()
 
     QVERIFY(!installFakeExecutable(bin.path(), u"risset"_s,
                                    u"9.9.9"_s, opcodes).isEmpty());
-    qputenv("PATH", bin.path().toUtf8());
+    useFakePath(bin.path());
 
     Risset risset;
     QVERIFY(risset.isInstalled);
@@ -161,7 +173,7 @@ void TestRisset::prefersManagedRisset()
     QVERIFY(pathBin.isValid());
     QVERIFY(!installFakeExecutable(pathBin.path(), u"risset"_s,
                                    u"9.9.9"_s, managedOpcodes).isEmpty());
-    qputenv("PATH", pathBin.path().toUtf8());
+    useFakePath(pathBin.path());
 
     Risset risset;
     QVERIFY(risset.isInstalled);
@@ -181,7 +193,7 @@ void TestRisset::generatesOpcodesXml()
 
     QVERIFY(!installFakeExecutable(bin.path(), u"risset"_s,
                                    u"7.7.7"_s, opcodes).isEmpty());
-    qputenv("PATH", bin.path().toUtf8());
+    useFakePath(bin.path());
 
     Risset risset;
     QVERIFY(risset.isInstalled);

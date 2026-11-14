@@ -600,9 +600,9 @@ jobs:
           arch: linux_gcc_64
           cache: true
 
-      # Qt >= 6.10 is required on macOS: older versions use __yield() without
-      # including <arm_acle.h> in qyieldcpu.h, which Xcode 26's clang rejects
-      # with -Werror,-Wimplicit-function-declaration.
+      # Qt 6.10 is used on macOS. Some 6.10.x headers still call __yield()
+      # without including <arm_acle.h>, which Xcode 26's clang rejects;
+      # tests/run-tests.sh passes -include arm_acle.h on arm64 for that.
       - name: Install Qt in macOS
         if: runner.os == 'macOS'
         uses: jurplel/install-qt-action@v4

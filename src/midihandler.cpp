@@ -28,9 +28,29 @@ MidiHandler::MidiHandler(int api, QObject *parent) :
 {
 #ifdef CSQT_RTMIDI
 	qDebug()<<"Using RtMidi API: " << api;
-	m_midiin = new RtMidiIn((RtMidi::Api) api, "CsoundQt"); //api - see RtMidi.h for types
-	m_midiout = new RtMidiOut((RtMidi::Api) api, "CsoundQt");
-	m_midiin->setCallback(&midiInMessageCallback, this);
+    // RtMidi throws when the host has no MIDI subsystem (for example a
+    // headless CI machine without /dev/snd/seq). CsoundQt can still run
+    // without MIDI, so keep the handler alive with the failed side disabled.
+    try {
+        m_midiin = new RtMidiIn((RtMidi::Api) api, "CsoundQt"); //api - see RtMidi.h for types
+    }
+    catch (RtMidiError &error) {
+        m_midiin = nullptr;
+        qWarning() << "MIDI input is not available:";
+        error.printMessage();
+    }
+
+    try {
+        m_midiout = new RtMidiOut((RtMidi::Api) api, "CsoundQt");
+    }
+    catch (RtMidiError &error) {
+        m_midiout = nullptr;
+        qWarning() << "MIDI output is not available:";
+        error.printMessage();
+    }
+
+    if (m_midiin != nullptr)
+        m_midiin->setCallback(&midiInMessageCallback, this);
 
 #endif
 	m_midiLearnDialog = NULL;
@@ -80,7 +100,8 @@ void MidiHandler::passMidiMessage(std::vector<unsigned char> *message)
 void MidiHandler::sendMidiOut(std::vector<unsigned char> *message)
 {
 #ifdef CSQT_RTMIDI
-	m_midiout->sendMessage(message);
+    if (m_midiout != nullptr)
+        m_midiout->sendMessage(message);
 #else
     (void) message;
 #endif
@@ -100,6 +121,8 @@ void MidiHandler::setMidiInterface(int number)
 int MidiHandler::findMidiInPortByName(QString name) {
 	int port = 9999; // stands for None
 #ifdef CSQT_RTMIDI
+    if (m_midiin == nullptr)
+        return port;
 	// to check agains alsa names wihtout port
     static const QRegularExpression re(uR"((\s\d+):(\d+)$)"_s);
     int index = name.indexOf(re);
@@ -125,6 +148,8 @@ int MidiHandler::findMidiInPortByName(QString name) {
 int MidiHandler::findMidiOutPortByName(QString name) {
 	int port = 9999; // stands for None
 #ifdef CSQT_RTMIDI
+    if (m_midiout == nullptr)
+        return port;
     static const QRegularExpression re(uR"((\s\d+):(\d+)$)"_s);
     int index = name.indexOf(re);
 	if (index>0) {
@@ -150,6 +175,8 @@ void MidiHandler::openMidiInPort(int port)
 {
     (void) port;
 #ifdef CSQT_RTMIDI
+    if (m_midiin == nullptr)
+        return;
 	try {
 		closeMidiInPort();
 	}
@@ -184,6 +211,8 @@ void MidiHandler::openMidiOutPort(int port)
 {
     (void) port;
 #ifdef CSQT_RTMIDI
+    if (m_midiout == nullptr)
+        return;
 	try {
 		closeMidiOutPort();
 	}
@@ -208,13 +237,15 @@ void MidiHandler::openMidiOutPort(int port)
 void MidiHandler::closeMidiInPort()
 {
 #ifdef CSQT_RTMIDI
-	m_midiin->closePort();
+    if (m_midiin != nullptr)
+        m_midiin->closePort();
 #endif
 }
 
 void MidiHandler::closeMidiOutPort()
 {
 #ifdef CSQT_RTMIDI
-	m_midiout->closePort();
+    if (m_midiout != nullptr)
+        m_midiout->closePort();
 #endif
 }

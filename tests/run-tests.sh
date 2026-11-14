@@ -278,6 +278,11 @@ build_and_run() {
     mkdir -p "$out"
 
     qmake_args=(CONFIG+=release)
+    if [ "$os" = macos ] && [ "$(uname -m)" = arm64 ]; then
+        # Qt up to 6.10.3 calls __yield() in qyieldcpu.h without including
+        # <arm_acle.h>; Xcode 26's clang rejects the implicit declaration.
+        qmake_args+=("QMAKE_CXXFLAGS+=-include arm_acle.h")
+    fi
     if [ -n "$csound_include" ]; then
         qmake_args+=("CSOUND_API_INCLUDE_DIR=$(native_path "$csound_include")")
     fi

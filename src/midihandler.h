@@ -41,8 +41,8 @@ private:
 	MidiLearnDialog *m_midiLearnDialog;
 
 #ifdef CSQT_RTMIDI
-	RtMidiIn *m_midiin;
-	RtMidiOut *m_midiout;
+	RtMidiIn *m_midiin = nullptr;
+	RtMidiOut *m_midiout = nullptr;
 #endif
 
 };
