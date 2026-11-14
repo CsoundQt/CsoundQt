@@ -65,6 +65,9 @@ protected:
 	// can show GitHub-flavoured Markdown; every other text widget stays plain.
 	void updateLabelText();
 	Qt::TextFormat labelTextFormat() const;
+	// Configure the optional rotated text layer for labels and displays.
+	void updateTextOrientation();
+	bool textIsVertical() const;
 
 	QString m_type;  // can be "label", "display", "edit", "scroll". In old widget format can also be "display".
 	// TODO this shouldn't be used anymore with the new format, as the type is found by querying getWidgetType()
@@ -90,6 +93,7 @@ protected:
 	QComboBox * alignment;
     QComboBox * vertAlignmentComboBox;
     QComboBox * textFormatComboBox = nullptr; // labels only
+    QComboBox * textOrientationComboBox = nullptr; // labels and displays
     QHash<QString, QLabel *>labelPtrs;
     int m_precision;
     QString m_displayFormat;

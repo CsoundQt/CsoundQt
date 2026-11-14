@@ -24,7 +24,11 @@
 
 #include "qutetext.h"
 #include "bundledfonts.h"
+#include <QAbstractTextDocumentLayout>
 #include <QMessageBox>
+#include <QPainter>
+#include <QTextDocument>
+#include <QTextOption>
 #include <math.h>
 
 #define USEFONTPIXELSIZE
@@ -110,10 +114,159 @@ static void writeBorderColorElement(QXmlStreamWriter &s, const QVariant &value)
 	QuteWidget::writeColorElement(s, "bordercolor", color);
 }
 
+// QLabel with an optional rotated text layer. The widget geometry is never
+// rotated: vertical text uses the fixed rectangle as its bounding box, with the
+// text laid out along the height and the line stack across the width.
+class QuteTextLabel : public QLabel
+{
+public:
+	enum class Direction { Up, Down };
+
+	explicit QuteTextLabel(QWidget *parent = nullptr) : QLabel(parent)
+	{
+		m_verticalFont = font();
+		m_verticalColor = palette().color(QPalette::WindowText);
+	}
+
+	void setVertical(bool vertical)
+	{
+		if (m_vertical == vertical)
+			return;
+		m_vertical = vertical;
+		update();
+	}
+
+	void setVerticalDirection(Direction direction)
+	{
+		if (m_direction == direction)
+			return;
+		m_direction = direction;
+		update();
+	}
+
+	void setVerticalText(const QString &text, Qt::TextFormat format)
+	{
+		m_verticalText = text;
+		m_verticalFormat = format;
+		update();
+	}
+
+	void setVerticalStyle(const QFont &font, const QColor &color,
+	                      int padding, int borderWidth,
+	                      Qt::Alignment alignment)
+	{
+		m_verticalFont = font;
+		m_verticalColor = color;
+		m_padding = qMax(0, padding);
+		m_borderWidth = qMax(0, borderWidth);
+		m_verticalAlignment = alignment;
+		update();
+	}
+
+protected:
+	void paintEvent(QPaintEvent *event) override
+	{
+		// Draw the stylesheet background and border. In vertical mode the QLabel
+		// text is empty, so this does not paint any horizontal text.
+		QLabel::paintEvent(event);
+		if (m_vertical)
+			paintVerticalText();
+	}
+
+private:
+	void paintVerticalText()
+	{
+		if (m_verticalText.isEmpty())
+			return;
+
+		// Padding applies along the reading direction. Across the text (the
+		// narrow dimension of a vertical widget) only the border insets the
+		// text, so narrow overlay widgets keep a usable line width.
+		const int border = m_borderWidth;
+		const QRect content = rect().adjusted(border, border + m_padding,
+		                                      -border, -(border + m_padding));
+		if (content.width() < 1 || content.height() < 1)
+			return;
+
+		QTextDocument document;
+		document.setDocumentMargin(0);
+		document.setDefaultFont(m_verticalFont);
+		QTextOption option;
+		option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+		option.setAlignment(Qt::AlignLeft);
+		document.setDefaultTextOption(option);
+		if (m_verticalFormat == Qt::MarkdownText)
+			document.setMarkdown(m_verticalText);
+		else if (m_verticalFormat == Qt::RichText)
+			document.setHtml(m_verticalText);
+		else
+			document.setPlainText(m_verticalText);
+
+		const qreal availableLength = content.height();
+		document.setTextWidth(availableLength);
+		const qreal usedLength = qMin<qreal>(document.idealWidth(),
+		                                     availableLength);
+		const qreal thickness = document.size().height();
+		if (usedLength <= 0.0 || thickness <= 0.0)
+			return;
+
+		const bool alignTop = m_verticalAlignment.testFlag(Qt::AlignTop);
+		const bool alignBottom = m_verticalAlignment.testFlag(Qt::AlignBottom);
+		const bool alignLeft = m_verticalAlignment.testFlag(Qt::AlignLeft);
+		const bool alignRight = m_verticalAlignment.testFlag(Qt::AlignRight);
+
+		qreal alongOffset = 0.0;
+		if (alignBottom && !alignTop)
+			alongOffset = availableLength - usedLength;
+		else if (!alignTop && !alignBottom)
+			alongOffset = (availableLength - usedLength) / 2.0;
+
+		qreal acrossOffset = 0.0;
+		if (alignRight && !alignLeft)
+			acrossOffset = content.width() - thickness;
+		else if (!alignLeft && !alignRight)
+			acrossOffset = (content.width() - thickness) / 2.0;
+
+		qreal originX;
+		qreal originY;
+		if (m_direction == Direction::Down) {
+			originX = content.left() + acrossOffset + thickness;
+			originY = content.top() + alongOffset;
+		} else {
+			originX = content.left() + acrossOffset;
+			originY = content.top() + alongOffset + usedLength;
+		}
+
+		QAbstractTextDocumentLayout::PaintContext context;
+		const QColor textColor = m_verticalColor.isValid()
+				? m_verticalColor
+				: palette().color(QPalette::WindowText);
+		context.palette.setColor(QPalette::Text, textColor);
+
+		QPainter painter(this);
+		painter.setRenderHint(QPainter::TextAntialiasing, true);
+		painter.setRenderHint(QPainter::Antialiasing, true);
+		painter.setClipRect(content);
+		painter.translate(originX, originY);
+		painter.rotate(m_direction == Direction::Down ? 90.0 : -90.0);
+		document.documentLayout()->draw(&painter, context);
+	}
+
+	bool m_vertical = false;
+	Direction m_direction = Direction::Up;
+	QString m_verticalText;
+	Qt::TextFormat m_verticalFormat = Qt::PlainText;
+	QFont m_verticalFont;
+	QColor m_verticalColor;
+	int m_padding = 0;
+	int m_borderWidth = 0;
+	Qt::Alignment m_verticalAlignment = Qt::AlignLeft | Qt::AlignTop;
+};
+
 QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 {
 	m_value = 0.0;
-	m_widget = new QLabel(this);
+	m_widget = new QuteTextLabel(this);
 	static_cast<QLabel*>(m_widget)->setWordWrap (true);
 	// A stylesheet padding makes QLabel report a non-zero frameWidth(), which in
 	// turn activates its automatic indent (half the width of "x", so proportional
@@ -221,11 +374,17 @@ void QuteText::setType(QString type)
         if (!property("CSQT_textformat").isValid()) {
             setProperty("CSQT_textformat", "plain");
         }
+        if (!property("CSQT_textorientation").isValid()) {
+            setProperty("CSQT_textorientation", "horizontal");
+        }
     }
     else if(type == "display") {
         m_typeid = QuteWidgetType::DISPLAY;
         if (!property("CSQT_bold").isValid()) {
             setProperty("CSQT_bold", false);
+        }
+        if (!property("CSQT_textorientation").isValid()) {
+            setProperty("CSQT_textorientation", "horizontal");
         }
     }
     else {
@@ -312,8 +471,69 @@ Qt::TextFormat QuteText::labelTextFormat() const
 void QuteText::updateLabelText()
 {
     QLabel *label = static_cast<QLabel *>(m_widget);
-    label->setTextFormat(labelTextFormat());
+    auto *textLabel = (m_type == "label" || m_type == "display")
+            ? static_cast<QuteTextLabel *>(m_widget) : nullptr;
+    const Qt::TextFormat format = labelTextFormat();
+    const bool vertical = textLabel != nullptr && textIsVertical();
+
+    if (textLabel != nullptr) {
+        if (vertical) {
+            // The QLabel text stays empty; the subclass paints the rotated
+            // document inside the same fixed rectangle.
+            label->setTextFormat(format);
+            label->setText(QString());
+            textLabel->setVerticalText(m_stringValue, format);
+            textLabel->setVertical(true);
+        } else {
+            textLabel->setVertical(false);
+            textLabel->setVerticalText(QString(), Qt::PlainText);
+            label->setTextFormat(format);
+            label->setText(m_stringValue);
+        }
+        return;
+    }
+
+    label->setTextFormat(format);
     label->setText(m_stringValue);
+}
+
+bool QuteText::textIsVertical() const
+{
+    const QString orientation = property("CSQT_textorientation").toString()
+            .trimmed().toLower();
+    return orientation == "vertical" || orientation == "vertical-up"
+            || orientation == "vertical-down";
+}
+
+void QuteText::updateTextOrientation()
+{
+    if (m_type != "label" && m_type != "display")
+        return;
+
+    auto *textLabel = static_cast<QuteTextLabel *>(m_widget);
+    const bool vertical = textIsVertical();
+    textLabel->setVertical(vertical);
+    if (!vertical)
+        return;
+
+    const QString orientation = property("CSQT_textorientation").toString()
+            .trimmed().toLower();
+    textLabel->setVerticalDirection(orientation == "vertical-down"
+            ? QuteTextLabel::Direction::Down
+            : QuteTextLabel::Direction::Up);
+
+    QFont font(property("CSQT_font").toString());
+    font.setPixelSize(qMax(1, qRound(property("CSQT_fontsize").toDouble())));
+    font.setBold(property("CSQT_bold").toBool());
+
+    QColor color = property("CSQT_color").value<QColor>();
+    if (!isWidgetEnabled())
+        color = QuteWidget::disabledColor(color);
+
+    textLabel->setVerticalStyle(font, color,
+            property("CSQT_padding").toInt(),
+            property("CSQT_borderwidth").toInt(),
+            static_cast<QLabel *>(m_widget)->alignment());
 }
 
 void QuteText::setText(QString text)
@@ -351,6 +571,13 @@ bool QuteText::applyProperty(const QString &name)
 	}
 	if (name == "CSQT_textformat") {
 		updateLabelText();
+		updateTextOrientation();
+		m_valueChanged = true;
+		return true;
+	}
+	if (name == "CSQT_textorientation") {
+		updateLabelText();
+		updateTextOrientation();
 		m_valueChanged = true;
 		return true;
 	}
@@ -360,10 +587,12 @@ bool QuteText::applyProperty(const QString &name)
 			boldFont.setBold(property("CSQT_bold").toBool());
 			m_widget->setFont(boldFont);
 		}
+		updateTextOrientation();
 		return true;
 	}
 	if (name == "CSQT_color") {
 		setTextColor(property("CSQT_color").value<QColor>());
+		updateTextOrientation();
 		return true;
 	}
 	return QuteWidget::applyProperty(name);
@@ -468,6 +697,8 @@ void QuteText::applyInternalProperties()
         m_widget->setFont(boldFont);
     }
 
+    updateTextOrientation();
+
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -544,6 +775,19 @@ QString QuteText::getQml()
         }
 
         qml += QString("\t\t\tanchors.centerIn: parent\n");
+        const QString orientation = property("CSQT_textorientation").toString()
+                .trimmed().toLower();
+        const bool vertical = (m_type == "label" || m_type == "display")
+                && (orientation == "vertical" || orientation == "vertical-up"
+                    || orientation == "vertical-down");
+        if (vertical) {
+            qml += "\t\t\twidth: parent.height\n";
+            qml += "\t\t\theight: parent.width\n";
+            qml += "\t\t\twrapMode: Text.WordWrap\n";
+            qml += QString("\t\t\trotation: %1\n")
+                    .arg(orientation == "vertical-down" ? 90 : -90);
+            qml += "\t\t\ttransformOrigin: Item.Center\n";
+        }
         qml += QString("\t\t\tfont.pixelSize: %1 * scaleItem.scale\n").arg(property("CSQT_fontsize").toString()); // is it OK on ndroid? not pointsize?
         qml += QString("\t\t\ttext: \"%1\"\n").arg(property("CSQT_label").toString());
         qml += QString("\t\t\ttextFormat: Text.%1\n")
@@ -584,6 +828,12 @@ QString QuteText::getWidgetXmlText()
 
 	s.writeTextElement("font", property("CSQT_font").toString());
 	s.writeTextElement("fontsize", QString::number(property("CSQT_fontsize").toInt()));
+	if (m_type == "label" || m_type == "display") {
+		const QString orientation = property("CSQT_textorientation").toString()
+				.trimmed().toLower();
+		if (!orientation.isEmpty() && orientation != "horizontal")
+			s.writeTextElement("textorientation", orientation);
+	}
 	if (m_type != "label") // labels have no numeric precision
 		s.writeTextElement("precision", QString::number(property("CSQT_precision").toInt()));
 	if (m_typeid == QuteWidgetType::DISPLAY)
@@ -763,6 +1013,33 @@ void QuteText::createPropertiesDialog()
         boldCheckBox->setToolTip(tr("Draw the display text with a bold face."));
         boldCheckBox->setChecked(property("CSQT_bold").toBool());
         layout->addWidget(boldCheckBox, row, 4, Qt::AlignLeft|Qt::AlignVCenter);
+    }
+
+    if (m_type == "label" || m_type == "display") {
+        ++row;
+        label = new QLabel(tr("Orientation"), dialog);
+        layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+        labelPtrs["textOrientation"] = label;
+
+        textOrientationComboBox = new QComboBox(dialog);
+        textOrientationComboBox->addItem(
+                    tr("Horizontal", "Text orientation"), "horizontal");
+        textOrientationComboBox->addItem(
+                    tr("Vertical, bottom to top", "Text orientation"),
+                    "vertical-up");
+        textOrientationComboBox->addItem(
+                    tr("Vertical, top to bottom", "Text orientation"),
+                    "vertical-down");
+        textOrientationComboBox->setToolTip(
+                    tr("Rotate the text inside the fixed widget rectangle."));
+        const QString orientation = property("CSQT_textorientation").toString()
+                .trimmed().toLower();
+        int orientationIndex = textOrientationComboBox->findData(orientation);
+        if (orientationIndex < 0)
+            orientationIndex = 0;
+        textOrientationComboBox->setCurrentIndex(orientationIndex);
+        layout->addWidget(textOrientationComboBox, row, 1, 1, 3,
+                          Qt::AlignLeft|Qt::AlignVCenter);
     }
 
     // ---------------------
@@ -986,6 +1263,10 @@ void QuteText::applyProperties()
     if (textFormatComboBox != nullptr) {
         setProperty("CSQT_textformat",
                     textFormatComboBox->currentIndex() == 1 ? "markdown" : "plain");
+    }
+    if (textOrientationComboBox != nullptr) {
+        setProperty("CSQT_textorientation",
+                    textOrientationComboBox->currentData().toString());
     }
 
     switch (alignment->currentIndex()) {
