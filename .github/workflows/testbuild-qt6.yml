@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       run_risset_install_test:
-        description: 'Run the networked risset installation test'
+        description: 'Install risset through CsoundQt (network test)'
         required: false
         default: false
         type: boolean
@@ -427,38 +427,45 @@ jobs:
       - name: unit test opcodes
         run: bash tests/run-tests.sh --only opcodes
 
+      # Opt-in end-to-end test: run the built CsoundQt and let its Plugins
+      # window install risset for real. This exercises the application code
+      # (uv download, uv tool install, risset info --full) and CsoundQt's own
+      # re-detection, not a copy of those commands. A throw-away HOME /
+      # LOCALAPPDATA keeps the runner clean.
+      - name: Install risset through CsoundQt (opt-in network test)
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.run_risset_install_test == 'true'
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          set -euo pipefail
+          app="bin/${{ env.APPNAME }}"
+          if [ -x "$app.app/Contents/MacOS/${{ env.APPNAME }}" ]; then
+            app="$app.app/Contents/MacOS/${{ env.APPNAME }}"
+          elif [ -x "$app.exe" ]; then
+            app="$app.exe"
+          fi
+          test -x "$app" || { echo "CsoundQt executable not found:"; ls -la bin; exit 1; }
+
+          root="$(mktemp -d)"
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            export LOCALAPPDATA="$(cygpath -w "$root/localappdata")"
+            mkdir -p "$root/localappdata"
+          else
+            export HOME="$root/home"
+            mkdir -p "$root/home"
+          fi
+          export XDG_DATA_HOME="$root/home/.local/share"
+          export XDG_CONFIG_HOME="$root/home/.config"
+          export XDG_CACHE_HOME="$root/home/.cache"
+
+          report="$root/risset-self-test.json"
+          "$app" --force-new --self-test-risset-install \
+                 --self-test-risset-report "$report"
+          echo "---- risset self-test report ----"
+          cat "$report"
+
   # The QtWebEngine/html_support build test lives in html5-testbuild.yml and
   # only runs on the csoundqt7-qtwebengine branch, where that code still is.
-
-  # Opt-in networked test for the Plugins window installer. The job is skipped
-  # on normal pushes; start it from Actions -> Test Build qt 6 -> Run workflow
-  # with "Run the networked risset installation test" checked.
-  risset-install-test:
-    name: Risset install on ${{ matrix.os }}
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.run_risset_install_test == 'true'
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-
-      - name: Install and verify risset (Windows)
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: ./tests/risset-install-test.ps1
-
-      - name: Install and verify risset (Unix)
-        if: runner.os != 'Windows'
-        shell: bash
-        run: bash tests/risset-install-test.sh
 
   buildjob-arm64-linux:
     name: Test Build CsoundQt on Linux arm64

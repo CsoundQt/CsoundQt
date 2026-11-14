@@ -239,19 +239,33 @@ RissetError Risset::generateOpcodesXml() {
         return RissetError::RissetNotInstalled;
     }
     QString path = this->defaultOpcodesXmlPath();
-    QStringList args = {"--debug", "dev", "--outfile", path, "opcodesxml"};
 
-    QProcess proc;
-    QDEBUG << "Calling risset to generate opcodes.xml. exec: " << m_rissetPath
-           << ", args: " << args;
-    proc.start(m_rissetPath, args);
-    proc.waitForFinished();
-    if(proc.exitCode() != 0) {
-        QDEBUG << "Error while generating opcodesxml";
-        return RissetError::Error;
+    // risset 4 takes --outfile after the "dev opcodesxml" subcommand. Older
+    // versions accepted it on "dev" itself, so try both before giving up.
+    const QList<QStringList> argumentVariants = {
+        {"--debug", "dev", "opcodesxml", "--outfile", path},
+        {"--debug", "dev", "--outfile", path, "opcodesxml"}
+    };
+
+    QString lastError;
+    for (const QStringList &args : argumentVariants) {
+        QProcess proc;
+        QDEBUG << "Calling risset to generate opcodes.xml. exec: " << m_rissetPath
+               << ", args: " << args;
+        proc.start(m_rissetPath, args);
+        proc.waitForFinished();
+        const QString standardError =
+                QString::fromLocal8Bit(proc.readAllStandardError()).trimmed();
+        if (proc.exitCode() == 0 && QFile::exists(path)) {
+            rissetOpcodesXml = path;
+            return RissetError::Ok;
+        }
+        if (!standardError.isEmpty())
+            lastError = standardError;
     }
-    rissetOpcodesXml = path;
-    return RissetError::Ok;
+
+    QDEBUG << "Error while generating opcodesxml:" << lastError;
+    return RissetError::Error;
 }
 
 

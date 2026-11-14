@@ -176,6 +176,16 @@ void PluginsDialog::installRisset()
     if (answer != QMessageBox::Yes)
         return;
 
+    startInstallation();
+}
+
+void PluginsDialog::startInstallation()
+{
+    if (m_installing)
+        return;
+
+    m_installationFinished = false;
+
     const QString binDir = Risset::pluginBinDir().absolutePath();
     const QString toolDir = Risset::pluginToolDir().absolutePath();
     const QString pythonDir = Risset::pluginPythonDir().absolutePath();
@@ -325,6 +335,7 @@ void PluginsDialog::verifyRisset()
                  .arg(error));
             return;
         }
+        emitInstallationFinished(true, QString());
         if (m_mainWindow != nullptr) {
             m_statusLabel->setText(tr("Risset installed. Detecting..."));
             m_detailLabel->setText(
@@ -417,6 +428,15 @@ void PluginsDialog::logLine(const QString &text)
         return;
     m_log->show();
     m_log->appendPlainText(trimmed);
+    emit message(trimmed);
+}
+
+void PluginsDialog::emitInstallationFinished(bool success, const QString &error)
+{
+    if (m_installationFinished)
+        return;
+    m_installationFinished = true;
+    emit installationFinished(success, error);
 }
 
 void PluginsDialog::fail(const QString &message)
@@ -428,4 +448,5 @@ void PluginsDialog::fail(const QString &message)
     m_statusLabel->setText(tr("Installation failed."));
     m_detailLabel->setText(message);
     logLine(message);
+    emitInstallationFinished(false, message);
 }

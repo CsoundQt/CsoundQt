@@ -38,6 +38,10 @@ public:
 
     bool isInstalled = false;
     QString rissetVersion;
+    // Path of the executable that was detected (managed install or PATH).
+    QString executablePath() const { return m_rissetPath; }
+    // Raw JSON printed by "risset info --full".
+    QString infoText() const { return m_infoText; }
     QDir rissetRoot;
     QString rissetOpcodesXml;
     QDir rissetHtmlDocs;

@@ -22,15 +22,28 @@
 
 #include <QApplication>
 #include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QSettings>
+#include <QStandardPaths>
+#include <QTextStream>
+#include <QTimer>
 #ifndef CSQT_NO_SPLASH
 #include <QSplashScreen>
 #endif
 #include "csoundqt.h"
+#include "pluginsdialog.h"
+#include "risset.h"
 #include "bundledfonts.h"
 #include "widgetstyle.h"
 #include "debuglog.h"
 #include <QLocalSocket>
+
+#include <cstdio>
+#include <cstdlib>
+#include <utility>
 
 #ifdef Q_OS_WIN
 #include <QtQuickControls2/QQuickStyle>
@@ -143,6 +156,223 @@ static bool handOverToRunningInstance(const QStringList &fileNames,
     return answer == QMessageBox::Cancel;
 }
 
+namespace {
+
+// Headless end-to-end test of the risset installation: it drives the real
+// Plugins window code, waits for CsoundQt's own detection to pick up the
+// result and writes a JSON report. Started by --self-test-risset-install, as
+// used by the opt-in networked CI job.
+class RissetSelfTest : public QObject
+{
+    Q_OBJECT
+public:
+    RissetSelfTest(CsoundQt *application, QString reportPath,
+                   QObject *parent = nullptr)
+        : QObject(parent), m_application(application),
+          m_reportPath(std::move(reportPath))
+    {
+        if (m_reportPath.isEmpty()) {
+            m_reportPath = QDir(QStandardPaths::writableLocation(
+                                    QStandardPaths::TempLocation))
+                    .filePath(QStringLiteral("csoundqt-risset-self-test.json"));
+        }
+    }
+
+    void start();
+
+signals:
+    void finished(bool success);
+
+private:
+    void onDetectionFinished();
+    void startInstallation();
+    void verifyDetection();
+    void finish(bool success, const QString &error = QString());
+    QJsonObject buildReport(bool success, const QString &error) const;
+
+    CsoundQt *m_application = nullptr;
+    QString m_reportPath;
+    PluginsDialog *m_dialog = nullptr;
+    QTimer *m_timeout = nullptr;
+    bool m_installStarted = false;
+    bool m_done = false;
+};
+
+void RissetSelfTest::start()
+{
+    // Defer to the event loop, so QApplication::exit() below is never called
+    // before exec() has started.
+    QTimer::singleShot(0, this, [this]() {
+        qInfo().noquote() << "Risset self test: waiting for the initial detection";
+
+        m_timeout = new QTimer(this);
+        m_timeout->setSingleShot(true);
+        connect(m_timeout, &QTimer::timeout, this, [this]() {
+            finish(false, QStringLiteral(
+                       "Timed out while installing or detecting risset."));
+        });
+        m_timeout->start(20 * 60 * 1000);
+
+        connect(m_application, &CsoundQt::rissetDetectionFinished,
+                this, &RissetSelfTest::onDetectionFinished);
+
+        if (m_application->rissetDetectionReady())
+            QTimer::singleShot(0, this, &RissetSelfTest::onDetectionFinished);
+        else
+            m_application->initRisset();
+    });
+}
+
+void RissetSelfTest::onDetectionFinished()
+{
+    if (m_done)
+        return;
+
+    if (!m_installStarted) {
+        if (m_application->rissetIsInstalled()) {
+            finish(false, QStringLiteral(
+                       "risset was already installed before the test: %1")
+                   .arg(m_application->rissetVersion()));
+            return;
+        }
+        qInfo().noquote() << "Risset self test: risset is not installed; "
+                             "starting the Plugins window installer";
+        startInstallation();
+        return;
+    }
+
+    verifyDetection();
+}
+
+void RissetSelfTest::startInstallation()
+{
+    m_installStarted = true;
+    m_dialog = new PluginsDialog(m_application, m_application);
+    connect(m_dialog, &PluginsDialog::message, this, [](const QString &text) {
+        qInfo().noquote() << "risset:" << text;
+    });
+    connect(m_dialog, &PluginsDialog::installationFinished, this,
+            [this](bool success, const QString &error) {
+        if (!success) {
+            finish(false, error);
+            return;
+        }
+        qInfo().noquote() << "Risset self test: installation finished; "
+                             "waiting for CsoundQt to detect it";
+    });
+    m_dialog->startInstallation();
+}
+
+void RissetSelfTest::verifyDetection()
+{
+    if (!m_application->rissetIsInstalled()) {
+        finish(false, QStringLiteral(
+                   "CsoundQt did not detect risset after the installation."));
+        return;
+    }
+
+    const QString version = m_application->rissetVersion();
+    if (version.isEmpty()) {
+        finish(false, QStringLiteral(
+                   "CsoundQt detected risset but reported no version."));
+        return;
+    }
+
+    // Detection must prefer the executable that the Plugins window installed,
+    // not an unrelated risset that happens to be on PATH.
+    const QString detected = m_application->risset->executablePath();
+    const QString managed = Risset::localRissetExecutable();
+    if (QFileInfo(detected) != QFileInfo(managed)) {
+        finish(false, QStringLiteral(
+                   "CsoundQt detected %1 instead of the managed %2.")
+               .arg(detected, managed));
+        return;
+    }
+
+    const QString opcodesXml = m_application->risset->rissetOpcodesXml;
+    if (!opcodesXml.isEmpty() && !QFile::exists(opcodesXml)) {
+        finish(false, QStringLiteral(
+                   "CsoundQt did not find risset's opcodes.xml at %1.")
+               .arg(opcodesXml));
+        return;
+    }
+
+    qInfo().noquote() << "Risset self test: CsoundQt detected risset" << version;
+    finish(true);
+}
+
+void RissetSelfTest::finish(bool success, const QString &error)
+{
+    if (m_done)
+        return;
+    m_done = true;
+    if (m_timeout != nullptr)
+        m_timeout->stop();
+
+    const QJsonObject report = buildReport(success, error);
+    const QByteArray json = QJsonDocument(report).toJson(QJsonDocument::Indented);
+
+    QFile file(m_reportPath);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        file.write(json);
+        file.close();
+        qInfo().noquote() << "Risset self test report:" << m_reportPath;
+    } else {
+        qWarning().noquote() << "Risset self test: could not write the report to"
+                             << m_reportPath;
+    }
+
+    QTextStream out(stdout);
+    out << QString::fromUtf8(json) << Qt::endl;
+
+    qInfo().noquote() << (success ? "RISSET SELF TEST PASSED"
+                                  : "RISSET SELF TEST FAILED")
+                      << (error.isEmpty() ? QString() : error);
+
+    if (m_dialog != nullptr) {
+        m_dialog->close();
+        m_dialog->deleteLater();
+        m_dialog = nullptr;
+    }
+
+    emit finished(success);
+    deleteLater();
+}
+
+QJsonObject RissetSelfTest::buildReport(bool success, const QString &error) const
+{
+    QJsonObject report;
+    report.insert(QStringLiteral("success"), success);
+    report.insert(QStringLiteral("dataRoot"),
+                  Risset::userDataRoot().absolutePath());
+    report.insert(QStringLiteral("pluginRoot"),
+                  Risset::pluginRootDir().absolutePath());
+    report.insert(QStringLiteral("managedExecutable"),
+                  Risset::localRissetExecutable());
+
+    if (m_application->risset != nullptr) {
+        const Risset *risset = m_application->risset;
+        report.insert(QStringLiteral("installed"), risset->isInstalled);
+        report.insert(QStringLiteral("version"), risset->rissetVersion);
+        report.insert(QStringLiteral("executable"), risset->executablePath());
+        report.insert(QStringLiteral("opcodesXml"), risset->rissetOpcodesXml);
+        const QJsonDocument info =
+                QJsonDocument::fromJson(risset->infoText().toUtf8());
+        if (info.isObject())
+            report.insert(QStringLiteral("info"), info.object());
+        else
+            report.insert(QStringLiteral("infoRaw"), risset->infoText());
+    } else {
+        report.insert(QStringLiteral("installed"), false);
+    }
+
+    if (!error.isEmpty())
+        report.insert(QStringLiteral("error"), error);
+    return report;
+}
+
+} // namespace
+
 int main(int argc, char *argv[])
 {
     int result = 0;
@@ -236,6 +466,8 @@ int main(int argc, char *argv[])
     bool forceNew = false;
     bool readOnly = false;
     bool noEditor = false;
+    bool rissetSelfTest = false;
+    QString rissetSelfTestReport;
     QStringList args = qapp.arguments();
     args.removeAt(0); // Remove program name
     for(int i=0; i < args.size(); i++) {
@@ -250,6 +482,8 @@ int main(int argc, char *argv[])
             out << "   --readonly    Open command-line files in read-only mode" << Qt::endl;
             out << "   --noeditor    Open command-line files without an editor, in a widget window" << Qt::endl;
             out << "   --force-new   Start a new instance even if one is already running" << Qt::endl;
+            out << "   --self-test-risset-install  Install risset through the Plugins window and verify detection (network test)" << Qt::endl;
+            out << "   --self-test-risset-report FILE  Write the self-test JSON report to FILE" << Qt::endl;
             out << "   --help        This message" << Qt::endl;
             out << Qt::endl;
             exit(0);
@@ -272,11 +506,25 @@ int main(int argc, char *argv[])
         if(arg == "--noeditor") {
             noEditor = true;
         }
+        if(arg == "--self-test-risset-install") {
+            rissetSelfTest = true;
+        }
+        if(arg == "--self-test-risset-report" && i + 1 < args.size()) {
+            rissetSelfTestReport = args[++i];
+        }
+        else if(arg.startsWith("--self-test-risset-report=")) {
+            rissetSelfTestReport = arg.section('=', 1);
+        }
     }
 
-    foreach (QString arg, args) {
-        if (!arg.startsWith("-")) {// avoid OS X arguments
-            fileNames.append(arg);
+    if (rissetSelfTest)
+        forceNew = true; // a running instance must not swallow the test
+
+    if (!rissetSelfTest) {
+        foreach (QString arg, args) {
+            if (!arg.startsWith("-")) {// avoid OS X arguments
+                fileNames.append(arg);
+            }
         }
     }
     // If another instance is already running, hand it the files (or ask before
@@ -290,14 +538,17 @@ int main(int argc, char *argv[])
     qapp.installEventFilter(&filterObj);
 
 #ifndef CSQT_NO_SPLASH
-    QPixmap pixmap(":/images/splashscreen.png");
+    QSplashScreen *splash = nullptr;
+    if (!rissetSelfTest) {
+        QPixmap pixmap(":/images/splashscreen.png");
 
-    QSplashScreen *splash = new QSplashScreen(pixmap);
-    splash->showMessage(QString("Version %1").arg(CSQT_VERSION),
-                        Qt::AlignCenter | Qt::AlignBottom, Qt::white);
-    splash->show();
-    splash->raise();
-    qapp.processEvents();
+        splash = new QSplashScreen(pixmap);
+        splash->showMessage(QString("Version %1").arg(CSQT_VERSION),
+                            Qt::AlignCenter | Qt::AlignBottom, Qt::white);
+        splash->show();
+        splash->raise();
+        qapp.processEvents();
+    }
 #endif
     QSettings qsettings("csoundqt", "csoundqt");
     qsettings.beginGroup("GUI");
@@ -316,15 +567,27 @@ int main(int argc, char *argv[])
         qDebug()<<"Could not start local server.";
 #ifndef CSQT_NO_SPLASH
     // splash->finish(csoundQt);
-    splash->hide();
-    delete splash;
-    splash = nullptr;
+    if (splash != nullptr) {
+        splash->hide();
+        delete splash;
+        splash = nullptr;
+    }
 #endif
 
     // enable widget updates after show
     csoundQt->show();
-    
-    
+
+    if (rissetSelfTest) {
+        auto *selfTest = new RissetSelfTest(csoundQt, rissetSelfTestReport);
+        QObject::connect(selfTest, &RissetSelfTest::finished, &qapp,
+                         [&qapp](bool success) {
+            qInfo() << "Risset self test: asking the application to exit with"
+                    << (success ? 0 : 1);
+            qapp.exit(success ? 0 : 1);
+        });
+        selfTest->start();
+    }
+
     if(autoplay && !fileNames.isEmpty()) {
         if (noEditor)
             csoundQt->playWidgetWindows();
@@ -339,5 +602,14 @@ int main(int argc, char *argv[])
     // QDEBUG << "Starting qapp exec";
     
     result = qapp.exec();
+    if (rissetSelfTest) {
+        qInfo() << "Risset self test: event loop returned" << result;
+        // The self test must not hang in Csound/Qt teardown on CI. Everything
+        // that matters has been written to the report at this point.
+        std::fflush(nullptr);
+        std::_Exit(result);
+    }
     return result;
 }
+
+#include "main.moc"

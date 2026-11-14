@@ -22,6 +22,7 @@ private slots:
     void missingRissetDoesNotInvokePython();
     void detectsRissetScript();
     void prefersManagedRisset();
+    void generatesOpcodesXml();
 
 private:
     QString installFakeExecutable(const QString &directory,
@@ -43,6 +44,12 @@ void TestRisset::initTestCase()
     qputenv("HOME", m_home.path().toUtf8());
     qputenv("LOCALAPPDATA", m_home.path().toUtf8());
     qputenv("PATH", m_emptyBin.path().toUtf8());
+
+    // Remove a fake managed risset left behind by an interrupted earlier run.
+    QDir managed(Risset::pluginBinDir().absolutePath());
+    managed.remove(u"risset"_s + Risset::executableSuffix());
+    managed.remove(u"risset-json.txt"_s);
+    managed.remove(u"opcodes.xml"_s);
 }
 
 QString TestRisset::installFakeExecutable(const QString &directory,
@@ -165,6 +172,37 @@ void TestRisset::prefersManagedRisset()
     QFile::remove(QDir(managedDir).filePath(u"risset-json.txt"_s));
 }
 
+void TestRisset::generatesOpcodesXml()
+{
+    QTemporaryDir bin;
+    QVERIFY(bin.isValid());
+    const QString opcodes = bin.filePath(u"opcodes.xml"_s);
+    QVERIFY(!QFile::exists(opcodes));
+
+    QVERIFY(!installFakeExecutable(bin.path(), u"risset"_s,
+                                   u"7.7.7"_s, opcodes).isEmpty());
+    qputenv("PATH", bin.path().toUtf8());
+
+    Risset risset;
+    QVERIFY(risset.isInstalled);
+    QCOMPARE(risset.rissetVersion, u"7.7.7"_s);
+    QVERIFY(QFile::exists(opcodes));
+    QCOMPARE(risset.rissetOpcodesXml, opcodes);
+
+    // risset 4 expects "dev opcodesxml --outfile PATH". The old argument order
+    // is only a fallback for older risset installations.
+    QFile argsFile(bin.filePath(u"risset-args.txt"_s));
+    QVERIFY(argsFile.open(QIODevice::ReadOnly));
+    const QStringList args = QString::fromLocal8Bit(argsFile.readAll())
+            .split(u"\n"_s, Qt::SkipEmptyParts);
+    QVERIFY2(args.size() >= 5, qPrintable(args.join(u" "_s)));
+    QCOMPARE(args.at(0), u"--debug"_s);
+    QCOMPARE(args.at(1), u"dev"_s);
+    QCOMPARE(args.at(2), u"opcodesxml"_s);
+    QCOMPARE(args.at(3), u"--outfile"_s);
+    QCOMPARE(args.at(4), opcodes);
+}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
@@ -175,11 +213,34 @@ int main(int argc, char *argv[])
     const QFileInfo self(QCoreApplication::applicationFilePath());
     const bool asPython = qEnvironmentVariableIsSet("CSQT_FAKE_PYTHON");
     bool infoCommand = false;
+    bool opcodesXmlCommand = false;
+    QString outfile;
     for (int i = 1; i < argc; ++i) {
-        if (qstrcmp(argv[i], "info") == 0) {
+        if (qstrcmp(argv[i], "info") == 0)
             infoCommand = true;
-            break;
+        if (qstrcmp(argv[i], "opcodesxml") == 0)
+            opcodesXmlCommand = true;
+        if (qstrcmp(argv[i], "--outfile") == 0 && i + 1 < argc)
+            outfile = QString::fromLocal8Bit(argv[i + 1]);
+    }
+
+    // Generating opcodes.xml: write the requested file and remember the
+    // argument order, so the test can check that the current risset 4 syntax
+    // is used before the legacy fallback.
+    if (opcodesXmlCommand) {
+        QFile argsFile(QDir(self.absolutePath()).filePath(u"risset-args.txt"_s));
+        if (argsFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            for (int i = 1; i < argc; ++i) {
+                argsFile.write(argv[i]);
+                argsFile.write("\n");
+            }
         }
+        if (!outfile.isEmpty()) {
+            QFile out(outfile);
+            if (out.open(QIODevice::WriteOnly | QIODevice::Truncate))
+                out.write("<opcodes/>");
+        }
+        return 0;
     }
 
     if (asPython) {

@@ -222,6 +222,11 @@ The source and binaries can be downloaded from:
   the editor's syntax highlighting once risset detection finishes. Risset is
   detected only through the managed executable or a `risset` script on `PATH`;
   CsoundQt no longer probes system Python modules.
+* **risset 4 command line:** generating `opcodes.xml` now uses
+  `risset dev opcodesxml --outfile <path>`, the order required by risset 4. The
+  previous argument order is tried as a fallback for older installations. With
+  risset 4.0.1 the old order made detection succeed but left the plugin opcodes
+  unloaded.
 * **Read-only and detached windows** keep their own themed menu bar and
   toolbar; Test Audio Setup opens the AudioMidiTest example in widget-only
   mode.
@@ -275,13 +280,14 @@ The source and binaries can be downloaded from:
 * `tests/run-tests.sh` builds and runs the standalone QtTest suites and
   benchmarks in CI, including the Markdown renderer, embedded files, scanner,
   Inspector, bracket matcher, Go to Source and external launcher. A new
-  `risset` test covers the managed plugin paths, script-only detection and the
-  absence of a Python-module fallback.
-* A separate `workflow_dispatch` job in `testbuild-qt6.yml` runs
-  `tests/risset-install-test.sh` on Linux and macOS. It performs the same
-  networked uv/risset installation as the Plugins window into a temporary
-  HOME and verifies `risset info --full`. It is opt-in because it depends on
-  external network services.
+  `risset` test covers the managed plugin paths, script-only detection, the
+  absence of a Python-module fallback and the `opcodes.xml` command line.
+* The opt-in `workflow_dispatch` test in `testbuild-qt6.yml` runs the built
+  CsoundQt with `--self-test-risset-install` on Linux, macOS and Windows. The
+  application itself downloads uv, installs risset into a throw-away data
+  directory through the Plugins window code, waits for its own re-detection
+  and writes a JSON report (`risset info --full` plus the detected version and
+  executable). It is opt-in because it depends on external network services.
 * The build layout is qmake-only: `qcs.pro` stays in the root, other project
   and `.pri` files live in `qmake/`, and third-party submodules live under
   `third_party/`. RtMidi is bundled and enabled by default, recording is

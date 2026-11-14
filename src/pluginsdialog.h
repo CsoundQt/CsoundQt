@@ -26,11 +26,25 @@ class PluginsDialog : public QDialog
 public:
     explicit PluginsDialog(CsoundQt *mainWindow, QWidget *parent = nullptr);
 
+    // Starts the installation without asking for confirmation. The regular
+    // user path is installRisset(), which asks first. The application's
+    // --self-test-risset-install mode uses this entry point so that CI
+    // exercises the same code as the window.
+    void startInstallation();
+
+signals:
+    // The installation commands have finished. On success CsoundQt still has
+    // to re-detect risset; watch CsoundQt::rissetDetectionFinished for that.
+    void installationFinished(bool success, const QString &error);
+    // Progress text, mirroring what the log view shows.
+    void message(const QString &text);
+
 private slots:
     void refresh();
     void installRisset();
 
 private:
+    void emitInstallationFinished(bool success, const QString &error);
     void setBusy(bool busy);
     void logLine(const QString &text);
     void fail(const QString &message);
@@ -54,6 +68,7 @@ private:
     QString m_uvInstallerPath;
     QString m_uvPath;
     bool m_installing = false;
+    bool m_installationFinished = false;
 };
 
 #endif // PLUGINSDIALOG_H
