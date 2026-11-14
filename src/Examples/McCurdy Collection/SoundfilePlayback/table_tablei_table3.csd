@@ -807,6 +807,7 @@ The example demonstrates the use of the table family of opcodes to playback a sa
   </bsbDropdownItemList>
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -861,6 +862,7 @@ The example demonstrates the use of the table family of opcodes to playback a sa
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

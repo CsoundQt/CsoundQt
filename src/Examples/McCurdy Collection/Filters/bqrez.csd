@@ -576,6 +576,7 @@ bqrez is an implementation of a second-order multi-mode filter. Its input argume
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>

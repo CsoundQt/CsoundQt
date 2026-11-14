@@ -132,6 +132,8 @@ i 10 0 3600  ; GUI
 
 
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -141,11 +143,7 @@ i 10 0 3600  ; GUI
  <height>200</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>239</r>
-  <g>239</g>
-  <b>239</b>
- </bgcolor>
+ <bgcolor mode="background">#efefef</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
@@ -164,24 +162,11 @@ i 10 0 3600  ; GUI
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>244</r>
-   <g>248</g>
-   <b>200</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#f4f8c8</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -204,24 +189,11 @@ i 10 0 3600  ; GUI
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -241,11 +213,27 @@ i 10 0 3600  ; GUI
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.46600000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5184</objectName>
@@ -264,18 +252,14 @@ i 10 0 3600  ; GUI
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>On / Off (MIDI)</text>
-  <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -302,24 +286,11 @@ i 10 0 3600  ; GUI
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -342,24 +313,11 @@ i 10 0 3600  ; GUI
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>244</r>
-   <g>248</g>
-   <b>200</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#f4f8c8</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -383,24 +341,11 @@ The phaser1 opcode is an implementation of an algorithm consisting of a user def
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>65</r>
-   <g>65</g>
-   <b>65</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#414141</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -421,21 +366,14 @@ The phaser1 opcode is an implementation of an algorithm consisting of a user def
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
   <maximum>4999</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>50</value>
+  <value>1</value>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>InputGain</objectName>
@@ -456,22 +394,11 @@ The phaser1 opcode is an implementation of an algorithm consisting of a user def
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -507,6 +434,14 @@ The phaser1 opcode is an implementation of an algorithm consisting of a user def
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
+  <font>Liberation Sans</font>
+  <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#eff0f1</bgcolor>
+  <foreground>#34393a</foreground>
+  <bordercolor>#adbdc2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>0</borderRadius>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -527,24 +462,11 @@ The phaser1 opcode is an implementation of an algorithm consisting of a user def
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -566,18 +488,14 @@ The phaser1 opcode is an implementation of an algorithm consisting of a user def
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>808loop.wav</stringvalue>
   <text>Browse Audio File</text>
-  <image>/</image>
   <eventLine/>
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -604,22 +522,10 @@ The phaser1 opcode is an implementation of an algorithm consisting of a user def
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e5e5e5</bgcolor>
   <background>nobackground</background>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>0</borderradius>
   <borderwidth>0</borderwidth>
@@ -642,24 +548,11 @@ The phaser1 opcode is an implementation of an algorithm consisting of a user def
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -679,11 +572,27 @@ The phaser1 opcode is an implementation of an algorithm consisting of a user def
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.48200000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Frequency_Value</objectName>
@@ -704,22 +613,11 @@ The phaser1 opcode is an implementation of an algorithm consisting of a user def
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -742,24 +640,11 @@ The phaser1 opcode is an implementation of an algorithm consisting of a user def
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
   <padding>5</padding>
   <locked>false</locked>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -779,11 +664,27 @@ The phaser1 opcode is an implementation of an algorithm consisting of a user def
   <description/>
   <minimum>-0.99000000</minimum>
   <maximum>0.99000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.52272000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Feedback</objectName>
@@ -804,22 +705,11 @@ The phaser1 opcode is an implementation of an algorithm consisting of a user def
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>

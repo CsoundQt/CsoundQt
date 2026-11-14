@@ -415,6 +415,7 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -914,6 +915,7 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>

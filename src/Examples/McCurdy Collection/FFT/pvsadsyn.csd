@@ -351,6 +351,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Rescale_Frequencies_Value</objectName>
@@ -517,6 +518,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse</objectName>

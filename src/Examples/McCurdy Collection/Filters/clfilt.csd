@@ -691,6 +691,7 @@ clfilt implements low and high-pass filters of various types. Experimentation is
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -814,6 +815,7 @@ of Poles</label>
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>

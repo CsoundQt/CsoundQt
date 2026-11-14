@@ -341,6 +341,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   </bsbDropdownItemList>
   <selectedIndex>3</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>

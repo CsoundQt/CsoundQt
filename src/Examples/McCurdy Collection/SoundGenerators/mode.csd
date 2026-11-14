@@ -5198,6 +5198,7 @@ i 1000 0.0 3600  ; Reverb
   </bsbDropdownItemList>
   <selectedIndex>4</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>Modes</objectName>
@@ -5514,6 +5515,7 @@ Mode is a filtering opcode which is intended to be used as a resonator for modal
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5469</objectName>

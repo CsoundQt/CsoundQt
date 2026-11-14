@@ -342,6 +342,7 @@ i 10 0 3600
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Opcode</objectName>
@@ -377,6 +378,7 @@ i 10 0 3600
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -588,6 +590,7 @@ Off and On the instrument after changing Audio file.</label>
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Fade</objectName>

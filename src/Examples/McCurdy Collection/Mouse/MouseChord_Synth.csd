@@ -373,6 +373,7 @@ i 1000 0 3600  ; Reverb
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Ton</objectName>
@@ -398,6 +399,7 @@ i 1000 0 3600  ; Reverb
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Octave</objectName>

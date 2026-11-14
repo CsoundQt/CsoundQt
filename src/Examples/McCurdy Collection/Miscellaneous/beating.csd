@@ -767,6 +767,7 @@ i 10 0 3600  ; GUI
   </bsbDropdownItemList>
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Mode</objectName>
@@ -795,6 +796,7 @@ i 10 0 3600  ; GUI
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>

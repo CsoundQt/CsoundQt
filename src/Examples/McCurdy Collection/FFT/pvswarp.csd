@@ -674,6 +674,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Coefs</objectName>
@@ -757,6 +758,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -860,6 +862,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

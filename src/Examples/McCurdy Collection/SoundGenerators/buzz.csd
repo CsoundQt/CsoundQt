@@ -70,6 +70,8 @@ endin
 i 10 0.0 3600  ; GUI
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -79,11 +81,7 @@ i 10 0.0 3600  ; GUI
  <height>258</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>239</r>
-  <g>239</g>
-  <b>239</b>
- </bgcolor>
+ <bgcolor mode="background">#efefef</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
@@ -91,29 +89,22 @@ i 10 0.0 3600  ; GUI
   <width>512</width>
   <height>250</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>buzz</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>244</r>
-   <g>244</g>
-   <b>72</b>
-  </color>
-  <bgcolor mode="background">
-   <r>106</r>
-   <g>117</g>
-   <b>150</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#f4f448</color>
+  <bgcolor mode="background">#6a7596</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -125,23 +116,24 @@ i 10 0.0 3600  ; GUI
   <width>124</width>
   <height>30</height>
   <uuid>{487d5181-d838-4cce-9628-317fefc350cb}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>ON / OFF (MIDI)</text>
-  <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -152,60 +144,57 @@ i 10 0.0 3600  ; GUI
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
-  <y>138</y>
+  <y>140</y>
   <width>150</width>
   <height>30</height>
   <uuid>{0200a063-5db8-4668-bc2d-2d989a083f6e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Amplitude</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>244</r>
-   <g>244</g>
-   <b>72</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#f4f448</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>448</x>
-  <y>138</y>
+  <y>142</y>
   <width>60</width>
   <height>30</height>
   <uuid>{ab191e3a-430d-4f1d-88aa-9840342cd2d3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.492</label>
+  <description/>
+  <label>0.330</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
-  <color>
-   <r>244</r>
-   <g>244</g>
-   <b>72</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <format/>
+  <padding>5</padding>
+  <color>#f4f448</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -214,29 +203,22 @@ i 10 0.0 3600  ; GUI
   <width>420</width>
   <height>250</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>buzz</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>244</r>
-   <g>244</g>
-   <b>72</b>
-  </color>
-  <bgcolor mode="background">
-   <r>106</r>
-   <g>117</g>
-   <b>150</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#f4f448</color>
+  <bgcolor mode="background">#6a7596</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -248,151 +230,182 @@ i 10 0.0 3600  ; GUI
   <width>412</width>
   <height>231</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>----------------------------------------------------------------------------------------------------
 Buzz creates a composite tone of harmonically related sine wave partials. The user is given control of the number of partials required (from the fundemental upwards) and of the the amplitude and the fundemental frequency of the tone. Buzz requires the user to first supply it with a sine waveform via a function table (probably GEN 10). This table should not be too small, sizes of 8192 and upwards are recommended. Buzz provides a useful source for subtractive synthesis. This example can also be played from an external MIDI keyboard. Pitch, note velocity and pitch bend and represented appropriately. MIDI controller 1 (the modulation wheel) can be used to modulate 'Number of Harmonics'.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>244</r>
-   <g>244</g>
-   <b>72</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#f4f448</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>8</x>
-  <y>122</y>
+  <y>125</y>
   <width>500</width>
-  <height>27</height>
+  <height>14</height>
   <uuid>{2a8dc6e2-12f4-443d-af9b-59e4373cc24b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description>Slider variation 15</description>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.49200000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.33000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#e0e7ff</bgcolor>
+  <foreground>#312e81</foreground>
+  <fillcolor>#b6bccf</fillcolor>
+  <bordercolor>#4f46e5</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>0</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#4f46e5</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
-  <y>176</y>
+  <y>178</y>
   <width>150</width>
   <height>30</height>
   <uuid>{4fa545c6-e2f1-4387-8c9f-4a9dd388bb42}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Oscillator Frequency</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>244</r>
-   <g>244</g>
-   <b>72</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#f4f448</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Frequency_Value</objectName>
   <x>448</x>
-  <y>176</y>
+  <y>180</y>
   <width>60</width>
   <height>30</height>
   <uuid>{b0ad1916-b43e-44c2-be40-bca29f5cb1f4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>126.245</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
-  <color>
-   <r>244</r>
-   <g>244</g>
-   <b>72</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <format/>
+  <padding>5</padding>
+  <color>#f4f448</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Frequency</objectName>
   <x>8</x>
-  <y>160</y>
+  <y>163</y>
   <width>500</width>
-  <height>27</height>
+  <height>14</height>
   <uuid>{9069e547-5638-4568-896f-980087c61de0}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description>Slider variation 15</description>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.56800000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.53000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#e0e7ff</bgcolor>
+  <foreground>#312e81</foreground>
+  <fillcolor>#b6bccf</fillcolor>
+  <bordercolor>#4f46e5</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>0</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>0</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#4f46e5</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>40</x>
-  <y>68</y>
+  <y>73</y>
   <width>169</width>
   <height>31</height>
   <uuid>{ada34c8d-83fe-4eae-b207-ac7e38c5251f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>No. of Harmonics CC#1 :</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>244</r>
-   <g>244</g>
-   <b>72</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#f4f448</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Harmonics</objectName>
@@ -401,25 +414,21 @@ Buzz creates a composite tone of harmonically related sine wave partials. The us
   <width>50</width>
   <height>30</height>
   <uuid>{c37974b7-7a24-481d-8f02-a116324085e3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>1</midichan>
   <midicc>1</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>16</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
   <maximum>80</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>

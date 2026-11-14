@@ -357,6 +357,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -536,6 +537,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b6560</objectName>

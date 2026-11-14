@@ -426,6 +426,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
@@ -602,6 +603,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Wave</objectName>
@@ -627,6 +629,7 @@ When the frequency of amplitude modulation of an audio signal enters the domain 
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>

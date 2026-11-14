@@ -745,6 +745,7 @@ rbjeq is a filter and EQ opcode offering 7 different modes. It is based on an al
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -799,6 +800,7 @@ rbjeq is a filter and EQ opcode offering 7 different modes. It is based on an al
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Q_Value</objectName>

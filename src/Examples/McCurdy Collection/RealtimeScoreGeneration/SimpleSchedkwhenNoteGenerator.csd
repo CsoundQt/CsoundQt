@@ -238,6 +238,7 @@ This example demonstrates how the opcode 'schedkwhen' can be used to implement a
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>TrigFreqMin</objectName>

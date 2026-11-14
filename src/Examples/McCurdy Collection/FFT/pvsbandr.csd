@@ -323,6 +323,7 @@ The user can choose between different input sources which includes the computer'
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -421,6 +422,7 @@ The user can choose between different input sources which includes the computer'
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Low_Cut_Value</objectName>

@@ -405,6 +405,7 @@ In this example the user can choose between a sound file input or the computer's
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -904,6 +905,7 @@ In this example the user can choose between a sound file input or the computer's
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

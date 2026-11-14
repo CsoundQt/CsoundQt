@@ -946,6 +946,7 @@ tangent), pivoting (as in a vibraphone bar), or free (as in the lower end of a t
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>bcR</objectName>
@@ -976,6 +977,7 @@ tangent), pivoting (as in a vibraphone bar), or free (as in the lower end of a t
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>

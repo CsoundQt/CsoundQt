@@ -719,6 +719,7 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>

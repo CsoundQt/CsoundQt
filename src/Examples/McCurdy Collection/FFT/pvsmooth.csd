@@ -301,6 +301,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   </bsbDropdownItemList>
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -399,6 +400,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude_Cutoff_Frequency</objectName>

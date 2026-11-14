@@ -1120,6 +1120,7 @@ i 11 0 3600
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>DelayTimeL</objectName>

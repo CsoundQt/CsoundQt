@@ -633,6 +633,7 @@ This instrument can also be activated via MIDI. It will be velocity sensitive an
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -708,6 +709,7 @@ Buffer</label>
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

@@ -331,6 +331,7 @@ f 0 3600  ; Real time for 1 hour
   </bsbDropdownItemList>
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>

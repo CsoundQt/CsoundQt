@@ -287,6 +287,7 @@ OFF : MIDI</text>
   </bsbDropdownItemList>
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -498,6 +499,7 @@ OFF : MIDI</text>
   </bsbDropdownItemList>
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -625,6 +627,7 @@ OFF : MIDI</text>
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>

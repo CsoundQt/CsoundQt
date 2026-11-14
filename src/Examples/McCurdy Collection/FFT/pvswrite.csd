@@ -600,6 +600,7 @@ one in which a pointer through the file is controlled manually and another in wh
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

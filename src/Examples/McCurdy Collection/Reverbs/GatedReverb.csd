@@ -419,6 +419,7 @@ Gated reverbs were a popular effect on snare drums in 1980s pop music.</label>
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>

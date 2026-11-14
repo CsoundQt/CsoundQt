@@ -2643,6 +2643,7 @@ i 300 0 3600  ; Resetting of global audio variables
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>Rate</objectName>
@@ -4688,6 +4689,7 @@ i 300 0 3600  ; Resetting of global audio variables
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>IPmode</objectName>
@@ -4718,6 +4720,7 @@ i 300 0 3600  ; Resetting of global audio variables
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>

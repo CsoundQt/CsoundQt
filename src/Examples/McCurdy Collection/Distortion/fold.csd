@@ -416,7 +416,7 @@ The amount of foldover is expressed as a multiple of the sampling rate therefore
   <selectedIndex>1</selectedIndex>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#eff0f1</bgcolor>
   <foreground>#34393a</foreground>
   <bordercolor>#adbdc2</bordercolor>

@@ -305,6 +305,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -398,6 +399,7 @@ It can be observed that smaller FFT size and window sizes results in less time s
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Blur_Time</objectName>

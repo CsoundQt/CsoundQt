@@ -359,6 +359,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -538,6 +539,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b4790</objectName>

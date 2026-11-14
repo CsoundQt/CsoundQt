@@ -442,6 +442,7 @@ THIS EXAMPLE PRODUCES NO SOUND.</label>
   </bsbDropdownItemList>
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>Minimum</objectName>

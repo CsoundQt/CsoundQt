@@ -937,6 +937,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>BaseNote</objectName>
@@ -1181,6 +1182,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>SynType</objectName>
@@ -1219,6 +1221,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>

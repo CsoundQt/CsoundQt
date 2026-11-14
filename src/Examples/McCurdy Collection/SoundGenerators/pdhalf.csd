@@ -536,6 +536,7 @@ i 11 0.0 0.01  ; Init
   </bsbDropdownItemList>
   <selectedIndex>5</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b5646</objectName>
@@ -621,6 +622,7 @@ i 11 0.0 0.01  ; Init
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>

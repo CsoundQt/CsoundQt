@@ -514,6 +514,7 @@ This example is MIDI-ified, responding to MIDI notes, key velocity, pitch bend a
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>

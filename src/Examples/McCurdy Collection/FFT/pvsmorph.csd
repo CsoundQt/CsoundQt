@@ -347,6 +347,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -623,6 +624,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse2</objectName>

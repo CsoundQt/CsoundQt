@@ -135,6 +135,9 @@ i 11 0 0.01  ; Init
 </CsScore>
 </CsoundSynthesizer>
 
+
+
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="false" loopStart="0" loopEnd="0">    </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -144,11 +147,7 @@ i 11 0 0.01  ; Init
  <height>452</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
-  <r>239</r>
-  <g>239</g>
-  <b>239</b>
- </bgcolor>
+ <bgcolor mode="background">#efefef</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
@@ -156,29 +155,22 @@ i 11 0 0.01  ; Init
   <width>511</width>
   <height>450</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>phaser2</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>244</r>
-   <g>248</g>
-   <b>200</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="background">#f4f8c8</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -190,27 +182,25 @@ i 11 0 0.01  ; Init
   <width>220</width>
   <height>30</height>
   <uuid>{640b50b7-7200-4f81-8394-89d9843ae939}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Live Input Gain</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>InputGain</objectName>
@@ -219,16 +209,35 @@ i 11 0 0.01  ; Init
   <width>500</width>
   <height>27</height>
   <uuid>{5585fa6f-0f63-4ac3-bf1b-809c2b1d9134}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.38200000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>b2980</objectName>
@@ -237,23 +246,24 @@ i 11 0 0.01  ; Init
   <width>120</width>
   <height>26</height>
   <uuid>{04d44ebe-12eb-4bb0-a3f5-9e4fd3e7830e}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>On / Off (MIDI)</text>
-  <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -268,28 +278,26 @@ i 11 0 0.01  ; Init
   <width>160</width>
   <height>40</height>
   <uuid>{7c945fd6-92be-427f-bceb-ab7630e97198}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>No. of Ordinates
 (i-rate)</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -298,29 +306,22 @@ i 11 0 0.01  ; Init
   <width>563</width>
   <height>450</height>
   <uuid>{cd1b9ee0-e607-49ed-9a8d-37ebb3d7fe8f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>phaser2</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>244</r>
-   <g>248</g>
-   <b>200</b>
-  </bgcolor>
-  <bordercolor>
-   <r>158</r>
-   <g>158</g>
-   <b>158</b>
-  </bordercolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="background">#f4f8c8</bgcolor>
+  <bordercolor>#9e9e9e</bordercolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
@@ -332,29 +333,27 @@ i 11 0 0.01  ; Init
   <width>561</width>
   <height>413</height>
   <uuid>{16d3e28c-026e-45ef-b167-57f393c4e2d5}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>-----------------------------------------------------------------------------------------------------------------------------------------
 The phaser2 opcode is an implementation of an algorithm consisting of a user definable number of second order allpass filters arranged in series. 'Frequency' (kfreq) (in Hz) controls the centre frequency of the first filter in the series. Frequencies of subsequent filters in the series are derived from this base frequency using the setting given by Separation (ksep). 'Q' (kq) controls the amount of Q. Higher values result in narrower filter notches. 'No. of Ordinates' (kord) allows the user to define the number of allpass filter stages present in the algorithm (range: 1 -2499).
 'Mode' (kmode) selects between 2 methods of spacing the frequencies of filters. When Mode is given a value of 1 (Linear in menu) the frequencies are spaced at equal intervals in Hz. When Mode is given a value of 2 (Power in menu) each frequency is a power of 'Separation' (ksep) multiplied to the previous frequency value. Separation (ksep) controls the frequency separation between subsequent filters in the series. Its precise functioning is also dependent upon the setting given to 'Mode'. Refer to the Csound manual for further information regarding this parameter. Feedback (kfeedback) controls the amount of the signal which is fed back from the output back into the input of the chain of filters. This value should be less than 1 and more than -1. I have included an attenuating amplitude control as this opcode can produce increases in amplitude. In this example the user can choose between a sound file input, the computer's live input or a stream of click impulses. The risk of feedback is greatly increased through the use of phaser1 processing so for this reason a gain control on the live input, which is initially zero, is included. Use with caution! It might actually be better to monitor through headphones to further reduce the risk of feedback when using the live input. This instrument can also be triggered via MIDI in which case the basic frequency value is dictated by the MIDI ket played. In MIDI mode multiple instances of phaser2 can be triggered to create chords.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>65</r>
-   <g>65</g>
-   <b>65</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#414141</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Ordinates</objectName>
@@ -363,27 +362,23 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>60</width>
   <height>30</height>
   <uuid>{6971083c-0c40-43d3-bf87-a37efbc45c73}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="background">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="background">#e0e0e0</bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
   <maximum>2499</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>8</value>
+  <value>1</value>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>InputGain</objectName>
@@ -392,27 +387,26 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>60</width>
   <height>30</height>
   <uuid>{ab191e3a-430d-4f1d-88aa-9840342cd2d3}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.382</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <format/>
+  <padding>5</padding>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
@@ -421,9 +415,12 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>120</width>
   <height>30</height>
   <uuid>{9b81a1f2-bcb8-4582-925b-9ae56def3865}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>Audio File</name>
@@ -442,6 +439,14 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
+  <font>Liberation Sans</font>
+  <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#eff0f1</bgcolor>
+  <foreground>#34393a</foreground>
+  <bordercolor>#adbdc2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>0</borderRadius>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -451,27 +456,25 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>80</width>
   <height>30</height>
   <uuid>{62eeb695-9b83-42da-81cd-8000c232d9b9}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Input</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Browse</objectName>
@@ -480,23 +483,24 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>170</width>
   <height>30</height>
   <uuid>{9b992da1-8c0f-449e-af03-7913cc05efed}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>808loop.wav</stringvalue>
   <text>Browse Audio File</text>
-  <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
+  <font/>
   <flatStyle>true</flatStyle>
-  <color>
-   <r>203</r>
-   <g>206</g>
-   <b>255</b>
-  </color>
+  <color>#cbceff</color>
   <pressedColor>#9a9cc1</pressedColor>
   <borderColor>#9a9cc1</borderColor>
   <textColor>#202020</textColor>
@@ -511,25 +515,25 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>330</width>
   <height>28</height>
   <uuid>{15a8ec14-710f-43e6-be9e-f5dc8c8786cb}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>808loop.wav</label>
+  <instant>true</instant>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
-  </bgcolor>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e5e5e5</bgcolor>
   <background>nobackground</background>
+  <bordercolor>#000000</bordercolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>0</borderradius>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -538,27 +542,25 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>220</width>
   <height>30</height>
   <uuid>{1daeb2b9-bae2-4c0a-939b-62c3ea3ac853}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Frequency</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Frequency</objectName>
@@ -567,16 +569,35 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>500</width>
   <height>27</height>
   <uuid>{b378cb0c-4cee-4f42-86ad-2a0d9524d355}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.58920002</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Frequency_Value</objectName>
@@ -585,27 +606,26 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>60</width>
   <height>30</height>
   <uuid>{cf1f320e-c59c-4b26-82b5-f405ba7194fa}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1171.614</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <format/>
+  <padding>5</padding>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -614,27 +634,25 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>220</width>
   <height>30</height>
   <uuid>{231bb990-9786-4aad-a8bf-56f542cd2f4a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Q</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Q</objectName>
@@ -643,16 +661,35 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>500</width>
   <height>27</height>
   <uuid>{2e1f3a23-2e04-44eb-98e7-edaed6ee7738}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00010000</minimum>
   <maximum>4.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>1.63205920</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Q</objectName>
@@ -661,27 +698,26 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>60</width>
   <height>30</height>
   <uuid>{3a818717-052f-4ce3-b538-4e12df8abe25}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.632</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <format/>
+  <padding>5</padding>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -690,27 +726,25 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>220</width>
   <height>30</height>
   <uuid>{1e7a0a63-ba07-4631-9bd1-0b2ad4ec1771}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Separation</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Separation</objectName>
@@ -719,16 +753,35 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>500</width>
   <height>27</height>
   <uuid>{ccecdba9-0569-4c2b-aa5e-cc55658ad904}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.75000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Separation</objectName>
@@ -737,27 +790,26 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>60</width>
   <height>30</height>
   <uuid>{7645a881-fb3a-4442-aec3-b11b8e1a5b4f}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.750</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <format/>
+  <padding>5</padding>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -766,27 +818,25 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>220</width>
   <height>30</height>
   <uuid>{f6fffcb7-36f0-415a-84bf-42d9d683828c}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Feedback</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Feedback</objectName>
@@ -795,16 +845,35 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>500</width>
   <height>27</height>
   <uuid>{47425bda-5dbf-4234-881b-b1c77fa628b4}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>-0.99000000</minimum>
   <maximum>0.99000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.87000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Feedback</objectName>
@@ -813,27 +882,26 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>60</width>
   <height>30</height>
   <uuid>{fb7e4136-169d-41a8-9797-697c9068097a}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.870</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <format/>
+  <padding>5</padding>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -842,27 +910,25 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>220</width>
   <height>30</height>
   <uuid>{43d037d7-0640-467f-8ffb-83e8ceb1f34d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Amplitude</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
@@ -871,16 +937,35 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>500</width>
   <height>27</height>
   <uuid>{eccfbe8b-cb1a-4385-8d09-83d9bd5fc95b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
@@ -889,27 +974,26 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>60</width>
   <height>30</height>
   <uuid>{de8f5fdf-0d63-479c-ae85-a478a3594f8b}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.000</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <format/>
+  <padding>5</padding>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -918,28 +1002,26 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>116</width>
   <height>30</height>
   <uuid>{1d7c9a20-730e-4d74-8e32-414b84844d00}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Mode
 </label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>32</r>
-   <g>32</g>
-   <b>32</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>224</r>
-   <g>224</g>
-   <b>224</b>
-  </bgcolor>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Mode</objectName>
@@ -948,9 +1030,12 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <width>100</width>
   <height>30</height>
   <uuid>{bcbc1b3c-8a74-4190-a329-25d3ced93c7d}</uuid>
+  <widgetName/>
   <visible>true</visible>
+  <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>Linear</name>
@@ -963,10 +1048,17 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>1</selectedIndex>
+  <selectedIndex>0</selectedIndex>
+  <font>Liberation Sans</font>
+  <fontsize>10</fontsize>
+  <flatStyle>true</flatStyle>
+  <bgcolor>#eff0f1</bgcolor>
+  <foreground>#34393a</foreground>
+  <bordercolor>#adbdc2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>0</borderRadius>
   <randomizable group="0">false</randomizable>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

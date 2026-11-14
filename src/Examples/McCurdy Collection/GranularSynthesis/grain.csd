@@ -1742,6 +1742,7 @@ Some GUI sliders are also controllable using MIDI controllers. Details are given
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>GrainEnvelope</objectName>
@@ -1787,6 +1788,7 @@ Some GUI sliders are also controllable using MIDI controllers. Details are given
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

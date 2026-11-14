@@ -315,6 +315,7 @@ Pvsynth is the compliment to pvsanal in that it takes an fsig signal and reynthe
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>

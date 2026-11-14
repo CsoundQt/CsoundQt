@@ -551,7 +551,7 @@ Very short settings of this parameter can lead to harmonic distortions of the in
   <selectedIndex>0</selectedIndex>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#eff0f1</bgcolor>
   <foreground>#34393a</foreground>
   <bordercolor>#adbdc2</bordercolor>

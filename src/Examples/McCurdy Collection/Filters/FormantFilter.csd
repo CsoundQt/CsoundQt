@@ -805,6 +805,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   </bsbDropdownItemList>
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>Voice</objectName>
@@ -845,6 +846,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   </bsbDropdownItemList>
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>f1</objectName>

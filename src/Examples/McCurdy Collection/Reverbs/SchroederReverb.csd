@@ -1278,6 +1278,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1523,6 +1524,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   </bsbDropdownItemList>
   <selectedIndex>3</selectedIndex>
   <randomizable group="0">false</randomizable>
+  <flatStyle>true</flatStyle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
