@@ -47,6 +47,8 @@ i 2 0 1000
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -78,7 +80,7 @@ i 2 0 1000
   <padding>5</padding>
   <locked>false</locked>
   <color>#ffaa00</color>
-  <bgcolor mode="background">#303030</bgcolor>
+  <bgcolor mode="background">#3b3b3b</bgcolor>
   <bordercolor>#ffaa00</bordercolor>
   <bordermode>true</bordermode>
   <borderradius>5</borderradius>
@@ -114,9 +116,9 @@ i 2 0 1000
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
-  <y>41</y>
+  <y>37</y>
   <width>465</width>
-  <height>44</height>
+  <height>50</height>
   <uuid>{5a8df46b-c8e6-46ce-bb0d-80380ff2884a}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -124,17 +126,19 @@ i 2 0 1000
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>The Scope widget is an oscilloscope which can show the output of Csound. The oscilloscope can show individual channels or a sum of all output channels. Clicking on a Scope widget freezes it.</label>
+  <label>The Scope widget is an **oscilloscope** which can show any audio signal. The oscilloscope can show individual output channels, the sum of all output channels or any audio sent to it via **chnset**. 
+Clicking on a Scope widget freezes it.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Liberation Sans</font>
+  <font>Noto Sans</font>
   <fontsize>10</fontsize>
   <padding>5</padding>
+  <textformat>markdown</textformat>
   <locked>false</locked>
   <color>#000000</color>
   <bgcolor mode="background">#bfccea</bgcolor>
   <bordercolor>#000000</bordercolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
@@ -161,6 +165,7 @@ i 2 0 1000
   <mode>0.00000000</mode>
   <triggermode>NoTrigger</triggermode>
   <antialias>true</antialias>
+  <bgcolor>#161616</bgcolor>
  </bsbObject>
  <bsbObject type="BSBScope" version="2">
   <objectName/>
@@ -184,9 +189,10 @@ i 2 0 1000
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
   <triggermode>NoTrigger</triggermode>
+  <bgcolor>#161616</bgcolor>
  </bsbObject>
  <bsbObject type="BSBScope" version="2">
-  <objectName>80</objectName>
+  <objectName/>
   <x>10</x>
   <y>256</y>
   <width>465</width>
@@ -208,6 +214,7 @@ i 2 0 1000
   <mode>0.00000000</mode>
   <triggermode>TriggerUp</triggermode>
   <antialias>true</antialias>
+  <bgcolor>#161616</bgcolor>
  </bsbObject>
  <bsbObject type="BSBScope" version="2">
   <objectName/>
@@ -231,11 +238,12 @@ i 2 0 1000
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
   <triggermode>NoTrigger</triggermode>
+  <bgcolor>#161616</bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
-  <y>344</y>
+  <y>342</y>
   <width>465</width>
   <height>40</height>
   <uuid>{7c7b875f-7bff-4359-9a43-ebc3ca6b92ac}</uuid>
@@ -248,7 +256,7 @@ i 2 0 1000
   <label>The decimation property averages sample, allowing a larger time frame to be displayed. The default without decimation is one audio sample per screen pixel.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Liberation Sans</font>
+  <font>Noto Sans</font>
   <fontsize>10</fontsize>
   <padding>5</padding>
   <locked>false</locked>
@@ -281,6 +289,7 @@ i 2 0 1000
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
   <triggermode>TriggerUp</triggermode>
+  <bgcolor>#161616</bgcolor>
  </bsbObject>
  <bsbObject type="BSBScope" version="2">
   <objectName/>
@@ -304,6 +313,7 @@ i 2 0 1000
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
   <triggermode>NoTrigger</triggermode>
+  <bgcolor>#161616</bgcolor>
  </bsbObject>
  <bsbObject type="BSBScope" version="2">
   <objectName/>
@@ -327,6 +337,7 @@ i 2 0 1000
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
   <triggermode>NoTrigger</triggermode>
+  <bgcolor>#161616</bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -344,14 +355,14 @@ i 2 0 1000
   <label>The Scope widget can also show Lissajou and Poincare graphs. The decimation parameter in these cases determines the "zoom".</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Liberation Sans</font>
+  <font>Noto Sans</font>
   <fontsize>10</fontsize>
   <padding>5</padding>
   <locked>false</locked>
   <color>#000000</color>
   <bgcolor mode="background">#bfccea</bgcolor>
   <bordercolor>#000000</bordercolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
@@ -462,6 +473,7 @@ i 2 0 1000
   <mode>0.00000000</mode>
   <triggermode>TriggerUp</triggermode>
   <antialias>true</antialias>
+  <bgcolor>#2c2c2c</bgcolor>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>db</objectName>
@@ -479,7 +491,7 @@ i 2 0 1000
   <minimum>-60.00000000</minimum>
   <maximum>0.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>-45.75000000</value>
+  <value>-14.25000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>

@@ -12,7 +12,8 @@ instr 1  ; make sound
   ktransp  = chnget("transp")
   ktype    = chnget("type")
   if changed(ktype) == 1 then
-    Stype = invalue("type/getitem")
+    Stype = invalue("flatmenu/getitem")
+    chnsetks(Stype, "item")
     println "Menu idx: %d, item: %s", ktype, Stype
   endif
   ktfactor = tab(ktransp, 1)  ; map index to transposition factor
@@ -45,6 +46,12 @@ f 2 0 16384 10 1
 f 0 3600
 </CsScore>
 </CsoundSynthesizer>
+
+
+
+
+
+
 
 
 
@@ -94,10 +101,10 @@ f 0 3600
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>40</x>
+  <x>20</x>
   <y>49</y>
-  <width>290</width>
-  <height>114</height>
+  <width>350</width>
+  <height>116</height>
   <uuid>{f6d0f932-fa22-486e-8167-b37311d339c2}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -105,12 +112,14 @@ f 0 3600
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>Menu widgets can show menus with user defined elements. The elements are set as a comma separated list in the properties. The menu widget transmits the index of the currently selected item counting from 0. The current index can also be set from Csound. </label>
+  <label>Menu widgets can show menus with user defined elements. The elements are set as a comma separated list in the properties. The menu widget **sends the index** of the currently selected item counting **from 0**. The current index can also be set from Csound. 
+Csound can also query the item as a string via `invalue` (see example)</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Noto Sans</font>
   <fontsize>11</fontsize>
   <padding>10</padding>
+  <textformat>markdown</textformat>
   <locked>false</locked>
   <color>#202020</color>
   <bgcolor mode="background">#dadad3</bgcolor>
@@ -149,7 +158,7 @@ f 0 3600
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>0</selectedIndex>
+  <selectedIndex>1</selectedIndex>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <flatStyle>false</flatStyle>
@@ -180,7 +189,7 @@ f 0 3600
   <eventLine>i1 0 2</eventLine>
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>10</fontsize>
   <font/>
   <flatStyle>false</flatStyle>
@@ -253,7 +262,7 @@ f 0 3600
   <eventLine>i2 0 1</eventLine>
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>10</fontsize>
   <font/>
   <flatStyle>false</flatStyle>
@@ -322,11 +331,11 @@ f 0 3600
  <bsbObject type="BSBDropdown" version="2">
   <objectName>type</objectName>
   <x>105</x>
-  <y>401</y>
+  <y>400</y>
   <width>80</width>
   <height>30</height>
   <uuid>{0a06aaa0-4226-47b1-b389-275169f5f2bf}</uuid>
-  <widgetName/>
+  <widgetName>flatmenu</widgetName>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
@@ -349,7 +358,7 @@ f 0 3600
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>0</selectedIndex>
+  <selectedIndex>1</selectedIndex>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <flatStyle>true</flatStyle>
@@ -380,7 +389,7 @@ f 0 3600
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>10</fontsize>
   <font>Liberation Sans</font>
   <flatStyle>true</flatStyle>
@@ -453,7 +462,7 @@ f 0 3600
   <eventLine>i2 0 1</eventLine>
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>10</fontsize>
   <font>Liberation Sans</font>
   <flatStyle>true</flatStyle>
@@ -521,9 +530,9 @@ f 0 3600
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>38</x>
+  <x>20</x>
   <y>315</y>
-  <width>288</width>
+  <width>350</width>
   <height>69</height>
   <uuid>{d5620c04-f6e3-4f20-8f2d-7cf28f032371}</uuid>
   <widgetName/>
@@ -532,12 +541,13 @@ f 0 3600
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>Menus, like most other widgets, have a flat version which is the same across all platforms and independent from any application theme</label>
+  <label>Menus, like most other widgets, have a **flat version** which is the same across all platforms and independent from any application theme</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Noto Sans</font>
   <fontsize>11</fontsize>
   <padding>10</padding>
+  <textformat>markdown</textformat>
   <locked>false</locked>
   <color>#202020</color>
   <bgcolor mode="background">#dadad3</bgcolor>
@@ -548,10 +558,10 @@ f 0 3600
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>39</x>
+  <x>20</x>
   <y>283</y>
-  <width>197</width>
-  <height>41</height>
+  <width>170</width>
+  <height>33</height>
   <uuid>{d42448c6-8816-4724-9b74-a8000597fe35}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -559,15 +569,72 @@ f 0 3600
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>Flat Menus</label>
+  <label>**Flat Menus**</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Noto Sans</font>
-  <fontsize>16</fontsize>
+  <fontsize>14</fontsize>
   <padding>5</padding>
+  <textformat>markdown</textformat>
   <locked>false</locked>
   <color>#202020</color>
   <bgcolor mode="nobackground">#bfccea</bgcolor>
+  <bordercolor>#000000</bordercolor>
+  <bordermode>false</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBDisplay" version="2">
+  <objectName>item</objectName>
+  <x>105</x>
+  <y>479</y>
+  <width>81</width>
+  <height>32</height>
+  <uuid>{5a8dc581-d907-48e2-9124-3bc90dc93f78}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>saw</label>
+  <alignment>center</alignment>
+  <valignment>center</valignment>
+  <font>Noto Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <format/>
+  <bold>true</bold>
+  <padding>4</padding>
+  <color>#34393a</color>
+  <bgcolor mode="background">#eff0f1</bgcolor>
+  <bordercolor>#aebdc2</bordercolor>
+  <bordermode>true</bordermode>
+  <borderradius>4</borderradius>
+  <borderwidth>2</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>10</x>
+  <y>483</y>
+  <width>90</width>
+  <height>25</height>
+  <uuid>{ca8554a7-682e-4350-a6c5-49faa4b845b9}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Selected</label>
+  <alignment>right</alignment>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <padding>5</padding>
+  <locked>false</locked>
+  <color>#202020</color>
+  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
   <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>

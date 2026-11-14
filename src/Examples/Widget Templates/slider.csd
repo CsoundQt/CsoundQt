@@ -6,6 +6,10 @@
 </CsInstruments>
 </CsoundSynthesizer>
 
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -32,7 +36,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.27500000</value>
+  <value>0.55833333</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -69,7 +73,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.44166667</value>
+  <value>0.43333333</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -106,7 +110,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.50000000</value>
+  <value>0.44166667</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -115,7 +119,7 @@
   <bgcolor>#dbeafe</bgcolor>
   <foreground>#1e3a8a</foreground>
   <fillcolor>#60a5fa</fillcolor>
-  <bordercolor>#2563eb</bordercolor>
+  <bordercolor>#1e3a8a</bordercolor>
   <borderWidth>1</borderWidth>
   <borderRadius>0</borderRadius>
   <thumbWidth>4</thumbWidth>
@@ -143,7 +147,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.50000000</value>
+  <value>0.54166667</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -152,7 +156,7 @@
   <bgcolor>#1e293b</bgcolor>
   <foreground>#e2e8f0</foreground>
   <fillcolor>#3b82f6</fillcolor>
-  <bordercolor>#60a5fa</bordercolor>
+  <bordercolor>#1e293b</bordercolor>
   <borderWidth>1</borderWidth>
   <borderRadius>0</borderRadius>
   <thumbWidth>4</thumbWidth>
@@ -213,30 +217,30 @@
   <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <description>Slider variation 6</description>
+  <description>Slider variation 5</description>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.50000000</value>
+  <value>0.55000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
   <flatStyle>true</flatStyle>
-  <bgcolor>#083344</bgcolor>
-  <foreground>#cffafe</foreground>
-  <fillcolor>#22d3ee</fillcolor>
-  <bordercolor>#67e8f9</bordercolor>
+  <bgcolor>#ccfbf1</bgcolor>
+  <foreground>#115e59</foreground>
+  <fillcolor>#2dd4bf</fillcolor>
+  <bordercolor>#115e59</bordercolor>
   <borderWidth>1</borderWidth>
-  <borderRadius>0</borderRadius>
-  <thumbWidth>4</thumbWidth>
+  <borderRadius>2</borderRadius>
+  <thumbWidth>1</thumbWidth>
   <thumbPadding>0</thumbPadding>
   <thumbRadius>0</thumbRadius>
   <fillMode>fill</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
-  <rulercolor>#67e8f9</rulercolor>
+  <rulercolor>#0f766e</rulercolor>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>v6</objectName>
@@ -291,7 +295,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.50000000</value>
+  <value>0.60000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -302,7 +306,7 @@
   <fillcolor>#a3e635</fillcolor>
   <bordercolor>#65a30d</bordercolor>
   <borderWidth>1</borderWidth>
-  <borderRadius>0</borderRadius>
+  <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
   <thumbPadding>0</thumbPadding>
   <thumbRadius>0</thumbRadius>
@@ -328,7 +332,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.50000000</value>
+  <value>0.30000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -341,8 +345,8 @@
   <borderWidth>1</borderWidth>
   <borderRadius>0</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
-  <thumbRadius>0</thumbRadius>
+  <thumbPadding>2</thumbPadding>
+  <thumbRadius>2</thumbRadius>
   <fillMode>fill</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
@@ -398,30 +402,30 @@
   <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <description>Slider variation 11</description>
+  <description>Slider variation 5</description>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.50000000</value>
+  <value>0.73333333</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
   <flatStyle>true</flatStyle>
-  <bgcolor>#3b1f0b</bgcolor>
-  <foreground>#ffedd5</foreground>
-  <fillcolor>#fb923c</fillcolor>
-  <bordercolor>#fdba74</bordercolor>
+  <bgcolor>#ccfbf1</bgcolor>
+  <foreground>#115e59</foreground>
+  <fillcolor>#2dd4bf</fillcolor>
+  <bordercolor>#115e59</bordercolor>
   <borderWidth>1</borderWidth>
   <borderRadius>0</borderRadius>
-  <thumbWidth>4</thumbWidth>
+  <thumbWidth>1</thumbWidth>
   <thumbPadding>0</thumbPadding>
   <thumbRadius>0</thumbRadius>
   <fillMode>fill</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
-  <rulercolor>#fdba74</rulercolor>
+  <rulercolor>#0f766e</rulercolor>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>v11</objectName>
@@ -476,7 +480,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.50000000</value>
+  <value>0.58333333</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -484,12 +488,12 @@
   <flatStyle>true</flatStyle>
   <bgcolor>#fce7f3</bgcolor>
   <foreground>#831843</foreground>
-  <fillcolor>#f472b6</fillcolor>
+  <fillcolor>#f4cbea</fillcolor>
   <bordercolor>#db2777</bordercolor>
   <borderWidth>1</borderWidth>
   <borderRadius>0</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>3</thumbPadding>
   <thumbRadius>0</thumbRadius>
   <fillMode>fill</fillMode>
   <backgroundMode>jump</backgroundMode>
@@ -513,16 +517,16 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.50000000</value>
+  <value>0.68333333</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
   <flatStyle>true</flatStyle>
   <bgcolor>#ede9fe</bgcolor>
-  <foreground>#4c1d95</foreground>
-  <fillcolor>#a78bfa</fillcolor>
-  <bordercolor>#7c3aed</bordercolor>
+  <foreground>#c75321</foreground>
+  <fillcolor>#ffbbaa</fillcolor>
+  <bordercolor>#eb6227</bordercolor>
   <borderWidth>1</borderWidth>
   <borderRadius>0</borderRadius>
   <thumbWidth>4</thumbWidth>
@@ -550,7 +554,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.50000000</value>
+  <value>0.55833333</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -558,9 +562,9 @@
   <flatStyle>true</flatStyle>
   <bgcolor>#e0e7ff</bgcolor>
   <foreground>#312e81</foreground>
-  <fillcolor>#818cf8</fillcolor>
+  <fillcolor>#b6bccf</fillcolor>
   <bordercolor>#4f46e5</bordercolor>
-  <borderWidth>1</borderWidth>
+  <borderWidth>2</borderWidth>
   <borderRadius>0</borderRadius>
   <thumbWidth>4</thumbWidth>
   <thumbPadding>0</thumbPadding>
@@ -583,30 +587,30 @@
   <enabled>true</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <description>Slider variation 16</description>
+  <description>Slider variation 4</description>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.50000000</value>
+  <value>0.54166667</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
   <flatStyle>true</flatStyle>
-  <bgcolor>#f5f5f4</bgcolor>
-  <foreground>#292524</foreground>
-  <fillcolor>#78716c</fillcolor>
-  <bordercolor>#57534e</bordercolor>
+  <bgcolor>#3b5073</bgcolor>
+  <foreground>#242424</foreground>
+  <fillcolor>#ffff7f</fillcolor>
+  <bordercolor>#3b5073</bordercolor>
   <borderWidth>1</borderWidth>
   <borderRadius>0</borderRadius>
-  <thumbWidth>4</thumbWidth>
+  <thumbWidth>0</thumbWidth>
   <thumbPadding>0</thumbPadding>
   <thumbRadius>0</thumbRadius>
   <fillMode>fill</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
-  <rulercolor>#57534e</rulercolor>
+  <rulercolor>#60a5fa</rulercolor>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>v16</objectName>
@@ -624,7 +628,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.50000000</value>
+  <value>0.35833333</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -957,7 +961,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.50000000</value>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1216,7 +1220,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.50000000</value>
+  <value>0.34166667</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1327,7 +1331,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.38333333</value>
+  <value>0.34166667</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1586,7 +1590,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.72500000</value>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1623,7 +1627,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.45833333</value>
+  <value>0.17500000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1660,7 +1664,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.74166667</value>
+  <value>0.48333333</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1697,7 +1701,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.46666667</value>
+  <value>0.64166667</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1734,7 +1738,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.69166667</value>
+  <value>0.49166667</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1771,7 +1775,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.35000000</value>
+  <value>0.60833333</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1808,7 +1812,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.25000000</value>
+  <value>0.61666667</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1845,7 +1849,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.70000000</value>
+  <value>0.53333333</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1882,7 +1886,7 @@
   <minimum>-60.00000000</minimum>
   <maximum>0.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.00000000</value>
+  <value>-21.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1919,7 +1923,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.55000000</value>
+  <value>0.61666667</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1956,7 +1960,7 @@
   <minimum>-60.00000000</minimum>
   <maximum>0.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>-22.00000000</value>
+  <value>-46.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1993,7 +1997,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.32500000</value>
+  <value>0.65000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2030,7 +2034,7 @@
   <minimum>-90.00000000</minimum>
   <maximum>0.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>-90.00000000</value>
+  <value>-30.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2067,7 +2071,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.53333333</value>
+  <value>0.35000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2104,7 +2108,7 @@
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>0.46666667</value>
+  <value>0.64166667</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2138,7 +2142,7 @@
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.467</label>
+  <label>0.642</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Noto Sans</font>
@@ -2195,14 +2199,15 @@
   <description/>
   <label>Use these templates to copy and paste styles
 
-Select any slider. To use the style of that slider, right click and select "Copy Style". Then in your own document you can select any slider and right-click "Apply Style". 
+Select any slider. To use the style of that slider, right click and select **Copy Style**. Then in your own document you can select any slider and right-click **Apply Style**. 
 
-If you create a style you want to use later, do the opposite, copy the style of that slider and apply it on any slider here or in a document of your own with other template objects</label>
+If you create a style you want to use later, do the opposite:  **copy** the style of that slider and **apply** it on any slider here or in a document of your own with other template objects</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Noto Sans</font>
-  <fontsize>11</fontsize>
+  <fontsize>12</fontsize>
   <padding>5</padding>
+  <textformat>markdown</textformat>
   <locked>false</locked>
   <color>#232627</color>
   <bgcolor mode="nobackground">#eff0f1</bgcolor>
