@@ -151,6 +151,8 @@ public:
 	// Behavior
 	void setKeyRepeatMode(bool repeat);
 	void showWidgetTooltips(bool show);
+	// Draw widget names/channels on top of widgets while editing.
+	void setWidgetNameOverlayVisible(bool show);
 	void setWidgetToolTip(QuteWidget *widget, bool show);
 	void setContained(bool contained);
 	void setCurrentPosition(QPoint pos); // To set the mouse position for new widgets
@@ -161,6 +163,9 @@ public:
 	// The application's widget edit mode action. Used by the panel context menu
 	// to turn edit mode on before creating a widget.
 	void setEditModeAction(QAction *action);
+	// The application's name-overlay toggle action, shown at the bottom of the
+	// edit-mode widget toolbar.
+	void setWidgetNameOverlayAction(QAction *action);
     void setUpdateRate(int rate) { m_updateRate = rate; }
 
 	// Experimental channel probe: outline every widget whose channel (or
@@ -491,7 +496,9 @@ private:
 	bool m_openProperties; // Open widget properties when creating widgets
 	bool m_enableEdit; // Enable editing and properties dialog
 	QAction *m_editModeAction = nullptr;
+	QPointer<QAction> m_widgetNameOverlayAction;
 	bool m_tooltips;  // Show widget tooltips
+	bool m_showWidgetNameOverlay = false; // Edit-mode widget name/channel overlay
 	int mouseX, mouseY, mouseRelX, mouseRelY, mouseBut1, mouseBut2;
 	int xOffset, yOffset;
     int m_updateRate;

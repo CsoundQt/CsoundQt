@@ -28,6 +28,7 @@
 #include <QColor>
 
 class QuteWidget;
+class QPainter;
 
 class FrameWidget : public QFrame
 {
@@ -43,6 +44,10 @@ public:
 
 	void setWidget(QuteWidget* widget) {m_widget = widget;}
 	QuteWidget* getWidget() {return m_widget;}
+
+	// Draw the widget name/channel as a small overlay while editing.
+	void setShowNameOverlay(bool show);
+	bool showNameOverlay() const { return m_showNameOverlay; }
 
 	// Edit-frame colours, set from Settings/Widgets. Static because the setting
 	// is global; every frame reads the current values.
@@ -62,6 +67,8 @@ protected:
 	virtual void resizeEvent (QResizeEvent* event);
 
 private:
+	void paintNameOverlay(QPainter &painter);
+
 	int startx, starty, oldx, oldy;
 	// Transparent children that only provide the diagonal resize cursor for the
 	// bottom-right and top-left corners. They ignore mouse events, so the frame
@@ -75,6 +82,7 @@ private:
 	bool m_moving;
 	bool m_selecting;
 	bool m_selected;
+	bool m_showNameOverlay = false;
 	bool m_changed;
 	bool m_ctrlPress;
 	bool m_dragStarted;

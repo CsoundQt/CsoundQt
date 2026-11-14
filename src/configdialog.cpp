@@ -463,6 +463,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	showWidgetsOnRunCheckBox->setChecked(m_options->showWidgetsOnRun);
 	showWidgetToolbarCheckBox->setChecked(m_options->showWidgetToolbar);
 	showTooltipsCheckBox->setChecked(m_options->showTooltips);
+	showWidgetNameOverlayCheckBox->setChecked(m_options->showWidgetNameOverlay);
 	flatStyleNewWidgetsCheckBox->setChecked(m_options->flatStyleNewWidgets);
 	editModeWhilePlayingCheckBox->setChecked(m_options->editModeWhilePlaying);
     graphUpdateRateSpinBox->setValue(m_options->graphUpdateRate);
@@ -1103,6 +1104,7 @@ void ConfigDialog::apply()
 	m_options->showWidgetsOnRun = showWidgetsOnRunCheckBox->isChecked();
 	m_options->showWidgetToolbar = showWidgetToolbarCheckBox->isChecked();
 	m_options->showTooltips = showTooltipsCheckBox->isChecked();
+	m_options->showWidgetNameOverlay = showWidgetNameOverlayCheckBox->isChecked();
 	m_options->defaultWidgetFont = defaultFontComboBox->currentText();
 	m_options->flatStyleNewWidgets = flatStyleNewWidgetsCheckBox->isChecked();
 	m_options->editModeWhilePlaying = editModeWhilePlayingCheckBox->isChecked();

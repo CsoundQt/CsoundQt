@@ -61,6 +61,11 @@ protected:
 	virtual void createPropertiesDialog();
 	virtual void applyProperties();
 
+	// Render the current label text using the configured text format. Labels
+	// can show GitHub-flavoured Markdown; every other text widget stays plain.
+	void updateLabelText();
+	Qt::TextFormat labelTextFormat() const;
+
 	QString m_type;  // can be "label", "display", "edit", "scroll". In old widget format can also be "display".
 	// TODO this shouldn't be used anymore with the new format, as the type is found by querying getWidgetType()
 
@@ -73,6 +78,7 @@ protected:
     bool m_borderColorSet = false;
     QCheckBox *bg;
     QCheckBox *lockedCheckBox = nullptr; // labels only
+    QCheckBox *boldCheckBox = nullptr;   // displays only
     // QCheckBox *border;
 	QSpinBox *borderRadius;
 	QSpinBox *borderWidth;
@@ -83,6 +89,7 @@ protected:
 	QSpinBox * fontSize;
 	QComboBox * alignment;
     QComboBox * vertAlignmentComboBox;
+    QComboBox * textFormatComboBox = nullptr; // labels only
     QHash<QString, QLabel *>labelPtrs;
     int m_precision;
     QString m_displayFormat;

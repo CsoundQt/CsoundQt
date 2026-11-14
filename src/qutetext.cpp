@@ -217,9 +217,17 @@ void QuteText::setType(QString type)
         if (!property("CSQT_locked").isValid()) {
             setProperty("CSQT_locked", false);
         }
+        // "plain" is the historical rendering; Markdown is opt-in per label.
+        if (!property("CSQT_textformat").isValid()) {
+            setProperty("CSQT_textformat", "plain");
+        }
     }
-    else if(type == "display")
+    else if(type == "display") {
         m_typeid = QuteWidgetType::DISPLAY;
+        if (!property("CSQT_bold").isValid()) {
+            setProperty("CSQT_bold", false);
+        }
+    }
     else {
         qWarning() << "Unknown text widget: " << type;
         m_typeid = QuteWidgetType::UNKNOWN;
@@ -289,6 +297,25 @@ void QuteText::setBorder(bool border)
 		static_cast<QFrame*>(m_widget)->setFrameShape(QFrame::NoFrame);
 }
 
+Qt::TextFormat QuteText::labelTextFormat() const
+{
+    const QString textFormat = property("CSQT_textformat").toString().trimmed();
+    // Markdown only applies to the static label widget. Displays, line edits
+    // and scroll numbers keep their existing plain-text rendering.
+    if (m_typeid != QuteWidgetType::LABEL
+            || textFormat.compare("markdown", Qt::CaseInsensitive) != 0) {
+        return Qt::PlainText;
+    }
+    return Qt::MarkdownText;
+}
+
+void QuteText::updateLabelText()
+{
+    QLabel *label = static_cast<QLabel *>(m_widget);
+    label->setTextFormat(labelTextFormat());
+    label->setText(m_stringValue);
+}
+
 void QuteText::setText(QString text)
 {
 #ifdef  USE_WIDGET_MUTEX
@@ -296,18 +323,14 @@ void QuteText::setText(QString text)
 #endif
 
 	setProperty("CSQT_label", text);
-	QString displayText = text;
 	m_stringValue = text;
 	m_valueChanged = true;
-    // displayText.replace("\n", "<br />"); // commented out due Qt::PlainText format below
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
 
 	m_widget->blockSignals(true);
-    QLabel * l = static_cast<QLabel*>(m_widget);
-    l->setTextFormat(Qt::PlainText);
-    l->setText(displayText);
+    updateLabelText();
 	m_widget->blockSignals(false);
 }
 
@@ -321,9 +344,22 @@ bool QuteText::applyProperty(const QString &name)
 {
 	if (name == "CSQT_label") {
 		m_stringValue = property("CSQT_label").toString();
-		static_cast<QLabel*>(m_widget)->setText(m_stringValue);
+		updateLabelText();
 		m_value = m_stringValue.toDouble();
 		m_valueChanged = true;
+		return true;
+	}
+	if (name == "CSQT_textformat") {
+		updateLabelText();
+		m_valueChanged = true;
+		return true;
+	}
+	if (name == "CSQT_bold") {
+		if (m_type == "display") {
+			QFont boldFont = m_widget->font();
+			boldFont.setBold(property("CSQT_bold").toBool());
+			m_widget->setFont(boldFont);
+		}
 		return true;
 	}
 	if (name == "CSQT_color") {
@@ -339,7 +375,6 @@ void QuteText::applyInternalProperties()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForWrite();
 #endif
-    static_cast<QLabel*>(m_widget)->setText(property("CSQT_label").toString());
     m_precision = property("CSQT_precision").toInt();
     m_displayFormat = property("CSQT_format").toString();
     m_displayFormatConversion = QChar();
@@ -348,6 +383,7 @@ void QuteText::applyInternalProperties()
     m_stringValue = property("CSQT_label").toString();
 	m_value = m_stringValue.toDouble();
 	m_valueChanged = true;
+    updateLabelText();
 
     Qt::Alignment align;
     QString horizontalAlignment = property("CSQT_alignment").toString();
@@ -422,6 +458,15 @@ void QuteText::applyInternalProperties()
             // A stylesheet color would otherwise survive setEnabled(false), so
             // grey the text explicitly for the disabled state.
             + "; } QLabel:disabled { color:" + disabledColor(textColor).name() + "; }");
+
+    // Displays can opt into a bold face. Keep it on the widget font rather than
+    // in the stylesheet so a runtime "bold" toggle does not need to rebuild the
+    // whole style (and the stylesheet leaves font-weight unspecified).
+    if (m_type == "display") {
+        QFont boldFont = m_widget->font();
+        boldFont.setBold(property("CSQT_bold").toBool());
+        m_widget->setFont(boldFont);
+    }
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -501,9 +546,15 @@ QString QuteText::getQml()
         qml += QString("\t\t\tanchors.centerIn: parent\n");
         qml += QString("\t\t\tfont.pixelSize: %1 * scaleItem.scale\n").arg(property("CSQT_fontsize").toString()); // is it OK on ndroid? not pointsize?
         qml += QString("\t\t\ttext: \"%1\"\n").arg(property("CSQT_label").toString());
+        qml += QString("\t\t\ttextFormat: Text.%1\n")
+                .arg(labelTextFormat() == Qt::MarkdownText
+                     ? "MarkdownText" : "PlainText");
 
         qml += QString("\t\t\tcolor: \"%1\"\n").arg(color);
         qml += QString("\t\tfont.family: \"%1\"\n").arg(property("CSQT_font").toString());
+        if (m_type == "display" && property("CSQT_bold").toBool()) {
+            qml += "\t\t\tfont.bold: true\n";
+        }
         // TODO: alignment
         qml += "\t\t}\n"; // end label
         qml += "\t}\n"; // end rectangle
@@ -537,8 +588,18 @@ QString QuteText::getWidgetXmlText()
 		s.writeTextElement("precision", QString::number(property("CSQT_precision").toInt()));
 	if (m_typeid == QuteWidgetType::DISPLAY)
 		s.writeTextElement("format", property("CSQT_format").toString());
+	// Displays can opt into a bold face. Omit the element when false so
+	// existing files stay unchanged.
+	if (m_type == "display" && property("CSQT_bold").toBool())
+		s.writeTextElement("bold", "true");
 	s.writeTextElement("padding", QString::number(property("CSQT_padding").toInt()));
 	if (m_type == "label") {
+		// "plain" is the default, so only an explicit Markdown label needs the
+		// extra element. This keeps existing files unchanged on save.
+		const QString textFormat = property("CSQT_textformat").toString()
+				.trimmed().toLower();
+		if (!textFormat.isEmpty() && textFormat != "plain")
+			s.writeTextElement("textformat", textFormat);
 		s.writeTextElement("locked", property("CSQT_locked").toBool() ? "true" : "false");
 	}
 
@@ -611,7 +672,40 @@ void QuteText::createPropertiesDialog()
     
     // ---------------------------------
     ++row;
-    
+
+    if (m_type == "label") {
+        label = new QLabel(dialog);
+        label->setText(tr("Text Format"));
+        layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+        labelPtrs["textFormat"] = label;
+
+        textFormatComboBox = new QComboBox(dialog);
+        textFormatComboBox->addItem(tr("Plain", "Text format"));
+        textFormatComboBox->addItem(tr("Markdown", "Text format"));
+        textFormatComboBox->setToolTip(
+                    tr("Interpret the label text as plain text or "
+                       "GitHub-flavoured Markdown."));
+        const QString textFormat = property("CSQT_textformat").toString()
+                .trimmed().toLower();
+        textFormatComboBox->setCurrentIndex(textFormat == "markdown" ? 1 : 0);
+        layout->addWidget(textFormatComboBox, row, 1, 1, 2,
+                          Qt::AlignLeft|Qt::AlignVCenter);
+        auto updateTextFormatUi = [this](int index) {
+            if (QLabel *textLabel = labelPtrs.value("text")) {
+                textLabel->setText(index == 1 ? tr("Markdown:") : tr("Text:"));
+            }
+            if (text != nullptr) {
+                text->setPlaceholderText(index == 1
+                        ? tr("Markdown source, e.g. **bold**, # Heading, - item")
+                        : QString());
+            }
+        };
+        connect(textFormatComboBox, &QComboBox::currentIndexChanged,
+                this, updateTextFormatUi);
+        updateTextFormatUi(textFormatComboBox->currentIndex());
+        ++row;
+    }
+
     label = new QLabel(dialog);
 	label->setText(tr("Font"));
     layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
@@ -663,7 +757,14 @@ void QuteText::createPropertiesDialog()
     fontSize->unsetLocale();
 	fontSize->setMaximum(999); // allow also very big fonts
     layout->addWidget(fontSize, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
-    
+
+    if (m_type == "display") {
+        boldCheckBox = new QCheckBox(tr("Bold"), dialog);
+        boldCheckBox->setToolTip(tr("Draw the display text with a bold face."));
+        boldCheckBox->setChecked(property("CSQT_bold").toBool());
+        layout->addWidget(boldCheckBox, row, 4, Qt::AlignLeft|Qt::AlignVCenter);
+    }
+
     // ---------------------
     ++row; 
 
@@ -882,6 +983,10 @@ void QuteText::applyProperties()
 	widgetLock.lockForWrite();
 #endif
 	setProperty("CSQT_label", text->toPlainText());
+    if (textFormatComboBox != nullptr) {
+        setProperty("CSQT_textformat",
+                    textFormatComboBox->currentIndex() == 1 ? "markdown" : "plain");
+    }
 
     switch (alignment->currentIndex()) {
 	case 0:
@@ -913,6 +1018,9 @@ void QuteText::applyProperties()
 
     setProperty("CSQT_font", font->currentText());
 	setProperty("CSQT_fontsize", fontSize->value());
+    if (boldCheckBox != nullptr) {
+        setProperty("CSQT_bold", boldCheckBox->isChecked());
+    }
     setProperty("CSQT_bgcolor", bgColor->getColor());
     setProperty("CSQT_bgcolormode", bg->isChecked());
     // setProperty("CSQT_color", textColor->palette().color(QPalette::Window));

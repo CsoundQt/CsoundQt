@@ -141,15 +141,13 @@ void TestInspectorView::testOpcodeArgs()
     QTreeWidgetItem *opcode = tree->topLevelItem(0)->child(0);
     QVERIFY(opcode != nullptr);
     QCOMPARE(opcode->text(0), QString("Gain, a, ak"));
-    QCOMPARE(opcode->childCount(), 2);
-    QCOMPARE(opcode->child(0)->text(0), QString("ain, kgain xin"));
-    QCOMPARE(static_cast<TreeItem *>(opcode->child(0))->getLine(), 2);
-    QCOMPARE(opcode->child(1)->text(0), QString("xout ain * kgain"));
-    QCOMPARE(static_cast<TreeItem *>(opcode->child(1))->getLine(), 3);
+    // xin/xout are part of the body, not separate child nodes in the tree.
+    QCOMPARE(opcode->childCount(), 0);
+    QCOMPARE(static_cast<TreeItem *>(opcode)->getLine(), 1);
 }
 
 // A Csound 7 signature carries the arguments in the declaration line, so the
-// tree does not add the xin/xout rows used by the classic form.
+// tree shows only the opcode node here as well.
 void TestInspectorView::testNewStyleOpcode()
 {
     const QString text =

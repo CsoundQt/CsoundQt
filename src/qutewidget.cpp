@@ -62,8 +62,10 @@ static bool isStylePropertyExcluded(const QString &name)
 		|| name == "CSQT_channel2" || name == "CSQT_channels") {
 		return true;
 	}
-	// Text content
-	if (name == "CSQT_text" || name == "CSQT_label") {
+	// Text content. The text format (plain/Markdown) describes how that content
+	// must be interpreted, so it belongs to the text rather than to the look.
+	if (name == "CSQT_text" || name == "CSQT_label"
+	        || name == "CSQT_textformat") {
 		return true;
 	}
 	// Widget identity (defensive; these are static properties, not dynamic)
@@ -617,6 +619,7 @@ QString QuteWidget::propertyType(const QString &name) const
         {u"visible"_s, u"boolean"_s},
         {u"enabled"_s, u"boolean"_s},
         {u"locked"_s, u"boolean"_s},
+        {u"bold"_s, u"boolean"_s},
         {u"selected"_s, u"boolean"_s},
         {u"latch"_s, u"boolean"_s},
         {u"momentaryMidiButton"_s, u"boolean"_s},
@@ -625,6 +628,7 @@ QString QuteWidget::propertyType(const QString &name) const
         {u"backgroundMode"_s, u"string"_s},
         {u"rulermode"_s, u"string"_s},
         {u"rulerscale"_s, u"string"_s},
+        {u"textformat"_s, u"string"_s},
         {u"plottype"_s, u"string"_s},
         {u"checkstyle"_s, u"string"_s},
         {u"randomizable"_s, u"boolean"_s},
@@ -677,6 +681,7 @@ QString QuteWidget::propertyDescription(const QString &name) const
         {u"visible"_s, u"Whether the widget is shown"_s},
         {u"enabled"_s, u"Does the widget accept input/value updates?"_s},
         {u"locked"_s, u"Prevent moving/resizing"_s},
+        {u"bold"_s, u"Draw the display text in bold"_s},
         {u"color"_s, u"Main colour of the widget"_s},
         {u"bgcolor"_s, u"Background colour"_s},
         {u"pressedColor"_s, u"Colour while a button is pressed"_s},
@@ -699,13 +704,14 @@ QString QuteWidget::propertyDescription(const QString &name) const
         {u"foreground"_s, u"Main/foreground colour"_s},
         {u"fillcolor"_s, u"Fill colour (defaults to the foreground)"_s},
         {u"thumbWidth"_s, u"Length of the slider thumb along the track"_s},
-        {u"thumbPadding"_s, u"Gap between the thumb and the slider edges"_s},
+        {u"thumbPadding"_s, u"Gap between the thumb and the sides of the track"_s},
         {u"thumbRadius"_s, u"Corner radius of the thumb"_s},
         {u"fillMode"_s, u"Slider mode: thumb only or fill up to the thumb"_s},
         {u"backgroundMode"_s, u"Behaviour when the slider background is clicked"_s},
         {u"rulermode"_s, u"Value ruler: hide, full or compact"_s},
         {u"rulerscale"_s, u"Ruler scale: linear or db (VU-meter style)"_s},
         {u"rulercolor"_s, u"Ruler tick and label colour"_s},
+        {u"textformat"_s, u"Label text format: plain or markdown"_s},
         {u"exponent"_s, u"Skew of the value curve (1 = linear)"_s},
         {u"flatStyle"_s, u"Use a flat, platform-independent style"_s},
         {u"checkstyle"_s, u"Check mark style: \"x\" or \"full\""_s},

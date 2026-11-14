@@ -90,6 +90,7 @@ Options::Options(ConfigLists *configlists) :
     showWidgetsOnRun = true;
     showWidgetToolbar = true;
     showTooltips = false;
+    showWidgetNameOverlay = false;
     defaultWidgetFont = QStringLiteral("Liberation Sans");
     flatStyleNewWidgets = true;
     editModeWhilePlaying = false;

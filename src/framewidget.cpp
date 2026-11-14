@@ -24,7 +24,9 @@
 #include "qutewidget.h"
 
 #include <QColor>
+#include <QFontMetrics>
 #include <QPainter>
+#include <QStringList>
 
 // Grab zones at the bottom-right and top-left corners of an edit-mode frame.
 // The zones shrink for very small widgets so that both always fit without
@@ -156,6 +158,122 @@ void FrameWidget::refreshFrameAppearance()
     update();
 }
 
+void FrameWidget::setShowNameOverlay(bool show)
+{
+    if (m_showNameOverlay == show)
+        return;
+    m_showNameOverlay = show;
+    update();
+}
+
+void FrameWidget::paintNameOverlay(QPainter &painter)
+{
+    if (m_widget == nullptr)
+        return;
+
+    QStringList lines;
+    const QString widgetName = m_widget->getWidgetName();
+    if (!widgetName.isEmpty())
+        lines << widgetName;
+
+    const QString channel = m_widget->getChannelName();
+    const QString channel2 = m_widget->getChannel2Name();
+    QString channelLine;
+    if (!channel.isEmpty() && !channel2.isEmpty())
+        channelLine = channel + QStringLiteral(" / ") + channel2;
+    else if (!channel.isEmpty())
+        channelLine = channel;
+    else
+        channelLine = channel2;
+    if (!channelLine.isEmpty() && channelLine != widgetName)
+        lines << channelLine;
+
+    if (lines.isEmpty())
+        return;
+
+    QFont font = painter.font();
+    font.setPointSizeF(7.0);
+    font.setBold(true);
+    const QFontMetrics metrics(font);
+
+    // The badge is flush with the widget's top-right corner, so it uses no
+    // outer padding. A little internal padding keeps the glyphs off the edge.
+    const int pad = 0;
+    const int maxWidth = width() - 2 * pad;
+    const int lineHeight = qMax(1, metrics.height());
+    const int maxLines = (height() - 2 * pad) / lineHeight;
+
+    // Narrow widgets (typically vertical sliders) have no room for a
+    // horizontal badge. Draw a single line down the right edge instead.
+    if (width() < 32 && height() >= 48) {
+        const int vpad = 0;
+        QFont verticalFont = font;
+        verticalFont.setPointSizeF(6.0);
+        const QFontMetrics verticalMetrics(verticalFont);
+        const int thickness = verticalMetrics.height() + 2;
+        const int available = height() - 2 * vpad - 4;
+        if (width() - 2 * vpad < thickness || available < 8)
+            return;
+        const QString text = verticalMetrics.elidedText(
+                    lines.join(QStringLiteral(": ")), Qt::ElideRight,
+                    available);
+        if (text.isEmpty())
+            return;
+        const int textWidth = verticalMetrics.horizontalAdvance(text);
+
+        painter.save();
+        painter.setRenderHint(QPainter::Antialiasing, true);
+        painter.translate(width() - vpad, vpad);
+        painter.rotate(90);
+        const QRect box(0, 0, textWidth + 4, thickness);
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(QColor(0, 0, 0, 175));
+        painter.drawRect(box);
+        painter.setFont(verticalFont);
+        painter.setPen(QColor(255, 255, 255, 240));
+        painter.drawText(box.adjusted(2, 0, -2, 0),
+                         Qt::AlignLeft | Qt::AlignVCenter, text);
+        painter.restore();
+        return;
+    }
+
+    if (maxWidth < 24 || maxLines < 1)
+        return;
+    if (lines.size() > maxLines)
+        lines = lines.mid(0, maxLines);
+
+    QStringList elided;
+    int textWidth = 0;
+    for (const QString &line : lines) {
+        const QString text = metrics.elidedText(line, Qt::ElideRight,
+                                                maxWidth - 4);
+        elided << text;
+        textWidth = qMax(textWidth, metrics.horizontalAdvance(text));
+    }
+    if (elided.isEmpty())
+        return;
+
+    const int boxWidth = qMin(maxWidth, textWidth + 4);
+    const QRect box(width() - boxWidth, pad,
+                    boxWidth, elided.size() * lineHeight + 4);
+
+    painter.save();
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(QColor(0, 0, 0, 175));
+    painter.drawRect(box);
+
+    painter.setFont(font);
+    painter.setPen(QColor(255, 255, 255, 240));
+    int y = box.top() + 2;
+    for (const QString &line : elided) {
+        painter.drawText(QRect(box.left() + 2, y, box.width() - 4, lineHeight),
+                         Qt::AlignLeft | Qt::AlignVCenter, line);
+        y += lineHeight;
+    }
+    painter.restore();
+}
+
 void FrameWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
@@ -185,6 +303,9 @@ void FrameWidget::paintEvent(QPaintEvent *event)
         painter.fillRect(QRect(rightX, topHeight, width() - rightX, bottomY - topHeight),
                          frameColor);
     }
+
+    if (m_showNameOverlay)
+        paintNameOverlay(painter);
 
     if (m_selected) {
         const int size = resizeHandleSize(this);

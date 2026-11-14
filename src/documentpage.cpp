@@ -868,6 +868,14 @@ void DocumentPage::showWidgetTooltips(bool visible)
 	}
 }
 
+void DocumentPage::setWidgetNameOverlayVisible(bool visible)
+{
+	foreach (WidgetLayout *wl, m_widgetLayouts) {
+		if (wl != nullptr)
+			wl->setWidgetNameOverlayVisible(visible);
+	}
+}
+
 void DocumentPage::setKeyRepeatMode(bool keyRepeat)
 {
 	foreach (WidgetLayout *wl, m_widgetLayouts) {
@@ -1707,10 +1715,13 @@ void DocumentPage::highlightSelectedWidgetChannels() {
     QStringList channels;
     const QString channel = selected.first()->getChannelName();
     const QString channel2 = selected.first()->getChannel2Name();
+    const QString widgetName = selected.first()->getWidgetName();
     if (!channel.isEmpty())
         channels.append(channel);
     if (!channel2.isEmpty())
         channels.append(channel2);
+    if (!widgetName.isEmpty())
+        channels.append(widgetName);
     togglePinnedWidgetChannelHighlights(channels);
 }
 
@@ -1775,6 +1786,8 @@ void DocumentPage::updateWidgetChannelLineHighlights() {
             channels.append(widget->getChannelName());
         if (!widget->getChannel2Name().isEmpty())
             channels.append(widget->getChannel2Name());
+        if (!widget->getWidgetName().isEmpty())
+            channels.append(widget->getWidgetName());
     }
     channels.removeDuplicates();
     m_view->highlightWidgetChannels(channels);

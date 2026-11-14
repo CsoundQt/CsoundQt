@@ -184,29 +184,42 @@ public:
         setFixedWidth(WidgetOverlayWidth);
         setFocusPolicy(Qt::NoFocus);
 
-        auto *column = new QVBoxLayout(this);
-        column->setContentsMargins(0, 2, 0, 2);
-        column->setSpacing(0);
+        m_column = new QVBoxLayout(this);
+        m_column->setContentsMargins(0, 2, 0, 2);
+        m_column->setSpacing(0);
 
         for (QAction *action : actions) {
-            auto *button = new QToolButton(this);
-            button->setAutoRaise(true);
-            button->setToolButtonStyle(Qt::ToolButtonIconOnly);
-            button->setIconSize(QSize(WidgetOverlayMaxIconSize,
-                                      WidgetOverlayMaxIconSize));
-            button->setFixedSize(WidgetOverlayWidth,
-                                 WidgetOverlayMaxButtonHeight);
-            button->setFocusPolicy(Qt::NoFocus);
-            button->setCursor(Qt::PointingHandCursor);
-            connect(button, &QToolButton::clicked, this, [this, action]() {
-                if (m_layout != nullptr)
-                    m_layout->createWidgetFromOverlay(action);
-            });
-            connect(action, &QAction::changed, this, [this]() { updateIcons(); });
-            m_buttons.append(qMakePair(action, button));
-            column->addWidget(button, 0, Qt::AlignHCenter);
+            QToolButton *button = createButton(action, true);
+            m_column->addWidget(button, 0, Qt::AlignHCenter);
         }
-        column->addStretch(1);
+        m_column->addStretch(1);
+        updateIcons();
+    }
+
+    // The name-overlay toggle is not a widget-creation action: keep it at the
+    // bottom of the strip and mirror the action's checked state.
+    void setToggleAction(QAction *action)
+    {
+        if (m_toggleAction == action)
+            return;
+        if (m_toggleButton != nullptr) {
+            for (int i = 0; i < m_buttons.size(); ++i) {
+                if (m_buttons.at(i).second == m_toggleButton) {
+                    m_buttons.removeAt(i);
+                    break;
+                }
+            }
+            delete m_toggleButton;
+            m_toggleButton = nullptr;
+        }
+        m_toggleAction = action;
+        if (action == nullptr) {
+            updateButtonSizes();
+            return;
+        }
+        m_toggleButton = createButton(action, false);
+        m_column->addWidget(m_toggleButton, 0, Qt::AlignHCenter);
+        updateButtonSizes();
         updateIcons();
     }
 
@@ -218,6 +231,8 @@ public:
             button->setIcon(m_layout != nullptr
                             ? m_layout->iconForPanel(action)
                             : action->icon());
+            if (button->isCheckable())
+                button->setChecked(action->isChecked());
             QString tip = action->text();
             if (!action->shortcut().isEmpty()) {
                 tip += u" (%1)"_s.arg(
@@ -245,6 +260,31 @@ protected:
     }
 
 private:
+    QToolButton *createButton(QAction *action, bool createsWidget)
+    {
+        auto *button = new QToolButton(this);
+        button->setAutoRaise(true);
+        button->setToolButtonStyle(Qt::ToolButtonIconOnly);
+        button->setIconSize(QSize(WidgetOverlayMaxIconSize,
+                                  WidgetOverlayMaxIconSize));
+        button->setFixedSize(WidgetOverlayWidth, WidgetOverlayMaxButtonHeight);
+        button->setFocusPolicy(Qt::NoFocus);
+        button->setCursor(Qt::PointingHandCursor);
+        if (createsWidget) {
+            connect(button, &QToolButton::clicked, this, [this, action]() {
+                if (m_layout != nullptr)
+                    m_layout->createWidgetFromOverlay(action);
+            });
+        } else {
+            button->setCheckable(action->isCheckable());
+            connect(button, &QToolButton::clicked, action, &QAction::trigger);
+            connect(action, &QAction::toggled, this, [this]() { updateIcons(); });
+        }
+        connect(action, &QAction::changed, this, [this]() { updateIcons(); });
+        m_buttons.append(qMakePair(action, button));
+        return button;
+    }
+
     void updateButtonSizes()
     {
         if (m_buttons.isEmpty())
@@ -264,6 +304,9 @@ private:
     }
 
     QPointer<WidgetLayout> m_layout;
+    QVBoxLayout *m_column = nullptr;
+    QPointer<QAction> m_toggleAction;
+    QToolButton *m_toggleButton = nullptr;
     QList<QPair<QAction *, QToolButton *>> m_buttons;
 };
 
@@ -1722,6 +1765,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
                  || nodeName == "flatStyle"
                  || nodeName == "antialias"
                  || nodeName == "showArrows"
+                 || nodeName == "bold"
                  || nodeName == "instant" ) {  // BOOL type
             QDomNode n = node.firstChild();
             if (nodeName == "randomizable") {
@@ -2214,6 +2258,17 @@ void WidgetLayout::showWidgetTooltips(bool show)
     widgetsMutex.unlock();
 }
 
+void WidgetLayout::setWidgetNameOverlayVisible(bool show)
+{
+    if (m_showWidgetNameOverlay == show)
+        return;
+    m_showWidgetNameOverlay = show;
+    for (FrameWidget *frame : editWidgets) {
+        if (frame != nullptr)
+            frame->setShowNameOverlay(show);
+    }
+}
+
 void WidgetLayout::setWidgetToolTip(QuteWidget *widget, bool show)
 {
     // This function must be protected/locked by the caller
@@ -2231,6 +2286,11 @@ void WidgetLayout::setWidgetToolTip(QuteWidget *widget, bool show)
     if(!description.isEmpty()) {
         lines << description;
         lines << " ";
+    }
+
+    const QString widgetName = widget->getWidgetName();
+    if (!widgetName.isEmpty()) {
+        lines << tr("Name: ") + widgetName;
     }
 
     // Labels are static text and have no channel, so there is nothing to show.
@@ -2331,6 +2391,15 @@ void WidgetLayout::setToggleLockedAction(QAction *action)
 void WidgetLayout::setEditModeAction(QAction *action)
 {
     m_editModeAction = action;
+}
+
+void WidgetLayout::setWidgetNameOverlayAction(QAction *action)
+{
+    if (m_widgetNameOverlayAction == action)
+        return;
+    m_widgetNameOverlayAction = action;
+    if (m_createOverlay != nullptr)
+        m_createOverlay->setToggleAction(action);
 }
 
 void WidgetLayout::appendCurve(WINDAT *windat)
@@ -2704,6 +2773,7 @@ void WidgetLayout::ensureCreateOverlay()
         }
         m_createOverlay = new WidgetCreateOverlay(this, overlayActions,
                                                   targetParent);
+        m_createOverlay->setToggleAction(m_widgetNameOverlayAction);
         targetParent->installEventFilter(this);
     } else if (m_createOverlay->parentWidget() != targetParent) {
         if (m_createOverlay->parentWidget() != nullptr)
@@ -2751,6 +2821,10 @@ QIcon WidgetLayout::iconForPanel(QAction *action) const
             iconName = entry.second;
             break;
         }
+    }
+    if (iconName.isEmpty() && action != nullptr
+            && action == m_widgetNameOverlayAction) {
+        iconName = u"widget-name-overlay"_s;
     }
     if (iconName.isEmpty())
         return action != nullptr ? action->icon() : QIcon();
@@ -4330,6 +4404,8 @@ void WidgetLayout::widgetChanged(QuteWidget* widget)
             int newh = widget->height();
             editWidgets[index]->move(newx, newy);
             editWidgets[index]->resize(neww, newh);
+            // The name/channel overlay text may have changed.
+            editWidgets[index]->update();
         }
         setWidgetToolTip(widget, m_tooltips);
         //    widgetsMutex.unlock();
@@ -4361,8 +4437,11 @@ void WidgetLayout::widgetPropertyApplied(QuteWidget* widget, const QString &prop
         adjustLayoutSize();
     }
     else if (property == "CSQT_objectName" || property == "CSQT_objectName2"
+             || property == "CSQT_widgetName"
              || property == "CSQT_description") {
         setWidgetToolTip(widget, m_tooltips);
+        if (editWidgets.size() > index)
+            editWidgets[index]->update();
     }
     else if (property == "CSQT_midicc") {
         registerWidgetController(widget, widget->property("CSQT_midicc").toInt());
@@ -4409,6 +4488,10 @@ void WidgetLayout::highlightWidgetChannels(QuteWidget *widget)
 			channels.append(w->getChannelName());
 		if (!w->getChannel2Name().isEmpty())
 			channels.append(w->getChannel2Name());
+		// Widget names are also valid addresses in "<name>/<property>"
+		// outvalue/invalue messages, so highlight those references too.
+		if (!w->getWidgetName().isEmpty())
+			channels.append(w->getWidgetName());
 	};
 	if (widget) {
 		addWidget(widget);
@@ -4424,10 +4507,16 @@ void WidgetLayout::highlightWidgetChannels(QuteWidget *widget)
 
 void WidgetLayout::highlightChannel(const QString &channel)
 {
-	if (m_channelHighlightActive && m_channelHighlightChannel == channel)
+	// The cursor may be on "<channel>/<property>" or "<widgetName>/<property>".
+	// The outline is for the widget, so look it up by the part before the slash.
+	QString address = channel;
+	const int slash = address.indexOf(QLatin1Char('/'));
+	if (slash > 0)
+		address = address.left(slash);
+	if (m_channelHighlightActive && m_channelHighlightChannel == address)
 		return;
 	clearChannelHighlights();
-	if (channel.isEmpty())
+	if (address.isEmpty())
 		return;
 
 	// The layout already maintains a channel -> widgets map for value
@@ -4436,18 +4525,27 @@ void WidgetLayout::highlightChannel(const QString &channel)
 	QList<QuteWidget *> widgets;
 	{
 		QMutexLocker locker(&widgetsMutex);
-		auto it = channelNameToWidgets.constFind(channel);
+		auto it = channelNameToWidgets.constFind(address);
 		if (it != channelNameToWidgets.constEnd()) {
 			widgets = it.value();
 		} else {
-			for (QuteWidget *widget : m_widgets) {
-				if (widget
-						&& (widget->getChannelName() == channel
-							|| widget->getChannel2Name() == channel)) {
-					widgets.append(widget);
+			// Widget names are valid addresses for property messages too. Keep
+			// them out of channelNameToWidgets: that map is also used for value
+			// distribution and must only contain real channels.
+			auto nameIt = m_widgetNameToWidget.constFind(address);
+			if (nameIt != m_widgetNameToWidget.constEnd()
+					&& nameIt.value() != nullptr) {
+				widgets.append(nameIt.value());
+			} else {
+				for (QuteWidget *widget : m_widgets) {
+					if (widget
+							&& (widget->getChannelName() == address
+								|| widget->getChannel2Name() == address)) {
+						widgets.append(widget);
+					}
 				}
+				channelNameToWidgets.insert(address, widgets);
 			}
-			channelNameToWidgets.insert(channel, widgets);
 		}
 	}
 
@@ -4470,7 +4568,7 @@ void WidgetLayout::highlightChannel(const QString &channel)
 	if (m_channelHighlightFrames.isEmpty())
 		return;
 
-	m_channelHighlightChannel = channel;
+	m_channelHighlightChannel = address;
 	m_channelHighlightActive = true;
 	const QPoint cursor = QCursor::pos();
 	m_channelHighlightMouseInside = false;
@@ -5954,6 +6052,7 @@ void WidgetLayout::createEditFrame(QuteWidget* widget)
     // This function should be locked from outside always
     FrameWidget * frame = new FrameWidget(this);
     frame->setWidget(widget);
+    frame->setShowNameOverlay(m_showWidgetNameOverlay);
     installHoverFilter(this, frame);
     // The constructor runs before the widget is bound, so refresh now that the
     // locked flag is known (locked widgets get a dotted frame).

@@ -402,12 +402,14 @@ int QuteSliderControl::thumbLength(const QRectF &inner) const
 	if (requested <= 0) {
 		return 0;
 	}
+	// Thumb padding applies across the slider (to the left/right of a vertical
+	// thumb, above/below a horizontal one), never along its travel. The thumb
+	// may therefore reach the ends of the track.
 	const double axis = isVertical() ? inner.height() : inner.width();
-	const double available = axis - 2 * m_thumbPadding;
-	if (available <= 1) {
+	if (axis <= 1) {
 		return 1;
 	}
-	return qBound(1, requested, static_cast<int>(available));
+	return qBound(1, requested, static_cast<int>(axis));
 }
 
 QRectF QuteSliderControl::thumbRect(const QRectF &inner, double position) const
@@ -418,14 +420,13 @@ QRectF QuteSliderControl::thumbRect(const QRectF &inner, double position) const
 	                                       : static_cast<int>(inner.height()))
 	                          - 2 * m_thumbPadding);
 	const double axis = isVertical() ? inner.height() : inner.width();
-	const double travel = qMax(0.0, axis - 2 * m_thumbPadding - length);
+	const double travel = qMax(0.0, axis - length);
 
 	if (isVertical()) {
-		const double y = inner.bottom() - m_thumbPadding - length
-				- position * travel;
+		const double y = inner.bottom() - length - position * travel;
 		return QRectF(inner.left() + m_thumbPadding, y, cross, length);
 	}
-	const double x = inner.left() + m_thumbPadding + position * travel;
+	const double x = inner.left() + position * travel;
 	return QRectF(x, inner.top() + m_thumbPadding, length, cross);
 }
 
@@ -434,17 +435,15 @@ double QuteSliderControl::positionForPoint(const QRectF &inner,
 {
 	const int length = thumbLength(inner);
 	const double axis = isVertical() ? inner.height() : inner.width();
-	const double travel = qMax(0.0, axis - 2 * m_thumbPadding - length);
+	const double travel = qMax(0.0, axis - length);
 	if (travel <= 0.0) {
 		return 0.5;
 	}
 	double position;
 	if (isVertical()) {
-		position = (inner.bottom() - m_thumbPadding - length / 2.0 - point.y())
-				/ travel;
+		position = (inner.bottom() - length / 2.0 - point.y()) / travel;
 	} else {
-		position = (point.x() - (inner.left() + m_thumbPadding + length / 2.0))
-				/ travel;
+		position = (point.x() - (inner.left() + length / 2.0)) / travel;
 	}
 	return std::clamp(position, 0.0, 1.0);
 }
@@ -660,7 +659,7 @@ void QuteSliderControl::mouseMoveEvent(QMouseEvent *event)
 	const QRectF inner = innerRect(sliderRect());
 	const int length = thumbLength(inner);
 	const double axis = isVertical() ? inner.height() : inner.width();
-	const double travel = axis - 2 * m_thumbPadding - length;
+	const double travel = axis - length;
 	if (travel <= 0.0) {
 		return;
 	}

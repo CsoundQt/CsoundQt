@@ -217,6 +217,7 @@ public:
 	void inToGet();
 	// Widget Layout properties
 	void showWidgetTooltips(bool visible);
+	void setWidgetNameOverlayVisible(bool visible);
 	void setKeyRepeatMode(bool keyRepeat);  // Also for console widget
 	void setOpenProperties(bool open);
     void setGraphUpdateRate(int rate);

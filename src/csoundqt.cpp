@@ -5655,6 +5655,11 @@ void CsoundQt::applySettings()
         QSignalBlocker blocker(toggleScrollBarAct);
         toggleScrollBarAct->setChecked(m_options->showScrollBar);
     }
+    if (toggleWidgetNameOverlayAct) {
+        // Unlike the other toggles, this action's checked state also drives the
+        // widget-toolbar button, so let the signal through.
+        toggleWidgetNameOverlayAct->setChecked(m_options->showWidgetNameOverlay);
+    }
     auto toolButtonStyle = (m_options->iconText ? Qt::ToolButtonTextUnderIcon :
                                                   Qt::ToolButtonIconOnly);
 
@@ -5828,6 +5833,7 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->setChannelHighlightMode(m_options->channelHighlightMode);
     p->setChannelReferenceHighlightMode(m_options->channelReferenceHighlightMode);
     p->showWidgetTooltips(m_options->showTooltips);
+    p->setWidgetNameOverlayVisible(m_options->showWidgetNameOverlay);
     p->setWidgetFrameColors(m_options->widgetFrameColorUnselected,
                             m_options->widgetFrameColorSelected);
     p->setKeyRepeatMode(m_options->keyRepeat);
@@ -6153,6 +6159,7 @@ void CsoundQt::setColors(QString themeMode)
     setIcon(recAct, "media-record.svg");
     setIcon(renderAct, "render.svg");
     setIcon(showWidgetsAct, "widgets.svg");
+    setIcon(toggleWidgetNameOverlayAct, "widgets/widget-name-overlay.svg");
     setIcon(showInspectorAct, "edit-find.svg");
     setIcon(showEditorAct, "editor.svg");
     setIcon(showHelpAct, "info.svg");
@@ -6393,6 +6400,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     showOccurrencesAct->setShortcut(tr("Ctrl+Shift+A"));
     toggleToolbarAct->setShortcut(tr("Ctrl+T, T"));
     toggleScrollBarAct->setShortcut(tr("Ctrl+T, S"));
+    toggleWidgetNameOverlayAct->setShortcut(tr("Ctrl+T, N"));
     parameterModeAct->setShortcut(tr("Shift+Alt+P"));
     //	showParametersAct->setShortcut(tr("Alt+P"));
 
@@ -7144,6 +7152,20 @@ void CsoundQt::createActions()
     connect(toggleLockedWidgetAct, &QAction::triggered,
             this, &CsoundQt::toggleLockedWidgets);
 
+    toggleWidgetNameOverlayAct = new QAction(tr("Toggle Widget Name Overlay"), this);
+    toggleWidgetNameOverlayAct->setCheckable(true);
+    toggleWidgetNameOverlayAct->setStatusTip(
+                tr("Show or hide widget names and channels on top of widgets in edit mode"));
+    toggleWidgetNameOverlayAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(toggleWidgetNameOverlayAct, &QAction::toggled,
+            this, [this](bool checked) {
+        m_options->showWidgetNameOverlay = checked;
+        for (DocumentPage *page : documentPages) {
+            if (page != nullptr)
+                page->setWidgetNameOverlayVisible(checked);
+        }
+    });
+
     newWidgetAct = new QAction(icon("widgets.svg"), tr("Add Widget"), this);
     newWidgetAct->setStatusTip(tr("Show the New Widget palette"));
     // Registered on the current widget layout in connectActions(); N is safe
@@ -7276,6 +7298,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(pasteAct);
     m_keyActions.append(duplicateAct);
     m_keyActions.append(toggleLockedWidgetAct);
+    m_keyActions.append(toggleWidgetNameOverlayAct);
     m_keyActions.append(newWidgetAct);
     m_keyActions.append(inToGetAct);
     m_keyActions.append(getToInAct);
@@ -7431,6 +7454,7 @@ void CsoundQt::connectActions()
         registerWidgetPanelAction(newWidgetAct);
         layout->setToggleLockedAction(toggleLockedWidgetAct);
         layout->setEditModeAction(editAct);
+        layout->setWidgetNameOverlayAction(toggleWidgetNameOverlayAct);
         layout->updateCreateOverlayVisibility();
     }
 
@@ -7679,6 +7703,7 @@ void CsoundQt::createMenus()
     viewMenu->addAction(lineNumbersAct);
     viewMenu->addAction(toggleToolbarAct);
     viewMenu->addAction(toggleScrollBarAct);
+    viewMenu->addAction(toggleWidgetNameOverlayAct);
 
 
     fillExampleMenu();
@@ -8227,6 +8252,8 @@ void CsoundQt::readSettings()
     m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
     m_options->showWidgetToolbar = settings.value("showWidgetToolbar", true).toBool();
     m_options->showTooltips = settings.value("showTooltips", true).toBool();
+    m_options->showWidgetNameOverlay =
+            settings.value("showWidgetNameOverlay", false).toBool();
     m_options->defaultWidgetFont =
             settings.value("defaultWidgetFont", "Liberation Sans").toString();
     m_options->flatStyleNewWidgets = settings.value("flatStyleNewWidgets", true).toBool();
@@ -8513,6 +8540,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("showWidgetToolbar", m_options->showWidgetToolbar);
     settings.setValue("graphUpdateRate", m_options->graphUpdateRate);
     settings.setValue("showTooltips", m_options->showTooltips);
+    settings.setValue("showWidgetNameOverlay", m_options->showWidgetNameOverlay);
     settings.setValue("defaultWidgetFont", m_options->defaultWidgetFont);
     settings.setValue("flatStyleNewWidgets", m_options->flatStyleNewWidgets);
     settings.setValue("editModeWhilePlaying", m_options->editModeWhilePlaying);

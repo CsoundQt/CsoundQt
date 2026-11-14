@@ -54,6 +54,7 @@
         <file>themes/breeze-dark/widgets/table-plot.svg</file>
         <file>themes/breeze-dark/widgets/vu-meter.svg</file>
         <file>themes/breeze-dark/widgets/waveform.svg</file>
+        <file>themes/breeze-dark/widgets/widget-name-overlay.svg</file>
         <file>themes/breeze/about.svg</file>
         <file>themes/breeze/align-horizontal-center.svg</file>
         <file>themes/breeze/align-horizontal-left.svg</file>
@@ -108,5 +109,6 @@
         <file>themes/breeze/widgets/table-plot.svg</file>
         <file>themes/breeze/widgets/vu-meter.svg</file>
         <file>themes/breeze/widgets/waveform.svg</file>
+        <file>themes/breeze/widgets/widget-name-overlay.svg</file>
     </qresource>
 </RCC>

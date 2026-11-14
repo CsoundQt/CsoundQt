@@ -114,6 +114,8 @@ public:
 	bool showWidgetsOnRun;
 	bool showWidgetToolbar;
 	bool showTooltips;
+	// Draw each widget's name and channel on top of it while editing.
+	bool showWidgetNameOverlay;
 	// Font family assigned to new widgets that carry a font.
 	QString defaultWidgetFont;
 	// Create new flat-style-capable widgets with the flat style enabled.
