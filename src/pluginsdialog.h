@@ -45,10 +45,17 @@ public:
     // exercises the same code as the window.
     void startInstallation();
 
+    // Suppress modal warnings during scripted tests. Failures are still
+    // reported through the status labels and pluginApplyFinished().
+    void setSilent(bool silent) { m_silent = silent; }
+
 signals:
     // The installation commands have finished. On success CsoundQt still has
     // to re-detect risset; watch CsoundQt::rissetDetectionFinished for that.
     void installationFinished(bool success, const QString &error);
+    // The plugin operations triggered by Apply or OK have finished. Emitted
+    // also when the dialog closes itself after a successful OK.
+    void pluginApplyFinished(bool success, const QString &error);
     // Progress text, mirroring what the log view shows.
     void message(const QString &text);
 
@@ -133,6 +140,7 @@ private:
     bool m_closeAfterApply = false;
     bool m_dependencyMode = false;
     bool m_upgradesAvailable = false;
+    bool m_silent = false;
 };
 
 #endif // PLUGINSDIALOG_H

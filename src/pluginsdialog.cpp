@@ -199,6 +199,7 @@ PluginsDialog::PluginsDialog(CsoundQt *mainWindow, QWidget *parent)
     layout->addWidget(title);
 
     m_statusLabel = new QLabel(this);
+    m_statusLabel->setObjectName(u"pluginsStatusLabel"_s);
     m_statusLabel->setTextFormat(Qt::RichText);
     QFont statusFont = m_statusLabel->font();
     statusFont.setBold(true);
@@ -208,6 +209,7 @@ PluginsDialog::PluginsDialog(CsoundQt *mainWindow, QWidget *parent)
     layout->addWidget(m_statusLabel);
 
     m_detailLabel = new QLabel(this);
+    m_detailLabel->setObjectName(u"pluginsDetailLabel"_s);
     m_detailLabel->setWordWrap(true);
     m_detailLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
     m_detailLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
@@ -228,6 +230,7 @@ PluginsDialog::PluginsDialog(CsoundQt *mainWindow, QWidget *parent)
             this, &PluginsDialog::loadPluginInfo);
 
     m_table = new QTableWidget(0, 7, this);
+    m_table->setObjectName(u"pluginsTable"_s);
     m_table->setHorizontalHeaderLabels(
                 {tr("Name"), QString(), tr("Installed"), tr("Version"),
                  tr("Short description"), tr("Info"), tr("Upgrade")});
@@ -283,6 +286,7 @@ PluginsDialog::PluginsDialog(CsoundQt *mainWindow, QWidget *parent)
     layout->addWidget(m_table, 1);
 
     m_installButton = new QPushButton(tr("Install risset (plugin manager)"), this);
+    m_installButton->setObjectName(u"installRissetButton"_s);
     m_installButton->setMinimumHeight(34);
     m_installButton->hide();
     layout->addWidget(m_installButton, 0, Qt::AlignLeft);
@@ -338,6 +342,7 @@ PluginsDialog::PluginsDialog(CsoundQt *mainWindow, QWidget *parent)
     });
 
     m_buttons = new QDialogButtonBox(QDialogButtonBox::Close, this);
+    m_buttons->setObjectName(u"pluginsButtonBox"_s);
     connect(m_buttons, &QDialogButtonBox::clicked,
             this, &PluginsDialog::buttonBoxClicked);
     auto *footer = new QHBoxLayout;
@@ -1006,8 +1011,10 @@ void PluginsDialog::applyPluginChanges(bool closeAfter)
     }
 
     if (pluginExecutable().isEmpty()) {
-        QMessageBox::warning(this, tr("Plugins"),
-                             tr("CsoundQt does not know where risset is installed."));
+        if (!m_silent) {
+            QMessageBox::warning(this, tr("Plugins"),
+                                 tr("CsoundQt does not know where risset is installed."));
+        }
         return;
     }
 
@@ -1099,7 +1106,8 @@ void PluginsDialog::finishPluginApply(bool success, const QString &error)
         m_detailLabel->show();
         logLine(error);
         setLogVisible(true);
-        QMessageBox::warning(this, tr("Plugins"), error);
+        if (!m_silent)
+            QMessageBox::warning(this, tr("Plugins"), error);
     } else {
         m_statusLabel->setText(tr("Plugins updated."));
         m_detailLabel->setText(tr("The plugin changes were applied."));
@@ -1113,6 +1121,8 @@ void PluginsDialog::finishPluginApply(bool success, const QString &error)
     }
     if (m_mainWindow != nullptr && (success || anyCompleted))
         m_mainWindow->recheckRisset(true);
+
+    emit pluginApplyFinished(success, error);
 
     if (success && m_closeAfterApply)
         accept();

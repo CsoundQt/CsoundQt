@@ -445,12 +445,15 @@ jobs:
       - name: unit test opcodes
         run: bash tests/run-tests.sh --only opcodes
 
-      # Opt-in end-to-end test: run the built CsoundQt and let its Plugins
-      # window install risset for real. This exercises the application code
-      # (uv download, uv tool install, risset info --full) and CsoundQt's own
+      # Opt-in end-to-end tests: run the built CsoundQt and let its Plugins
+      # window install risset for real. The second test starts from a clean
+      # account, opens a CSD whose klib opcodes are not declared in <CsMeta>,
+      # follows the dependency banner to install risset and klib, and runs the
+      # CSD. This exercises the application code (uv download, uv tool install,
+      # risset info --full, plugin installation, Csound) and CsoundQt's own
       # re-detection, not a copy of those commands. A throw-away HOME /
       # LOCALAPPDATA keeps the runner clean.
-      - name: Install risset through CsoundQt (opt-in network test)
+      - name: Risset end-to-end tests (opt-in network test)
         if: github.event_name == 'workflow_dispatch' && github.event.inputs.run_risset_install_test == 'true'
         env:
           QT_QPA_PLATFORM: offscreen
@@ -464,22 +467,49 @@ jobs:
           fi
           test -x "$app" || { echo "CsoundQt executable not found:"; ls -la bin; exit 1; }
 
-          root="$(mktemp -d)"
-          if [ "$RUNNER_OS" = "Windows" ]; then
-            export LOCALAPPDATA="$(cygpath -w "$root/localappdata")"
-            mkdir -p "$root/localappdata"
-          else
-            export HOME="$root/home"
-            mkdir -p "$root/home"
-          fi
-          export XDG_DATA_HOME="$root/home/.local/share"
-          export XDG_CONFIG_HOME="$root/home/.config"
-          export XDG_CACHE_HOME="$root/home/.cache"
+          use_account() {
+            root="$1"
+            if [ "$RUNNER_OS" = "Windows" ]; then
+              export LOCALAPPDATA="$(cygpath -w "$root/localappdata")"
+              mkdir -p "$root/localappdata"
+            else
+              export HOME="$root/home"
+              mkdir -p "$root/home"
+            fi
+            export XDG_DATA_HOME="$root/home/.local/share"
+            export XDG_CONFIG_HOME="$root/home/.config"
+            export XDG_CACHE_HOME="$root/home/.cache"
+          }
 
+          # 1. risset installation and detection.
+          root="$(mktemp -d)"
+          use_account "$root"
           report="$root/risset-self-test.json"
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            report_arg="$(cygpath -w "$report")"
+          else
+            report_arg="$report"
+          fi
           "$app" --force-new --self-test-risset-install \
-                 --self-test-risset-report "$report"
+                 --self-test-risset-report "$report_arg"
           echo "---- risset self-test report ----"
+          cat "$report"
+
+          # 2. Opcode-detected dependency, risset installation, filtered plugin
+          # installation and running the CSD.
+          root="$(mktemp -d)"
+          use_account "$root"
+          csd="$GITHUB_WORKSPACE/tests/data/dict_get.csd"
+          report="$root/risset-dependency-self-test.json"
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            csd="$(cygpath -w "$csd")"
+            report_arg="$(cygpath -w "$report")"
+          else
+            report_arg="$report"
+          fi
+          "$app" --force-new --self-test-risset-dependencies "$csd" \
+                 --self-test-risset-report "$report_arg"
+          echo "---- risset dependency self-test report ----"
           cat "$report"
 
   # The QtWebEngine/html_support build test lives in html5-testbuild.yml and

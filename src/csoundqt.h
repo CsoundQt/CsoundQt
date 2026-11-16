@@ -146,6 +146,13 @@ public:
 
 	// Engine
 	CsoundEngine *getEngine(int index = -1);
+	// The active document, or nullptr when no tab is open. Public mirror of
+	// getCurrentDocumentPage() for scripted tests.
+	DocumentPage *currentDocumentPage() const {
+		if (curPage < 0 || curPage >= documentPages.size())
+			return nullptr;
+		return documentPages.at(curPage);
+	}
 	OpEntryParser *m_opcodeTree;
     Risset *risset = nullptr;
 	// Detects risset (spawns external processes) and augments the opcode tree.

@@ -21,19 +21,30 @@
 */
 
 #include <QApplication>
+#include <QCheckBox>
+#include <QDialogButtonBox>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QFrame>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QLabel>
+#include <QPointer>
+#include <QPushButton>
 #include <QSettings>
 #include <QStandardPaths>
+#include <QTableWidget>
+#include <QTemporaryDir>
 #include <QTextStream>
 #include <QTimer>
 #ifndef CSQT_NO_SPLASH
 #include <QSplashScreen>
 #endif
 #include "csoundqt.h"
+#include "csoundengine.h"
+#include "documentpage.h"
 #include "pluginsdialog.h"
 #include "risset.h"
 #include "bundledfonts.h"
@@ -374,6 +385,570 @@ QJsonObject RissetSelfTest::buildReport(bool success, const QString &error) cons
     return report;
 }
 
+// End-to-end test of the plugin dependency workflow. It starts with risset
+// uninstalled, opens a CSD that uses plugin opcodes without declaring them in
+// <CsMeta>, follows the banner to install risset and the detected plugins
+// through the real windows, and finally runs the CSD. Used by the opt-in
+// networked CI job.
+class RissetDependencySelfTest : public QObject
+{
+    Q_OBJECT
+public:
+    RissetDependencySelfTest(CsoundQt *application, QString csdPath,
+                             QString reportPath, QObject *parent = nullptr)
+        : QObject(parent), m_application(application),
+          m_sourceCsd(std::move(csdPath)), m_reportPath(std::move(reportPath))
+    {
+        if (m_reportPath.isEmpty()) {
+            m_reportPath = QDir(QStandardPaths::writableLocation(
+                                    QStandardPaths::TempLocation))
+                    .filePath(u"csoundqt-risset-dependency-self-test.json"_s);
+        }
+    }
+
+    void start();
+
+signals:
+    void finished(bool success);
+
+private:
+    enum class Stage {
+        InitialDetection,
+        RissetInstallation,
+        RissetDetection,
+        PluginInstallation,
+        PluginDetection,
+        Performance,
+        Done
+    };
+
+    void checkInitialBanner();
+    void startRissetInstallation();
+    void checkPluginBanner();
+    void openFilteredPluginDialog();
+    void pollForPluginTable();
+    void checkFilteredPluginDialog();
+    void checkInstalledPlugin();
+    void startPerformance();
+    void onDetectionFinished();
+    void onPerformanceStopped();
+    void evaluatePerformance();
+    void appendMessage(const QString &message);
+    void appendErrorLines(const QList<QPair<int, QString>> &lines);
+    void finish(bool success, const QString &error = QString());
+    bool pluginInstalled(const QString &name) const;
+    QString bannerText() const;
+    QString installButtonText() const;
+    QPushButton *installButton() const;
+    PluginsDialog *pluginsDialog() const;
+    QJsonObject buildReport(bool success, const QString &error) const;
+
+    CsoundQt *m_application = nullptr;
+    QString m_sourceCsd;
+    QString m_reportPath;
+    QTemporaryDir m_tempDir;
+    QPointer<PluginsDialog> m_pluginsDialog;
+    DocumentPage *m_page = nullptr;
+    CsoundEngine *m_engine = nullptr;
+    QTimer *m_timeout = nullptr;
+    QTimer *m_pollTimer = nullptr;
+    Stage m_stage = Stage::InitialDetection;
+    QString m_tempCsd;
+    QStringList m_bannerTexts;
+    QString m_initialAction;
+    QString m_installAction;
+    QStringList m_installList;
+    QStringList m_messages;
+    QStringList m_errorLines;
+    bool m_runEvaluated = false;
+    bool m_done = false;
+    int m_pollTries = 0;
+};
+
+void RissetDependencySelfTest::start()
+{
+    // Defer to the event loop so this runs after CsoundQt is shown and
+    // QApplication::exec() has started.
+    QTimer::singleShot(0, this, [this]() {
+        qInfo().noquote() << "Risset dependency self test: loading"
+                          << m_sourceCsd;
+        if (!QFileInfo::exists(m_sourceCsd)) {
+            finish(false, u"CSD not found: "_s + m_sourceCsd);
+            return;
+        }
+        if (!m_tempDir.isValid()) {
+            finish(false, u"Could not create a temporary directory."_s);
+            return;
+        }
+        // Work on a copy: playing a document may save it, and the CI checkout
+        // should stay untouched.
+        m_tempCsd = m_tempDir.filePath(u"dict_get.csd"_s);
+        if (!QFile::copy(m_sourceCsd, m_tempCsd)) {
+            finish(false, u"Could not copy the CSD to "_s + m_tempCsd);
+            return;
+        }
+
+        m_timeout = new QTimer(this);
+        m_timeout->setSingleShot(true);
+        connect(m_timeout, &QTimer::timeout, this, [this]() {
+            finish(false, u"Timed out while installing risset, installing "
+                          "plugins or running the CSD."_s);
+        });
+        m_timeout->start(45 * 60 * 1000);
+
+        connect(m_application, &CsoundQt::rissetDetectionFinished,
+                this, &RissetDependencySelfTest::onDetectionFinished);
+
+        if (m_application->loadFile(m_tempCsd, false, true) < 0) {
+            finish(false, u"Could not load "_s + m_tempCsd);
+            return;
+        }
+        m_page = m_application->currentDocumentPage();
+        if (m_page == nullptr) {
+            finish(false, u"The test CSD has no document page."_s);
+            return;
+        }
+
+        if (m_application->rissetDetectionReady())
+            QTimer::singleShot(0, this,
+                               &RissetDependencySelfTest::checkInitialBanner);
+        else
+            m_application->initRisset();
+    });
+}
+
+void RissetDependencySelfTest::onDetectionFinished()
+{
+    switch (m_stage) {
+    case Stage::InitialDetection:
+        checkInitialBanner();
+        break;
+    case Stage::RissetDetection:
+        checkPluginBanner();
+        break;
+    case Stage::PluginDetection:
+        checkInstalledPlugin();
+        break;
+    default:
+        break;
+    }
+}
+
+QString RissetDependencySelfTest::bannerText() const
+{
+    auto *label = m_application->findChild<QLabel*>(
+                u"pluginDependencyLabel"_s);
+    return label != nullptr ? label->text() : QString();
+}
+
+QString RissetDependencySelfTest::installButtonText() const
+{
+    QPushButton *button = installButton();
+    return button != nullptr ? button->text() : QString();
+}
+
+QPushButton *RissetDependencySelfTest::installButton() const
+{
+    return m_application->findChild<QPushButton*>(
+                u"pluginDependencyInstallButton"_s);
+}
+
+PluginsDialog *RissetDependencySelfTest::pluginsDialog() const
+{
+    return m_application->findChild<PluginsDialog*>();
+}
+
+bool RissetDependencySelfTest::pluginInstalled(const QString &name) const
+{
+    if (m_application->risset == nullptr)
+        return false;
+    const auto &installed = m_application->risset->pluginInstalled;
+    for (auto it = installed.cbegin(); it != installed.cend(); ++it) {
+        if (it.key().compare(name, Qt::CaseInsensitive) == 0)
+            return it.value();
+    }
+    return false;
+}
+
+void RissetDependencySelfTest::checkInitialBanner()
+{
+    if (m_stage != Stage::InitialDetection
+            || !m_application->rissetDetectionReady()) {
+        return;
+    }
+    if (m_application->rissetIsInstalled()) {
+        finish(false, u"risset was already installed before the test: "_s
+               + m_application->rissetVersion());
+        return;
+    }
+
+    auto *banner = m_application->findChild<QFrame*>(
+                u"pluginDependencyBanner"_s);
+    QPushButton *button = installButton();
+    if (banner == nullptr || button == nullptr) {
+        finish(false, u"The plugin dependency banner was not created."_s);
+        return;
+    }
+    if (!banner->isVisible()) {
+        finish(false, u"The plugin dependency banner is not visible."_s);
+        return;
+    }
+    const QString text = bannerText();
+    if (!text.contains(u"klib"_s, Qt::CaseInsensitive)
+            || !text.contains(u"line "_s, Qt::CaseInsensitive)) {
+        finish(false, u"The banner does not report the detected klib "
+                      "opcodes: "_s + text);
+        return;
+    }
+    if (button->text().compare(u"Manage Plugins"_s,
+                               Qt::CaseInsensitive) != 0) {
+        finish(false, u"Expected the banner to offer Manage Plugins, got: "_s
+               + button->text());
+        return;
+    }
+    m_bannerTexts.append(text);
+    m_initialAction = button->text();
+
+    // Follow the same path as the user: click the banner button, then check
+    // that the Plugins window shows the risset installation page.
+    button->click();
+    m_pluginsDialog = pluginsDialog();
+    if (m_pluginsDialog == nullptr) {
+        finish(false, u"The Plugins window did not open."_s);
+        return;
+    }
+    m_pluginsDialog->setSilent(true);
+
+    auto *install = m_pluginsDialog->findChild<QPushButton*>(
+                u"installRissetButton"_s);
+    if (install == nullptr || !install->isVisible()) {
+        finish(false, u"The risset installation prompt is not visible."_s);
+        return;
+    }
+
+    m_stage = Stage::RissetInstallation;
+    startRissetInstallation();
+}
+
+void RissetDependencySelfTest::startRissetInstallation()
+{
+    connect(m_pluginsDialog, &PluginsDialog::installationFinished,
+            this, [this](bool success, const QString &error) {
+        if (!success) {
+            finish(false, u"Installing risset failed: "_s + error);
+            return;
+        }
+        m_stage = Stage::RissetDetection;
+        qInfo().noquote() << "Risset dependency self test: risset installed; "
+                             "waiting for detection";
+    });
+    m_pluginsDialog->startInstallation();
+}
+
+void RissetDependencySelfTest::checkPluginBanner()
+{
+    if (m_stage != Stage::RissetDetection
+            || !m_application->rissetDetectionReady()) {
+        return;
+    }
+    if (!m_application->rissetIsInstalled()) {
+        finish(false, u"CsoundQt did not detect risset after installation."_s);
+        return;
+    }
+
+    auto *banner = m_application->findChild<QFrame*>(
+                u"pluginDependencyBanner"_s);
+    QPushButton *button = installButton();
+    if (banner == nullptr || button == nullptr || !banner->isVisible()) {
+        finish(false, u"The plugin dependency banner did not return after "
+                      "installing risset."_s);
+        return;
+    }
+    const QString text = bannerText();
+    if (!text.contains(u"klib"_s, Qt::CaseInsensitive)) {
+        finish(false, u"The banner does not mention klib after risset was "
+                      "installed: "_s + text);
+        return;
+    }
+    if (button->text().compare(u"Install Plugins"_s,
+                               Qt::CaseInsensitive) != 0) {
+        finish(false, u"Expected the banner to offer Install Plugins, got: "_s
+               + button->text());
+        return;
+    }
+    m_bannerTexts.append(text);
+    m_installAction = button->text();
+
+    // Open the filtered Plugins window from the banner.
+    button->click();
+    m_pluginsDialog = pluginsDialog();
+    if (m_pluginsDialog == nullptr) {
+        finish(false, u"The filtered Plugins window did not open."_s);
+        return;
+    }
+    m_pluginsDialog->setSilent(true);
+
+    m_stage = Stage::PluginInstallation;
+    m_pollTries = 0;
+    m_pollTimer = new QTimer(this);
+    connect(m_pollTimer, &QTimer::timeout,
+            this, &RissetDependencySelfTest::pollForPluginTable);
+    m_pollTimer->start(200);
+    QTimer::singleShot(0, this,
+                       &RissetDependencySelfTest::pollForPluginTable);
+}
+
+void RissetDependencySelfTest::pollForPluginTable()
+{
+    if (m_stage != Stage::PluginInstallation)
+        return;
+    if (m_pluginsDialog == nullptr) {
+        finish(false, u"The filtered Plugins window was closed unexpectedly."_s);
+        return;
+    }
+    auto *table = m_pluginsDialog->findChild<QTableWidget*>(
+                u"pluginsTable"_s);
+    if (table != nullptr && table->isVisible() && table->rowCount() > 0) {
+        if (m_pollTimer != nullptr)
+            m_pollTimer->stop();
+        checkFilteredPluginDialog();
+        return;
+    }
+    if (++m_pollTries > 900) { // about three minutes
+        finish(false, u"Timed out waiting for the filtered plugin list."_s);
+    }
+}
+
+void RissetDependencySelfTest::checkFilteredPluginDialog()
+{
+    auto *table = m_pluginsDialog->findChild<QTableWidget*>(
+                u"pluginsTable"_s);
+    int klibRow = -1;
+    for (int row = 0; row < table->rowCount(); ++row) {
+        const QTableWidgetItem *item = table->item(row, 0);
+        if (item != nullptr
+                && item->text().compare(u"klib"_s,
+                                        Qt::CaseInsensitive) == 0) {
+            klibRow = row;
+            break;
+        }
+    }
+    if (klibRow < 0) {
+        finish(false, u"The filtered Plugins window does not list klib."_s);
+        return;
+    }
+
+    auto *checkContainer = table->cellWidget(klibRow, 1);
+    auto *check = checkContainer != nullptr
+            ? checkContainer->findChild<QCheckBox*>() : nullptr;
+    if (check == nullptr || !check->isChecked()) {
+        finish(false, u"klib is not preselected for installation."_s);
+        return;
+    }
+
+    auto *buttons = m_pluginsDialog->findChild<QDialogButtonBox*>(
+                u"pluginsButtonBox"_s);
+    if (buttons == nullptr) {
+        finish(false, u"The filtered Plugins window has no button box."_s);
+        return;
+    }
+    if (buttons->button(QDialogButtonBox::Apply) != nullptr) {
+        finish(false, u"The dependency Plugins window shows an Apply "
+                      "button."_s);
+        return;
+    }
+    auto *ok = buttons->button(QDialogButtonBox::Ok);
+    if (ok == nullptr || buttons->button(QDialogButtonBox::Cancel) == nullptr) {
+        finish(false, u"The dependency Plugins window does not offer only "
+                      "OK and Cancel."_s);
+        return;
+    }
+
+    m_installList.append(u"klib"_s);
+    connect(m_pluginsDialog, &PluginsDialog::pluginApplyFinished,
+            this, [this](bool success, const QString &error) {
+        if (!success) {
+            finish(false, u"Installing klib failed: "_s + error);
+            return;
+        }
+        m_stage = Stage::PluginDetection;
+        qInfo().noquote() << "Risset dependency self test: plugins installed; "
+                             "waiting for detection";
+    });
+    ok->click();
+}
+
+void RissetDependencySelfTest::checkInstalledPlugin()
+{
+    if (m_stage != Stage::PluginDetection
+            || !m_application->rissetDetectionReady()) {
+        return;
+    }
+    if (!pluginInstalled(u"klib"_s)) {
+        finish(false, u"CsoundQt did not detect the installed klib plugin."_s);
+        return;
+    }
+    auto *banner = m_application->findChild<QFrame*>(
+                u"pluginDependencyBanner"_s);
+    if (banner != nullptr && banner->isVisible()) {
+        finish(false, u"The dependency banner is still visible after klib was "
+                      "installed: "_s + bannerText());
+        return;
+    }
+    startPerformance();
+}
+
+void RissetDependencySelfTest::startPerformance()
+{
+    m_page = m_application->currentDocumentPage();
+    if (m_page == nullptr) {
+        finish(false, u"The test document disappeared."_s);
+        return;
+    }
+    m_engine = m_page->getEngine();
+    if (m_engine == nullptr) {
+        finish(false, u"The test document has no Csound engine."_s);
+        return;
+    }
+    connect(m_page, &DocumentPage::stopSignal,
+            this, &RissetDependencySelfTest::onPerformanceStopped);
+    connect(m_engine, &CsoundEngine::passMessages,
+            this, &RissetDependencySelfTest::appendMessage);
+    connect(m_engine, &CsoundEngine::errorLines,
+            this, &RissetDependencySelfTest::appendErrorLines);
+
+    m_stage = Stage::Performance;
+    qInfo().noquote() << "Risset dependency self test: running the CSD with "
+                         "the installed klib plugin";
+    m_application->play(false);
+}
+
+void RissetDependencySelfTest::onPerformanceStopped()
+{
+    if (m_stage != Stage::Performance)
+        return;
+    // Let play() return before compiling again for the final check.
+    QTimer::singleShot(0, this,
+                       &RissetDependencySelfTest::evaluatePerformance);
+}
+
+void RissetDependencySelfTest::appendMessage(const QString &message)
+{
+    m_messages.append(message);
+    if (m_messages.size() > 200)
+        m_messages.removeFirst();
+}
+
+void RissetDependencySelfTest::appendErrorLines(
+        const QList<QPair<int, QString>> &lines)
+{
+    for (const auto &line : lines) {
+        const QString text = line.second.trimmed();
+        if (!text.isEmpty())
+            m_errorLines.append(text);
+    }
+}
+
+void RissetDependencySelfTest::evaluatePerformance()
+{
+    if (m_done || m_runEvaluated || m_engine == nullptr)
+        return;
+    m_runEvaluated = true;
+
+    // The run itself is the check. A compilation failure reports error lines
+    // and the message buffer contains the Csound diagnostics; do not compile
+    // a second time here because CsoundQt may already have removed its session
+    // copy of the CSD.
+    QStringList problems = m_errorLines;
+    for (const QString &message : std::as_const(m_messages)) {
+        if (message.contains(u"error"_s, Qt::CaseInsensitive)
+                || message.contains(u"unknown opcode"_s, Qt::CaseInsensitive)
+                || message.contains(u"not found"_s, Qt::CaseInsensitive)) {
+            problems.append(message.trimmed());
+        }
+    }
+    if (!problems.isEmpty()) {
+        finish(false, u"The CSD did not run cleanly:\n"_s
+               + problems.join(u"\n"_s));
+        return;
+    }
+    finish(true);
+}
+
+void RissetDependencySelfTest::finish(bool success, const QString &error)
+{
+    if (m_done)
+        return;
+    m_done = true;
+    m_stage = Stage::Done;
+    if (m_timeout != nullptr)
+        m_timeout->stop();
+    if (m_pollTimer != nullptr)
+        m_pollTimer->stop();
+
+    const QJsonObject report = buildReport(success, error);
+    const QByteArray json = QJsonDocument(report).toJson(QJsonDocument::Indented);
+
+    QFile file(m_reportPath);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        file.write(json);
+        file.close();
+        qInfo().noquote() << "Risset dependency self test report:"
+                          << m_reportPath;
+    } else {
+        qWarning().noquote() << "Risset dependency self test: could not write "
+                                "the report to" << m_reportPath;
+    }
+
+    QTextStream out(stdout);
+    out << QString::fromUtf8(json) << Qt::endl;
+
+    qInfo().noquote() << (success ? "RISSET DEPENDENCY SELF TEST PASSED"
+                                  : "RISSET DEPENDENCY SELF TEST FAILED")
+                      << (error.isEmpty() ? QString() : error);
+
+    if (m_pluginsDialog != nullptr) {
+        m_pluginsDialog->close();
+        m_pluginsDialog->deleteLater();
+        m_pluginsDialog = nullptr;
+    }
+
+    emit finished(success);
+    deleteLater();
+}
+
+QJsonObject RissetDependencySelfTest::buildReport(
+        bool success, const QString &error) const
+{
+    QJsonObject report;
+    report.insert(u"success"_s, success);
+    report.insert(u"csd"_s, m_sourceCsd);
+    report.insert(u"temporaryCsd"_s, m_tempCsd);
+    report.insert(u"dataRoot"_s, Risset::userDataRoot().absolutePath());
+    report.insert(u"pluginRoot"_s, Risset::pluginRootDir().absolutePath());
+    report.insert(u"rissetInstalled"_s, m_application->rissetIsInstalled());
+    report.insert(u"rissetVersion"_s, m_application->rissetVersion());
+    report.insert(u"klibInstalled"_s, pluginInstalled(u"klib"_s));
+
+    QJsonArray bannerTexts;
+    for (const QString &text : m_bannerTexts)
+        bannerTexts.append(text);
+    report.insert(u"banners"_s, bannerTexts);
+    report.insert(u"initialAction"_s, m_initialAction);
+    report.insert(u"installAction"_s, m_installAction);
+    report.insert(u"installList"_s, QJsonArray::fromStringList(m_installList));
+
+    QJsonArray messages;
+    for (const QString &message : m_messages)
+        messages.append(message);
+    report.insert(u"messages"_s, messages);
+    report.insert(u"errorLines"_s, QJsonArray::fromStringList(m_errorLines));
+
+    if (!error.isEmpty())
+        report.insert(u"error"_s, error);
+    return report;
+}
+
 } // namespace
 
 int main(int argc, char *argv[])
@@ -470,6 +1045,8 @@ int main(int argc, char *argv[])
     bool readOnly = false;
     bool noEditor = false;
     bool rissetSelfTest = false;
+    bool rissetDependencySelfTest = false;
+    QString rissetDependencyCsd;
     QString rissetSelfTestReport;
     QStringList args = qapp.arguments();
     args.removeAt(0); // Remove program name
@@ -486,6 +1063,7 @@ int main(int argc, char *argv[])
             out << "   --noeditor    Open command-line files without an editor, in a widget window" << Qt::endl;
             out << "   --force-new   Start a new instance even if one is already running" << Qt::endl;
             out << "   --self-test-risset-install  Install risset through the Plugins window and verify detection (network test)" << Qt::endl;
+            out << "   --self-test-risset-dependencies FILE  Install risset and detected plugins through CsoundQt, then run FILE (network test)" << Qt::endl;
             out << "   --self-test-risset-report FILE  Write the self-test JSON report to FILE" << Qt::endl;
             out << "   --help        This message" << Qt::endl;
             out << Qt::endl;
@@ -512,6 +1090,14 @@ int main(int argc, char *argv[])
         if(arg == "--self-test-risset-install") {
             rissetSelfTest = true;
         }
+        if(arg == "--self-test-risset-dependencies" && i + 1 < args.size()) {
+            rissetDependencySelfTest = true;
+            rissetDependencyCsd = args[++i];
+        }
+        else if(arg.startsWith("--self-test-risset-dependencies=")) {
+            rissetDependencySelfTest = true;
+            rissetDependencyCsd = arg.section('=', 1);
+        }
         if(arg == "--self-test-risset-report" && i + 1 < args.size()) {
             rissetSelfTestReport = args[++i];
         }
@@ -520,10 +1106,16 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (rissetSelfTest)
+    if (rissetDependencySelfTest && rissetDependencyCsd.isEmpty()) {
+        qWarning() << "--self-test-risset-dependencies needs a CSD path";
+        return 1;
+    }
+    const bool anyRissetSelfTest = rissetSelfTest || rissetDependencySelfTest;
+
+    if (anyRissetSelfTest)
         forceNew = true; // a running instance must not swallow the test
 
-    if (!rissetSelfTest) {
+    if (!anyRissetSelfTest) {
         foreach (QString arg, args) {
             if (!arg.startsWith("-")) {// avoid OS X arguments
                 fileNames.append(arg);
@@ -542,7 +1134,7 @@ int main(int argc, char *argv[])
 
 #ifndef CSQT_NO_SPLASH
     QSplashScreen *splash = nullptr;
-    if (!rissetSelfTest) {
+    if (!anyRissetSelfTest) {
         QPixmap pixmap(":/images/splashscreen.png");
 
         splash = new QSplashScreen(pixmap);
@@ -589,6 +1181,16 @@ int main(int argc, char *argv[])
             qapp.exit(success ? 0 : 1);
         });
         selfTest->start();
+    } else if (rissetDependencySelfTest) {
+        auto *selfTest = new RissetDependencySelfTest(
+                    csoundQt, rissetDependencyCsd, rissetSelfTestReport);
+        QObject::connect(selfTest, &RissetDependencySelfTest::finished, &qapp,
+                         [&qapp](bool success) {
+            qInfo() << "Risset dependency self test: asking the application "
+                       "to exit with" << (success ? 0 : 1);
+            qapp.exit(success ? 0 : 1);
+        });
+        selfTest->start();
     }
 
     if(autoplay && !fileNames.isEmpty()) {
@@ -605,7 +1207,7 @@ int main(int argc, char *argv[])
     // QDEBUG << "Starting qapp exec";
     
     result = qapp.exec();
-    if (rissetSelfTest) {
+    if (anyRissetSelfTest) {
         qInfo() << "Risset self test: event loop returned" << result;
         // The self test must not hang in Csound/Qt teardown on CI. Everything
         // that matters has been written to the report at this point.

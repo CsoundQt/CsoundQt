@@ -145,6 +145,13 @@ The source and binaries can be downloaded from:
   `risset info --full` output. `--self-test-risset-report FILE` chooses the
   report path. The test is opt-in in CI because it uses external network
   services.
+* `--self-test-risset-dependencies FILE` starts with risset uninstalled and
+  checks the complete dependency workflow: it verifies that FILE's klib
+  opcodes are detected without a `<CsMeta>` declaration, installs risset from
+  the banner, checks the filtered **Install Plugins** window, installs klib
+  through it, and runs FILE with `-n` to confirm that it compiles and
+  completes without errors. The CI job runs this on Linux, macOS and Windows
+  when the opt-in risset test is enabled.
 * `tests/run-tests.sh` covers the risset discovery paths, the bundled opcode
   map and opcode-usage detection (including comments, strings, UDOs, variables
   and line numbers), and opcode-tree reloading without duplicate or stale

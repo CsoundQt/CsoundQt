@@ -745,6 +745,7 @@ CsoundQt::CsoundQt(QStringList fileNames, bool noRecentFiles,
     documentCentralLayout->setSpacing(0);
 
     m_pluginDependencyBanner = new QFrame(m_documentCentralWidget);
+    m_pluginDependencyBanner->setObjectName(u"pluginDependencyBanner"_s);
     m_pluginDependencyBanner->setFrameShape(QFrame::StyledPanel);
     auto *dependencyBannerRow = new QHBoxLayout(m_pluginDependencyBanner);
     dependencyBannerRow->setContentsMargins(8, 6, 4, 6);
@@ -753,18 +754,24 @@ CsoundQt::CsoundQt(QStringList fileNames, bool noRecentFiles,
     dependencyBannerLayout->setContentsMargins(0, 0, 0, 0);
     dependencyBannerLayout->setSpacing(4);
     m_pluginDependencyLabel = new QLabel(m_pluginDependencyBanner);
+    m_pluginDependencyLabel->setObjectName(u"pluginDependencyLabel"_s);
     m_pluginDependencyLabel->setWordWrap(true);
     dependencyBannerLayout->addWidget(m_pluginDependencyLabel);
     m_pluginDependencyUnavailableLabel = new QLabel(m_pluginDependencyBanner);
+    m_pluginDependencyUnavailableLabel->setObjectName(
+                u"pluginDependencyUnavailableLabel"_s);
     m_pluginDependencyUnavailableLabel->setWordWrap(true);
     m_pluginDependencyUnavailableLabel->hide();
     dependencyBannerLayout->addWidget(m_pluginDependencyUnavailableLabel);
     m_installPluginsButton = new QPushButton(tr("Install Plugins"),
                                              m_pluginDependencyBanner);
+    m_installPluginsButton->setObjectName(u"pluginDependencyInstallButton"_s);
     dependencyBannerLayout->addWidget(m_installPluginsButton, 0, Qt::AlignLeft);
     dependencyBannerRow->addLayout(dependencyBannerLayout, 1);
 
     m_pluginDependencyCloseButton = new QToolButton(m_pluginDependencyBanner);
+    m_pluginDependencyCloseButton->setObjectName(
+                u"pluginDependencyCloseButton"_s);
     m_pluginDependencyCloseButton->setText(u"\u00d7"_s);
     m_pluginDependencyCloseButton->setAutoRaise(true);
     m_pluginDependencyCloseButton->setFocusPolicy(Qt::NoFocus);
