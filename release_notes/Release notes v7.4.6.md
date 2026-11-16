@@ -139,10 +139,6 @@ The source and binaries can be downloaded from:
   channels (Never, Cursor only, Mouse only, Full), and three modes for marking
   editor lines that reference a selected widget's channels or name. Marks can
   be pinned with Ctrl+Shift+J and cleared with Esc.
-* **External plugin opcodes:** opcodes discovered through Risset's
-  `opcodes.xml` now become part of syntax highlighting in already-open
-  editors as soon as Risset detection finishes, instead of waiting for a
-  restart.
 * **Faster large documents:** syntax rehighlighting suspends the document
   layout, reducing loading a large file by a factor of 30x. The highlighter 
   itself was optimised, the Inspector is debounced, and widget edit mode now 
@@ -218,45 +214,6 @@ The source and binaries can be downloaded from:
 * **Wayland:** Qt Quick uses its software scene graph on Wayland, so opening
   the virtual MIDI keyboard no longer slows down widget painting or leaves the
   main window inactive.
-* **Plugins window:** File → Plugins shows whether risset is available. When it
-  is not, the window can install risset with uv into the user's CsoundQt data
-  directory without administrator rights. External plugin opcodes are added to
-  the editor's syntax highlighting once risset detection finishes. Risset is
-  detected only through the managed executable or a `risset` script on `PATH`;
-  CsoundQt no longer probes system Python modules.
-* **Plugin manager:** once risset is installed, the Plugins window lists the
-  plugins that have a binary for the current platform and Csound version. The
-  window shows a spinner while it checks risset and loads the list; the table
-  appears only when the data is ready. Each row shows the name, installed
-  state and installed version, the latest version, short description, an
-  **Info** button that opens `risset show` output, and an upgrade checkbox for
-  installed plugins with a newer compatible version. Plugins without an
-  upgrade get no checkbox, and the Upgrade column is hidden entirely when no
-  plugin can be upgraded. An extra **All** row selects every available upgrade.
-  Only the install/upgrade checkboxes are interactive. In Fusion dark the table
-  rows use a slightly lighter background so the native checkbox stays visible;
-  all other styles keep their native table appearance. Checking or unchecking
-  a row and pressing **Apply** or **OK** installs, removes or upgrades the
-  plugin; **Cancel** discards the changes. Apply stays disabled while there is
-  nothing to do. After an update, risset's `opcodes.xml` is regenerated and the
-  editor's opcode highlighter, completion data and opcode insert bar are
-  refreshed, so newly installed opcodes appear and removed ones disappear.
-  **Update** runs `risset update`; **Update Documentation** runs
-  `risset makedocs`. CSDs can declare required plugins in a TOML `plugins`
-  array inside `<CsMeta>`. Without such a declaration, plugin opcodes used in
-  the orchestra are matched against an opcode map bundled with CsoundQt, so
-  missing plugins are still detected, even before risset is installed. The
-  banner names up to three triggering opcodes per plugin with their line
-  numbers. If all dependencies are available, **Install Plugins** opens a
-  filtered dialog with the missing plugins preselected; if any have no
-  compatible binary, the banner identifies them and offers **Manage Plugins**
-  instead. The banner can be dismissed with its close button. Risset commands
-  show output in a collapsible panel.
-* **risset 4 command line:** generating `opcodes.xml` now uses
-  `risset dev opcodesxml --outfile <path>`, the order required by risset 4. The
-  previous argument order is tried as a fallback for older installations. With
-  risset 4.0.1 the old order made detection succeed but left the plugin opcodes
-  unloaded.
 * **Read-only and detached windows** keep their own themed menu bar and
   toolbar; Test Audio Setup opens the AudioMidiTest example in widget-only
   mode.
@@ -276,9 +233,6 @@ The source and binaries can be downloaded from:
 * The bundled examples were modernized for Csound 7 and the current widget
   format. Obsolete or broken examples were removed, and the McCurdy haikus
   were reorganized.
-* The Examples menu now honours an optional `.order` file in any example
-  folder. It lists the folder's files and subfolders one per line in the
-  desired menu order; entries it does not mention follow alphabetically.
 
 ### Removed or changed
 
@@ -312,17 +266,9 @@ The source and binaries can be downloaded from:
   descriptions and transitory methods.
 * `tests/run-tests.sh` builds and runs the standalone QtTest suites and
   benchmarks in CI, including the Markdown renderer, embedded files, scanner,
-  Inspector, bracket matcher, Go to Source and external launcher. A new
-  `risset` test covers the managed plugin paths, script-only detection, the
-  absence of a Python-module fallback and the `opcodes.xml` command line. On
-  macOS arm64 the script forces `<arm_acle.h>` into the compiler, because Qt
-  up to 6.10.3 calls `__yield()` from `qyieldcpu.h` without including it.
-* The opt-in `workflow_dispatch` test in `testbuild-qt6.yml` runs the built
-  CsoundQt with `--self-test-risset-install` on Linux, macOS and Windows. The
-  application itself downloads uv, installs risset into a throw-away data
-  directory through the Plugins window code, waits for its own re-detection
-  and writes a JSON report (`risset info --full` plus the detected version and
-  executable). It is opt-in because it depends on external network services.
+  Inspector, bracket matcher, Go to Source and external launcher. On macOS
+  arm64 the script forces `<arm_acle.h>` into the compiler, because Qt up to
+  6.10.3 calls `__yield()` from `qyieldcpu.h` without including it.
 * The build layout is qmake-only: `qcs.pro` stays in the root, other project
   and `.pri` files live in `qmake/`, and third-party submodules live under
   `third_party/`. RtMidi is bundled and enabled by default, recording is
