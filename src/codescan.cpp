@@ -32,12 +32,12 @@ constexpr int MAX_INCLUDE_DEPTH = 16;
 
 bool isNameChar(QChar c)
 {
-    return c.isLetterOrNumber() || c == QLatin1Char('_');
+    return c.isLetterOrNumber() || c == '_'_L1;
 }
 
 bool isNameStart(QChar c)
 {
-    return c.isLetter() || c == QLatin1Char('_');
+    return c.isLetter() || c == '_'_L1;
 }
 
 // The type characters of Csound variables, as in gkFoo or gSFoo.
@@ -115,7 +115,7 @@ void collectTypedVariables(QStringView statement, int indent,
         // "label: statement" is a label, not a typed variable. Typed
         // declarations are written without a space after the colon.
         const int colon = static_cast<int>(statement.indexOf(
-                    QLatin1Char(':'), match.capturedEnd(1)));
+                    ':'_L1, match.capturedEnd(1)));
         if (nameStart == 0 && colon >= 0 && colon + 1 < statement.size()
                 && statement.at(colon + 1).isSpace()) {
             continue;
@@ -131,7 +131,7 @@ bool addLegacyVariable(QStringView token, int column, int lineIndex,
                        const QString &file, Definition &definition)
 {
     QString name = token.toString().trimmed();
-    if (name.isEmpty() || name.contains(QLatin1Char(':')))
+    if (name.isEmpty() || name.contains(':'_L1))
         return false;
     bool array = name.endsWith(u"[]"_s);
     if (array)
@@ -143,11 +143,11 @@ bool addLegacyVariable(QStringView token, int column, int lineIndex,
             return false;
     }
     int typeIndex = 0;
-    if (name.size() > 1 && name.at(0) == QLatin1Char('g')
+    if (name.size() > 1 && name.at(0) == 'g'_L1
             && isTypeChar(name.at(1))) {
         typeIndex = 1;
     }
-    else if (name.size() > 1 && name.at(0) == QLatin1Char('g')) {
+    else if (name.size() > 1 && name.at(0) == 'g'_L1) {
         // An untyped g-prefixed name is not a variable, but might be a UDO.
         return false;
     }
@@ -192,7 +192,7 @@ void collectClassicOutputs(QStringView statement, int indent, int lineIndex,
             break;
         const int start = position;
         while (position < text.size() && !text.at(position).isSpace()
-               && text.at(position) != QLatin1Char(',')) {
+               && text.at(position) != ','_L1) {
             ++position;
         }
         const QString token = text.mid(start, position - start);
@@ -204,7 +204,7 @@ void collectClassicOutputs(QStringView statement, int indent, int lineIndex,
             ++position;
         // Further output variables have to be separated by a comma. Once only
         // whitespace follows, the next word is the opcode, not another output.
-        if (position < text.size() && text.at(position) == QLatin1Char(','))
+        if (position < text.size() && text.at(position) == ','_L1)
             ++position;
         else
             break;
@@ -218,7 +218,7 @@ void collectLegacyVariables(QStringView statement, int indent, int lineIndex,
     const QRegularExpressionMatch assignment = assignmentRx.match(code);
     if (assignment.hasMatch()) {
         const QString lhs = code.left(assignment.capturedStart());
-        const QStringList targets = lhs.split(QLatin1Char(','));
+        const QStringList targets = lhs.split(','_L1);
         for (QString target : targets) {
             target = target.trimmed();
             const QStringList words = target.split(
@@ -269,7 +269,7 @@ void collectLocalVariables(QStringView statement, int indent,
 QStringView withoutComment(QStringView line)
 {
     qsizetype cut = -1;
-    const qsizetype semicolon = line.indexOf(QLatin1Char(';'));
+    const qsizetype semicolon = line.indexOf(';'_L1);
     if (semicolon >= 0)
         cut = semicolon;
     const qsizetype slashes = line.indexOf(u"//"_s);
@@ -299,7 +299,7 @@ bool startsWithKeyword(QStringView text, QStringView keyword)
 // and the scanner deliberately keeps the directive syntax strict.
 bool isDirective(QStringView code, QStringView name)
 {
-    if (!code.startsWith(QLatin1Char('#')))
+    if (!code.startsWith('#'_L1))
         return false;
     const QStringView rest = code.mid(1);
     if (!rest.startsWith(name))
@@ -311,7 +311,7 @@ bool isDirective(QStringView code, QStringView name)
 // "# define" is deliberately not a directive.
 QStringView directiveName(QStringView code)
 {
-    if (!code.startsWith(QLatin1Char('#')))
+    if (!code.startsWith('#'_L1))
         return QStringView();
     qsizetype end = 1;
     while (end < code.size() && isNameChar(code.at(end)))
@@ -349,10 +349,10 @@ bool isIncludeGuardStart(const QVector<QStringView> &lines, int index,
 
     for (int j = index + 1; j < lines.size(); ++j) {
         const QStringView next = lines.at(j).trimmed();
-        if (next.isEmpty() || next.startsWith(QLatin1Char(';'))
+        if (next.isEmpty() || next.startsWith(';'_L1)
                 || next.startsWith(u"//"_s))
             continue;
-        if (!next.startsWith(QLatin1Char('#')))
+        if (!next.startsWith('#'_L1))
             return false;
         const QStringView define = withoutComment(next);
         if (!isDirective(define, u"define"_s))
@@ -371,11 +371,11 @@ bool isIncludeGuardStart(const QVector<QStringView> &lines, int index,
 QString parameterNames(const QString &parameters)
 {
     QStringList names;
-    for (const QString &parameter : parameters.split(QLatin1Char(','))) {
+    for (const QString &parameter : parameters.split(','_L1)) {
         const QString trimmed = parameter.trimmed();
         if (trimmed.isEmpty())
             continue;
-        const qsizetype colon = trimmed.indexOf(QLatin1Char(':'));
+        const qsizetype colon = trimmed.indexOf(':'_L1);
         names.append((colon > 0 ? trimmed.left(colon) : trimmed).trimmed());
     }
     return names.join(u", "_s);
@@ -461,10 +461,10 @@ QString readDocstring(const QVector<QStringView> &lines, int declarationLine)
         }
         if (line.startsWith(indent))
             line.remove(0, indent.size());
-        while (line.endsWith(QLatin1Char(' ')) || line.endsWith(QLatin1Char('\t')))
+        while (line.endsWith(' '_L1) || line.endsWith('\t'_L1))
             line.chop(1);
     }
-    return body.join(QLatin1Char('\n'));
+    return body.join('\n'_L1);
 }
 
 // One variable of a p-field assignment, with the field it takes: "ifoo" and
@@ -483,13 +483,13 @@ QString variableField(const QString &variable, int pField)
     QString type = match.captured(2);
     if (type.isEmpty()) {
         const qsizetype prefix =
-                name.startsWith(QLatin1Char('g')) && name.size() > 1 ? 1 : 0;
+                name.startsWith('g'_L1) && name.size() > 1 ? 1 : 0;
         if (prefix >= name.size() || !isTypeChar(name.at(prefix)))
             return QString();
         type = QString(name.at(prefix));
     }
-    return name + QLatin1Char(':') + type + u"(p"_s
-            + QString::number(pField) + QLatin1Char(')');
+    return name + ':'_L1 + type + u"(p"_s
+            + QString::number(pField) + ')'_L1;
 }
 
 // The p-fields of a direct assignment inside an instrument, as shown in its
@@ -523,7 +523,7 @@ QStringList pAssignmentFields(QStringView statement)
         if (pField < 1)
             return QStringList();
         QStringList fields;
-        for (const QString &variable : match.captured(1).split(QLatin1Char(','))) {
+        for (const QString &variable : match.captured(1).split(','_L1)) {
             const QString field = variableField(variable, pField++);
             if (field.isEmpty())
                 return QStringList();
@@ -534,8 +534,8 @@ QStringList pAssignmentFields(QStringView statement)
 
     if (!(match = assignmentRx.matchView(statement)).hasMatch())
         return QStringList();
-    const QStringList variables = match.captured(1).split(QLatin1Char(','));
-    const QStringList values = match.captured(2).split(QLatin1Char(','));
+    const QStringList variables = match.captured(1).split(','_L1);
+    const QStringList values = match.captured(2).split(','_L1);
     // Each variable takes the p-field at the same position; a line that does
     // not pair them one to one is not a plain parameter list.
     if (variables.size() != values.size())
@@ -559,7 +559,7 @@ QStringList pAssignmentFields(QStringView statement)
 // can assign a variable more than once; its parameter is the first assignment.
 QString fieldVariable(const QString &field)
 {
-    const qsizetype colon = field.indexOf(QLatin1Char(':'));
+    const qsizetype colon = field.indexOf(':'_L1);
     return colon < 0 ? field : field.left(colon);
 }
 
@@ -567,7 +567,7 @@ QString fieldVariable(const QString &field)
 QStringList nameList(const QString &names)
 {
     QStringList result;
-    for (const QString &name : names.split(QLatin1Char(','))) {
+    for (const QString &name : names.split(','_L1)) {
         const QString trimmed = name.trimmed();
         if (!trimmed.isEmpty())
             result.append(trimmed);
@@ -595,11 +595,11 @@ QStringList typeList(const QString &types)
     QString text = types.trimmed();
     if (text == u"0"_s)
         return QStringList();
-    if (text.startsWith(QLatin1Char('(')) && text.endsWith(QLatin1Char(')')))
+    if (text.startsWith('('_L1) && text.endsWith(')'_L1))
         text = text.mid(1, text.size() - 2);
 
     QStringList result;
-    for (const QString &part : text.split(QLatin1Char(','))) {
+    for (const QString &part : text.split(','_L1)) {
         const QString type = part.trimmed();
         if (type.isEmpty())
             continue;
@@ -629,17 +629,17 @@ QString parameterType(QString type)
     QChar replacement;
     int defaultValue = 0;
     switch (type.at(0).unicode()) {
-    case 'o': replacement = QLatin1Char('i'); defaultValue = 0; break;
-    case 'O': replacement = QLatin1Char('k'); defaultValue = 0; break;
-    case 'j': replacement = QLatin1Char('i'); defaultValue = -1; break;
-    case 'J': replacement = QLatin1Char('k'); defaultValue = -1; break;
-    case 'p': replacement = QLatin1Char('i'); defaultValue = 1; break;
-    case 'P': replacement = QLatin1Char('k'); defaultValue = 1; break;
+    case 'o': replacement = 'i'_L1; defaultValue = 0; break;
+    case 'O': replacement = 'k'_L1; defaultValue = 0; break;
+    case 'j': replacement = 'i'_L1; defaultValue = -1; break;
+    case 'J': replacement = 'k'_L1; defaultValue = -1; break;
+    case 'p': replacement = 'i'_L1; defaultValue = 1; break;
+    case 'P': replacement = 'k'_L1; defaultValue = 1; break;
     default:
         return type;
     }
     return QString(replacement) + type.mid(1)
-            + QLatin1Char('=') + QString::number(defaultValue);
+            + '='_L1 + QString::number(defaultValue);
 }
 
 // A Csound 7 parameter list with the optional types made explicit:
@@ -647,16 +647,16 @@ QString parameterType(QString type)
 QString parameterList(const QString &parameters)
 {
     QStringList result;
-    for (const QString &parameter : parameters.split(QLatin1Char(','))) {
+    for (const QString &parameter : parameters.split(','_L1)) {
         const QString trimmed = parameter.trimmed();
         if (trimmed.isEmpty())
             continue;
-        const qsizetype colon = trimmed.indexOf(QLatin1Char(':'));
+        const qsizetype colon = trimmed.indexOf(':'_L1);
         if (colon < 0) {
             result.append(trimmed);
             continue;
         }
-        result.append(trimmed.left(colon).trimmed() + QLatin1Char(':')
+        result.append(trimmed.left(colon).trimmed() + ':'_L1
                       + parameterType(trimmed.mid(colon + 1).trimmed()));
     }
     return result.join(u", "_s);
@@ -687,7 +687,7 @@ QString variablesWithTypes(const QStringList &variables, const QStringList &type
         const QString variable = i < variables.size() ? variables.at(i) : QString();
         const QString type = i < types.size() ? types.at(i) : QString();
         if (!variable.isEmpty() && !type.isEmpty())
-            pairs.append(variable + QLatin1Char(':') + type);
+            pairs.append(variable + ':'_L1 + type);
         else if (!variable.isEmpty())
             pairs.append(variable);
         else
@@ -703,16 +703,16 @@ QString buildCallSignature(const Definition &udo)
 {
     QString signature = udo.name;
     if (udo.newStyle) {
-        signature += QLatin1Char('(') + parameterList(udo.signatureParams)
-                + QLatin1Char(')');
+        signature += '('_L1 + parameterList(udo.signatureParams)
+                + ')'_L1;
     }
     else {
         QStringList inputTypes;
         for (const QString &type : typeList(udo.inTypes))
             inputTypes.append(parameterType(type));
-        signature += QLatin1Char('(')
+        signature += '('_L1
                 + variablesWithTypes(nameList(udo.inArgs), inputTypes)
-                + QLatin1Char(')');
+                + ')'_L1;
     }
 
     // An xout expression has no variable name to show, only its type.
@@ -751,8 +751,8 @@ void addDefinition(QStringView line, QStringView code, const CsoundLex::Line &le
     if (code.isEmpty())
         return;
     const QChar first = code.at(0);
-    if (first != QLatin1Char('o') && first != QLatin1Char('i')
-            && first != QLatin1Char('s') && first != QLatin1Char('#'))
+    if (first != 'o'_L1 && first != 'i'_L1
+            && first != 's'_L1 && first != '#'_L1)
         return;
 
     Kind kind;
@@ -769,7 +769,7 @@ void addDefinition(QStringView line, QStringView code, const CsoundLex::Line &le
         kind = Kind::Struct;
         pos = 6;
     }
-    else if (code.startsWith(QLatin1Char('#'))) {
+    else if (code.startsWith('#'_L1)) {
         kind = Kind::Macro;
         if (!isDirective(code, u"define"_s))
             return;
@@ -827,17 +827,17 @@ bool parseInclude(QStringView code, IncludeSpec *spec)
         return false;
     const QChar open = code.at(pos);
     QChar close;
-    if (open == QLatin1Char('"'))
-        close = QLatin1Char('"');
-    else if (open == QLatin1Char('<'))
-        close = QLatin1Char('>');
+    if (open == '"'_L1)
+        close = '"'_L1;
+    else if (open == '<'_L1)
+        close = '>'_L1;
     else
         return false;
     const qsizetype end = code.indexOf(close, pos + 1);
     if (end < 0)
         return false;
     spec->name = code.mid(pos + 1, end - pos - 1).toString().trimmed();
-    spec->angled = open == QLatin1Char('<');
+    spec->angled = open == '<'_L1;
     return !spec->name.isEmpty();
 }
 
@@ -848,7 +848,7 @@ QVector<QStringView> splitLines(QStringView text)
     QVector<QStringView> lines;
     qsizetype start = 0;
     for (;;) {
-        const qsizetype newline = text.indexOf(QLatin1Char('\n'), start);
+        const qsizetype newline = text.indexOf('\n'_L1, start);
         if (newline < 0) {
             lines.append(text.mid(start));
             break;
@@ -885,7 +885,7 @@ void scanDocument(Result &result, Accumulator &accumulator, const QString &text,
     if (mode == Mode::Csd) {
         int tagLine = -1;
         for (int i = 0; i < lineCount; ++i) {
-            if (lines.at(i).contains(QLatin1Char('<'))
+            if (lines.at(i).contains('<'_L1)
                     && orcStartRx.matchView(lines.at(i)).hasMatch()) {
                 tagLine = i;
                 break;
@@ -894,7 +894,7 @@ void scanDocument(Result &result, Accumulator &accumulator, const QString &text,
         if (tagLine < 0) {
             // No orchestra section: the document may still have a score.
             for (int i = 0; i < lineCount; ++i) {
-                if (lines.at(i).contains(QLatin1Char('<'))
+                if (lines.at(i).contains('<'_L1)
                         && scoreRx.matchView(lines.at(i)).hasMatch()) {
                     result.scoreLine = i + 1;
                     break;
@@ -907,13 +907,13 @@ void scanDocument(Result &result, Accumulator &accumulator, const QString &text,
             result.orchestraLine = first + 1;
         // The section ends at the first tag line after it.
         for (int i = first; i < lineCount; ++i) {
-            if (lines.at(i).trimmed().startsWith(QLatin1Char('<'))) {
+            if (lines.at(i).trimmed().startsWith('<'_L1)) {
                 last = i;
                 break;
             }
         }
         for (int i = last; i < lineCount; ++i) {
-            if (lines.at(i).contains(QLatin1Char('<'))
+            if (lines.at(i).contains('<'_L1)
                     && scoreRx.matchView(lines.at(i)).hasMatch()) {
                 result.scoreLine = i + 1;
                 break;
@@ -1072,10 +1072,10 @@ void scanDocument(Result &result, Accumulator &accumulator, const QString &text,
         //
         // Global variables are found by hand rather than with a regex: this
         // runs on every header line of every scan.
-        if (line.contains(QLatin1Char('g'))) {
+        if (line.contains('g'_L1)) {
             const int length = static_cast<int>(line.size());
             for (int k = 0; k + 1 < length; ++k) {
-                if (line.at(k) != QLatin1Char('g'))
+                if (line.at(k) != 'g'_L1)
                     continue;
                 // A name starts at a word boundary: it must not continue an
                 // identifier.
@@ -1090,12 +1090,12 @@ void scanDocument(Result &result, Accumulator &accumulator, const QString &text,
                     continue;
                 const QString name = line.mid(k, end - k).toString();
                 accumulator.globalVariables.insert(name);
-                if (name.size() > 1 && name.at(1) == QLatin1Char('S'))
+                if (name.size() > 1 && name.at(1) == 'S'_L1)
                     accumulator.globalStringVariables.insert(name);
                 k = end - 1;
             }
         }
-        if (line.contains(QLatin1Char('@'))) {
+        if (line.contains('@'_L1)) {
             for (auto it = annotatedGlobalRx.globalMatchView(line); it.hasNext(); ) {
                 const QRegularExpressionMatch match = it.next();
                 if (!CsoundLex::isCode(lex, static_cast<int>(match.capturedStart(1))))
@@ -1107,7 +1107,7 @@ void scanDocument(Result &result, Accumulator &accumulator, const QString &text,
                     accumulator.globalStringVariables.insert(name);
             }
         }
-        if (line.contains(QLatin1Char(':'))) {
+        if (line.contains(':'_L1)) {
             for (auto it = annotatedLocalRx.globalMatchView(line); it.hasNext(); ) {
                 const QRegularExpressionMatch match = it.next();
                 if (CsoundLex::isCode(lex, static_cast<int>(match.capturedStart(1))))
@@ -1125,8 +1125,8 @@ void scanDocument(Result &result, Accumulator &accumulator, const QString &text,
         if (startsWithKeyword(statement, u"instr"_s)) {
             const QStringView instrText = statement.mid(5).trimmed();
             QStringView instrName = instrText;
-            if (instrName.startsWith(QLatin1Char('"'))) {
-                const qsizetype close = instrName.indexOf(QLatin1Char('"'), 1);
+            if (instrName.startsWith('"'_L1)) {
+                const qsizetype close = instrName.indexOf('"'_L1, 1);
                 instrName = close > 0 ? instrName.mid(1, close - 1) : instrName.mid(1);
             }
             else if (const QRegularExpressionMatch nameMatch =
@@ -1176,12 +1176,12 @@ void scanDocument(Result &result, Accumulator &accumulator, const QString &text,
             else {
                 // Classic form: "opcode Name, outtypes, intypes".
                 const QStringList parts =
-                        definition.text.split(QLatin1Char(','), Qt::SkipEmptyParts);
+                        definition.text.split(','_L1, Qt::SkipEmptyParts);
                 if (parts.size() >= 2)
                     definition.outTypes = parts.at(1).trimmed();
                 if (parts.size() >= 3)
                     definition.inTypes = QStringList(parts.mid(2))
-                            .join(QLatin1Char(',')).trimmed();
+                            .join(','_L1).trimmed();
             }
             definition.docstring = readDocstring(lines, i);
             result.udos.append(definition);
@@ -1303,10 +1303,10 @@ QString docstringAbstract(const QString &docstring)
 {
     const QString text = docstring.trimmed();
     qsizetype end = text.size();
-    const qsizetype period = text.indexOf(QLatin1Char('.'));
+    const qsizetype period = text.indexOf('.'_L1);
     if (period >= 0)
         end = qMin(end, period);
-    const qsizetype newline = text.indexOf(QLatin1Char('\n'));
+    const qsizetype newline = text.indexOf('\n'_L1);
     if (newline >= 0)
         end = qMin(end, newline);
     // The delimiter itself is not part of the abstract.
@@ -1356,7 +1356,7 @@ Result scan(const QString &text, Mode mode, IncludeProvider *includes,
     // its body. Anonymous (numeric) instruments have no name to show.
     for (Definition &instrument : result.instruments) {
         if (!instrument.name.isEmpty() && !instrument.pFields.isEmpty())
-            instrument.callSignature = instrument.name + QLatin1Char(' ')
+            instrument.callSignature = instrument.name + ' '_L1
                     + instrument.pFields.join(u", "_s);
     }
 

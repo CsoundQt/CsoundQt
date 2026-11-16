@@ -23,6 +23,7 @@
 #include <QRadialGradient>
 #include <QConicalGradient>
 #include <QDebug>
+using namespace Qt::StringLiterals;
 
 using namespace litehtml;
 
@@ -81,7 +82,7 @@ uint_ptr LiteHtmlContainer::create_font(const font_description &descr, const doc
     fd->descent = fmtr.descent();
     fd->height  = fmtr.height();
     fd->xHeight = fmtr.xHeight();
-    fd->chWidth = fmtr.horizontalAdvance(QStringLiteral("0"));
+    fd->chWidth = fmtr.horizontalAdvance(u"0"_s);
 
     if (fm)
     {

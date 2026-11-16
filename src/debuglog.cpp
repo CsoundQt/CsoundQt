@@ -40,6 +40,7 @@
 #  endif
 #  include <windows.h>
 #endif
+using namespace Qt::StringLiterals;
 
 namespace DebugLog {
 
@@ -87,18 +88,18 @@ QString filePath()
 #if defined(Q_OS_LINUX)
     QString stateHome = qEnvironmentVariable("XDG_STATE_HOME");
     if (stateHome.isEmpty())
-        stateHome = QDir::homePath() + QStringLiteral("/.local/state");
-    return QDir(stateHome).filePath(QStringLiteral("csoundqt/csoundqt.log"));
+        stateHome = QDir::homePath() + u"/.local/state"_s;
+    return QDir(stateHome).filePath(u"csoundqt/csoundqt.log"_s);
 #elif defined(Q_OS_MACOS)
-    return QDir::homePath() + QStringLiteral("/Library/Logs/CsoundQt/csoundqt.log");
+    return QDir::homePath() + u"/Library/Logs/CsoundQt/csoundqt.log"_s;
 #elif defined(Q_OS_WIN)
     QString base = qEnvironmentVariable("LOCALAPPDATA");
     if (base.isEmpty())
         base = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
-    return QDir(base).filePath(QStringLiteral("CsoundQt/csoundqt.log"));
+    return QDir(base).filePath(u"CsoundQt/csoundqt.log"_s);
 #else
     return QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))
-            .filePath(QStringLiteral("csoundqt.log"));
+            .filePath(u"csoundqt.log"_s);
 #endif
 }
 
@@ -136,7 +137,7 @@ void setEnabled(bool enabled)
                      qPrintable(path), qPrintable(g_file.errorString()));
         return;
     }
-    const QString header = QStringLiteral("--**-- %1 CsoundQt debug log started\n")
+    const QString header = u"--**-- %1 CsoundQt debug log started\n"_s
             .arg(QDateTime::currentDateTime().toString(Qt::ISODate));
     g_file.write(header.toUtf8());
     g_file.flush();

@@ -45,14 +45,14 @@ QString parseName(const QString &header)
     if (pos >= header.size())
         return QString();
 
-    if (header.at(pos) == QLatin1Char('"')) {
-        const int close = header.indexOf(QLatin1Char('"'), pos + 1);
+    if (header.at(pos) == '"'_L1) {
+        const int close = header.indexOf('"'_L1, pos + 1);
         if (close < 0)
             return QString();
         return header.mid(pos + 1, close - pos - 1);
     }
 
-    const int close = header.indexOf(QLatin1Char('>'), pos);
+    const int close = header.indexOf('>'_L1, pos);
     if (close < 0)
         return header.mid(pos).trimmed();
     return header.mid(pos, close - pos).trimmed();
@@ -83,7 +83,7 @@ QVector<EmbeddedFile> parse(const QString &text)
         if (start < 0)
             break;
 
-        const int headerEnd = text.indexOf(QLatin1Char('>'), start);
+        const int headerEnd = text.indexOf('>'_L1, start);
         if (headerEnd < 0)
             break;
 
@@ -94,9 +94,9 @@ QVector<EmbeddedFile> parse(const QString &text)
         int blockEnd = close + kCloseTagLength;
         // Keep the line break that follows the block, so concatenating the
         // original raw blocks reproduces the source text exactly.
-        if (blockEnd < text.size() && text.at(blockEnd) == QLatin1Char('\r'))
+        if (blockEnd < text.size() && text.at(blockEnd) == '\r'_L1)
             ++blockEnd;
-        if (blockEnd < text.size() && text.at(blockEnd) == QLatin1Char('\n'))
+        if (blockEnd < text.size() && text.at(blockEnd) == '\n'_L1)
             ++blockEnd;
 
         EmbeddedFile file;
@@ -117,8 +117,8 @@ QString serialize(const QVector<EmbeddedFile> &files)
     QString text;
     for (const EmbeddedFile &file : files) {
         text += file.rawBlock;
-        if (!text.endsWith(QLatin1Char('\n')))
-            text += QLatin1Char('\n');
+        if (!text.endsWith('\n'_L1))
+            text += '\n'_L1;
     }
     return text;
 }
@@ -129,7 +129,7 @@ QString makeBlock(const QString &name, const QByteArray &data)
     const QByteArray base64 = data.toBase64();
     for (int i = 0; i < base64.size(); i += kBase64LineWidth) {
         block += QString::fromLatin1(base64.mid(i, kBase64LineWidth));
-        block += QLatin1Char('\n');
+        block += '\n'_L1;
     }
     block += u"</CsFileB>\n"_s;
     return block;
@@ -243,7 +243,7 @@ qint64 decodedSize(const QString &base64)
         const QChar c = base64.at(i);
         if (c.isSpace())
             continue;
-        if (c == QLatin1Char('='))
+        if (c == '='_L1)
             ++padding;
         else
             break;

@@ -135,7 +135,7 @@ static QString extractArticle(const QString &html)
     // ancestors. mkdocs-material indents lists and blockquotes only via
     // [dir=ltr]-scoped selectors (e.g. "[dir=ltr] .md-typeset ul"), so the
     // wrapper must carry dir="ltr" for nested lists to be indented.
-    return QStringLiteral("<div dir=\"ltr\">") + art + QStringLiteral("</div>");
+    return u"<div dir=\"ltr\">"_s + art + u"</div>"_s;
 }
 
 static QString findSiteRoot(const QString &file)

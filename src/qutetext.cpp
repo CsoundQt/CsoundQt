@@ -32,6 +32,7 @@
 #include <math.h>
 
 #define USEFONTPIXELSIZE
+using namespace Qt::StringLiterals;
 
 // Parse a printf-style format used by a Display widget. Exactly one numeric
 // conversion is allowed; %% pairs are literal percent signs. The conversion
@@ -52,7 +53,7 @@ static bool parseDisplayFormat(const QString &format, QChar *conversion = nullpt
         if (++conversions > 1)
             return false;
         int j = i + 1;
-        while (j < format.size() && QStringLiteral("-+ #0").contains(format.at(j)))
+        while (j < format.size() && u"-+ #0"_s.contains(format.at(j)))
             ++j;
         while (j < format.size() && format.at(j).isDigit())
             ++j;
@@ -64,7 +65,7 @@ static bool parseDisplayFormat(const QString &format, QChar *conversion = nullpt
         if (j >= format.size())
             return false;
         const QChar c = format.at(j);
-        if (!QStringLiteral("diouxXfFeEgGaA").contains(c))
+        if (!u"diouxXfFeEgGaA"_s.contains(c))
             return false;
         if (conversion != nullptr)
             *conversion = c;
@@ -1095,7 +1096,7 @@ void QuteText::createPropertiesDialog()
             const bool empty = fmt.trimmed().isEmpty();
             const bool valid = empty || parseDisplayFormat(fmt, &conversion);
             formatLineEdit->setStyleSheet(valid ? QString()
-                                                : QStringLiteral("color: red;"));
+                                                : u"color: red;"_s);
             if (!valid) {
                 QMessageBox::warning(
                             dialog, tr("Invalid format"),
@@ -1109,7 +1110,7 @@ void QuteText::createPropertiesDialog()
         QChar conversion;
         if (!initialFormat.trimmed().isEmpty()
                 && !parseDisplayFormat(initialFormat, &conversion)) {
-            formatLineEdit->setStyleSheet(QStringLiteral("color: red;"));
+            formatLineEdit->setStyleSheet(u"color: red;"_s);
         }
         refreshPrecision();
     }

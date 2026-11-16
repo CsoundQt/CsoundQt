@@ -28,10 +28,10 @@ QStringList IncludeCache::splitPathList(const QString &value)
 		const bool atEnd = i == value.size();
 		if (!atEnd) {
 			const QChar c = value.at(i);
-			if (c != QLatin1Char(':') && c != QLatin1Char(';'))
+			if (c != ':'_L1 && c != ';'_L1)
 				continue;
 			// A drive letter colon belongs to the path: C:\foo.
-			if (c == QLatin1Char(':') && i == start + 1
+			if (c == ':'_L1 && i == start + 1
 			        && value.at(start).isLetter())
 				continue;
 		}
@@ -53,9 +53,9 @@ QStringList IncludeCache::includePathsFromOptions(const QString &optionsText,
 	        uR"RX(--env:INCDIR(\+)?=(?:"([^"]*)"|'([^']*)'|(\S+)))RX"_s);
 
 	QStringList paths = basePaths;
-	for (const QString &line : optionsText.split(QLatin1Char('\n'))) {
+	for (const QString &line : optionsText.split('\n'_L1)) {
 		const QString trimmed = line.trimmed();
-		if (trimmed.startsWith(QLatin1Char(';')) || trimmed.startsWith("//"_L1))
+		if (trimmed.startsWith(';'_L1) || trimmed.startsWith("//"_L1))
 			continue; // a commented-out option is not in effect
 		for (auto it = optionRx.globalMatch(line); it.hasNext(); ) {
 			const QRegularExpressionMatch match = it.next();
@@ -103,7 +103,7 @@ QString IncludeCache::resolvePath(const QString &spec, const QString &includingF
 	// include path list.
 	QStringList candidates;
 	if (!includingFile.isEmpty())
-		candidates.append(QFileInfo(includingFile).absolutePath() + QLatin1Char('/') + spec);
+		candidates.append(QFileInfo(includingFile).absolutePath() + '/'_L1 + spec);
 	for (const QString &directory : searchPaths)
 		candidates.append(QDir(directory).filePath(spec));
 	candidates.append(QDir::current().filePath(spec));

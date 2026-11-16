@@ -24,6 +24,7 @@
 #include "opentryparser.h"
 
 #include <QRegularExpression>
+using namespace Qt::StringLiterals;
 
 // Percentage of the original colour saturation kept by a read-only editor.
 // Lower values make the read-only state more obvious.
@@ -33,7 +34,7 @@ static constexpr int READONLY_COLOR_SATURATION_PERCENT = 25;
 static const QRegularExpression &orchestraDefinitionRx()
 {
 	static const QRegularExpression defRx(
-				QStringLiteral(R"(^[ \t]*(?:instr|opcode)\b)"),
+				uR"(^[ \t]*(?:instr|opcode)\b)"_s,
 				QRegularExpression::MultilineOption);
 	return defRx;
 }
@@ -196,7 +197,7 @@ void BaseView::setReadOnly(bool readOnly)
 	m_highlighter.setColorSaturation(readOnly ? READONLY_COLOR_SATURATION_PERCENT
 	                                          : 100);
 	const QTextCharFormat defaultFormat =
-	        m_highlighter.getFormat(QStringLiteral("default"));
+	        m_highlighter.getFormat(u"default"_s);
 	if (defaultFormat.foreground().style() != Qt::NoBrush
 	        && defaultFormat.background().style() != Qt::NoBrush) {
 		setColors(defaultFormat.foreground().color(),
@@ -328,8 +329,8 @@ void BaseView::clearFileBText()
 void BaseView::appendFileBText(QString text)
 {
 	m_filebText += text;
-	if (!m_filebText.endsWith(QLatin1Char('\n'))) {
-		m_filebText += QLatin1Char('\n');
+	if (!m_filebText.endsWith('\n'_L1)) {
+		m_filebText += '\n'_L1;
 	}
 }
 
@@ -386,7 +387,7 @@ void BaseView::setEditorPadding(int padding)
 
 void BaseView::updateLineAreaColors()
 {
-    const auto defaultFormat = m_highlighter.getFormat(QStringLiteral("default"));
+    const auto defaultFormat = m_highlighter.getFormat(u"default"_s);
     QColor foreground = defaultFormat.foreground().color();
     QColor background = defaultFormat.background().color();
     if (foreground.lightness() < background.lightness()) {
@@ -417,11 +418,11 @@ static bool cursorIsInsideQuotes(const QTextCursor &cursor)
 	bool inside = false;
 	for (int i = 0; i < column && i < line.size(); ++i) {
 		const QChar c = line.at(i);
-		if (c == QLatin1Char('\\')) {
+		if (c == '\\'_L1) {
 			++i; // skip the escaped character
 			continue;
 		}
-		if (c == QLatin1Char('"')) {
+		if (c == '"'_L1) {
 			inside = !inside;
 		}
 	}
@@ -440,7 +441,7 @@ void BaseView::insertPathAtCursor(const QString &path)
 		cursor.insertText(path);
 	}
 	else {
-		cursor.insertText(QStringLiteral("\"%1\"").arg(path));
+		cursor.insertText(u"\"%1\""_s.arg(path));
 	}
 	editor->setTextCursor(cursor);
 }
@@ -455,21 +456,21 @@ void BaseView::insertOrchestraGlobal(QString text)
 	// definition so the code still ends up in the global region.
 	auto insertAt = [](QTextCursor &cursor, const QString &document, int pos, QString text) {
 		if (pos > 0 && pos <= document.size()
-				&& document.at(pos - 1) != QLatin1Char('\n')) {
-			text.prepend(QLatin1Char('\n'));
+				&& document.at(pos - 1) != '\n'_L1) {
+			text.prepend('\n'_L1);
 		}
 		cursor.setPosition(pos);
 		cursor.insertText(text);
 		// Always keep at least one blank line between the inserted code and
 		// the first instr/opcode definition.
 		if (isDefinitionLine(cursor.block().text())) {
-			cursor.insertText(QStringLiteral("\n"));
+			cursor.insertText(u"\n"_s);
 		}
 	};
 	QTextCursor cursor = m_mainEditor->textCursor();
 	const QString document = m_mainEditor->toPlainText();
-	const int orcStart = document.indexOf(QStringLiteral("<CsInstruments>"));
-	const int orcEnd = document.indexOf(QStringLiteral("</CsInstruments>"));
+	const int orcStart = document.indexOf(u"<CsInstruments>"_s);
+	const int orcEnd = document.indexOf(u"</CsInstruments>"_s);
 	int globalStart;
 	int globalEnd;
 	if (orcStart >= 0 && orcEnd > orcStart) {
@@ -496,10 +497,10 @@ void BaseView::insertAtScoreStart(QString text)
 		return;
 	QTextCursor cursor = m_mainEditor->textCursor();
 	const QString document = m_mainEditor->toPlainText();
-	const int tagIndex = document.indexOf(QStringLiteral("<CsScore"));
+	const int tagIndex = document.indexOf(u"<CsScore"_s);
 	if (tagIndex >= 0) {
-		const int tagEnd = document.indexOf(QLatin1Char('>'), tagIndex);
-		int insertPos = tagEnd >= 0 ? document.indexOf(QLatin1Char('\n'), tagEnd) : -1;
+		const int tagEnd = document.indexOf('>'_L1, tagIndex);
+		int insertPos = tagEnd >= 0 ? document.indexOf('\n'_L1, tagEnd) : -1;
 		insertPos = insertPos >= 0 ? insertPos + 1 : tagEnd + 1;
 		cursor.setPosition(insertPos);
 	}

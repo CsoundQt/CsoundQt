@@ -26,6 +26,7 @@
 
 #include "texteditor.h"
 #include "widgetstyle.h"
+using namespace Qt::StringLiterals;
 
 
 TextEditor::TextEditor(QWidget *parent) :
@@ -260,7 +261,7 @@ int TextEditLineNumbers::getAreaWidth()
     // always fits (hinting makes the scaled font not exactly 0.8x the editor
     // font metrics).
     QFontMetrics numberMetrics(lineNumberArea->lineNumberFont());
-    int oneDigit = numberMetrics.horizontalAdvance(QLatin1Char('9'));
+    int oneDigit = numberMetrics.horizontalAdvance('9'_L1);
     return oneDigit * numDigits + left_padding + right_padding;
 }
 

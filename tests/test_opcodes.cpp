@@ -20,8 +20,10 @@
 */
 
 #include <QtTest>
+#include <QFile>
 #include <QGuiApplication>
 #include <QHash>
+#include <QTemporaryDir>
 
 #include "opentryparser.h"
 
@@ -127,6 +129,41 @@ private slots:
         QVERIFY2(m_parser->findOpcode(QStringLiteral("bformdec")).deprecated,
                  "bformdec is deprecated in the manual");
         QVERIFY(!m_parser->findOpcode(QStringLiteral("oscili")).deprecated);
+    }
+
+    // Refreshing external opcodes must start from the built-in set again:
+    // removed plugin opcodes disappear and repeated refreshes do not duplicate
+    // the built-in entries.
+    void reloadDropsExternalOpcodes()
+    {
+        const int builtinCount = m_parser->opcodeList.size();
+        QVERIFY(builtinCount > 0);
+
+        QTemporaryDir dir;
+        QVERIFY(dir.isValid());
+        const QString file = dir.filePath(QStringLiteral("risset-opcodes.xml"));
+        QFile xml(file);
+        QVERIFY(xml.open(QIODevice::WriteOnly | QIODevice::Truncate));
+        xml.write("<opcodes><category name=\"External\">"
+                  "<opcode name=\"csqt_test_opcode\"><desc>test</desc>"
+                  "<synopsis>k = <opcodename>csqt_test_opcode</opcodename> k</synopsis>"
+                  "</opcode></category></opcodes>");
+        xml.close();
+
+        m_parser->parseOpcodesXml(file);
+        QVERIFY(m_parser->isOpcode(QStringLiteral("csqt_test_opcode")));
+        QVERIFY(m_parser->opcodeList.size() > builtinCount);
+
+        m_parser->reload();
+        QVERIFY(!m_parser->isOpcode(QStringLiteral("csqt_test_opcode")));
+        QCOMPARE(m_parser->opcodeList.size(), builtinCount);
+
+        m_parser->parseOpcodesXml(file);
+        const int withExternal = m_parser->opcodeList.size();
+        m_parser->reload();
+        m_parser->parseOpcodesXml(file);
+        QCOMPARE(m_parser->opcodeList.size(), withExternal);
+        m_parser->reload();
     }
 
 private:

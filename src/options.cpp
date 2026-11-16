@@ -25,6 +25,7 @@
 #include "types.h"
 #include "widgetstyle.h"
 #include "stdlib.h"
+using namespace Qt::StringLiterals;
 
 Options::Options(ConfigLists *configlists) :
     CsoundOptions(configlists)
@@ -91,7 +92,7 @@ Options::Options(ConfigLists *configlists) :
     showWidgetToolbar = true;
     showTooltips = false;
     showWidgetNameOverlay = false;
-    defaultWidgetFont = QStringLiteral("Liberation Sans");
+    defaultWidgetFont = u"Liberation Sans"_s;
     flatStyleNewWidgets = true;
     editModeWhilePlaying = false;
     openProperties = true;  // Open properties automatically when creating a widget

@@ -254,7 +254,7 @@ bool CsoundOptions::textSetsDbfs(const QString &basicText, const QString &option
     // Orchestra header assignment, e.g. "0dbfs = 1", "0dbfs=1.0" or
     // "0dbfs = 32768". Comments start with ; or //, so they do not match.
     static const QRegularExpression headerRx(
-                QStringLiteral(R"(^\s*0dbfs\s*=)"),
+                uR"(^\s*0dbfs\s*=)"_s,
                 QRegularExpression::MultilineOption);
     if (headerRx.match(basicText).hasMatch())
         return true;

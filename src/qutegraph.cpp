@@ -2127,7 +2127,7 @@ void QuteTableWidget::paintGrid(QPainter *painter) {
                                plot.left() - tickLength - textGap, fontHeight);
         painter->setPen(textColor);
         painter->drawText(labelRect, Qt::AlignRight | Qt::AlignVCenter,
-                          QStringLiteral("0"));
+                          u"0"_s);
     }
 
     // ------------------------- x axis -------------------------
@@ -3065,14 +3065,14 @@ void QuteTable::setValue(QString s) {
                     "or @update";
         return;
     }
-    if(parts[0] == QLatin1String("@set")) {
+    if(parts[0] == "@set"_L1) {
         if(parts.size() != 2) {
             qWarning() << "@set message expects a table number (example: @set 103)";
             return;
         }
         int tabnum = parts[1].toInt();
         setTableNumber(tabnum);
-    } else if (parts[0] == QLatin1String("@update") && m_tabnum > 0) {
+    } else if (parts[0] == "@update"_L1 && m_tabnum > 0) {
         setValue(-1);
     } else
         qWarning() << "Message not supported:" << s;

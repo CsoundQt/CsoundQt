@@ -14,6 +14,7 @@
 #include "sourcecursor.h"
 
 #include <QTextBlock>
+using namespace Qt::StringLiterals;
 
 namespace {
 
@@ -21,12 +22,12 @@ namespace {
 // underscores.
 bool isNameChar(QChar c)
 {
-    return c.isLetterOrNumber() || c == QLatin1Char('_');
+    return c.isLetterOrNumber() || c == '_'_L1;
 }
 
 bool isNameStart(QChar c)
 {
-    return c.isLetter() || c == QLatin1Char('_');
+    return c.isLetter() || c == '_'_L1;
 }
 
 // The word that ends just before the given position, skipping the spaces in
@@ -68,7 +69,7 @@ bool identifierBounds(const QString &line, int position, int *start, int *end)
 
 bool isScheduleOpcode(const QString &name)
 {
-    return name == QLatin1String("schedule") || name == QLatin1String("schedulek");
+    return name == "schedule"_L1 || name == "schedulek"_L1;
 }
 
 } // namespace
@@ -95,12 +96,12 @@ QString SourceCursor::includePathAt(const QTextCursor &cursor)
     int pos = 0;
     while (pos < line.size() && line.at(pos).isSpace())
         ++pos;
-    if (pos >= line.size() || line.at(pos) != QLatin1Char('#'))
+    if (pos >= line.size() || line.at(pos) != '#'_L1)
         return QString();
     ++pos;
     while (pos < line.size() && line.at(pos).isSpace())
         ++pos;
-    if (line.mid(pos, 7) != QLatin1String("include"))
+    if (line.mid(pos, 7) != "include"_L1)
         return QString();
     pos += 7;
     // "#includes" or "#include_x" is not the directive.
@@ -112,10 +113,10 @@ QString SourceCursor::includePathAt(const QTextCursor &cursor)
         return QString();
 
     QChar close;
-    if (line.at(pos) == QLatin1Char('"'))
-        close = QLatin1Char('"');
-    else if (line.at(pos) == QLatin1Char('<'))
-        close = QLatin1Char('>');
+    if (line.at(pos) == '"'_L1)
+        close = '"'_L1;
+    else if (line.at(pos) == '<'_L1)
+        close = '>'_L1;
     else
         return QString();
 
@@ -148,7 +149,7 @@ bool SourceCursor::isScheduleArgument(const QTextCursor &cursor)
     while (i >= 0 && line.at(i).isSpace())
         --i;
     // A quoted name: schedule "MyInstr"
-    if (i >= 0 && line.at(i) == QLatin1Char('"'))
+    if (i >= 0 && line.at(i) == '"'_L1)
         --i;
     while (i >= 0 && line.at(i).isSpace())
         --i;
@@ -156,7 +157,7 @@ bool SourceCursor::isScheduleArgument(const QTextCursor &cursor)
         return false;
 
     int argsStart = 0;
-    if (line.at(i) == QLatin1Char('(')) {
+    if (line.at(i) == '('_L1) {
         // The name of the opcode is the word before the parenthesis.
         if (!isScheduleOpcode(wordEndingBefore(line, i - 1)))
             return false;
@@ -178,7 +179,7 @@ bool SourceCursor::isScheduleArgument(const QTextCursor &cursor)
     for (int k = argsStart; k < start; ++k) {
         const QChar c = line.at(k);
         if (inString) {
-            if (c == QLatin1Char('"'))
+            if (c == '"'_L1)
                 inString = false;
             continue;
         }

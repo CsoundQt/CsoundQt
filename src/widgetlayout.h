@@ -72,6 +72,7 @@ private:
 class QuteConsole;
 class QuteGraph;
 class WidgetCreateOverlay;
+class QMimeData;
 class QuteScope;
 class QuteButton;
 class FrameWidget;
@@ -120,6 +121,12 @@ public:
 	// Widgets currently selected in the editor (empty when not editing)
 	QList<QuteWidget *> getSelectedWidgets();
 	bool isEditMode() const { return m_editMode; }
+	// Drag and drop from the edit-mode create overlay. The MIME payload is the
+	// same stable type id used for the overlay icons (see m_createWidgetIcons).
+	bool canCreateWidgetFromMime(const QMimeData *mime) const;
+	void createWidgetFromMime(const QMimeData *mime,
+	                          const QPoint &globalDropPos);
+	QString widgetTypeForAction(QAction *action) const;
 	QuteWidget *getHoveredWidget() const { return m_hoveredWidget; }
 	// Ask the document to mark editor lines for this widget (or the current
 	// selection when widget is nullptr).
@@ -446,6 +453,10 @@ protected:
 	virtual void mouseMoveEvent(QMouseEvent *event);
 	virtual void mouseReleaseEvent(QMouseEvent *event);
 	virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
+	virtual void dragEnterEvent(QDragEnterEvent *event) override;
+	virtual void dragMoveEvent(QDragMoveEvent *event) override;
+	virtual void dragLeaveEvent(QDragLeaveEvent *event) override;
+	virtual void dropEvent(QDropEvent *event) override;
 	virtual void keyPressEvent(QKeyEvent *event);
 	virtual void keyReleaseEvent(QKeyEvent *event);
 	virtual bool focusNextPrevChild(bool next) override;
@@ -467,6 +478,9 @@ private:
 	void restoreBackgroundFromProperties();
 	void ensureCreateOverlay();
 	void updateCreateOverlayGeometry();
+	QAction *actionForWidgetType(const QString &type) const;
+	QSize defaultWidgetSize(QAction *action) const;
+	void createWidgetAt(QAction *action, const QPoint &dropPoint);
 	bool panelBackgroundIsDark() const;
 	QPointer<WidgetCreateOverlay> m_createOverlay;
 
@@ -697,6 +711,42 @@ public:
 protected:
 	bool eventFilter(QObject *watched, QEvent *event) override
 	{
+		if (m_layout != nullptr && m_layout->isEditMode()) {
+			switch (event->type()) {
+			case QEvent::DragEnter:
+			case QEvent::DragMove: {
+				auto *dragEvent = static_cast<QDragMoveEvent *>(event);
+				if (m_layout->canCreateWidgetFromMime(dragEvent->mimeData())) {
+					dragEvent->setDropAction(Qt::CopyAction);
+					dragEvent->accept();
+				} else {
+					dragEvent->ignore();
+				}
+				return true;
+			}
+			case QEvent::DragLeave:
+				event->accept();
+				return true;
+			case QEvent::Drop: {
+				auto *dropEvent = static_cast<QDropEvent *>(event);
+				auto *watchedWidget = qobject_cast<QWidget *>(watched);
+				if (watchedWidget != nullptr
+						&& m_layout->canCreateWidgetFromMime(dropEvent->mimeData())) {
+					dropEvent->setDropAction(Qt::CopyAction);
+					dropEvent->accept();
+					m_layout->createWidgetFromMime(
+								dropEvent->mimeData(),
+								watchedWidget->mapToGlobal(
+									dropEvent->position().toPoint()));
+				} else {
+					dropEvent->ignore();
+				}
+				return true;
+			}
+			default:
+				break;
+			}
+		}
 		if (m_layout != nullptr) {
 			if (event->type() == QEvent::MouseButtonPress
 					&& m_layout->isEditMode()) {

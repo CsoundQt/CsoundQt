@@ -70,7 +70,7 @@ static bool isIdentifierInput(const QString &text)
 	if (text.isEmpty())
 		return false;
 	for (const QChar c : text) {
-		if (!c.isLetterOrNumber() && c != QLatin1Char('_'))
+		if (!c.isLetterOrNumber() && c != '_'_L1)
 			return false;
 	}
 	return true;
@@ -101,7 +101,7 @@ static void addLineNumbersToDocument(QTextDocument *source,
         const QTextBlock sourceBlock = source->findBlockByNumber(i);
         const QTextBlock targetBlock = target->findBlockByNumber(i);
         const int blockStart = targetBlock.position();
-        const QString number = QStringLiteral("%1  ").arg(i + 1, digits);
+        const QString number = u"%1  "_s.arg(i + 1, digits);
         cursor.setPosition(blockStart);
         cursor.insertText(number, numberFormat);
 
@@ -146,10 +146,10 @@ static bool isCsoundTypeChar(QChar c)
 static QChar variableTypeFromToken(QString token)
 {
     token = token.trimmed();
-    const int array = token.indexOf(QLatin1Char('['));
+    const int array = token.indexOf('['_L1);
     if (array >= 0)
         token.truncate(array);
-    const int colon = token.indexOf(QLatin1Char(':'));
+    const int colon = token.indexOf(':'_L1);
     if (colon >= 0) {
         QString type = token.mid(colon + 1).trimmed();
         if (type.endsWith(u"[]"_s))
@@ -158,7 +158,7 @@ static QChar variableTypeFromToken(QString token)
                 ? type.at(0) : QChar();
     }
     int index = 0;
-    if (token.size() > 1 && token.at(0) == QLatin1Char('g')
+    if (token.size() > 1 && token.at(0) == 'g'_L1
             && isCsoundTypeChar(token.at(1))) {
         index = 1;
     }
@@ -172,11 +172,11 @@ static QChar variableTypeFromToken(QString token)
 static QString outputVariableFromPrefix(const QString &beforeWord)
 {
     QString prefix = beforeWord.trimmed();
-    if (!prefix.endsWith(QLatin1Char('='))) {
+    if (!prefix.endsWith('='_L1)) {
         // In the classic form the output variable comes immediately before the
         // opcode. With an incomplete assignment such as "k = 1 + osci" the last
         // token is an operator/operand, not an output variable.
-        if (prefix.contains(QLatin1Char('=')))
+        if (prefix.contains('='_L1))
             return {};
     } else {
         prefix.chop(1);
@@ -189,10 +189,10 @@ static QString outputVariableFromPrefix(const QString &beforeWord)
 static QString plainVariableName(QString token)
 {
     token = token.trimmed();
-    const int colon = token.indexOf(QLatin1Char(':'));
+    const int colon = token.indexOf(':'_L1);
     if (colon >= 0)
         token.truncate(colon);
-    const int bracket = token.indexOf(QLatin1Char('['));
+    const int bracket = token.indexOf('['_L1);
     if (bracket >= 0)
         token.truncate(bracket);
     return token;
@@ -208,7 +208,7 @@ static bool selectionCoversWholeWord(const QTextCursor &cursor)
     if (document == nullptr)
         return false;
     const auto isWordChar = [](QChar c) {
-        return c.isLetterOrNumber() || c == QLatin1Char('_');
+        return c.isLetterOrNumber() || c == '_'_L1;
     };
     const int start = cursor.selectionStart();
     const int end = cursor.selectionEnd();
@@ -237,9 +237,9 @@ static bool keepsCompletionMenuOpen(const QKeyEvent *event)
     if (text.isEmpty())
         return false;
     for (const QChar c : text) {
-        if (!(c.isLetterOrNumber() || c == QLatin1Char('_') || c == QLatin1Char('/')
-              || c == QLatin1Char('.') || c == QLatin1Char('-') || c == QLatin1Char('~')
-              || c == QLatin1Char('$') || c == QLatin1Char('@')))
+        if (!(c.isLetterOrNumber() || c == '_'_L1 || c == '/'_L1
+              || c == '.'_L1 || c == '-'_L1 || c == '~'_L1
+              || c == '$'_L1 || c == '@'_L1))
             return false;
     }
     return true;
@@ -278,10 +278,10 @@ static int openDoubleQuoteIndex(const QString &text)
     int open = -1;
     bool inString = false;
     for (int i = 0; i < text.size(); ++i) {
-        if (text[i] != QLatin1Char('"'))
+        if (text[i] != '"'_L1)
             continue;
         int backslashes = 0;
-        for (int j = i - 1; j >= 0 && text[j] == QLatin1Char('\\'); --j)
+        for (int j = i - 1; j >= 0 && text[j] == '\\'_L1; --j)
             ++backslashes;
         if (backslashes % 2 != 0)
             continue;
@@ -378,7 +378,7 @@ static CompletionContext completionContext(const QString &textBeforeCursor)
             // invalue can read a widget property/method with a '/' path, just
             // like outvalue. Offer properties once the slash is present.
             const QString prefix = textBeforeCursor.mid(quote + 1);
-            context.kind = prefix.contains(QLatin1Char('/'))
+            context.kind = prefix.contains('/'_L1)
                     ? CompletionContext::Property
                     : CompletionContext::WidgetAddress;
         } else if (outvalueQuotedRx.match(beforeQuote).hasMatch()) {
@@ -386,7 +386,7 @@ static CompletionContext completionContext(const QString &textBeforeCursor)
             // '/' has been typed it is an addressable widget property instead.
             // This deliberately takes precedence over path completion.
             const QString prefix = textBeforeCursor.mid(quote + 1);
-            context.kind = prefix.contains(QLatin1Char('/'))
+            context.kind = prefix.contains('/'_L1)
                     ? CompletionContext::Property
                     : CompletionContext::WidgetAddress;
         } else {
@@ -395,7 +395,7 @@ static CompletionContext completionContext(const QString &textBeforeCursor)
             const QString prefix = textBeforeCursor.mid(quote + 1);
             if (prefix.startsWith("./"_L1)
                     || prefix.startsWith("../"_L1)
-                    || prefix.startsWith(QLatin1Char('/'))
+                    || prefix.startsWith('/'_L1)
                     || prefix.startsWith("~/"_L1)) {
                 context.kind = CompletionContext::Path;
             }
@@ -477,11 +477,11 @@ static CompletionContext optionCompletionContext(const QString &textBeforeCursor
         // A quoted path value, --env:VAR="/... or --env:VAR="./... (and
         // ../...): complete the path itself instead of the variable name.
         const QStringView afterEnv = token.mid(6);
-        const qsizetype equals = afterEnv.indexOf(QLatin1Char('='));
+        const qsizetype equals = afterEnv.indexOf('='_L1);
         if (equals > 0 && equals + 1 < afterEnv.size()
-                && afterEnv.at(equals + 1) == QLatin1Char('"')) {
+                && afterEnv.at(equals + 1) == '"'_L1) {
             const QStringView value = afterEnv.mid(equals + 2);
-            if (value.startsWith(QLatin1Char('/'))
+            if (value.startsWith('/'_L1)
                     || value.startsWith("./"_L1)
                     || value.startsWith("../"_L1)) {
                 context.kind = CompletionContext::EnvPath;
@@ -517,7 +517,7 @@ static bool hasOpenQuote(const QString &textBeforeCursor)
                 continue;
             int backslashes = 0;
             int j = i - 1;
-            while (j >= 0 && text[j] == QLatin1Char('\\')) {
+            while (j >= 0 && text[j] == '\\'_L1) {
                 ++backslashes;
                 --j;
             }
@@ -526,8 +526,8 @@ static bool hasOpenQuote(const QString &textBeforeCursor)
         }
         return (count % 2) != 0;
     };
-    return hasUnmatched(textBeforeCursor, QLatin1Char('"')) ||
-           hasUnmatched(textBeforeCursor, QLatin1Char('\''));
+    return hasUnmatched(textBeforeCursor, '"'_L1) ||
+           hasUnmatched(textBeforeCursor, '\''_L1);
 }
 
 // The arguments of an opcode without the parentheses around them. The menu
@@ -535,7 +535,7 @@ static bool hasOpenQuote(const QString &textBeforeCursor)
 static QString withoutParentheses(const QString &args)
 {
     const QString text = args.trimmed();
-    if (text.startsWith(QLatin1Char('(')) && text.endsWith(QLatin1Char(')')))
+    if (text.startsWith('('_L1) && text.endsWith(')'_L1))
         return text.mid(1, text.length() - 2).trimmed();
     return text;
 }
@@ -644,6 +644,15 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 DocumentView::~DocumentView()
 {
 	disconnect(this, 0,0,0);
+}
+
+void DocumentView::refreshOpcodeNames()
+{
+    BaseView::refreshOpcodeNames();
+    // The insert bar is built when it is shown. Keep an already visible bar in
+    // sync when plugins add or remove opcodes.
+    if (m_opcodeInsertBar != nullptr)
+        m_opcodeInsertBar->setOpcodes(m_opcodeTree->opcodeNameList());
 }
 
 bool DocumentView::isModified()
@@ -1158,20 +1167,20 @@ void DocumentView::highlightWidgetChannels(const QStringList &channels,
 		for (const QString &channel : uniqueChannels) {
 			// Also accept the widget-property form "<channel>/<property>"
 			// used by outvalue, without matching a longer channel name.
-			const QString prefix = QLatin1Char('"') + channel;
+			const QString prefix = '"'_L1 + channel;
 			int from = 0;
 			while ((from = line.indexOf(prefix, from)) >= 0) {
 				const int next = from + prefix.size();
 				if (next >= line.size()
-						|| (line.at(next) != QLatin1Char('"')
-							&& line.at(next) != QLatin1Char('/'))) {
+						|| (line.at(next) != '"'_L1
+							&& line.at(next) != '/'_L1)) {
 					from = next;
 					continue;
 				}
 				const ChannelTextResult result = findChannelLiteral(
 							line, from + 1, false);
 				if (result.channel == channel
-						|| result.channel.startsWith(channel + QLatin1Char('/'))) {
+						|| result.channel.startsWith(channel + '/'_L1)) {
 					matches = true;
 					matchPosition = from;
 					break;
@@ -1284,8 +1293,8 @@ QString DocumentView::hoverHelpWordAt(TextEditor *editor,
     const QTextDocument *document = editor->document();
     const int start = cursor.selectionStart();
     const int end = cursor.selectionEnd();
-    if (start > 0 && document->characterAt(start - 1) == QLatin1Char('"')
-            && document->characterAt(end) == QLatin1Char('"'))
+    if (start > 0 && document->characterAt(start - 1) == '"'_L1
+            && document->characterAt(end) == '"'_L1)
         return QString();
     return cursor.selectedText();
 }
@@ -1450,8 +1459,8 @@ QString DocumentView::helpWordUnderCursor()
 	// The instrument that schedule and friends are asked to play: the name can
 	// be written as a string, "bar", so the quotes are not part of it.
 	QString instrument = word;
-	if (instrument.size() >= 2 && instrument.startsWith(QLatin1Char('"'))
-			&& instrument.endsWith(QLatin1Char('"')))
+	if (instrument.size() >= 2 && instrument.startsWith('"'_L1)
+			&& instrument.endsWith('"'_L1))
 		instrument = instrument.mid(1, instrument.size() - 2);
 	if (m_instrumentNames.contains(instrument))
 		return instrument;
@@ -1617,7 +1626,7 @@ QTextBlock DocumentView::currentScopeStartBlock() const
     for (QTextBlock block = editor->textCursor().block(); block.isValid();
          block = block.previous()) {
         const QString line = block.text().trimmed();
-        if (line.startsWith(QLatin1Char(';')) || line.startsWith("//"_L1))
+        if (line.startsWith(';'_L1) || line.startsWith("//"_L1))
             continue;
         // A closing line before the opening line means the cursor is between
         // two blocks, not inside either of them.
@@ -1806,7 +1815,7 @@ QString DocumentView::currentScopeText() const
         QString line = block.text();
         // Ignore the rest of a line after a comment; semicolons inside string
         // literals are rare in variable names and do not matter here.
-        const int semicolon = line.indexOf(QLatin1Char(';'));
+        const int semicolon = line.indexOf(';'_L1);
         const int slashes = line.indexOf("//"_L1);
         int comment = -1;
         if (semicolon >= 0 && slashes >= 0)
@@ -1816,7 +1825,7 @@ QString DocumentView::currentScopeText() const
         if (comment >= 0)
             line.truncate(comment);
         scopeText += line;
-        scopeText += QLatin1Char('\n');
+        scopeText += '\n'_L1;
         if (block == blockEnd)
             break;
     }
@@ -2039,7 +2048,7 @@ void DocumentView::autoCompleteAtCursor(bool force) {
         QString insert = name;
         if (!context.quoted && quoteIfNeeded
                 && !simpleNameRx.match(name).hasMatch()) {
-            insert = QLatin1Char('"') + name + QLatin1Char('"');
+            insert = '"'_L1 + name + '"'_L1;
         }
         QAction *action = syntaxMenu->addCompletion(
                     name, insert, name, 0, this, SLOT(insertAutoCompleteText()));
@@ -2066,7 +2075,7 @@ void DocumentView::autoCompleteAtCursor(bool force) {
             }
         } else if (context.kind == CompletionContext::Property) {
             const QString prefix = context.prefix;
-            const int slash = prefix.indexOf(QLatin1Char('/'));
+            const int slash = prefix.indexOf('/'_L1);
             const QString channel = prefix.left(slash);
             const QString propertyPrefix = prefix.mid(slash + 1);
             const auto shortType = [](QString type) {
@@ -2093,7 +2102,7 @@ void DocumentView::autoCompleteAtCursor(bool force) {
             nameWidth += 2;
             typeWidth += 2;
             for (const WidgetPropertyInfo &property : matching) {
-                const QString insert = channel + QLatin1Char('/') + property.name;
+                const QString insert = channel + '/'_L1 + property.name;
                 if (contextSeen.contains(insert))
                     continue;
                 const QString type = shortType(property.type);
@@ -2125,7 +2134,7 @@ void DocumentView::autoCompleteAtCursor(bool force) {
             const bool include = context.kind == CompletionContext::Include;
             const bool envPath = context.kind == CompletionContext::EnvPath;
             const QString prefix = context.prefix;
-            const int slash = prefix.lastIndexOf(QLatin1Char('/'));
+            const int slash = prefix.lastIndexOf('/'_L1);
             const QString directoryPrefix = slash >= 0
                     ? prefix.left(slash + 1) : QString();
             const QString filePrefix = slash >= 0
@@ -2192,8 +2201,8 @@ void DocumentView::autoCompleteAtCursor(bool force) {
                     if (entry.isDir()) {
                         // Keep the directory open so the next path segment can
                         // be completed as well: Lib/sound/...
-                        insert += QLatin1Char('/');
-                        display += QLatin1Char('/');
+                        insert += '/'_L1;
+                        display += '/'_L1;
                     }
                     if (contextSeen.contains(insert))
                         continue;
@@ -2335,7 +2344,7 @@ void DocumentView::autoCompleteAtCursor(bool force) {
                             // The arguments keep their parentheses, but there
                             // is no space between the name and them.
                             const QString inArgs = opcodedefs[i].inArgs.simplified();
-                            syntaxText += inArgs.startsWith(QLatin1Char('(')) ? inArgs
+                            syntaxText += inArgs.startsWith('('_L1) ? inArgs
                                                                              : " " + inArgs;
                         }
                     }
@@ -2780,7 +2789,7 @@ void DocumentView::indentNewLine()
 
 	const QString bodyIndent = leading + step;
 	internalChange = true;
-	m_mainEditor->insertPlainText(step + QLatin1Char('\n') + leading + endTag);
+	m_mainEditor->insertPlainText(step + '\n'_L1 + leading + endTag);
 	// insertPlainText moves the cursor after the end tag; put it back on the
 	// indented body line.
 	QTextCursor cursor = m_mainEditor->textCursor();
@@ -3170,7 +3179,7 @@ void DocumentView::insertAutoCompleteText()
 			// contents right away, exactly as if completion had been invoked
 			// again (Ctrl+M). Queued, because this runs from the triggered()
 			// signal of an action the new completion will delete.
-			if (insert.endsWith(QLatin1Char('/')))
+			if (insert.endsWith('/'_L1))
 				QTimer::singleShot(0, this, [this]() { autoCompleteAtCursor(true); });
 			return;
 		}
@@ -3458,7 +3467,7 @@ QString DocumentView::indentString() const
 	// of spaces. Otherwise keep the historical behaviour: a tab character,
 	
 	if (m_mainEditor->tabUseSpaces()) {
-		return QString(m_mainEditor->tabSpaces(), QLatin1Char(' '));
+		return QString(m_mainEditor->tabSpaces(), ' '_L1);
 	}
 	return u"\t"_s;
 }
@@ -3505,17 +3514,17 @@ void DocumentView::indent()
 static QString removeOneIndent(const QString &line, bool useSpaces, int tabSpaces)
 {
 	if (useSpaces) {
-		if (line.startsWith(QLatin1Char('\t'))) {
+		if (line.startsWith('\t'_L1)) {
 			return line.mid(1);
 		}
 		int count = 0;
 		while (count < tabSpaces && count < line.size()
-			   && line.at(count) == QLatin1Char(' ')) {
+			   && line.at(count) == ' '_L1) {
 			++count;
 		}
 		return line.mid(count);
 	}
-	if (line.startsWith(QLatin1Char('\t'))) {
+	if (line.startsWith('\t'_L1)) {
 		return line.mid(1);
 	}
 	return line;
@@ -3607,12 +3616,12 @@ void DocumentView::tabsToSpaces()
 	// is whitespace. Tabs after the first non-whitespace character (tabs
 	// "within" a line) are never touched.
 	auto isIndentationTab = [](const QString &line) {
-		const int tabIndex = line.indexOf(QLatin1Char('\t'));
+		const int tabIndex = line.indexOf('\t'_L1);
 		if (tabIndex < 0) {
 			return false;
 		}
 		for (int i = 0; i < tabIndex; ++i) {
-			if (line.at(i) != QLatin1Char(' ') && line.at(i) != QLatin1Char('\t')) {
+			if (line.at(i) != ' '_L1 && line.at(i) != '\t'_L1) {
 				return false;
 			}
 		}
@@ -3631,7 +3640,7 @@ void DocumentView::tabsToSpaces()
 	}
 
 	internalChange = true;
-	const QString spacesString(m_mainEditor->tabSpaces(), QLatin1Char(' '));
+	const QString spacesString(m_mainEditor->tabSpaces(), ' '_L1);
 	QTextCursor cursor(document);
 	cursor.beginEditBlock();
 	for (QTextBlock block = document->begin(); block.isValid(); ) {
@@ -3640,11 +3649,11 @@ void DocumentView::tabsToSpaces()
 		int i = 0;
 		QString indent;
 		while (i < line.size()
-			   && (line.at(i) == QLatin1Char(' ') || line.at(i) == QLatin1Char('\t'))) {
-			if (line.at(i) == QLatin1Char('\t')) {
+			   && (line.at(i) == ' '_L1 || line.at(i) == '\t'_L1)) {
+			if (line.at(i) == '\t'_L1) {
 				indent += spacesString;
 			} else {
-				indent += QLatin1Char(' ');
+				indent += ' '_L1;
 			}
 			++i;
 		}
@@ -3697,7 +3706,7 @@ void DocumentView::duplicateLine()
     // line of its own directly below.
     QTextCursor insertAt(cursor);
     insertAt.movePosition(QTextCursor::EndOfBlock);
-    insertAt.insertText(QLatin1Char('\n') + line);
+    insertAt.insertText('\n'_L1 + line);
     // Put the caret on the copy, at the same column as before, so repeating
     // the action keeps duplicating the line the caret is now on.
     QTextCursor copy(m_mainEditor->document());
@@ -3779,8 +3788,8 @@ void DocumentView::moveLine(int offset)
     span.setPosition(end, QTextCursor::KeepAnchor);
     span.beginEditBlock();
     span.insertText(offset < 0
-                    ? currentText + QLatin1Char('\n') + neighbourText
-                    : neighbourText + QLatin1Char('\n') + currentText);
+                    ? currentText + '\n'_L1 + neighbourText
+                    : neighbourText + '\n'_L1 + currentText);
     span.endEditBlock();
     QTextCursor moved(m_mainEditor->document());
     moved.setPosition(movedStart + qMin(column, currentText.size()));
@@ -4359,7 +4368,7 @@ void MySyntaxMenu::refreshCompletions(int maxVisibleLines, int widthCharacters)
     const int labelCharacters = qMax(14, widthCharacters);
     const QFontMetrics metrics(m_completionList->font());
     const int labelWidth = metrics.horizontalAdvance(
-                QString(labelCharacters, QLatin1Char('M')));
+                QString(labelCharacters, 'M'_L1));
     // The item delegate reserves a small horizontal margin on both sides. Add
     // it to the item width, not to the text: otherwise a 42-character row is
     // elided by a few pixels and its output type is replaced by "…".

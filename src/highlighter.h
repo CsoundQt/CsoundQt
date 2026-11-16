@@ -41,7 +41,8 @@ using namespace Qt::StringLiterals;
 
 namespace EditorThemes { struct Theme; struct FormatSpec; }
 
-enum CsdSection { UnknownSection, OptionsSection, OrchestraSection, ScoreSection, HtmlSection };
+enum CsdSection { UnknownSection, OptionsSection, OrchestraSection, ScoreSection,
+                  HtmlSection, MetadataSection };
 
 struct BracketInfo
 {
@@ -303,6 +304,7 @@ private:
         u"CsHtml5"_s,
         u"CsFileB"_s,
         u"CsLicense"_s, u"CsLincense"_s,
+        u"CsMeta"_s,
     };
 
     const QSet<QString> keywordLiterals = {

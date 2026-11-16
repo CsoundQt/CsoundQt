@@ -1,4 +1,4 @@
-﻿/*
+/*
     Copyright (C) 2008, 2009 Andres Cabrera
     mantaraya36@gmail.com
 
@@ -44,6 +44,9 @@
 #include <cstdio>
 #include <cstdlib>
 #include <utility>
+
+using namespace Qt::StringLiterals;
+
 
 #ifdef Q_OS_WIN
 #include <QtQuickControls2/QQuickStyle>
@@ -95,24 +98,24 @@ BOOL IsWow64() {
 static void addSystemStylePluginPaths()
 {
     QStringList candidates;
-    candidates << QStringLiteral("/usr/lib/qt6/plugins")
-               << QStringLiteral("/usr/lib64/qt6/plugins")
-               << QStringLiteral("/usr/local/lib/qt6/plugins");
+    candidates << u"/usr/lib/qt6/plugins"_s
+               << u"/usr/lib64/qt6/plugins"_s
+               << u"/usr/local/lib/qt6/plugins"_s;
 
     // Debian/Ubuntu style multiarch directories, e.g.
     // /usr/lib/x86_64-linux-gnu/qt6/plugins
-    const QDir libDir(QStringLiteral("/usr/lib"));
+    const QDir libDir(u"/usr/lib"_s);
     const QStringList arches = libDir.entryList(
-                QStringList() << QStringLiteral("*-linux-gnu"),
+                QStringList() << u"*-linux-gnu"_s,
                 QDir::Dirs | QDir::NoDotAndDotDot);
     for (const QString &arch : arches)
-        candidates << QStringLiteral("/usr/lib/") + arch + QStringLiteral("/qt6/plugins");
+        candidates << u"/usr/lib/"_s + arch + u"/qt6/plugins"_s;
 
     const QStringList libraryPaths = QCoreApplication::libraryPaths();
     for (const QString &path : candidates) {
         if (libraryPaths.contains(path))
             continue; // already searched
-        if (QDir(path + QStringLiteral("/styles")).exists())
+        if (QDir(path + u"/styles"_s).exists())
             QCoreApplication::addLibraryPath(path);
     }
 }
@@ -174,7 +177,7 @@ public:
         if (m_reportPath.isEmpty()) {
             m_reportPath = QDir(QStandardPaths::writableLocation(
                                     QStandardPaths::TempLocation))
-                    .filePath(QStringLiteral("csoundqt-risset-self-test.json"));
+                    .filePath(u"csoundqt-risset-self-test.json"_s);
         }
     }
 
@@ -342,32 +345,32 @@ void RissetSelfTest::finish(bool success, const QString &error)
 QJsonObject RissetSelfTest::buildReport(bool success, const QString &error) const
 {
     QJsonObject report;
-    report.insert(QStringLiteral("success"), success);
-    report.insert(QStringLiteral("dataRoot"),
+    report.insert(u"success"_s, success);
+    report.insert(u"dataRoot"_s,
                   Risset::userDataRoot().absolutePath());
-    report.insert(QStringLiteral("pluginRoot"),
+    report.insert(u"pluginRoot"_s,
                   Risset::pluginRootDir().absolutePath());
-    report.insert(QStringLiteral("managedExecutable"),
+    report.insert(u"managedExecutable"_s,
                   Risset::localRissetExecutable());
 
     if (m_application->risset != nullptr) {
         const Risset *risset = m_application->risset;
-        report.insert(QStringLiteral("installed"), risset->isInstalled);
-        report.insert(QStringLiteral("version"), risset->rissetVersion);
-        report.insert(QStringLiteral("executable"), risset->executablePath());
-        report.insert(QStringLiteral("opcodesXml"), risset->rissetOpcodesXml);
+        report.insert(u"installed"_s, risset->isInstalled);
+        report.insert(u"version"_s, risset->rissetVersion);
+        report.insert(u"executable"_s, risset->executablePath());
+        report.insert(u"opcodesXml"_s, risset->rissetOpcodesXml);
         const QJsonDocument info =
                 QJsonDocument::fromJson(risset->infoText().toUtf8());
         if (info.isObject())
-            report.insert(QStringLiteral("info"), info.object());
+            report.insert(u"info"_s, info.object());
         else
-            report.insert(QStringLiteral("infoRaw"), risset->infoText());
+            report.insert(u"infoRaw"_s, risset->infoText());
     } else {
-        report.insert(QStringLiteral("installed"), false);
+        report.insert(u"installed"_s, false);
     }
 
     if (!error.isEmpty())
-        report.insert(QStringLiteral("error"), error);
+        report.insert(u"error"_s, error);
     return report;
 }
 
@@ -400,7 +403,7 @@ int main(int argc, char *argv[])
     // repaints are throttled and stay slow even after the QML window is closed.
     // The QML panels here are simple, so use the software scene graph on
     // Wayland and keep normal QWidget painting unaffected.
-    if (QGuiApplication::platformName().startsWith(QStringLiteral("wayland"))
+    if (QGuiApplication::platformName().startsWith(u"wayland"_s)
             && !qEnvironmentVariableIsSet("QT_QUICK_BACKEND")) {
         qputenv("QT_QUICK_BACKEND", "software");
     }
@@ -427,7 +430,7 @@ int main(int argc, char *argv[])
 
 #ifdef Q_OS_WIN
     // To force qml elemtns follow colour theme
-    QQuickStyle::setStyle(QStringLiteral("Fusion"));
+    QQuickStyle::setStyle(u"Fusion"_s);
     qDebug() << "QQC2 style requested:" << QQuickStyle::name();
 #endif
 

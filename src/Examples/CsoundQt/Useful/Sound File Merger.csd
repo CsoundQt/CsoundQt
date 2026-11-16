@@ -1,7 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
 -nm128
---env:SSDIR+= ../../SourceMaterials
+--env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
 

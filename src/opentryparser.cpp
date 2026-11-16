@@ -159,8 +159,8 @@ QString OpEntryParser::repairOpcodesXml(const QString &xml)
         pos = match.capturedEnd();
         QString tag = match.captured(0);
         const bool isOpcodeStart = tag.startsWith("<opcode") &&
-                (tag.size() == 8 ? tag.at(7) == QLatin1Char('>')
-                                 : tag.size() > 8 && tag.at(7) == QLatin1Char(' '));
+                (tag.size() == 8 ? tag.at(7) == '>'_L1
+                                 : tag.size() > 8 && tag.at(7) == ' '_L1);
         if (isOpcodeStart) {
             while (openOpcodes > 0) {
                 result += "</opcode>";
@@ -194,6 +194,20 @@ OpEntryParser::OpEntryParser(QString opcodeFile)
     m_udosMap = nullptr;
     parseOpcodesXml(opcodeFile);
 	addExtraOpcodes();
+}
+
+void OpEntryParser::reload()
+{
+    opcodeList.clear();
+    opcodeMap.clear();
+    opcodeCategoryList.clear();
+    opcodeListCategory.clear();
+    categoryList.clear();
+    excludedOpcodes.clear();
+    m_opcodeNameListCache.clear();
+
+    parseOpcodesXml(m_opcodeFile);
+    addExtraOpcodes();
 }
 
 OpEntryParser::~OpEntryParser()
@@ -283,7 +297,7 @@ QString opcodeCallSyntax(const Opcode &opc)
     if (opc.newStyle) {
         QString syntax = opc.opcodeName.simplified() + "(" + inArgs + ")";
         if (!opc.outArgs.isEmpty()) {
-            if (opc.outArgs.contains(QLatin1Char(',')))
+            if (opc.outArgs.contains(','_L1))
                 syntax += ":(" + opc.outArgs.simplified() + ")";
             else
                 syntax += ":" + opc.outArgs.simplified();
@@ -297,7 +311,7 @@ QString opcodeCallSyntax(const Opcode &opc)
     if (!inArgs.isEmpty()) {
         // The arguments come with their parentheses: the name is followed by
         // them directly, as in a call.
-        syntax += inArgs.startsWith(QLatin1Char('(')) ? inArgs
+        syntax += inArgs.startsWith('('_L1) ? inArgs
                                                       : " " + inArgs;
     }
     return syntax;
@@ -337,7 +351,7 @@ QString OpEntryParser::quickReferenceHtml(const QString &opcodeName) const
         // One block for all variants: a <pre> per variant would be separated by
         // the element's margin, which reads as an empty line between them.
         html += u"<pre><code>%1</code></pre>\n"_s.arg(
-                    syntaxes.join(QLatin1Char('\n')).toHtmlEscaped());
+                    syntaxes.join('\n'_L1).toHtmlEscaped());
     }
     if (!description.isEmpty()) {
         html += u"<p>%1</p>\n"_s.arg(description.toHtmlEscaped());

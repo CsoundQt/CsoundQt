@@ -154,7 +154,9 @@ public:
 	// GUI-thread part: applies the (background) detection result.
 	void applyRisset();
 	// Probe again after the Plugins window installed risset.
-	void recheckRisset();
+	// regenerateOpcodes forces risset's opcodes.xml to be rebuilt, which is
+	// needed after plugins were installed or removed.
+	void recheckRisset(bool regenerateOpcodes = false);
 	bool rissetDetectionReady() const { return m_rissetReady; }
 	bool rissetIsInstalled() const;
 	QString rissetVersion() const;
@@ -241,6 +243,7 @@ protected:
 	void recordRightDockRatio();
 	bool currentPageIsReadOnly() const;
 	void applyCodePadAppearance();
+	void updatePluginDependencyBanner();
 	//    virtual void keyPressEvent(QKeyEvent *event);
 private slots:
 	void open();
@@ -254,6 +257,7 @@ private slots:
 	void info();
 	void showEmbeddedFiles();
 	void showPlugins();
+	void showPluginsForDependencies(const QStringList &plugins);
 	// Edition
 	void copy();
 	void cut();
@@ -503,6 +507,16 @@ private:
 
     ConfigLists m_configlists;
 	QTabWidget *documentTabs;
+	QWidget *m_documentCentralWidget = nullptr;
+	QFrame *m_pluginDependencyBanner = nullptr;
+	QLabel *m_pluginDependencyLabel = nullptr;
+	QLabel *m_pluginDependencyUnavailableLabel = nullptr;
+	QPushButton *m_installPluginsButton = nullptr;
+	QToolButton *m_pluginDependencyCloseButton = nullptr;
+    QStringList m_pluginDependencyInstallList;
+    QString m_pluginDependencyKey;
+    QString m_dismissedPluginDependencyKey;
+    bool m_pluginDependenciesUnavailable = false;
 	QVector<DocumentPage *> documentPages;
 	struct PendingSessionFile {
 		QString path;
@@ -747,6 +761,7 @@ private:
     bool m_rissetInitialized = false;
     bool m_rissetDetecting = false;
     bool m_rissetReady = false;
+    bool m_rissetRegenerateOpcodes = false;
     bool m_audioMidiDiscovered = false;
     bool m_realtimeAudioValidated = false;
     QString m_helpStartPage;

@@ -39,6 +39,11 @@ public:
     void parseOpcodesXml(QString opcodeFile);
     void sortOpcodes();
 	void addExtraOpcodes();
+    // Reset to the opcode file given to the constructor plus the extra entries,
+    // dropping any previously parsed external (risset) opcodes. Call this
+    // before parsing an updated external file: it makes removed opcodes
+    // disappear and prevents repeated refreshes from duplicating entries.
+    void reload();
     // Drop the cached name list after adding/removing opcodes (e.g. external
     // plugin opcodes parsed from risset's opcodes.xml).
     void clearOpcodeNameCache();

@@ -122,6 +122,7 @@ public:
 	void setAutoParameterMode(bool autoParameterMode);
 	// Keep the completion popup on the editor font, two points smaller.
 	void setFont(QFont font) override;
+	void refreshOpcodeNames() override;
 
 	// TODO add all text inputs here as below
 

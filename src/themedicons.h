@@ -29,19 +29,15 @@
 // Icons for actions that may end up in the desktop's global menu (KDE Plasma's
 // "Global Menu" widget in a panel, for instance).
 //
-// Qt exports such menus to the shell over D-Bus (the "dbusmenu" protocol). For
-// every item it sends either an icon *name* or, when the QIcon has no name, a
-// rasterized PNG of the icon (see QDBusMenuItem in the Qt sources). CsoundQt's
-// icons are built from bundled resource files, so they have no name: their
-// pixels - rendered with CsoundQt's own theme - are handed to the shell and
-// drawn on the shell's background. If CsoundQt is set to a dark theme while the
-// desktop is light (or the other way round) the two no longer match and the
-// menu icons become unreadable.
+// Qt exports global menus to the shell over D-Bus (the "dbusmenu" protocol).
+// The shell resolves an icon name in its own icon theme, which follows the
+// desktop palette; an icon without a name is instead sent as rasterized pixels
+// rendered with CsoundQt's palette. That can make menu icons unreadable when
+// the application's theme differs from the desktop's.
 //
-// These helpers wrap a bundled icon in a QIconEngine that reports a freedesktop
-// icon name, so Qt sends only the name and the shell resolves it in *its* icon
-// theme. Inside the application the bundled pixels are painted unchanged, so
-// toolbars keep CsoundQt's own artwork and follow its theme setting.
+// forMenu() therefore returns an icon whose engine reports the matching
+// freedesktop name to global-menu exporters, while continuing to paint the
+// bundled application-themed pixels in CsoundQt's own menus and toolbars.
 namespace ThemedIcons {
 
 // Resolve a bundled theme icon path to the SVG file that should be loaded. The

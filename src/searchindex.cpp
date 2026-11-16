@@ -20,6 +20,7 @@
 #include <QSet>
 #include <QDebug>
 #include <algorithm>
+using namespace Qt::StringLiterals;
 
 static QString stripHtml(const QString &html)
 {
@@ -44,9 +45,9 @@ static QString stripHtml(const QString &html)
         if (!inTag)
             out.append(c);
     }
-    out.replace(QStringLiteral("&amp;"), "&").replace(QStringLiteral("&lt;"), "<")
-        .replace(QStringLiteral("&gt;"), ">").replace(QStringLiteral("&nbsp;"), " ")
-        .replace(QStringLiteral("&#39;"), "'").replace(QStringLiteral("&quot;"), "\"");
+    out.replace(u"&amp;"_s, "&").replace(u"&lt;"_s, "<")
+        .replace(u"&gt;"_s, ">").replace(u"&nbsp;"_s, " ")
+        .replace(u"&#39;"_s, "'").replace(u"&quot;"_s, "\"");
     return out;
 }
 

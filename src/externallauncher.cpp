@@ -364,8 +364,8 @@ bool openFolder(const QString &path, QString *errorString, const QString &featur
 #endif
 
     QString folder = info.absoluteFilePath();
-    if (!folder.endsWith(QLatin1Char('/')))
-        folder += QLatin1Char('/');
+    if (!folder.endsWith('/'_L1))
+        folder += '/'_L1;
     return openWithDefaultApplication(QUrl::fromLocalFile(folder), errorString, request);
 }
 
@@ -463,7 +463,7 @@ bool openBrowser(const QString &configuredBrowser, const QUrl &url, QString *err
 
     // Only report a failure if the system default browser failed as well.
     if (errorString)
-        *errorString = launchError + QLatin1Char('\n') + fallbackError;
+        *errorString = launchError + '\n'_L1 + fallbackError;
     return false;
 }
 

@@ -59,7 +59,7 @@ QString shortcutScope(QAction *action)
 {
 	const QVariant scope = action != nullptr ? action->property("shortcutScope")
 											 : QVariant();
-	return scope.isValid() ? scope.toString() : QStringLiteral("global");
+	return scope.isValid() ? scope.toString() : u"global"_s;
 }
 
 QString shortcutScopeLabel(const QString &scope)
@@ -275,7 +275,7 @@ void KeyboardShortcutsWidget::assignShortcut(int row, int /*column*/)
 				if (conflictScope != candidateScope) {
 					crossScope = true;
 				}
-				usedBy.append(QStringLiteral("\"%1\" (%2)").arg(
+				usedBy.append(u"\"%1\" (%2)"_s.arg(
 						conflictName != nullptr
 						? conflictName->text().toHtmlEscaped() : QString(),
 						shortcutScopeLabel(conflictScope)));
@@ -290,7 +290,7 @@ void KeyboardShortcutsWidget::assignShortcut(int row, int /*column*/)
 							.arg(shortcut, usedBy.first()));
 			} else {
 				box.setText(tr("The shortcut <b>%1</b> is already used by:<br>%2")
-							.arg(shortcut, usedBy.join(QStringLiteral("<br>"))));
+							.arg(shortcut, usedBy.join(u"<br>"_s)));
 			}
 			box.setInformativeText(crossScope
 					? tr("The existing action has a different scope. Global shortcuts "

@@ -23,6 +23,8 @@ private slots:
     void detectsRissetScript();
     void prefersManagedRisset();
     void generatesOpcodesXml();
+    void bundledOpcodeMap();
+    void pluginUsagesInText();
 
 private:
     QString installFakeExecutable(const QString &directory,
@@ -213,6 +215,93 @@ void TestRisset::generatesOpcodesXml()
     QCOMPARE(args.at(2), u"opcodesxml"_s);
     QCOMPARE(args.at(3), u"--outfile"_s);
     QCOMPARE(args.at(4), opcodes);
+}
+
+void TestRisset::bundledOpcodeMap()
+{
+    // Without risset, the opcode map compiled into CsoundQt still tells which
+    // plugin provides each external opcode.
+    qputenv("PATH", m_emptyBin.path().toUtf8());
+    Risset risset;
+    QVERIFY(!risset.isInstalled);
+    QVERIFY(!risset.opcodeToPlugin.isEmpty());
+    QCOMPARE(risset.opcodeToPlugin.value(u"dict_new"_s), u"klib"_s);
+    QCOMPARE(risset.opcodeToPlugin.value(u"poly"_s), u"poly"_s);
+    QVERIFY(risset.pluginOpcodes.value(u"klib"_s).contains(u"dict_new"_s));
+}
+
+void TestRisset::pluginUsagesInText()
+{
+    qputenv("PATH", m_emptyBin.path().toUtf8());
+    Risset risset;
+
+    const QString csd = uR"(<CsoundSynthesizer>
+<CsInstruments>
+instr 1
+    ; dict_del is only a comment
+    // jsfx is only a comment
+    /* sndmeta is only a comment */
+    Sname = "else pathSplit filereadmeta"
+    idict:k = dict_new()
+    ijoin:i = findFileInPath("x")
+    asig:a = poly(1)
+endin
+</CsInstruments>
+<CsScore>
+; filereadmeta is outside the orchestra
+i1 0 1
+</CsScore>
+</CsoundSynthesizer>)"_s;
+    const QVector<Risset::PluginUsage> usages =
+            risset.pluginUsagesInText(csd);
+    QCOMPARE(usages.size(), 3);
+    QCOMPARE(usages.at(0).plugin, u"klib"_s);
+    QCOMPARE(usages.at(0).opcodes.size(), 1);
+    QCOMPARE(usages.at(0).opcodes.first().opcode, u"dict_new"_s);
+    QCOMPARE(usages.at(0).opcodes.first().line, 8);
+    QCOMPARE(usages.at(1).plugin, u"pathtools"_s);
+    QCOMPARE(usages.at(1).opcodes.first().opcode, u"findFileInPath"_s);
+    QCOMPARE(usages.at(1).opcodes.first().line, 9);
+    QCOMPARE(usages.at(2).plugin, u"poly"_s);
+    QCOMPARE(usages.at(2).opcodes.first().opcode, u"poly"_s);
+    QCOMPARE(usages.at(2).opcodes.first().line, 10);
+
+    // A UDO defined in the text shadows a plugin opcode with the same name.
+    const QString udo = u"opcode poly, a, a\n"
+                        "    aout = ain\n"
+                        "endop\n"
+                        "asig:a = poly(asig)\n"_s;
+    QVERIFY(risset.pluginUsagesInText(udo).isEmpty());
+
+    // Typed variables and assignment targets are variables, not opcodes.
+    const QString variables = u"instr 1\n"
+                              "    accum:k init 0\n"
+                              "    accum = accum + 1\n"
+                              "    asig:a = oscil(0.5, 440)\n"
+                              "endin\n"_s;
+    QVERIFY(risset.pluginUsagesInText(variables).isEmpty());
+
+    // Semicolon comments and {{ }} strings are not code either.
+    const QString comments = u"instr 1\n"
+                             "    accum = 0\n"
+                             "    Sname = \"accum\"\n"
+                             "    {{ accum }}\n"
+                             "endin\n"_s;
+    QVERIFY(risset.pluginUsagesInText(comments).isEmpty());
+
+    // Orchestra-only text has no CsInstruments tags to isolate, and repeated
+    // uses of one opcode keep only the first line.
+    const QString orc = u"/* a\n"
+                        "   comment */\n"
+                        "asig:a = beosc(440)\n"
+                        "asig:a = beosc(220)\n"_s;
+    const QVector<Risset::PluginUsage> orcUsages =
+            risset.pluginUsagesInText(orc);
+    QCOMPARE(orcUsages.size(), 1);
+    QCOMPARE(orcUsages.first().plugin, u"beosc"_s);
+    QCOMPARE(orcUsages.first().opcodes.size(), 1);
+    QCOMPARE(orcUsages.first().opcodes.first().opcode, u"beosc"_s);
+    QCOMPARE(orcUsages.first().opcodes.first().line, 3);
 }
 
 int main(int argc, char *argv[])

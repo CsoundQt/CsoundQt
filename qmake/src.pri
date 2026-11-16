@@ -2,6 +2,7 @@
 RESOURCES += "src/application.qrc" \
     "src/icons.qrc" \
     "src/fonts.qrc" \
+    src/risset.qrc \
     src/qml_resources.qrc
 
 FORMS = "src/about.ui" \

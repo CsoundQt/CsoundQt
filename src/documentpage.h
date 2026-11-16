@@ -74,6 +74,7 @@ public:
 	void setOptionsText(QString text);
 	void loadTextString(QString &text); // sets the text string and resets the undo history
 	int setTextString(QString &text);
+	QStringList requiredPlugins() const { return m_requiredPlugins; }
 	void toggleLineArea();
 	void toggleParameterMode();
 	void showParametersInEditor();
@@ -356,6 +357,7 @@ private:
 	ChannelReferenceHighlightMode m_channelReferenceHighlightMode = ChannelReferenceHighlightMode::NotPerforming;
 	bool m_widgetChannelHighlightPinned = false;
 	QStringList m_pinnedWidgetChannels;
+	QStringList m_requiredPlugins;
 
 private slots:
 	void textChanged();
@@ -367,6 +369,8 @@ signals:
     void unmodified();
     // The <CsFileB> list changed (added, removed or replaced).
     void embeddedFilesChanged();
+    // The plugin dependencies declared in <CsMeta> changed.
+    void pluginDependenciesChanged();
     void stopSignal(); // To tell main application that running has stopped
 	void setHelpSignal(); // Propagated from view
     // Requests from play/render/pause/stop buttons in the widget layout. The

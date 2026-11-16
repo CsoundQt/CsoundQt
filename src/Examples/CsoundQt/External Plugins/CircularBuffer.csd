@@ -1,4 +1,8 @@
 <CsoundSynthesizer>
+<CsMeta>
+plugins = ["klib", "else"]
+</CsMeta>
+
 <CsInstruments>
 
 /*
@@ -88,6 +92,10 @@ schedule "main", 0, -1
 
 </CsInstruments>
 </CsoundSynthesizer>
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -115,7 +123,6 @@ schedule "main", 0, -1
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>REC</text>
-  <image/>
   <eventLine/>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>

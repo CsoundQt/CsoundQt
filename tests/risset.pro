@@ -24,3 +24,5 @@ HEADERS += \
 SOURCES += \
     $$PWD/../src/risset.cpp \
     $$PWD/test_risset.cpp
+
+RESOURCES += $$PWD/../src/risset.qrc

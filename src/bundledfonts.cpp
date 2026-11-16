@@ -25,6 +25,7 @@
 #include <QDebug>
 #include <QFontDatabase>
 #include <QHash>
+using namespace Qt::StringLiterals;
 
 namespace {
 
@@ -164,12 +165,12 @@ QStringList allFamilies()
 
 QString defaultFamily()
 {
-	return QStringLiteral("Liberation Sans");
+	return u"Liberation Sans"_s;
 }
 
 QString rulerFamily()
 {
-	return QStringLiteral("Noto Sans");
+	return u"Noto Sans"_s;
 }
 
 int rulerPixelSize()

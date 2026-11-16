@@ -3,7 +3,9 @@
 
 Pass source files or directories. Directories are searched recursively for C++
 source/header files; build and VCS directories are skipped. Single-line,
-literal-only QStringLiteral and QLatin1String calls are converted. The required
+literal-only QStringLiteral and QLatin1String calls are converted to the
+corresponding literal suffixes, and QLatin1Char calls with a character literal
+are converted to the _L1 character suffix. The required
 Qt::StringLiterals using-directive is added to changed files when absent. Use
 --dry-run to inspect the diff first.
 """
@@ -28,6 +30,9 @@ STRING_LITERAL_USING_RE = re.compile(
 TRANSFORMATIONS = {
     "QStringLiteral": ("u", "_s"),
     "QLatin1String": ("", "_L1"),
+}
+CHAR_TRANSFORMS = {
+    "QLatin1Char": "_L1",
 }
 
 
@@ -142,6 +147,25 @@ def parse_literal_argument(
     return close_paren + 1, argument
 
 
+def parse_char_argument(
+    text: str, open_paren: int, suffix: str
+) -> tuple[int, str] | None:
+    """Parse a single-line call containing one narrow character literal."""
+    i = skip_trivia(text, open_paren + 1)
+    if i is None or i >= len(text) or text[i] != "'":
+        return None
+    end = quoted_end(text, i, "'")
+    if end is None:
+        return None
+    close = skip_trivia(text, end)
+    if close is None or close >= len(text) or text[close] != ")":
+        return None
+    argument_source = text[open_paren + 1 : close]
+    if "\n" in argument_source or "\r" in argument_source:
+        return None
+    return close + 1, text[i:end] + suffix
+
+
 def is_identifier_start(char: str) -> bool:
     return char == "_" or char.isalpha() or ord(char) >= 0x80
 
@@ -182,6 +206,12 @@ def convert(source: str) -> tuple[str, int]:
             if name in TRANSFORMATIONS and i < len(source) and source[i] == "(":
                 literal_prefix, suffix = TRANSFORMATIONS[name]
                 parsed = parse_literal_argument(source, i, literal_prefix, suffix)
+                if parsed is not None:
+                    end, replacement = parsed
+                    replacements.append((start, end, replacement))
+                    i = end
+            elif name in CHAR_TRANSFORMS and i < len(source) and source[i] == "(":
+                parsed = parse_char_argument(source, i, CHAR_TRANSFORMS[name])
                 if parsed is not None:
                     end, replacement = parsed
                     replacements.append((start, end, replacement))
@@ -294,9 +324,9 @@ def main() -> int:
             sys.stdout.writelines(diff)
         else:
             path.write_bytes(updated.encode("utf-8"))
-            print(f"{path}: converted {count} string literal call(s)")
+            print(f"{path}: converted {count} literal call(s)")
     if args.dry_run:
-        print(f"Would convert {total} string literal call(s) in {changed_files} file(s).")
+        print(f"Would convert {total} literal call(s) in {changed_files} file(s).")
     return 0
 
 

@@ -30,6 +30,7 @@
 #include <QStringView>
 
 #include <algorithm>
+using namespace Qt::StringLiterals;
 
 
 TextBlockData::TextBlockData() = default;
@@ -83,7 +84,7 @@ void scanInto(QStringView line, int startState, Line &info)
 
 	while (pos < length) {
 		const QChar c = line.at(pos);
-		if (c == QLatin1Char('"')) {
+		if (c == '"'_L1) {
 			// A string ends at the next quote; an unterminated one runs to the
 			// end of the line.
 			const int end = line.indexOf('"', pos + 1);
@@ -94,10 +95,10 @@ void scanInto(QStringView line, int startState, Line &info)
 				info.strings.append({pos, end + 1});
 				pos = end + 1;
 			}
-		} else if (c == QLatin1Char('/')
+		} else if (c == '/'_L1
 		&& pos + 1 < length) {
 			const QChar next = line.at(pos + 1);
-			if (next == QLatin1Char('*')) {
+			if (next == '*'_L1) {
 				const int end = line.indexOf(u"*/"_s, pos + 2);
 				if (end < 0) {
 					info.comments.append({pos, length});
@@ -108,16 +109,16 @@ void scanInto(QStringView line, int startState, Line &info)
 				pos = end + 2;
 				continue;
 			}
-			if (next == QLatin1Char('/')) {
+			if (next == '/'_L1) {
 				info.comments.append({pos, length});
 				return; // the comment goes to the end of the line
 			}
 			++pos;
-		} else if (c == QLatin1Char(';')) {
+		} else if (c == ';'_L1) {
 			info.comments.append({pos, length});
 			return; // the comment goes to the end of the line
-		} else if (c == QLatin1Char('{') && pos + 1 < length
-				   && line.at(pos + 1) == QLatin1Char('{')) {
+		} else if (c == '{'_L1 && pos + 1 < length
+				   && line.at(pos + 1) == '{'_L1) {
 			// A {{ ... }} string, which may span lines.
 			const int end = line.indexOf(u"}}"_s, pos + 2);
 			if (end < 0) {
@@ -148,17 +149,17 @@ namespace {
 // once for the lifetime of the process instead of guarding a function-local
 // static on every call.
 const QRegularExpression csdtagRx(
-        QStringLiteral("^\\s*<\\/?(CsInstruments|CsOptions|CsoundSynthesizer|CsScore|CsFileB|CsLicense|html).*>"));
+        u"^\\s*<\\/?(CsInstruments|CsOptions|CsoundSynthesizer|CsScore|CsFileB|CsLicense|CsMeta|html).*>"_s);
 const QRegularExpression defineRx(
-        QStringLiteral("^\\s*#define\\s+[_\\w\\ \\t]*#.*#"));
+        u"^\\s*#define\\s+[_\\w\\ \\t]*#.*#"_s);
 const QRegularExpression instOpcodeRx(
-        QStringLiteral("^\\s*\\b(instr|opcode)\\s+(\\w+)\\b"));
+        u"^\\s*\\b(instr|opcode)\\s+(\\w+)\\b"_s);
 // A label is an identifier followed by ':' and then whitespace/end-of-line.
 // The lookahead keeps the match ending at the colon so trailing whitespace
 // (e.g. before a comment) is not highlighted, and it prevents mistaking a
 // Csound 7 typed variable definition ("name:type") for a label.
 const QRegularExpression labelRx(
-        QStringLiteral("^\\s*([a-zA-Z]\\w*):(?=\\s|$)"));
+        u"^\\s*([a-zA-Z]\\w*):(?=\\s|$)"_s);
 const QRegularExpression udoSignatureRx(
         QStringLiteral("^\\s*opcode\\s+[A-Za-z_]\\w*\\s*"
                        "\\(([^)]*)\\)\\s*"
@@ -168,13 +169,13 @@ const QRegularExpression typedParamRx(
         QStringLiteral("([A-Za-z_]\\w*)\\s*:\\s*"
                        "([A-Za-z_]\\w*(?:\\[\\])?)"));
 const QRegularExpression typeRx(
-        QStringLiteral("[A-Za-z_]\\w*(?:\\[\\])?"));
+        u"[A-Za-z_]\\w*(?:\\[\\])?"_s);
 const QRegularExpression structRx(
-        QStringLiteral("^\\s*\\bstruct\\b\\s+(\\w+)\\b"));
+        u"^\\s*\\bstruct\\b\\s+(\\w+)\\b"_s);
 const QRegularExpression globalRx(
-        QStringLiteral("(\\w+)@global:(\\w+(?:\\[\\])?)"));
+        u"(\\w+)@global:(\\w+(?:\\[\\])?)"_s);
 const QRegularExpression expressionRx(
-        QStringLiteral("\\b[\\w:]+\\b"));
+        u"\\b[\\w:]+\\b"_s);
 
 // The names of the Csound preprocessor directives. A '#' anywhere else is
 // ordinary text -- a colour in a string, a stray symbol, a comment -- and
@@ -197,7 +198,7 @@ const QSet<QString> builtinTypes = {
 // Strip a Csound 7 type annotation such as the ":k" in "chnget:k".
 QString opcodeBaseName(const QString &name)
 {
-    const int colon = name.indexOf(QLatin1Char(':'));
+    const int colon = name.indexOf(':'_L1);
     return colon > 0 ? name.left(colon) : name;
 }
 
@@ -219,7 +220,7 @@ int channelArgumentIndex(const QString &name)
 }
 
 const QRegularExpression channelSecondArgRx(
-        QStringLiteral("\\b(chnset|chnmix)(?:\\s*:\\s*[A-Za-z]+)?\\b"));
+        u"\\b(chnset|chnmix)(?:\\s*:\\s*[A-Za-z]+)?\\b"_s);
 
 } // namespace
 
@@ -361,34 +362,34 @@ void Highlighter::resetFormats()
 
 QTextCharFormat *Highlighter::formatForName(const QString &name)
 {
-    if (name == QLatin1String("default")) return &defaultFormat;
-    if (name == QLatin1String("csdtag")) return &csdtagFormat;
-    if (name == QLatin1String("csdtagClose")) return &csdtagCloseFormat;
-    if (name == QLatin1String("inst")) return &instFormat;
-    if (name == QLatin1String("header")) return &headerFormat;
-    if (name == QLatin1String("keyword")) return &keywordFormat;
-    if (name == QLatin1String("opcode")) return &opcodeFormat;
-    if (name == QLatin1String("deprecated")) return &deprecatedFormat;
-    if (name == QLatin1String("singleLineComment")) return &singleLineCommentFormat;
-    if (name == QLatin1String("importantComment")) return &importantCommentFormat;
-    if (name == QLatin1String("multiLineComment")) return &multiLineCommentFormat;
-    if (name == QLatin1String("macroDefine")) return &macroDefineFormat;
-    if (name == QLatin1String("pfield")) return &pfieldFormat;
-    if (name == QLatin1String("irate")) return &irateFormat;
-    if (name == QLatin1String("krate")) return &krateFormat;
-    if (name == QLatin1String("arate")) return &arateFormat;
-    if (name == QLatin1String("stringVar")) return &stringVarFormat;
-    if (name == QLatin1String("channelname")) return &channelnameFormat;
-    if (name == QLatin1String("fsig")) return &fsigFormat;
-    if (name == QLatin1String("boolean")) return &booleanFormat;
-    if (name == QLatin1String("complex")) return &complexFormat;
-    if (name == QLatin1String("label")) return &labelFormat;
-    if (name == QLatin1String("name")) return &nameFormat;
-    if (name == QLatin1String("quotation")) return &quotationFormat;
-    if (name == QLatin1String("io")) return &ioFormat;
-    if (name == QLatin1String("udo")) return &udoFormat;
-    if (name == QLatin1String("operator")) return &operatorFormat;
-    if (name == QLatin1String("scoreLetter")) return &scoreLetterFormat;
+    if (name == "default"_L1) return &defaultFormat;
+    if (name == "csdtag"_L1) return &csdtagFormat;
+    if (name == "csdtagClose"_L1) return &csdtagCloseFormat;
+    if (name == "inst"_L1) return &instFormat;
+    if (name == "header"_L1) return &headerFormat;
+    if (name == "keyword"_L1) return &keywordFormat;
+    if (name == "opcode"_L1) return &opcodeFormat;
+    if (name == "deprecated"_L1) return &deprecatedFormat;
+    if (name == "singleLineComment"_L1) return &singleLineCommentFormat;
+    if (name == "importantComment"_L1) return &importantCommentFormat;
+    if (name == "multiLineComment"_L1) return &multiLineCommentFormat;
+    if (name == "macroDefine"_L1) return &macroDefineFormat;
+    if (name == "pfield"_L1) return &pfieldFormat;
+    if (name == "irate"_L1) return &irateFormat;
+    if (name == "krate"_L1) return &krateFormat;
+    if (name == "arate"_L1) return &arateFormat;
+    if (name == "stringVar"_L1) return &stringVarFormat;
+    if (name == "channelname"_L1) return &channelnameFormat;
+    if (name == "fsig"_L1) return &fsigFormat;
+    if (name == "boolean"_L1) return &booleanFormat;
+    if (name == "complex"_L1) return &complexFormat;
+    if (name == "label"_L1) return &labelFormat;
+    if (name == "name"_L1) return &nameFormat;
+    if (name == "quotation"_L1) return &quotationFormat;
+    if (name == "io"_L1) return &ioFormat;
+    if (name == "udo"_L1) return &udoFormat;
+    if (name == "operator"_L1) return &operatorFormat;
+    if (name == "scoreLetter"_L1) return &scoreLetterFormat;
     return nullptr;
 }
 
@@ -489,7 +490,7 @@ void Highlighter::setTheme(const QString &theme)
     if (!definition) {
         qDebug() << "CsoundQt: editor theme" << theme
                  << "not found, falling back to light";
-        applied = QStringLiteral("light");
+        applied = u"light"_s;
         definition = EditorThemes::find(applied);
     }
 
@@ -498,8 +499,8 @@ void Highlighter::setTheme(const QString &theme)
         // A JSON theme only describes what it changes. Start from its built-in
         // light or dark base, then overlay the defined values.
         const EditorThemes::Theme *base =
-                EditorThemes::find(definition->dark ? QStringLiteral("dark")
-                                                    : QStringLiteral("light"));
+                EditorThemes::find(definition->dark ? u"dark"_s
+                                                    : u"light"_s);
         if (base)
             applyTheme(*base);
         defaultFormat.setForeground(definition->defaultForeground);
@@ -830,17 +831,17 @@ bool Highlighter::isChannelNameArgument(const QString &line, int stringStart) co
     int lastComma = -1;
     for (int i = pos; i >= 0; --i) {
         const QChar c = line.at(i);
-        if (c == QLatin1Char(')')) {
+        if (c == ')'_L1) {
             ++depth;
         }
-        else if (c == QLatin1Char('(')) {
+        else if (c == '('_L1) {
             if (depth == 0) {
                 openParen = i;
                 break;
             }
             --depth;
         }
-        else if (c == QLatin1Char(',') && depth == 0 && lastComma < 0) {
+        else if (c == ','_L1 && depth == 0 && lastComma < 0) {
             lastComma = i;
         }
     }
@@ -864,8 +865,8 @@ bool Highlighter::isChannelNameArgument(const QString &line, int stringStart) co
         const int nameEnd = pos + 1;
         while (pos >= 0) {
             const QChar c = line.at(pos);
-            if (!c.isLetterOrNumber() && c != QLatin1Char('_')
-                    && c != QLatin1Char(':'))
+            if (!c.isLetterOrNumber() && c != '_'_L1
+                    && c != ':'_L1)
                 break;
             --pos;
         }
@@ -878,14 +879,14 @@ bool Highlighter::isChannelNameArgument(const QString &line, int stringStart) co
         int nested = 0;
         for (int i = openParen + 1; i < stringStart; ++i) {
             const QChar c = line.at(i);
-            if (c == QLatin1Char('(')) {
+            if (c == '('_L1) {
                 ++nested;
             }
-            else if (c == QLatin1Char(')')) {
+            else if (c == ')'_L1) {
                 if (nested > 0)
                     --nested;
             }
-            else if (c == QLatin1Char(',') && nested == 0) {
+            else if (c == ','_L1 && nested == 0) {
                 ++argumentIndex;
             }
         }
@@ -908,14 +909,14 @@ bool Highlighter::isChannelNameArgument(const QString &line, int stringStart) co
         int nested = 0;
         for (int i = match.capturedEnd(); i < stringStart; ++i) {
             const QChar c = line.at(i);
-            if (c == QLatin1Char('(')) {
+            if (c == '('_L1) {
                 ++nested;
             }
-            else if (c == QLatin1Char(')')) {
+            else if (c == ')'_L1) {
                 if (nested > 0)
                     --nested;
             }
-            else if (c == QLatin1Char(',') && nested == 0) {
+            else if (c == ','_L1 && nested == 0) {
                 ++argumentIndex;
             }
         }
@@ -927,8 +928,8 @@ bool Highlighter::isChannelNameArgument(const QString &line, int stringStart) co
     int wordEnd = pos + 1;
     while (pos >= 0) {
         const QChar c = line.at(pos);
-        if (!c.isLetterOrNumber() && c != QLatin1Char('_')
-                && c != QLatin1Char(':'))
+        if (!c.isLetterOrNumber() && c != '_'_L1
+                && c != ':'_L1)
             break;
         --pos;
     }
@@ -1179,7 +1180,7 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
     auto blockdata = static_cast<TextBlockData*>(currentBlockUserData());
 
     const QStringView trimmedLine = QStringView(line).trimmed();
-    if (trimmedLine.startsWith(QLatin1Char('<'))) {
+    if (trimmedLine.startsWith('<'_L1)) {
         rxmatch = csdtagRx.match(line);
         if(rxmatch.hasMatch() ) {
             const QStringView tagName = rxmatch.capturedView(1);
@@ -1191,12 +1192,14 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
                 blockdata->section = OptionsSection;
             } else if(tagName == QLatin1StringView("html") )  {
                 blockdata->section = HtmlSection;
+            } else if (tagName == QLatin1StringView("CsMeta")) {
+                blockdata->section = MetadataSection;
             } else {
                 blockdata->section = UnknownSection;
             }
             const int nameStart = static_cast<int>(rxmatch.capturedStart(1));
             const bool closing = nameStart > 0
-                    && line.at(nameStart - 1) == QLatin1Char('/');
+                    && line.at(nameStart - 1) == '/'_L1;
             setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(),
                       closing ? csdtagCloseFormat : csdtagFormat);
             return;
@@ -1210,6 +1213,10 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
         return;
     } else if (blockdata->section == HtmlSection || m_sectionType == HtmlSection) {
         highlightHtmlBlock(line);
+        return;
+    } else if (blockdata->section == MetadataSection
+               || m_sectionType == MetadataSection) {
+        // CsMeta contains TOML metadata, not orchestra code.
         return;
     } else if(blockdata->section == OptionsSection || m_sectionType == OptionsSection ) {
         // Options are simple command-line tokens. Walk the line without
@@ -1226,8 +1233,8 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
                 break;
 
             const QStringView token = optionsLine.mid(tokenStart, i - tokenStart);
-            qsizetype separator = token.indexOf(QLatin1Char('='));
-            const qsizetype colon = token.indexOf(QLatin1Char(':'));
+            qsizetype separator = token.indexOf('='_L1);
+            const qsizetype colon = token.indexOf(':'_L1);
             if (colon >= 0 && (separator < 0 || colon < separator))
                 separator = colon;
             const QStringView optionName = separator < 0 ? token
@@ -1244,7 +1251,7 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
         const QStringView codeText = text.trimmed();
 
         // define
-        if (codeText.startsWith(QLatin1Char('#'))) {
+        if (codeText.startsWith('#'_L1)) {
             rxmatch = defineRx.match(text);
             if(rxmatch.hasMatch()) {
                 setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), macroDefineFormat);
@@ -1337,17 +1344,17 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
             int opLength = 0;
             if (i + 1 < textSize) {
                 const QChar next = text.at(i + 1);
-                if ((c == QLatin1Char('&') && next == QLatin1Char('&'))
-                        || (c == QLatin1Char('|') && next == QLatin1Char('|'))
-                        || (c == QLatin1Char('=') && next == QLatin1Char('='))
-                        || (c == QLatin1Char('!') && next == QLatin1Char('='))
-                        || (c == QLatin1Char('<') && next == QLatin1Char('='))
-                        || (c == QLatin1Char('>') && next == QLatin1Char('=')))
+                if ((c == '&'_L1 && next == '&'_L1)
+                        || (c == '|'_L1 && next == '|'_L1)
+                        || (c == '='_L1 && next == '='_L1)
+                        || (c == '!'_L1 && next == '='_L1)
+                        || (c == '<'_L1 && next == '='_L1)
+                        || (c == '>'_L1 && next == '='_L1))
                     opLength = 2;
             }
             if (opLength == 0
-                    && (c == QLatin1Char('<') || c == QLatin1Char('>')
-                        || c == QLatin1Char('\\')))
+                    && (c == '<'_L1 || c == '>'_L1
+                        || c == '\\'_L1))
                 opLength = 1;
             if (opLength > 0) {
                 setFormat(i, opLength, operatorFormat);
@@ -1368,8 +1375,8 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
                 // "$name" is a macro expansion anywhere. "#name" is a
                 // preprocessor directive only when name is one: "#" followed
                 // by anything else is not highlighted.
-                if(prev == QLatin1Char('$')
-                        || (prev == QLatin1Char('#')
+                if(prev == '$'_L1
+                        || (prev == '#'_L1
                             && isPreprocessorDirective(rxmatch.capturedView()))) {
                     setFormat(wordStart - 1, wordEnd - wordStart + 1, macroDefineFormat);
                     continue;
@@ -1378,7 +1385,7 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
 
             const QStringView word = rxmatch.capturedView();
             const int wordLength = static_cast<int>(word.size());
-            bool isPfield = wordLength > 1 && word.at(0) == QLatin1Char('p');
+            bool isPfield = wordLength > 1 && word.at(0) == 'p'_L1;
             for (int i = 1; isPfield && i < wordLength; ++i) {
                 if (!word.at(i).isDigit())
                     isPfield = false;
@@ -1396,10 +1403,10 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
                 break; // was: return. For any case, to go through lines after while loop
             }
             else if(tagPatterns.contains(wordKey) && wordStart > 0
-                    && (text.at(wordStart - 1) == QLatin1Char('<')
-                        || (wordStart > 1 && text.at(wordStart - 2) == QLatin1Char('<')
-                            && text.at(wordStart - 1) == QLatin1Char('/')))) {
-                const bool closing = text.at(wordStart - 1) == QLatin1Char('/');
+                    && (text.at(wordStart - 1) == '<'_L1
+                        || (wordStart > 1 && text.at(wordStart - 2) == '<'_L1
+                            && text.at(wordStart - 1) == '/'_L1))) {
+                const bool closing = text.at(wordStart - 1) == '/'_L1;
                 setFormat(wordStart - (closing ? 2 : 1),
                           wordLength + (closing ? 3 : 2),
                           closing ? csdtagCloseFormat : csdtagFormat);
@@ -1413,16 +1420,16 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
             else if(ioPatterns.contains(wordKey)) {
                 setFormat(wordStart, wordLength, ioFormat);
             }
-            else if(word.at(wordLength - 1) != QLatin1Char(':')
-                    && word.indexOf(QLatin1Char(':')) >= 0) {
-                const int colon = static_cast<int>(word.indexOf(QLatin1Char(':')));
+            else if(word.at(wordLength - 1) != ':'_L1
+                    && word.indexOf(':'_L1) >= 0) {
+                const int colon = static_cast<int>(word.indexOf(':'_L1));
                 const int secondColon = static_cast<int>(
-                            word.indexOf(QLatin1Char(':'), colon + 1));
+                            word.indexOf(':'_L1, colon + 1));
                 if (secondColon < 0) {
                     const QStringView varName  = word.left(colon);
                     const QStringView typeName = word.mid(colon + 1);
                     // "@global:type" annotation: the token is "global:type", preceded by '@'
-                    if(wordStart > 0 && text.at(wordStart - 1) == QLatin1Char('@')) {
+                    if(wordStart > 0 && text.at(wordStart - 1) == '@'_L1) {
                         // Highlight "@global:type" together as a keyword annotation
                         setFormat(wordStart - 1, wordLength + 1, keywordFormat);
                     }
@@ -1524,13 +1531,13 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
                     variableFormat = nameFormat; haveVariableFormat = true;
                 }
                 // Fall back to classic prefix-based detection
-                else if(word.startsWith(QLatin1Char('a'))) {
+                else if(word.startsWith('a'_L1)) {
                     variableFormat = arateFormat; haveVariableFormat = true;
                 }
-                else if(word.startsWith(QLatin1Char('k'))) {
+                else if(word.startsWith('k'_L1)) {
                     variableFormat = krateFormat; haveVariableFormat = true;
                 }
-                else if(word.startsWith(QLatin1Char('i'))) {
+                else if(word.startsWith('i'_L1)) {
                     variableFormat = irateFormat; haveVariableFormat = true;
                 }
                 else if(word.startsWith(QLatin1StringView("ga"))) {
@@ -1542,13 +1549,13 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
                 else if(word.startsWith(QLatin1StringView("gi"))) {
                     variableFormat = girateFormat; haveVariableFormat = true;
                 }
-                else if(word.startsWith(QLatin1Char('S'))) {
+                else if(word.startsWith('S'_L1)) {
                     variableFormat = stringVarFormat; haveVariableFormat = true;
                 }
                 else if(word.startsWith(QLatin1StringView("gS"))) {
                     variableFormat = gstringVarFormat; haveVariableFormat = true;
                 }
-                else if(word.startsWith(QLatin1Char('f'))) {
+                else if(word.startsWith('f'_L1)) {
                     variableFormat = fsigFormat; haveVariableFormat = true;
                 }
                 else if(word.startsWith(QLatin1StringView("gf"))) {
@@ -1563,13 +1570,13 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
         // String ranges are normally painted by highlightBlock() from the
         // lexical scan, after the code has been highlighted.
         if (paintStrings) {
-            for (qsizetype quote = text.indexOf(QLatin1Char('"')); quote >= 0; ) {
-                const qsizetype end = text.indexOf(QLatin1Char('"'), quote + 1);
+            for (qsizetype quote = text.indexOf('"'_L1); quote >= 0; ) {
+                const qsizetype end = text.indexOf('"'_L1, quote + 1);
                 if (end < 0)
                     break;
                 setFormat(static_cast<int>(quote), static_cast<int>(end - quote + 1),
                           quotationFormat);
-                quote = text.indexOf(QLatin1Char('"'), end + 1);
+                quote = text.indexOf('"'_L1, end + 1);
             }
         }
 
@@ -1586,7 +1593,7 @@ void Highlighter::highlightCsoundBlock(const QString &line, bool paintStrings)
 
         // label (separate). Only lines with a colon can contain a label; skip
         // the expression for the much more common lines without one.
-        if (text.indexOf(QLatin1Char(':')) >= 0) {
+        if (text.indexOf(':'_L1) >= 0) {
             rxmatch = labelRx.match(text);
             if (rxmatch.hasMatch()) {
                 // Highlight "<label>:" only, not the leading indentation.
@@ -1631,7 +1638,7 @@ void Highlighter::highlightHtmlBlock(const QString &text)
     // check what type of block it is:
     auto blockdata = static_cast<TextBlockData*>(currentBlockUserData());
 
-    rx.setPattern(uR"(^\s*<\/?(CsInstruments|CsOptions|CsoundSynthesizer|CsScore|CsFileB|CsLicense|html).*>)"_s);
+    rx.setPattern(uR"(^\s*<\/?(CsInstruments|CsOptions|CsoundSynthesizer|CsScore|CsFileB|CsLicense|CsMeta|html).*>)"_s);
     rxmatch = rx.match(text);
     if(rxmatch.hasMatch() ) {
         if(rxmatch.captured(1) == "CsInstruments" ) {
@@ -1642,12 +1649,14 @@ void Highlighter::highlightHtmlBlock(const QString &text)
             blockdata->section = OptionsSection;
         } else if(rxmatch.captured(1) == "html" )  {
             blockdata->section = HtmlSection;
+        } else if (rxmatch.captured(1) == "CsMeta") {
+            blockdata->section = MetadataSection;
         } else {
             blockdata->section = UnknownSection;
         }
         const int nameStart = static_cast<int>(rxmatch.capturedStart(1));
         const bool closing = nameStart > 0
-                && text.at(nameStart - 1) == QLatin1Char('/');
+                && text.at(nameStart - 1) == '/'_L1;
         setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(),
                   closing ? csdtagCloseFormat : csdtagFormat);
         return;

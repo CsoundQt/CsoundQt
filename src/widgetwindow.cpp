@@ -138,6 +138,7 @@ WidgetWindow::WidgetWindow(CsoundQt *mainWindow, const QString &fileName,
         m_scrollArea->setWidget(layout);
         m_scrollArea->viewport()->installEventFilter(
                     new WidgetLayoutViewportFilter(layout));
+        m_scrollArea->viewport()->setAcceptDrops(true);
         layout->setContained(true);
         layout->adjustLayoutSize();
         connect(layout, &WidgetLayout::windowStatus,

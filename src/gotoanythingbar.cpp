@@ -30,6 +30,7 @@
 #include <QVBoxLayout>
 
 #include <algorithm>
+using namespace Qt::StringLiterals;
 
 namespace {
 
@@ -54,8 +55,8 @@ int fuzzyScore(const QString &text, const QString &query)
 			return -1;
 		const QChar before = found > 0 ? text.at(found - 1) : QChar();
 		const bool wordStart = found == 0 || before.isSpace()
-				|| before == QLatin1Char('-') || before == QLatin1Char('/')
-				|| before == QLatin1Char(':');
+				|| before == '-'_L1 || before == '/'_L1
+				|| before == ':'_L1;
 		if (wordStart)
 			score += 16;
 		if (found == previous + 1)

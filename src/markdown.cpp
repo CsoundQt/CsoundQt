@@ -42,8 +42,8 @@ QString inlineHtml(const QString &text)
     while (i < text.size()) {
         const QChar c = text.at(i);
 
-        if (c == QLatin1Char('`')) {
-            const qsizetype close = text.indexOf(QLatin1Char('`'), i + 1);
+        if (c == '`'_L1) {
+            const qsizetype close = text.indexOf('`'_L1, i + 1);
             if (close > i + 1) {
                 flushPlain(i);
                 out += u"<code>"_s
@@ -54,7 +54,7 @@ QString inlineHtml(const QString &text)
                 continue;
             }
         }
-        else if (c == QLatin1Char('*')) {
+        else if (c == '*'_L1) {
             if (text.mid(i, 2) == u"**"_s) {
                 const qsizetype close = text.indexOf(u"**"_s, i + 2);
                 if (close > i + 2) {
@@ -68,7 +68,7 @@ QString inlineHtml(const QString &text)
                 }
             }
             else {
-                const qsizetype close = text.indexOf(QLatin1Char('*'), i + 1);
+                const qsizetype close = text.indexOf('*'_L1, i + 1);
                 if (close > i + 1) {
                     flushPlain(i);
                     out += u"<em>"_s
@@ -80,9 +80,9 @@ QString inlineHtml(const QString &text)
                 }
             }
         }
-        else if (c == QLatin1Char('_')) {
+        else if (c == '_'_L1) {
             const bool leftBoundary = i == 0 || !text.at(i - 1).isLetterOrNumber();
-            const qsizetype close = text.indexOf(QLatin1Char('_'), i + 1);
+            const qsizetype close = text.indexOf('_'_L1, i + 1);
             if (leftBoundary && close > i + 1) {
                 const bool rightBoundary = close + 1 >= text.size()
                         || !text.at(close + 1).isLetterOrNumber();
@@ -115,7 +115,7 @@ int headingLevel(const QString &trimmed)
 {
     int level = 0;
     while (level < 6 && level < trimmed.size()
-           && trimmed.at(level) == QLatin1Char('#'))
+           && trimmed.at(level) == '#'_L1)
         ++level;
     if (level == 0 || level >= trimmed.size() || !trimmed.at(level).isSpace())
         return 0;
@@ -127,8 +127,8 @@ bool isListMarker(const QString &trimmed, QString *text = nullptr)
     if (trimmed.size() < 2)
         return false;
     const QChar marker = trimmed.at(0);
-    if (marker != QLatin1Char('*') && marker != QLatin1Char('-')
-            && marker != QLatin1Char('+'))
+    if (marker != '*'_L1 && marker != '-'_L1
+            && marker != '+'_L1)
         return false;
     if (!trimmed.at(1).isSpace())
         return false;
@@ -141,9 +141,9 @@ int indentationWidth(const QString &line)
 {
     int width = 0;
     for (const QChar c : line) {
-        if (c == QLatin1Char(' '))
+        if (c == ' '_L1)
             ++width;
-        else if (c == QLatin1Char('\t'))
+        else if (c == '\t'_L1)
             width += 4;
         else
             break;
@@ -159,9 +159,9 @@ QString paragraphLine(const QString &line)
     QString prefix;
     while (indent < line.size()) {
         const QChar c = line.at(indent);
-        if (c == QLatin1Char(' '))
+        if (c == ' '_L1)
             prefix += u"&nbsp;"_s;
-        else if (c == QLatin1Char('\t'))
+        else if (c == '\t'_L1)
             prefix += u"&nbsp;&nbsp;&nbsp;&nbsp;"_s;
         else
             break;
@@ -237,10 +237,10 @@ int renderList(const QStringList &lines, int i, QString &html)
 
 QString toHtml(const QString &markdown, int headingOffset)
 {
-    QStringList lines = markdown.split(QLatin1Char('\n'));
+    QStringList lines = markdown.split('\n'_L1);
     // Tolerate CRLF input; the scanner normally already works on LF.
     for (QString &line : lines) {
-        if (line.endsWith(QLatin1Char('\r')))
+        if (line.endsWith('\r'_L1))
             line.chop(1);
     }
 
@@ -261,7 +261,7 @@ QString toHtml(const QString &markdown, int headingOffset)
             bool first = true;
             while (i < lines.size() && !isFence(lines.at(i).trimmed())) {
                 if (!first)
-                    code += QLatin1Char('\n');
+                    code += '\n'_L1;
                 code += lines.at(i);
                 first = false;
                 ++i;

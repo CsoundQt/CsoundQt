@@ -586,7 +586,7 @@ static QString humanizePropertyName(const QString &name)
     for (int i = 0; i < name.size(); ++i) {
         const QChar c = name.at(i);
         if (i > 0 && c.isUpper() && !name.at(i - 1).isUpper())
-            text += QLatin1Char(' ');
+            text += ' '_L1;
         text += c;
     }
     if (!text.isEmpty())

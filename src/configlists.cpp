@@ -501,7 +501,7 @@ int ConfigLists::audioDeviceChannels(const QString &module, const QString &devic
         // ports. Each JACK port is one channel.
         QString pattern = device;
         if (pattern.startsWith("adc:"_L1) || pattern.startsWith("dac:"_L1))
-            pattern = pattern.section(QLatin1Char(':'), 1);
+            pattern = pattern.section(':'_L1, 1);
         if (pattern != "null"_L1) {
             const QList<QStringPair> ports = isOutput
                     ? getAudioOutputDevices(u"jack"_s)
@@ -634,7 +634,7 @@ bool ConfigLists::isPipeWireRunning() {
         return false;
     QString remote = qEnvironmentVariable("PIPEWIRE_REMOTE",
                                           u"pipewire-0"_s);
-    return QFile::exists(dir + QLatin1Char('/') + remote);
+    return QFile::exists(dir + '/'_L1 + remote);
 #else
     return false;
 #endif
@@ -743,7 +743,7 @@ bool ConfigLists::isPerDeviceSamplerateBackend(const QString &module)
 int ConfigLists::deviceSamplerate(const QString &module, const QString &device,
                                   bool isOutput)
 {
-    const QString cacheKey = module + QLatin1Char('|') + device
+    const QString cacheKey = module + '|'_L1 + device
             + (isOutput ? u"|out"_s : u"|in"_s);
     if (m_deviceSamplerates.contains(cacheKey))
         return m_deviceSamplerates.value(cacheKey);
@@ -830,11 +830,11 @@ static bool jackNaturalLessThan(const QString &a, const QString &b)
 // Common prefix of a numbered JACK port family, e.g. "jaaa:in_1" -> "jaaa:in_".
 static QString jackAggregateKey(const QString &portName)
 {
-    const int colon = portName.indexOf(QLatin1Char(':'));
+    const int colon = portName.indexOf(':'_L1);
     if (colon < 0)
         return portName;
     const QString shortName = portName.mid(colon + 1);
-    const int underscore = shortName.lastIndexOf(QLatin1Char('_'));
+    const int underscore = shortName.lastIndexOf('_'_L1);
     if (underscore < 0)
         return portName;
     return portName.left(colon + 1) + shortName.left(underscore + 1);
@@ -877,7 +877,7 @@ static QString jackEscapeRegex(const QString &text)
     escaped.reserve(text.size() * 2);
     for (const QChar c : text) {
         if (special.contains(c))
-            escaped += QLatin1Char('\\');
+            escaped += '\\'_L1;
         escaped += c;
     }
     return escaped;
@@ -885,8 +885,8 @@ static QString jackEscapeRegex(const QString &text)
 
 static QString jackPortFamily(const QString &portName)
 {
-    const QString shortName = portName.section(QLatin1Char(':'), 1);
-    const int underscore = shortName.lastIndexOf(QLatin1Char('_'));
+    const QString shortName = portName.section(':'_L1, 1);
+    const int underscore = shortName.lastIndexOf('_'_L1);
     return underscore > 0 ? shortName.left(underscore) : shortName;
 }
 
@@ -920,7 +920,7 @@ QString ConfigLists::jackHardwarePattern(bool isOutput)
 QString ConfigLists::resolveJackDevice(const QString &device, bool isOutput)
 {
     const QString prefix = isOutput ? u"dac"_s : u"adc"_s;
-    if (device.contains(QLatin1Char(':')))
+    if (device.contains(':'_L1))
         return device;
     if (device.isEmpty())
         return isOutput ? jackHardwarePattern(true) : QString();
@@ -934,11 +934,11 @@ QString ConfigLists::resolveJackDevice(const QString &device, bool isOutput)
     if (index < 0 || index >= int(ports.size()))
         return device;
     const QString selected = ports.at(index).first;
-    const QString client = selected.section(QLatin1Char(':'), 0, 0);
+    const QString client = selected.section(':'_L1, 0, 0);
     const QString family = jackPortFamily(selected);
     QStringList siblings;
     for (const QStringPair &port : ports) {
-        if (port.first.section(QLatin1Char(':'), 0, 0) == client
+        if (port.first.section(':'_L1, 0, 0) == client
                 && jackPortFamily(port.first) == family) {
             siblings.append(port.first);
         }
@@ -952,7 +952,7 @@ QString ConfigLists::resolveJackDevice(const QString &device, bool isOutput)
     QStringList escaped;
     for (const QString &port : siblings)
         escaped.append(jackEscapeRegex(port));
-    return prefix + QLatin1Char(':') + escaped.join(QLatin1Char('|'));
+    return prefix + ':'_L1 + escaped.join('|'_L1);
 }
 
 QString ConfigLists::audioDeviceDisplayName(const QString &module, bool isOutput,

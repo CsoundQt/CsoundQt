@@ -27,6 +27,7 @@
 #include <QFontMetrics>
 #include <QPainter>
 #include <QStringList>
+using namespace Qt::StringLiterals;
 
 // Grab zones at the bottom-right and top-left corners of an edit-mode frame.
 // The zones shrink for very small widgets so that both always fit without
@@ -180,7 +181,7 @@ void FrameWidget::paintNameOverlay(QPainter &painter)
     const QString channel2 = m_widget->getChannel2Name();
     QString channelLine;
     if (!channel.isEmpty() && !channel2.isEmpty())
-        channelLine = channel + QStringLiteral(" / ") + channel2;
+        channelLine = channel + u" / "_s + channel2;
     else if (!channel.isEmpty())
         channelLine = channel;
     else
@@ -215,7 +216,7 @@ void FrameWidget::paintNameOverlay(QPainter &painter)
         if (width() - 2 * vpad < thickness || available < 8)
             return;
         const QString text = verticalMetrics.elidedText(
-                    lines.join(QStringLiteral(": ")), Qt::ElideRight,
+                    lines.join(u": "_s), Qt::ElideRight,
                     available);
         if (text.isEmpty())
             return;

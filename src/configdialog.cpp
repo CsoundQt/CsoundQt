@@ -1353,8 +1353,8 @@ void ConfigDialog::selectAudioInput()
             details.append(tr("%1 ch").arg(device.channels));
         QString text = device.name;
         if (!details.isEmpty())
-            text += QStringLiteral("  (") + details.join(QStringLiteral(", "))
-                    + QLatin1Char(')');
+            text += u"  ("_s + details.join(u", "_s)
+                    + ')'_L1;
         entries.append(QStringPair(text, device.id));
     }
 
@@ -1417,8 +1417,8 @@ void ConfigDialog::selectAudioOutput()
             details.append(tr("%1 ch").arg(device.channels));
         QString text = device.name;
         if (!details.isEmpty())
-            text += QStringLiteral("  (") + details.join(QStringLiteral(", "))
-                    + QLatin1Char(')');
+            text += u"  ("_s + details.join(u", "_s)
+                    + ')'_L1;
         entries.append(QStringPair(text, device.id));
     }
 
@@ -1631,7 +1631,7 @@ void ConfigDialog::selectDefaultAudioDeviceIfNeeded(bool isOutput)
 	const QString text = edit->text();
 	if (text.isEmpty())
 		return; // explicit No Input / No Output
-	if (text.contains(QLatin1Char('*')))
+	if (text.contains('*'_L1))
 		return; // expert regex
 
 	static const QStringList inputSpecial = {

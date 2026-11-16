@@ -23,6 +23,13 @@
 #include <cstdlib>
 #include <cmath>
 
+#include <QApplication>
+#include <QDrag>
+#include <QDragEnterEvent>
+#include <QDragLeaveEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QMimeData>
 #include <QSet>
 #include <QThread>
 #include <QDockWidget>
@@ -169,7 +176,92 @@ constexpr int WidgetOverlayWidth = 28;
 constexpr int WidgetOverlayMinButtonHeight = 18;
 constexpr int WidgetOverlayMaxButtonHeight = 28;
 constexpr int WidgetOverlayMaxIconSize = 24;
+// Private drag payload for creating widgets by dragging an overlay icon onto
+// the panel. The data is the stable type id used by m_createWidgetIcons.
+constexpr char WidgetCreateMimeType[] = "application/x-csoundqt-widget-create";
 } // namespace
+
+// Create button in the edit-mode overlay. A click creates the widget at the
+// centre of the panel (as before); dragging it onto the panel creates it
+// centred on the drop point.
+class WidgetCreateButton : public QToolButton
+{
+public:
+    WidgetCreateButton(QAction *action, WidgetLayout *layout, QWidget *parent)
+        : QToolButton(parent), m_action(action), m_layout(layout)
+    {
+    }
+
+protected:
+    void mousePressEvent(QMouseEvent *event) override
+    {
+        if (event->button() == Qt::LeftButton) {
+            m_pressPosition = event->position().toPoint();
+            m_maybeDrag = true;
+        }
+        QToolButton::mousePressEvent(event);
+    }
+
+    void mouseMoveEvent(QMouseEvent *event) override
+    {
+        if (m_maybeDrag && (event->buttons() & Qt::LeftButton)
+                && (event->position().toPoint() - m_pressPosition)
+                        .manhattanLength() >= QApplication::startDragDistance()) {
+            if (startDrag()) {
+                event->accept();
+                return;
+            }
+        }
+        QToolButton::mouseMoveEvent(event);
+    }
+
+    void mouseReleaseEvent(QMouseEvent *event) override
+    {
+        const bool wasDragged = m_dragged;
+        m_maybeDrag = false;
+        m_dragged = false;
+        if (wasDragged) {
+            setDown(false);
+            event->accept();
+            return;
+        }
+        QToolButton::mouseReleaseEvent(event);
+    }
+
+private:
+    bool startDrag()
+    {
+        if (m_layout == nullptr || m_action == nullptr)
+            return false;
+        const QString type = m_layout->widgetTypeForAction(m_action);
+        if (type.isEmpty())
+            return false;
+
+        m_maybeDrag = false;
+        m_dragged = true;
+
+        auto *mime = new QMimeData;
+        mime->setData(QString::fromLatin1(WidgetCreateMimeType), type.toUtf8());
+
+        auto *drag = new QDrag(this);
+        drag->setMimeData(mime);
+        const QPixmap pixmap = icon().pixmap(iconSize());
+        if (!pixmap.isNull()) {
+            drag->setPixmap(pixmap);
+            drag->setHotSpot(pixmap.rect().center());
+        }
+        drag->exec(Qt::CopyAction);
+        setDown(false);
+        update();
+        return true;
+    }
+
+    QAction *m_action = nullptr;
+    QPointer<WidgetLayout> m_layout;
+    QPoint m_pressPosition;
+    bool m_maybeDrag = false;
+    bool m_dragged = false;
+};
 
 // Compact widget-type strip shown along the right edge of the panel in edit
 // mode. It mirrors the New Widget palette, but is always visible while editing.
@@ -262,7 +354,10 @@ protected:
 private:
     QToolButton *createButton(QAction *action, bool createsWidget)
     {
-        auto *button = new QToolButton(this);
+        QToolButton *button = createsWidget
+                ? static_cast<QToolButton *>(
+                      new WidgetCreateButton(action, m_layout.data(), this))
+                : new QToolButton(this);
         button->setAutoRaise(true);
         button->setToolButtonStyle(Qt::ToolButtonIconOnly);
         button->setIconSize(QSize(WidgetOverlayMaxIconSize,
@@ -698,6 +793,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
     xOffset = yOffset = 0;
     mouseRelX = mouseRelY = 0;
     m_contained = false;
+    setAcceptDrops(true);
 
     midiWriteCounter = 0;
     midiReadCounter = 0;
@@ -961,7 +1057,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 QString WidgetLayout::documentDirectory() const
 {
 	if (m_documentFileName.isEmpty()
-			|| m_documentFileName.startsWith(QLatin1String(":/"))) {
+			|| m_documentFileName.startsWith(":/"_L1)) {
 		return QDir::currentPath();
 	}
 	return QFileInfo(m_documentFileName).absolutePath();
@@ -1100,16 +1196,16 @@ void WidgetLayout::reportUnknownWidgetFonts()
     QStringList replacements;
     for (auto it = m_unknownWidgetFonts.constBegin();
          it != m_unknownWidgetFonts.constEnd(); ++it) {
-        replacements << QStringLiteral("* %1 \u2192 %2").arg(it.key(), it.value());
+        replacements << u"* %1 \u2192 %2"_s.arg(it.key(), it.value());
     }
-    QString details = replacements.join(QStringLiteral("<br>"));
+    QString details = replacements.join(u"<br>"_s);
     if (details.size() > 300) {
-        details = details.left(297) + QStringLiteral("...");
+        details = details.left(297) + u"..."_s;
     }
     // A transient banner is enough: this is informational, not something the
     // user has to act on. The headline is bold; details are escaped.
     const QString message =
-        QStringLiteral("<b>%1</b><br>%2")
+        u"<b>%1</b><br>%2"_s
             .arg(tr("Unknown fonts were replaced").toHtmlEscaped(),
                  details.toHtmlEscaped());
     Notification::showTransient(this, message, 8000, true);
@@ -1414,7 +1510,7 @@ QString WidgetLayout::getStringForChannel(QString channelName, bool *modified)
     // "<channel>/<property>" addresses a string property; "<menu>/getitem" is
     // the menu's current-item method.
     QString path;
-    const int slash = channelName.indexOf(QLatin1Char('/'));
+    const int slash = channelName.indexOf('/'_L1);
     if (slash >= 0) {
         path = channelName.mid(slash + 1);
         channelName = channelName.left(slash);
@@ -2838,6 +2934,26 @@ QIcon WidgetLayout::iconForPanel(QAction *action) const
     return QIcon(path);
 }
 
+QString WidgetLayout::widgetTypeForAction(QAction *action) const
+{
+    for (const auto &entry : m_createWidgetIcons) {
+        if (entry.first == action)
+            return entry.second;
+    }
+    return {};
+}
+
+QAction *WidgetLayout::actionForWidgetType(const QString &type) const
+{
+    if (type.isEmpty())
+        return nullptr;
+    for (const auto &entry : m_createWidgetIcons) {
+        if (entry.second == type)
+            return entry.first;
+    }
+    return nullptr;
+}
+
 bool WidgetLayout::panelBackgroundIsDark() const
 {
     QColor background;
@@ -2870,34 +2986,111 @@ void WidgetLayout::createWidgetFromOverlay(QAction *action)
             ? parentWidget() : this;
     const QPoint center = mapFromGlobal(targetParent->mapToGlobal(
                                             targetParent->rect().center()));
+    createWidgetAt(action, center);
+}
 
-    // Place the widget so that its own centre is at the centre of the visible
-    // panel rather than its top-left corner.
-    QSize size(80, 25);
+QSize WidgetLayout::defaultWidgetSize(QAction *action) const
+{
+    // Keep in sync with the sizes used by the createNew*() functions: the drop
+    // point is the centre of the new widget.
     if (action == createSliderAct)
-        size = QSize(20, 100);
-    else if (action == createButtonAct)
-        size = QSize(100, 30);
-    else if (action == createKnobAct)
-        size = QSize(80, 80);
-    else if (action == createCheckBoxAct)
-        size = QSize(20, 20);
-    else if (action == createMenuAct)
-        size = QSize(80, 30);
-    else if (action == createMeterAct)
-        size = QSize(30, 80);
-    else if (action == createLineEditAct)
-        size = QSize(100, 25);
-    else if (action == createGraphAct || action == createScopeAct
-             || action == createTableDisplayAct)
-        size = QSize(350, 150);
-    else if (action == createWaveformAct)
-        size = QSize(500, 160);
-    else if (action == createConsoleAct)
-        size = QSize(320, 400);
-    currentPosition = QPoint(qMax(0, center.x() - size.width() / 2),
-                             qMax(0, center.y() - size.height() / 2));
+        return QSize(20, 100);
+    if (action == createButtonAct)
+        return QSize(100, 30);
+    if (action == createKnobAct)
+        return QSize(80, 80);
+    if (action == createCheckBoxAct)
+        return QSize(20, 20);
+    if (action == createMenuAct)
+        return QSize(80, 30);
+    if (action == createMeterAct)
+        return QSize(30, 80);
+    if (action == createLineEditAct)
+        return QSize(100, 25);
+    if (action == createDisplayAct)
+        return QSize(60, 25);
+    if (action == createScrollNumberAct)
+        return QSize(60, 25);
+    if (action == createSpinBoxAct)
+        return QSize(60, 25);
+    if (action == createVUMeterAct)
+        return QSize(32, 140);
+    if (action == createGraphAct || action == createScopeAct
+            || action == createTableDisplayAct)
+        return QSize(350, 150);
+    if (action == createWaveformAct)
+        return QSize(500, 160);
+    if (action == createConsoleAct)
+        return QSize(320, 400);
+    return QSize(80, 25);
+}
+
+void WidgetLayout::createWidgetAt(QAction *action, const QPoint &dropPoint)
+{
+    if (action == nullptr || !m_editMode || !action->isEnabled())
+        return;
+    const QSize size = defaultWidgetSize(action);
+    currentPosition = QPoint(qMax(0, dropPoint.x() - size.width() / 2),
+                             qMax(0, dropPoint.y() - size.height() / 2));
     QTimer::singleShot(0, action, &QAction::trigger);
+}
+
+bool WidgetLayout::canCreateWidgetFromMime(const QMimeData *mime) const
+{
+    if (!m_editMode || mime == nullptr)
+        return false;
+    const QByteArray type = mime->data(QString::fromLatin1(WidgetCreateMimeType));
+    if (type.isEmpty())
+        return false;
+    const QAction *action = actionForWidgetType(QString::fromUtf8(type));
+    return action != nullptr && action->isEnabled();
+}
+
+void WidgetLayout::createWidgetFromMime(const QMimeData *mime,
+                                        const QPoint &globalDropPos)
+{
+    if (!canCreateWidgetFromMime(mime))
+        return;
+    QAction *action = actionForWidgetType(
+                QString::fromUtf8(mime->data(QString::fromLatin1(WidgetCreateMimeType))));
+    createWidgetAt(action, mapFromGlobal(globalDropPos));
+}
+
+void WidgetLayout::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (canCreateWidgetFromMime(event->mimeData())) {
+        event->setDropAction(Qt::CopyAction);
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+
+void WidgetLayout::dragMoveEvent(QDragMoveEvent *event)
+{
+    if (canCreateWidgetFromMime(event->mimeData())) {
+        event->setDropAction(Qt::CopyAction);
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+
+void WidgetLayout::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    event->accept();
+}
+
+void WidgetLayout::dropEvent(QDropEvent *event)
+{
+    if (!canCreateWidgetFromMime(event->mimeData())) {
+        event->ignore();
+        return;
+    }
+    event->setDropAction(Qt::CopyAction);
+    event->accept();
+    createWidgetFromMime(event->mimeData(),
+                         mapToGlobal(event->position().toPoint()));
 }
 
 QList<QAction *> WidgetLayout::createWidgetActionList() const
@@ -4510,7 +4703,7 @@ void WidgetLayout::highlightChannel(const QString &channel)
 	// The cursor may be on "<channel>/<property>" or "<widgetName>/<property>".
 	// The outline is for the widget, so look it up by the part before the slash.
 	QString address = channel;
-	const int slash = address.indexOf(QLatin1Char('/'));
+	const int slash = address.indexOf('/'_L1);
 	if (slash > 0)
 		address = address.left(slash);
 	if (m_channelHighlightActive && m_channelHighlightChannel == address)
@@ -4554,7 +4747,7 @@ void WidgetLayout::highlightChannel(const QString &channel)
 			continue;
 
 		auto *frame = new QFrame(this);
-		frame->setObjectName(QStringLiteral("channelHighlight"));
+		frame->setObjectName(u"channelHighlight"_s);
 		frame->setAttribute(Qt::WA_TransparentForMouseEvents);
 		frame->setFocusPolicy(Qt::NoFocus);
 		frame->setStyleSheet(

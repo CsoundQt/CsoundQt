@@ -13,6 +13,7 @@
 
 #include <QSet>
 #include <climits>
+using namespace Qt::StringLiterals;
 
 // A small tokenizer for one line of Csound code. It only needs to distinguish
 // the pieces that matter for finding a literal channel argument: identifiers,
@@ -40,14 +41,14 @@ static QList<CsoundLineToken> tokenizeCsoundLine(const QString &line,
             ++i;
             continue;
         }
-        if (c == QLatin1Char(';')
-                || (c == QLatin1Char('/') && i + 1 < line.size()
-                    && line.at(i + 1) == QLatin1Char('/'))) {
+        if (c == ';'_L1
+                || (c == '/'_L1 && i + 1 < line.size()
+                    && line.at(i + 1) == '/'_L1)) {
             if (commentStart)
                 *commentStart = i;
             break;
         }
-        if (c == QLatin1Char('"')) {
+        if (c == '"'_L1) {
             const int start = i++;
             QString text;
             bool escaped = false;
@@ -60,12 +61,12 @@ static QList<CsoundLineToken> tokenizeCsoundLine(const QString &line,
                     ++i;
                     continue;
                 }
-                if (ch == QLatin1Char('\\')) {
+                if (ch == '\\'_L1) {
                     escaped = true;
                     ++i;
                     continue;
                 }
-                if (ch == QLatin1Char('"')) {
+                if (ch == '"'_L1) {
                     closed = true;
                     ++i;
                     break;
@@ -76,22 +77,22 @@ static QList<CsoundLineToken> tokenizeCsoundLine(const QString &line,
             tokens.append({CsoundLineToken::String, text, start, i, closed});
             continue;
         }
-        if (c.isLetter() || c == QLatin1Char('_')) {
+        if (c.isLetter() || c == '_'_L1) {
             const int start = i;
             while (i < line.size()
                    && (line.at(i).isLetterOrNumber()
-                       || line.at(i) == QLatin1Char('_')))
+                       || line.at(i) == '_'_L1))
                 ++i;
             tokens.append({CsoundLineToken::Identifier,
                            line.mid(start, i - start), start, i, false});
             continue;
         }
         CsoundLineToken::Kind kind = CsoundLineToken::Other;
-        if (c == QLatin1Char(','))
+        if (c == ','_L1)
             kind = CsoundLineToken::Comma;
-        else if (c == QLatin1Char('('))
+        else if (c == '('_L1)
             kind = CsoundLineToken::LeftParen;
-        else if (c == QLatin1Char(')'))
+        else if (c == ')'_L1)
             kind = CsoundLineToken::RightParen;
         tokens.append({kind, QString(c), i, i + 1, false});
         ++i;
@@ -106,8 +107,8 @@ ChannelTextResult findChannelLiteral(const QString &line, int cursorPos,
     const QList<CsoundLineToken> tokens = tokenizeCsoundLine(line, &commentStart);
 
     static const QSet<QString> channelOpcodes = {
-        QStringLiteral("chnget"), QStringLiteral("chnset"),
-        QStringLiteral("invalue"), QStringLiteral("outvalue")
+        u"chnget"_s, u"chnset"_s,
+        u"invalue"_s, u"outvalue"_s
     };
 
     int opcodeIndex = -1;
@@ -135,12 +136,12 @@ ChannelTextResult findChannelLiteral(const QString &line, int cursorPos,
         return ChannelTextResult();
 
     const QString &opcode = tokens.at(opcodeIndex).text;
-    const int channelIndex = (opcode == QLatin1String("chnset")) ? 1 : 0;
+    const int channelIndex = (opcode == "chnset"_L1) ? 1 : 0;
     int i = opcodeIndex + 1;
     // Optional Csound 7 type annotation, e.g. chnget:k "channel".
     if (i + 1 < tokens.size()
             && tokens.at(i).kind == CsoundLineToken::Other
-            && tokens.at(i).text == QLatin1String(":")
+            && tokens.at(i).text == ":"_L1
             && tokens.at(i + 1).kind == CsoundLineToken::Identifier) {
         i += 2;
     }

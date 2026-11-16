@@ -213,10 +213,10 @@ QString QuteSliderControl::formatValue(double value, double step) const
 	}
 	QString text = QString::number(value, 'f', decimals);
 	if (decimals > 0) {
-		while (text.endsWith(QLatin1Char('0'))) {
+		while (text.endsWith('0'_L1)) {
 			text.chop(1);
 		}
-		if (text.endsWith(QLatin1Char('.'))) {
+		if (text.endsWith('.'_L1)) {
 			text.chop(1);
 		}
 	}

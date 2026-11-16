@@ -38,6 +38,7 @@
 #include <QPropertyAnimation>
 #include <QTimer>
 #include <QWidget>
+using namespace Qt::StringLiterals;
 
 namespace {
 
@@ -221,14 +222,14 @@ private:
 		QString html;
 		if (!m_title.isEmpty()) {
 			QString title = m_title.toHtmlEscaped();
-			title.replace(QLatin1Char('\n'), QStringLiteral("<br>"));
+			title.replace('\n'_L1, u"<br>"_s);
 			html += QStringLiteral("<div style=\"font-size:16px; font-weight:bold; "
 								   "line-height:140%;\">%1</div>").arg(title);
 		}
 		QString body = m_richText ? text : text.toHtmlEscaped();
-		body.replace(QLatin1Char('\n'), QStringLiteral("<br>"));
-		html += QStringLiteral("<div style=\"line-height:150%;%1\">%2</div>")
-				.arg(m_title.isEmpty() ? QString() : QStringLiteral("margin-top:4px;"), body);
+		body.replace('\n'_L1, u"<br>"_s);
+		html += u"<div style=\"line-height:150%;%1\">%2</div>"_s
+				.arg(m_title.isEmpty() ? QString() : u"margin-top:4px;"_s, body);
 		banner->setText(html);
 		banner->setTextInteractionFlags(Qt::NoTextInteraction);
 		banner->setCursor(Qt::PointingHandCursor);
@@ -249,13 +250,13 @@ private:
 		// content fits: measure unconstrained (includes stylesheet padding)
 		// and shrink the bubble to the text. Otherwise fix the width and
 		// wrap by words.
-		bool hasNewline = m_text.contains(QLatin1Char('\n'))
-			|| m_title.contains(QLatin1Char('\n'));
+		bool hasNewline = m_text.contains('\n'_L1)
+			|| m_title.contains('\n'_L1);
 		if (m_richText && !hasNewline) {
 			const QString lower = m_text.toLower() + m_title.toLower();
-			hasNewline = lower.contains(QStringLiteral("<br"))
-				|| lower.contains(QStringLiteral("<p"))
-				|| lower.contains(QStringLiteral("<div"));
+			hasNewline = lower.contains(u"<br"_s)
+				|| lower.contains(u"<p"_s)
+				|| lower.contains(u"<div"_s);
 		}
 		banner->setWordWrap(false);
 		banner->setMinimumWidth(0);

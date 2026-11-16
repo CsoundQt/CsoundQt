@@ -2,6 +2,7 @@
 #define RISSET_H
 
 #include <QString>
+#include <QVector>
 #include <QJsonDocument>
 #include <QDir>
 #include <QProcess>
@@ -34,6 +35,23 @@ public:
     QString markdownManpage(QString opcodeName);
     void cleanupProcesses();
     void markOpcodeTree(OpEntryParser *tree);
+    // One opcode in the scanned text and the 1-based line it was found on.
+    struct OpcodeLocation {
+        QString opcode;
+        int line = 0;
+    };
+    // The plugin and the opcodes in the text that require it. Each opcode is
+    // listed once, at its first occurrence.
+    struct PluginUsage {
+        QString plugin;
+        QVector<OpcodeLocation> opcodes;
+    };
+    // Plugins whose opcodes appear in Csound source text, with where they were
+    // found. Uses the opcode-to-plugin table, which comes from
+    // "risset info --full" when risset is installed and from the bundled opcode
+    // map otherwise. Comments and string literals are ignored, as are UDOs
+    // defined in the text.
+    QVector<PluginUsage> pluginUsagesInText(const QString &text) const;
     QString defaultOpcodesXmlPath() { return rissetRoot.filePath("opcodes.xml"); }
 
     bool isInstalled = false;
@@ -51,6 +69,7 @@ public:
     QDir csoundqtDataRoot;
     QStringList opcodeNames;                     // list of all opcodes (not installed opcodes might be excluded)
     QHash<QString, bool> pluginInstalled;        // maps plugin to installed status
+    QHash<QString, bool> pluginAvailable;         // binary supports this platform/Csound
     QHash<QString, QString> opcodeToPlugin;      // maps an opcode to its plugin
     QHash<QString, QStringList> pluginOpcodes;   // list of opcodes per plugin
 
@@ -63,6 +82,9 @@ private:
     QList<QProcess*> runningProcesses;
 
     void initIndex();
+    // Fill opcodeToPlugin from the opcode map compiled into CsoundQt. Used
+    // when risset is not installed, so missing plugins can still be detected.
+    void loadBundledOpcodeMap();
 
 
 };

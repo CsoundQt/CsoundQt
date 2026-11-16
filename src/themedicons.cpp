@@ -112,6 +112,7 @@ const QHash<QString, QString> &iconNameMap()
 		{ u"render"_s,        u"document-export"_s },
 		{ u"scratchpad"_s,    u"document-edit"_s },
 		{ u"widgets"_s,       u"view-grid"_s },
+		{ u"widget-name-overlay"_s, u"view-visible"_s },
 		{ u"editor"_s,        u"accessories-text-editor"_s },
 		{ u"devel"_s,         u"applications-utilities"_s },
 		{ u"midi-keyboard"_s, u"audio-midi"_s },
@@ -159,7 +160,7 @@ QString resolvePath(const QString &resourcePath)
 	// original path otherwise means a missing icon simply stays null instead of
 	// silently loading a rasterized fallback.
 	const QFileInfo info(resourcePath);
-	const QString svgPath = info.path() + QLatin1Char('/') + info.completeBaseName()
+	const QString svgPath = info.path() + '/'_L1 + info.completeBaseName()
 			+ u".svg"_s;
 	return QFile::exists(svgPath) ? svgPath : resourcePath;
 }
@@ -189,16 +190,11 @@ QIcon forMenu(const QString &resourcePath)
 	if (bundled.isNull()) {
 		return bundled;
 	}
-	// Let the menus draw the same bundled pixels as the toolbars. Exporting a
-	// freedesktop icon name instead (the previous behaviour) makes a global
-	// menu (e.g. KDE Plasma's) draw the icon in the shell's own theme, so the
-	// menu and the toolbar show different artwork for the same action. Set
-	// CSQT_DESKTOP_MENU_ICON_NAMES=1 to get the name-based behaviour back.
-	static const bool exposeName =
-			qEnvironmentVariableIsSet("CSQT_DESKTOP_MENU_ICON_NAMES");
-	if (!exposeName) {
-		return bundled;
-	}
+	// Paint the bundled icon inside CsoundQt, but expose its freedesktop name
+	// to desktop menu exporters. Plasma's global menu then resolves the icon in
+	// the system icon theme, matching its own light/dark palette even when the
+	// user selected a different theme for CsoundQt. Local menus and toolbars
+	// still draw the bundled fallback.
 	const QString name = freedesktopName(path);
 	if (name.isEmpty()) {
 		return bundled;

@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>risset-opcodemap.json</file>
+    </qresource>
+</RCC>

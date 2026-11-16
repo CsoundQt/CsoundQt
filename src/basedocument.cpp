@@ -30,6 +30,7 @@
 #include "csoundqt.h"
 #include "qutebutton.h"
 #include "console.h"
+using namespace Qt::StringLiterals;
 
 
 BaseDocument::BaseDocument(QWidget *parent, OpEntryParser *opcodeTree, ConfigLists *configlists) :
@@ -145,10 +146,10 @@ BaseDocument::~BaseDocument()
 
 int BaseDocument::parseAndRemoveWidgetText(QString &text)
 {
-    static const QString panelOpen   = QStringLiteral("<bsbPanel");
-    static const QString panelClose  = QStringLiteral("</bsbPanel>");
-    static const QString presetsOpen = QStringLiteral("<bsbPresets>");
-    static const QString presetsClose= QStringLiteral("</bsbPresets>");
+    static const QString panelOpen   = u"<bsbPanel"_s;
+    static const QString panelClose  = u"</bsbPanel>"_s;
+    static const QString presetsOpen = u"<bsbPresets>"_s;
+    static const QString presetsClose= u"</bsbPresets>"_s;
 
     constexpr int panelCloseLen   = 11; // "</bsbPanel>"
     constexpr int presetsCloseLen = 13; // "</bsbPresets>"

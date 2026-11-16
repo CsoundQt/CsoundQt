@@ -159,13 +159,13 @@ QString lastOutputOption(const QString &optionsText)
 QString stripOptionComments(const QString &optionsText)
 {
     QStringList lines;
-    for (const QString &line : optionsText.split(QLatin1Char('\n'))) {
+    for (const QString &line : optionsText.split('\n'_L1)) {
         const QString trimmed = line.trimmed();
-        if (trimmed.startsWith(QLatin1Char(';')) || trimmed.startsWith(u"//"_s))
+        if (trimmed.startsWith(';'_L1) || trimmed.startsWith(u"//"_s))
             continue;
         lines << line;
     }
-    return lines.join(QLatin1Char('\n'));
+    return lines.join('\n'_L1);
 }
 
 // Csound treats these -o values as realtime/stream outputs, not file paths.
@@ -175,7 +175,7 @@ bool isSpecialOutputName(const QString &name)
         if (!value.startsWith(prefix))
             return false;
         const QString rest = value.mid(prefix.size());
-        if (rest.isEmpty() || rest.startsWith(QLatin1Char(':')))
+        if (rest.isEmpty() || rest.startsWith(':'_L1))
             return true;
         for (const QChar c : rest) {
             if (!c.isDigit())
@@ -186,7 +186,7 @@ bool isSpecialOutputName(const QString &name)
     return deviceName(name, u"dac"_s)
             || deviceName(name, u"devaudio"_s)
             || name == u"stdout"_s
-            || name.startsWith(QLatin1Char('|'));
+            || name.startsWith('|'_L1);
 }
 
 QString resolveRenderFolder(const QString &folder, const QString &csdDir)
@@ -215,7 +215,7 @@ QString resolveRenderOutput(const QString &name, const QString &documentName,
     if (info.isAbsolute())
         return QDir::cleanPath(info.absoluteFilePath());
     const QString base = (documentName.isEmpty()
-                          || documentName.startsWith(QLatin1Char(':')))
+                          || documentName.startsWith(':'_L1))
             ? QDir::currentPath()
             : csdDir;
     return QDir::cleanPath(QDir(base).filePath(path));
@@ -224,9 +224,9 @@ QString resolveRenderOutput(const QString &name, const QString &documentName,
 QStringList fileTypeExtensions(const QString &patterns)
 {
     QStringList extensions;
-    for (const QString &pattern : patterns.split(QLatin1Char(';'))) {
+    for (const QString &pattern : patterns.split(';'_L1)) {
         QString extension = pattern.trimmed();
-        if (extension.startsWith(QLatin1Char('*')))
+        if (extension.startsWith('*'_L1))
             extension.remove(0, 1);
         if (!extension.isEmpty())
             extensions << extension;
@@ -258,7 +258,7 @@ QString readUtf8TextFile(const QString &path)
         return QString();
     QString text = QString::fromUtf8(file.readAll());
     text.replace("\r\n"_L1, "\n"_L1);
-    text.replace(QLatin1Char('\r'), QLatin1Char('\n'));
+    text.replace('\r'_L1, '\n'_L1);
     return text;
 }
 
@@ -291,7 +291,7 @@ double estimateScoreDuration(const QString &scoreText)
         const QString event = fields.first();
 
         bool instrumentNumber = false;
-        if (event.size() > 1 && event.startsWith(QLatin1Char('i'))) {
+        if (event.size() > 1 && event.startsWith('i'_L1)) {
             event.mid(1).toInt(&instrumentNumber);
         }
         if (event == "i"_L1 || instrumentNumber) {
@@ -341,12 +341,12 @@ QString formatRenderDuration(double seconds)
     const double rest = seconds - hours * 3600.0 - minutes * 60.0;
     if (hours > 0) {
         return u"%1:%2:%3"_s.arg(hours)
-                .arg(minutes, 2, 10, QLatin1Char('0'))
-                .arg(rest, 5, 'f', 2, QLatin1Char('0'));
+                .arg(minutes, 2, 10, '0'_L1)
+                .arg(rest, 5, 'f', 2, '0'_L1);
     }
     if (minutes > 0) {
         return u"%1:%2"_s.arg(minutes)
-                .arg(rest, 5, 'f', 2, QLatin1Char('0'));
+                .arg(rest, 5, 'f', 2, '0'_L1);
     }
     return u"%1 s"_s.arg(seconds, 0, 'f', 2);
 }
@@ -400,7 +400,7 @@ void locateSoundFile(QWidget *parent, const QString &soundFile)
 {
     QString error;
     if (!ExternalLauncher::revealFile(soundFile, &error,
-                                      QStringLiteral("render-history-locate"))) {
+                                      u"render-history-locate"_s)) {
         QMessageBox::warning(parent, CsoundQt::tr("Locate"),
                              error.isEmpty()
                              ? CsoundQt::tr("Could not open the folder:\n%1")
@@ -414,7 +414,7 @@ void openSoundFileInExternalApplication(QWidget *parent, const QString &soundFil
     QString error;
     if (!ExternalLauncher::openWithDefaultApplication(
                 QUrl::fromLocalFile(soundFile), &error,
-                QStringLiteral("render-history-open"))) {
+                u"render-history-open"_s)) {
         QMessageBox::warning(parent,
                              CsoundQt::tr("Open in external application"),
                              error.isEmpty()
@@ -449,9 +449,9 @@ Opcode quickReferenceOpcode(OpEntryParser *parser, const QString &word)
         return parser->findOpcode(word);
 
     QString name = word;
-    while (name.startsWith(QLatin1Char('-')))
+    while (name.startsWith('-'_L1))
         name.remove(0, 1);
-    while (name.endsWith(QLatin1Char(':')) || name.endsWith(QLatin1Char('=')))
+    while (name.endsWith(':'_L1) || name.endsWith('='_L1))
         name.chop(1);
     for (const Opcode &opcode : parser->opcodeList) {
         if (opcode.isFlag && opcode.opcodeName == name)
@@ -739,7 +739,55 @@ CsoundQt::CsoundQt(QStringList fileNames, bool noRecentFiles,
     connect(documentTabs->tabBar(), &QTabBar::customContextMenuRequested,
             this, &CsoundQt::showTabContextMenu);
 
-    setCentralWidget(documentTabs);
+    m_documentCentralWidget = new QWidget(this);
+    auto *documentCentralLayout = new QVBoxLayout(m_documentCentralWidget);
+    documentCentralLayout->setContentsMargins(0, 0, 0, 0);
+    documentCentralLayout->setSpacing(0);
+
+    m_pluginDependencyBanner = new QFrame(m_documentCentralWidget);
+    m_pluginDependencyBanner->setFrameShape(QFrame::StyledPanel);
+    auto *dependencyBannerRow = new QHBoxLayout(m_pluginDependencyBanner);
+    dependencyBannerRow->setContentsMargins(8, 6, 4, 6);
+    dependencyBannerRow->setSpacing(4);
+    auto *dependencyBannerLayout = new QVBoxLayout;
+    dependencyBannerLayout->setContentsMargins(0, 0, 0, 0);
+    dependencyBannerLayout->setSpacing(4);
+    m_pluginDependencyLabel = new QLabel(m_pluginDependencyBanner);
+    m_pluginDependencyLabel->setWordWrap(true);
+    dependencyBannerLayout->addWidget(m_pluginDependencyLabel);
+    m_pluginDependencyUnavailableLabel = new QLabel(m_pluginDependencyBanner);
+    m_pluginDependencyUnavailableLabel->setWordWrap(true);
+    m_pluginDependencyUnavailableLabel->hide();
+    dependencyBannerLayout->addWidget(m_pluginDependencyUnavailableLabel);
+    m_installPluginsButton = new QPushButton(tr("Install Plugins"),
+                                             m_pluginDependencyBanner);
+    dependencyBannerLayout->addWidget(m_installPluginsButton, 0, Qt::AlignLeft);
+    dependencyBannerRow->addLayout(dependencyBannerLayout, 1);
+
+    m_pluginDependencyCloseButton = new QToolButton(m_pluginDependencyBanner);
+    m_pluginDependencyCloseButton->setText(u"\u00d7"_s);
+    m_pluginDependencyCloseButton->setAutoRaise(true);
+    m_pluginDependencyCloseButton->setFocusPolicy(Qt::NoFocus);
+    m_pluginDependencyCloseButton->setCursor(Qt::PointingHandCursor);
+    m_pluginDependencyCloseButton->setToolTip(tr("Dismiss"));
+    connect(m_pluginDependencyCloseButton, &QToolButton::clicked, this, [this]() {
+        m_pluginDependencyBanner->hide();
+        m_dismissedPluginDependencyKey = m_pluginDependencyKey;
+    });
+    dependencyBannerRow->addWidget(m_pluginDependencyCloseButton, 0, Qt::AlignTop);
+
+    m_pluginDependencyBanner->hide();
+    documentCentralLayout->addWidget(m_pluginDependencyBanner);
+    documentCentralLayout->addWidget(documentTabs, 1);
+    setCentralWidget(m_documentCentralWidget);
+    connect(m_installPluginsButton, &QPushButton::clicked, this, [this]() {
+        if (m_pluginDependenciesUnavailable)
+            showPlugins();
+        else
+            showPluginsForDependencies(m_pluginDependencyInstallList);
+    });
+    connect(this, &CsoundQt::rissetDetectionFinished,
+            this, &CsoundQt::updatePluginDependencyBanner);
     connect(showEditorAct, &QAction::triggered, this, &CsoundQt::toggleEditorPanel);
     documentTabs->setVisible(showEditorAct->isChecked());
     documentTabs->setDocumentMode(true);
@@ -1092,7 +1140,7 @@ void CsoundQt::loadHelpOnce()
 static QString normalizedUserPath(QString path)
 {
     path = path.trimmed();
-    if (path.startsWith(QLatin1Char('~')))
+    if (path.startsWith('~'_L1))
         path = QDir::homePath() + path.mid(1);
     return QDir::cleanPath(QDir::fromNativeSeparators(path));
 }
@@ -1233,6 +1281,9 @@ void CsoundQt::initRisset()
     m_rissetInitialized = true;
     m_rissetDetecting = true;
 
+    const bool regenerateOpcodes = m_rissetRegenerateOpcodes;
+    m_rissetRegenerateOpcodes = false;
+
     // Risset detection spawns external processes (and may generate/fetch data),
     // so run it in the background and apply the results on the GUI thread once
     // it finishes. This keeps both startup and the UI responsive. The worker
@@ -1245,11 +1296,18 @@ void CsoundQt::initRisset()
         applyRisset();
         watcher->deleteLater();
     });
-    watcher->setFuture(QtConcurrent::run([]() -> Risset * {
+    watcher->setFuture(QtConcurrent::run([regenerateOpcodes]() -> Risset * {
         auto *r = new Risset();
-        if (r->isInstalled && !QFile::exists(r->rissetOpcodesXml)) {
-            QDEBUG << "opcodes.xml not found, searched: " << r->rissetOpcodesXml;
-            QDEBUG << "Calling risset to generate opcodes.xml";
+        if (!r->isInstalled)
+            return r;
+
+        if (regenerateOpcodes && QFile::exists(r->rissetOpcodesXml)) {
+            // Drop the old file so a failed regeneration cannot leave stale
+            // opcodes from plugins that were removed.
+            QFile::remove(r->rissetOpcodesXml);
+        }
+        if (regenerateOpcodes || !QFile::exists(r->rissetOpcodesXml)) {
+            QDEBUG << "Regenerating opcodes.xml, path: " << r->rissetOpcodesXml;
             if (r->generateOpcodesXml() != RissetError::Ok)
                 QDEBUG << "Could not generate opcodes.xml";
         }
@@ -1257,10 +1315,11 @@ void CsoundQt::initRisset()
     }));
 }
 
-void CsoundQt::recheckRisset()
+void CsoundQt::recheckRisset(bool regenerateOpcodes)
 {
     if (m_rissetDetecting)
         return;
+    m_rissetRegenerateOpcodes = regenerateOpcodes;
     delete risset;
     risset = nullptr;
     m_rissetInitialized = false;
@@ -1281,41 +1340,49 @@ QString CsoundQt::rissetVersion() const
 void CsoundQt::applyRisset()
 {
     m_rissetReady = true;
-    if (!risset || !risset->isInstalled) {
-        emit rissetDetectionFinished();
-        return;
+
+    // Always start from the built-in opcodes. Detection is re-run after
+    // plugins were installed or removed; without resetting, opcodes from
+    // removed plugins would stay in the tree, and repeated refreshes would
+    // append duplicate entries.
+    m_opcodeTree->reload();
+    m_opcodeTree->clearOpcodeNameCache();
+
+    const bool installed = risset != nullptr && risset->isInstalled;
+    if (installed) {
+        const QString rissetOpcodesXml = risset->rissetOpcodesXml;
+        if (!rissetOpcodesXml.isEmpty() && QFile::exists(rissetOpcodesXml)) {
+            QDEBUG << "Parsing risset's opcodes.xml:" << rissetOpcodesXml;
+            m_opcodeTree->parseOpcodesXml(rissetOpcodesXml);
+            m_opcodeTree->sortOpcodes();
+            risset->markOpcodeTree(m_opcodeTree);
+        } else {
+            QDEBUG << "Risset's opcodes.xml not found: " << rissetOpcodesXml;
+        }
     }
 
-    const QString rissetOpcodesXml = risset->rissetOpcodesXml;
-    if (!rissetOpcodesXml.isEmpty() && QFile::exists(rissetOpcodesXml)) {
-        QDEBUG << "Parsing risset's opcodes.xml:" << rissetOpcodesXml;
-        m_opcodeTree->parseOpcodesXml(rissetOpcodesXml);
-        m_opcodeTree->sortOpcodes();
-        risset->markOpcodeTree(m_opcodeTree);
-        // Editors built their opcode set before risset was detected. Refresh
-        // the cached names and rehighlight every open editor so external plugin
-        // opcodes are coloured like the built-ins.
-        m_opcodeTree->clearOpcodeNameCache();
-        for (DocumentPage *page : documentPages) {
-            if (page != nullptr)
-                page->refreshOpcodeNames();
-        }
-        for (WidgetWindow *window : m_widgetWindows) {
-            if (window != nullptr && window->page() != nullptr)
-                window->page()->refreshOpcodeNames();
-        }
-        if (m_scratchPad != nullptr) {
-            if (auto *editor = qobject_cast<LiveCodeEditor *>(m_scratchPad->widget()))
-                editor->getDocumentView()->refreshOpcodeNames();
-        }
-    } else {
-        QDEBUG << "Risset's opcodes.xml not found: " << rissetOpcodesXml;
+    // Editors built their opcode set before risset was detected. Refresh the
+    // cached names and rehighlight every open editor so external plugin
+    // opcodes are coloured like the built-ins, and removed ones disappear.
+    for (DocumentPage *page : documentPages) {
+        if (page != nullptr)
+            page->refreshOpcodeNames();
+    }
+    for (WidgetWindow *window : m_widgetWindows) {
+        if (window != nullptr && window->page() != nullptr)
+            window->page()->refreshOpcodeNames();
+    }
+    if (m_scratchPad != nullptr) {
+        if (auto *editor = qobject_cast<LiveCodeEditor *>(m_scratchPad->widget()))
+            editor->getDocumentView()->refreshOpcodeNames();
     }
 
-    // Register risset's manual as a search root (parsed lazily on first search)
-    QString rissetSite = risset->rissetHtmlDocs.path();
-    if (QFile::exists(rissetSite + "/search/search_index.json"))
-        helpPanel->addSearchRoot(rissetSite, tr("Risset"));
+    if (installed) {
+        // Register risset's manual as a search root (parsed lazily on first search)
+        const QString rissetSite = risset->rissetHtmlDocs.path();
+        if (QFile::exists(rissetSite + "/search/search_index.json"))
+            helpPanel->addSearchRoot(rissetSite, tr("Risset"));
+    }
 
     emit rissetDetectionFinished();
 }
@@ -1348,6 +1415,7 @@ void CsoundQt::changePage(int index)
     if (index < 0) { // No tabs left
         // qDebug() << "CsoundQt::changePage index < 0";
         updateReadOnlyIndicator();
+        updatePluginDependencyBanner();
         return;
     }
     if (documentPages.size() > curPage
@@ -1430,6 +1498,7 @@ void CsoundQt::changePage(int index)
         }
     }
     updateReadOnlyIndicator();
+    updatePluginDependencyBanner();
 }
 
 void CsoundQt::pageLeft()
@@ -1704,7 +1773,7 @@ void CsoundQt::showTabContextMenu(const QPoint &pos)
 #else
     const QString dir = QFileInfo(filePath).absolutePath();
     // QDEBUG << "opening " << dir;
-    if (!openUrlWithDiagnostics(QStringLiteral("open-folder"), QUrl::fromLocalFile(dir))) {
+    if (!openUrlWithDiagnostics(u"open-folder"_s, QUrl::fromLocalFile(dir))) {
         qDebug() << "Failed to open directory:" << dir;
     }
 #endif
@@ -1902,7 +1971,7 @@ void CsoundQt::evaluateString(QString evalCode)
     // codepad and the main editor.
     static const QRegularExpression scoreEventRx(
                 uR"(^\s*i\s+(?:-?\d+|[A-Za-z_]\w*|"[^"]*")(?:\s|$))"_s);
-    const QStringList lines = evalCode.split(QLatin1Char('\n'));
+    const QStringList lines = evalCode.split('\n'_L1);
     bool anyLine = false;
     bool allEvents = true;
     for (const QString &line : lines) {
@@ -2044,7 +2113,7 @@ WidgetWindow *CsoundQt::openWidgetWindow(const QString &fileName, bool readOnly,
     QStringDecoder decoder(QStringDecoder::Utf8);
     QString text = decoder(file.readAll());
     text.replace("\r\n", "\n");
-    text.replace(QLatin1Char('\r'), QLatin1Char('\n'));
+    text.replace('\r'_L1, '\n'_L1);
 
     auto *window = new WidgetWindow(this, fileName, text, readOnly);
     m_widgetWindows.append(window);
@@ -2098,8 +2167,8 @@ bool CsoundQt::playDetached(DocumentPage *page)
     }
 
     const QString fileName = page->getFileName();
-    if (!fileName.isEmpty() && !fileName.startsWith(QLatin1Char(':'))
-            && fileName.contains(QLatin1Char('/'))) {
+    if (!fileName.isEmpty() && !fileName.startsWith(':'_L1)
+            && fileName.contains('/'_L1)) {
         QDir::setCurrent(QFileInfo(fileName).absolutePath());
     }
 
@@ -2183,7 +2252,7 @@ void CsoundQt::tabMoved(int to, int from)  // arguments should be from, but prob
 void CsoundQt::openExamplesFolder()
 {
     QUrl examplePath = QUrl::fromLocalFile(QFileInfo(getExamplePath("")).absoluteFilePath());
-    openUrlWithDiagnostics(QStringLiteral("examples-folder"), examplePath);
+    openUrlWithDiagnostics(u"examples-folder"_s, examplePath);
 }
 
 bool CsoundQt::currentPageIsReadOnly() const
@@ -2257,13 +2326,13 @@ void CsoundQt::updatePerformanceInfo(DocumentPage *page)
     QString family = m_options->font;
     if (family.isEmpty())
         family = QFontDatabase::systemFont(QFontDatabase::FixedFont).family();
-    family.replace(QLatin1Char('&'), u"&amp;"_s);
-    family.replace(QLatin1Char('<'), u"&lt;"_s);
-    family.replace(QLatin1Char('>'), u"&gt;"_s);
-    family.replace(QLatin1Char('\''), u"&#39;"_s);
+    family.replace('&'_L1, u"&amp;"_s);
+    family.replace('<'_L1, u"&lt;"_s);
+    family.replace('>'_L1, u"&gt;"_s);
+    family.replace('\''_L1, u"&#39;"_s);
     const char *color = isDarkPalette
             ? PERFORMANCE_INFO_COLOR_DARK : PERFORMANCE_INFO_COLOR_LIGHT;
-    const QString valueStyle = QStringLiteral("font-family:'%1'; color:%2;")
+    const QString valueStyle = u"font-family:'%1'; color:%2;"_s
             .arg(family, QLatin1String(color));
 
     performanceInfoLabel->setText(
@@ -2416,7 +2485,7 @@ void CsoundQt::ensureAudioMidiDiscovery()
                              const QList<AudioDeviceInfo> &devices) {
         if (device.isEmpty())
             return; // explicit No Input / No Output
-        if (device.contains(QLatin1Char('*'))
+        if (device.contains('*'_L1)
                 || device.endsWith(":null"_L1)
                 || device == "dac:system:playback_"_L1
                 || device == "adc:system:capture_"_L1) {
@@ -2985,12 +3054,152 @@ void CsoundQt::showEmbeddedFiles()
     dialog.exec();
 }
 
+void CsoundQt::updatePluginDependencyBanner()
+{
+    if (m_pluginDependencyBanner == nullptr || curPage < 0
+            || curPage >= documentPages.size() || !rissetDetectionReady()) {
+        if (m_pluginDependencyBanner != nullptr)
+            m_pluginDependencyBanner->hide();
+        return;
+    }
+
+    DocumentPage *page = documentPages.at(curPage);
+    QStringList dependencies = page->requiredPlugins();
+    QVector<Risset::PluginUsage> detectedUsages;
+    if (dependencies.isEmpty() && risset != nullptr
+            && page->scanMode() != CodeScan::Mode::None) {
+        // No <CsMeta> plugins: derive them from the plugin opcodes the
+        // orchestra actually uses. The opcode map is available even when
+        // risset is not installed, so the user can be pointed to it.
+        detectedUsages = risset->pluginUsagesInText(page->getFullText());
+        for (const Risset::PluginUsage &usage : detectedUsages)
+            dependencies.append(usage.plugin);
+    }
+    if (dependencies.isEmpty()) {
+        m_pluginDependencyBanner->hide();
+        return;
+    }
+
+    QStringList missing;
+    QStringList unavailable;
+    for (const QString &dependency : dependencies) {
+        bool installed = false;
+        bool available = false;
+        if (rissetIsInstalled() && risset != nullptr) {
+            for (auto it = risset->pluginInstalled.cbegin();
+                 it != risset->pluginInstalled.cend(); ++it) {
+                if (it.key().compare(dependency, Qt::CaseInsensitive) == 0) {
+                    installed = it.value();
+                    available = risset->pluginAvailable.value(it.key(), installed);
+                    break;
+                }
+            }
+        }
+        if (!installed)
+            missing.append(dependency);
+        if (rissetIsInstalled() && !available)
+            unavailable.append(dependency);
+    }
+
+    if (missing.isEmpty()) {
+        m_pluginDependencyBanner->hide();
+        return;
+    }
+
+    m_pluginDependencyInstallList.clear();
+    if (rissetIsInstalled()) {
+        for (const QString &dependency : missing) {
+            if (!unavailable.contains(dependency, Qt::CaseInsensitive))
+                m_pluginDependencyInstallList.append(dependency);
+        }
+    }
+    m_pluginDependenciesUnavailable = !rissetIsInstalled()
+            || !unavailable.isEmpty();
+
+    // Dismissal is per document and per set of missing plugins, so the banner
+    // comes back if the problem changes but stays closed after the user closes
+    // it, also when switching to another document and back.
+    m_pluginDependencyKey = QString::number(
+                reinterpret_cast<quintptr>(documentPages.at(curPage)))
+            + '|'_L1 + missing.join(','_L1)
+            + '|'_L1 + unavailable.join(','_L1);
+    if (!m_dismissedPluginDependencyKey.isEmpty()
+            && m_dismissedPluginDependencyKey == m_pluginDependencyKey) {
+        m_pluginDependencyBanner->hide();
+        return;
+    }
+
+    if (detectedUsages.isEmpty()) {
+        m_pluginDependencyLabel->setText(
+                    tr("Plugin dependencies are not installed: %1")
+                    .arg(missing.join(u", "_s)));
+    } else {
+        // Show which opcodes triggered each missing plugin. The line numbers
+        // make false positives easy to spot. Three opcodes per plugin are
+        // enough for that without turning the banner into a long list.
+        QStringList lines;
+        for (const QString &plugin : missing) {
+            QStringList locations;
+            for (const Risset::PluginUsage &usage : detectedUsages) {
+                if (usage.plugin.compare(plugin, Qt::CaseInsensitive) != 0)
+                    continue;
+                for (const Risset::OpcodeLocation &location : usage.opcodes) {
+                    if (locations.size() >= 3)
+                        break;
+                    locations.append(tr("%1 (line %2)")
+                                     .arg(location.opcode)
+                                     .arg(location.line));
+                }
+                break;
+            }
+            if (locations.isEmpty()) {
+                lines.append(tr("Detected missing plugin %1").arg(plugin));
+            } else {
+                lines.append(tr("Detected missing plugin %1, opcodes: %2")
+                             .arg(plugin, locations.join(u", "_s)));
+            }
+        }
+        m_pluginDependencyLabel->setText(lines.join('\n'_L1));
+    }
+    if (!unavailable.isEmpty()) {
+        m_pluginDependencyUnavailableLabel->setText(
+                    tr("Some plugins are not available for this platform/Csound "
+                       "version: %1")
+                    .arg(unavailable.join(u", "_s)));
+        m_pluginDependencyUnavailableLabel->show();
+    } else {
+        m_pluginDependencyUnavailableLabel->clear();
+        m_pluginDependencyUnavailableLabel->hide();
+    }
+    m_installPluginsButton->setText(m_pluginDependenciesUnavailable
+                                    ? tr("Manage Plugins")
+                                    : tr("Install Plugins"));
+    m_pluginDependencyBanner->show();
+}
+
 void CsoundQt::showPlugins()
 {
-    if (m_pluginsDialog == nullptr) {
-        m_pluginsDialog = new PluginsDialog(this, this);
-        m_pluginsDialog->setAttribute(Qt::WA_DeleteOnClose);
+    auto *dialog = qobject_cast<PluginsDialog *>(m_pluginsDialog.data());
+    if (dialog == nullptr) {
+        dialog = new PluginsDialog(this, this);
+        dialog->setAttribute(Qt::WA_DeleteOnClose);
+        m_pluginsDialog = dialog;
     }
+    dialog->setDependencyFilter({});
+    dialog->show();
+    dialog->raise();
+    dialog->activateWindow();
+}
+
+void CsoundQt::showPluginsForDependencies(const QStringList &plugins)
+{
+    auto *dialog = qobject_cast<PluginsDialog *>(m_pluginsDialog.data());
+    if (dialog == nullptr) {
+        dialog = new PluginsDialog(this, this);
+        dialog->setAttribute(Qt::WA_DeleteOnClose);
+        m_pluginsDialog = dialog;
+    }
+    dialog->setDependencyFilter(plugins);
     m_pluginsDialog->show();
     m_pluginsDialog->raise();
     m_pluginsDialog->activateWindow();
@@ -3055,7 +3264,7 @@ void CsoundQt::exportPdf()
     QString suggested;
     if (!documentPath.isEmpty() && !documentPath.startsWith(":/"_L1)) {
         const QFileInfo info(documentPath);
-        suggested = info.absolutePath() + QLatin1Char('/')
+        suggested = info.absolutePath() + '/'_L1
                 + info.completeBaseName() + ".pdf"_L1;
     } else {
         suggested = lastUsedDir + "CsoundQt.pdf"_L1;
@@ -3076,7 +3285,7 @@ void CsoundQt::exportPdf()
 
     documentPages[curPage]->print(&writer);
 
-    lastUsedDir = QFileInfo(fileName).absolutePath() + QLatin1Char('/');
+    lastUsedDir = QFileInfo(fileName).absolutePath() + '/'_L1;
 }
 
 void CsoundQt::findReplace()
@@ -3204,7 +3413,7 @@ QString CsoundQt::validateRealtimeAudioSettings()
             || outputDevice == "dac"_L1
             || outputDevice == "dac:null"_L1
             || outputDevice == "dac:system:playback_"_L1
-            || outputDevice.contains(QLatin1Char('*'));
+            || outputDevice.contains('*'_L1);
     for (const AudioDeviceInfo &device : outputs) {
         if (device.id == outputDevice || device.name == outputDevice) {
             outputFound = true;
@@ -3221,7 +3430,7 @@ QString CsoundQt::validateRealtimeAudioSettings()
             && inputDevice != "adc"_L1
             && inputDevice != "adc:null"_L1
             && inputDevice != "adc:system:capture_"_L1
-            && !inputDevice.contains(QLatin1Char('*'))) {
+            && !inputDevice.contains('*'_L1)) {
         const QList<AudioDeviceInfo> &inputs = deviceGroups.first;
         bool inputFound = false;
         for (const AudioDeviceInfo &device : inputs) {
@@ -3534,7 +3743,7 @@ QString CsoundQt::writePlaybackTempFile(DocumentPage *page,
     }
     baseName = baseName.trimmed();
     // The tab label carries the modified marker; it is not part of the name.
-    if (baseName.endsWith(QLatin1Char('*')))
+    if (baseName.endsWith('*'_L1))
         baseName.chop(1);
     if (baseName.isEmpty())
         baseName = "untitled.csd";
@@ -3821,7 +4030,7 @@ void CsoundQt::runInTerm(bool realtime)
 #else
     args << "-e" << scriptFileName;
 #endif
-    if(startProcess(termexe, args, nullptr, QStringLiteral("terminal"))) {
+    if(startProcess(termexe, args, nullptr, u"terminal"_s)) {
         QMessageBox::critical(this, tr("Error running terminal"),
                               tr("Could not run terminal program: '%1'\nArgs: %2\n"
                                  "Check environment tab in preferences.").arg(termexe, args.join(" ")));
@@ -4030,7 +4239,7 @@ void CsoundQt::render()
     DocumentPage *page = documentPages[curPage];
     const QString documentName = page->getFileName();
     const bool hasDocumentFile = !documentName.isEmpty()
-            && !documentName.startsWith(QLatin1Char(':'));
+            && !documentName.startsWith(':'_L1);
     const QString csdDir = hasDocumentFile
             ? QFileInfo(documentName).absolutePath()
             : QString();
@@ -4069,8 +4278,8 @@ void CsoundQt::render()
     // Save-dialog start location / prefilled name.
     QString dialogPath;
     if (hasOutputOption) {
-        const bool optionHasDir = outputOption.contains(QLatin1Char('/'))
-                || outputOption.contains(QLatin1Char('\\'))
+        const bool optionHasDir = outputOption.contains('/'_L1)
+                || outputOption.contains('\\'_L1)
                 || QFileInfo(outputOption).isAbsolute();
         if (outputOptionIsFile) {
             const QFileInfo optionInfo(optionPath);
@@ -4162,7 +4371,7 @@ void CsoundQt::render()
     m_offlineRendering = true;
     m_renderCsdFile = documentName.isEmpty()
             ? tr("(untitled)")
-            : (documentName.startsWith(QLatin1Char(':'))
+            : (documentName.startsWith(':'_L1)
                ? documentName
                : QFileInfo(documentName).absoluteFilePath());
     m_renderScoreTime = 0.0;
@@ -5060,27 +5269,27 @@ void CsoundQt::reportExternalLaunchFailure(const QString &tool, const QString &t
                                            const QUrl &url, const QString &errorString)
 {
     QStringList lines;
-    lines << QStringLiteral("CsoundQt version: ") + CSQT_VERSION;
-    lines << QStringLiteral("Qt version: ") + QString::fromLatin1(qVersion());
-    lines << QStringLiteral("OS: ") + QSysInfo::prettyProductName()
-                 + QStringLiteral(" (") + QSysInfo::kernelType() + QLatin1Char(' ')
-                 + QSysInfo::kernelVersion() + QLatin1Char(')');
-    lines << QStringLiteral("Action: open ") + tool;
-    lines << QStringLiteral("URL: ") + url.toString();
-    lines << QStringLiteral("Configured ") + tool + QStringLiteral(" path: ")
-                 + (toolPath.isEmpty() ? QStringLiteral("<empty>") : toolPath);
+    lines << u"CsoundQt version: "_s + CSQT_VERSION;
+    lines << u"Qt version: "_s + QString::fromLatin1(qVersion());
+    lines << u"OS: "_s + QSysInfo::prettyProductName()
+                 + u" ("_s + QSysInfo::kernelType() + ' '_L1
+                 + QSysInfo::kernelVersion() + ')'_L1;
+    lines << u"Action: open "_s + tool;
+    lines << u"URL: "_s + url.toString();
+    lines << u"Configured "_s + tool + u" path: "_s
+                 + (toolPath.isEmpty() ? u"<empty>"_s : toolPath);
     if (!toolPath.isEmpty()) {
         const QFileInfo toolInfo(toolPath);
-        lines << QStringLiteral("  exists=%1 isFile=%2 isDir=%3 isExecutable=%4")
+        lines << u"  exists=%1 isFile=%2 isDir=%3 isExecutable=%4"_s
                      .arg(toolInfo.exists()).arg(toolInfo.isFile())
                      .arg(toolInfo.isDir()).arg(toolInfo.isExecutable());
         if (toolInfo.isSymLink()) {
-            lines << QStringLiteral("  symLinkTarget=") + toolInfo.symLinkTarget();
+            lines << u"  symLinkTarget="_s + toolInfo.symLinkTarget();
         }
     }
-    lines << QStringLiteral("Error: ")
-                 + (errorString.isEmpty() ? QStringLiteral("<none>") : errorString);
-    const QString details = lines.join(QLatin1Char('\n'));
+    lines << u"Error: "_s
+                 + (errorString.isEmpty() ? u"<none>"_s : errorString);
+    const QString details = lines.join('\n'_L1);
 
     qWarning().noquote() << "Could not open external" << tool << ":\n" << details;
     if (m_console != nullptr) {
@@ -5185,7 +5394,7 @@ void CsoundQt::changeFontSize(int change)
 
 void CsoundQt::openPdfFile(QString name)
 {
-    openUrlWithDiagnostics(QStringLiteral("pdfviewer-default"), QUrl::fromLocalFile(name));
+    openUrlWithDiagnostics(u"pdfviewer-default"_s, QUrl::fromLocalFile(name));
 }
 
 void CsoundQt::openFLOSSManual()
@@ -5520,10 +5729,10 @@ void CsoundQt::updateTabText(int index)
     QString name = documentTabs->tabText(index);
     // Toggle only the marker, so special labels like "default.csd" and the
     // display name of a recovered document are preserved.
-    if (name.endsWith(QLatin1Char('*')))
+    if (name.endsWith('*'_L1))
         name.chop(1);
     if (documentPages[index]->isModified())
-        name += QLatin1Char('*');
+        name += '*'_L1;
     documentTabs->setTabText(index, name);
 }
 
@@ -6055,7 +6264,7 @@ protected:
         const auto *helpEvent = static_cast<const QHelpEvent *>(event);
         QToolTip::showText(helpEvent->globalPos(),
                            ToolTipHelper::wrappedLines(text, QToolTip::font())
-                                   .join(QLatin1Char('\n')),
+                                   .join('\n'_L1),
                            widget);
         return true;
     }
@@ -6152,11 +6361,9 @@ void CsoundQt::setColors(QString themeMode)
         helpPanel->setIconTheme(m_options->theme);
     }
 
-    // Helper to set an icon if the action exists.
-    // ThemedIcons::forMenu() gives menus and toolbars the same bundled icon.
-    // Set CSQT_DESKTOP_MENU_ICON_NAMES=1 to export a freedesktop name instead,
-    // so a global menu (e.g. KDE Plasma's) draws it in the shell's own theme
-    // (this makes the menu icon differ from the toolbar icon).
+    // Helper to set an icon if the action exists. Local menus/toolbars paint
+    // the bundled app-themed pixels; global-menu exporters use the freedesktop
+    // name so the shell can choose an icon that contrasts with its own palette.
     auto setIcon = [&](QAction *act, const QString &iconName) {
         if (act) {
             act->setIcon(ThemedIcons::forMenu(QString(":/themes/%1/%2").arg(m_options->theme, iconName)));
@@ -6597,9 +6804,9 @@ void CsoundQt::createActions()
     // connected with connectActions() and are changed when the document changes.
     QString theme = m_options->theme;
     QString prefix = ":/themes/" + theme + "/";
-    // Keep painting our bundled icon here, but name it after the matching
-    // freedesktop icon so the desktop shell can draw it in its own theme when
-    // the menu is shown globally. See ThemedIcons::forMenu().
+    // Keep painting our bundled icon here, but expose the matching freedesktop
+    // name so a global-menu shell resolves it in the system icon theme. See
+    // ThemedIcons::forMenu().
     auto icon = [&prefix](const QString &fileName) {
         return ThemedIcons::forMenu(prefix + fileName);
     };
@@ -7831,8 +8038,6 @@ void CsoundQt::fillExampleMenu()
 void CsoundQt::fillExampleSubmenu(QDir dir, QMenu *m, int depth)
 {
     static constexpr int kMaxMenuDepth = 5;
-    QString test = dir.dirName();
-    //qDebug() << "dirName: " << test;
     if (depth > kMaxMenuDepth) {
         return;
     }
@@ -7846,24 +8051,68 @@ void CsoundQt::fillExampleSubmenu(QDir dir, QMenu *m, int depth)
     QStringList filters;
     filters << "*.csd" << "*.pdf" << "*.html";
     dir.setNameFilters(filters);
-    QStringList files = dir.entryList(QDir::Files,QDir::Name);
-    QStringList dirs = dir.entryList(QDir::AllDirs,QDir::Name);
-    for (int i = 0; i < dirs.size() && i < 256; i++) {
-        QDir newDir(dir.absolutePath() + "/" + dirs[i]);
-        newDir.setNameFilters(filters);
-        QStringList newFiles = dir.entryList(QDir::Files,QDir::Name);
-        QStringList newDirs = dir.entryList(QDir::AllDirs,QDir::Name);
-        if (newFiles.size() > 0 ||  newDirs.size() > 0) {
-            if (dirs[i] != "." && dirs[i] != ".." && dirs[i]!="SourceMaterials") {
-                QMenu *menu = m->addMenu(dirs[i]);
-                fillExampleSubmenu(newDir.absolutePath(), menu, depth + 1);
-            }
+    const QStringList files = dir.entryList(QDir::Files, QDir::Name);
+    QStringList dirs = dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot,
+                                     QDir::Name);
+    dirs.removeAll(u"SourceMaterials"_s);
+
+    // An optional .order file lists the directory's entries one per line, in
+    // the order they should appear in the menu. Entries it does not mention
+    // are added afterwards, directories first as before.
+    QStringList order;
+    QFile orderFile(dir.absoluteFilePath(u".order"_s));
+    if (orderFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        while (!orderFile.atEnd()) {
+            QString entry = QDir::fromNativeSeparators(
+                        QString::fromUtf8(orderFile.readLine()).trimmed());
+            while (entry.endsWith('/'_L1))
+                entry.chop(1);
+            if (!entry.isEmpty())
+                order.append(entry);
         }
     }
-    for (int i = 0; i < files.size() &&  i < 256; i++) {
-        QAction *newAction = m->addAction(files[i],
-                                          this, SLOT(openExample()));
-        newAction->setData(dir.absoluteFilePath(files[i]));
+
+    const auto findEntry = [&](const QString &name) -> QString {
+        for (const QString &file : files) {
+            if (file.compare(name, Qt::CaseInsensitive) == 0)
+                return file;
+        }
+        for (const QString &subdir : dirs) {
+            if (subdir.compare(name, Qt::CaseInsensitive) == 0)
+                return subdir;
+        }
+        return QString();
+    };
+
+    QStringList entries;
+    const auto appendEntry = [&](const QString &name) {
+        if (!name.isEmpty() && !entries.contains(name))
+            entries.append(name);
+    };
+    for (const QString &name : order)
+        appendEntry(findEntry(name));
+    for (const QString &name : dirs)
+        appendEntry(name);
+    for (const QString &name : files)
+        appendEntry(name);
+
+    for (int i = 0; i < entries.size() && i < 256; i++) {
+        const QString name = entries.at(i);
+        if (files.contains(name)) {
+            QAction *newAction = m->addAction(name,
+                                              this, SLOT(openExample()));
+            newAction->setData(dir.absoluteFilePath(name));
+            continue;
+        }
+        QDir newDir(dir.absoluteFilePath(name));
+        newDir.setNameFilters(filters);
+        QStringList newFiles = newDir.entryList(QDir::Files, QDir::Name);
+        QStringList newDirs = newDir.entryList(
+                    QDir::AllDirs | QDir::NoDotAndDotDot, QDir::Name);
+        if (!newFiles.isEmpty() || !newDirs.isEmpty()) {
+            QMenu *menu = m->addMenu(name);
+            fillExampleSubmenu(newDir.absolutePath(), menu, depth + 1);
+        }
     }
 }
 
@@ -8805,9 +9054,9 @@ void CsoundQt::handleDroppedFiles(QList<QUrl> urls, QPoint globalPos)
         const QString suffix = QFileInfo(fileName).suffix().toLower();
         // Csound source files are opened directly; any other file is offered
         // as text/table material to insert.
-        if (suffix == QLatin1String("csd")
-                || suffix == QLatin1String("udo")
-                || suffix == QLatin1String("orc")) {
+        if (suffix == "csd"_L1
+                || suffix == "udo"_L1
+                || suffix == "orc"_L1) {
             loadFile(fileName);
         }
         else {
@@ -8887,12 +9136,12 @@ void CsoundQt::insertDroppedFtgen(const QString &fileName)
     const QString path = droppedFilePath(fileName, true);
     QString name = QFileInfo(fileName).completeBaseName();
     name.replace(QRegularExpression(uR"([^A-Za-z0-9_])"_s),
-                 QStringLiteral("_"));
+                 u"_"_s);
     if (name.isEmpty())
-        name = QStringLiteral("soundfile");
+        name = u"soundfile"_s;
     // GEN01 with a deferred (0) table size, so Csound reads the file length
     // and format from the soundfile header.
-    const QString line = QStringLiteral("gi_%1 ftgen 0, 0, 0, 1, \"%2\", 0, 0, 0\n")
+    const QString line = u"gi_%1 ftgen 0, 0, 0, 1, \"%2\", 0, 0, 0\n"_s
             .arg(name, path);
     documentPages[curPage]->insertOrchestraGlobal(line);
 }
@@ -8902,7 +9151,7 @@ void CsoundQt::insertDroppedScoreTable(const QString &fileName)
     const QString path = droppedFilePath(fileName, true);
     const int tableNumber = nextFreeTableNumber();
     // GEN01 read from the score, with a deferred table size.
-    const QString line = QStringLiteral("f %1 0 0 1 \"%2\" 0 0 0\n")
+    const QString line = u"f %1 0 0 1 \"%2\" 0 0 0\n"_s
             .arg(tableNumber).arg(path);
     documentPages[curPage]->insertAtScoreStart(line);
 }
@@ -8913,10 +9162,10 @@ int CsoundQt::nextFreeTableNumber()
     if (curPage >= 0 && curPage < documentPages.size()) {
         const QString text = documentPages[curPage]->getFullText();
         static const QRegularExpression scoreRx(
-                    QStringLiteral(R"(^\s*f\s+(\d+))"),
+                    uR"(^\s*f\s+(\d+))"_s,
                     QRegularExpression::MultilineOption);
         static const QRegularExpression ftgenRx(
-                    QStringLiteral(R"(\bftgen\s+(\d+))"));
+                    uR"(\bftgen\s+(\d+))"_s);
         auto collect = [&highest](const QRegularExpression &rx, const QString &text) {
             auto it = rx.globalMatch(text);
             while (it.hasNext()) {
@@ -9088,6 +9337,13 @@ int CsoundQt::makeNewPage(QString fileName, QString text, bool activate, int ins
     DocumentPage *newPage = new DocumentPage(this, m_opcodeTree, &m_configlists, m_midiLearn);
     newPage->setScanService(m_scanService);
     newPage->setIncludeSearchPaths(configuredIncludePaths());
+    connect(newPage, &DocumentPage::pluginDependenciesChanged,
+            this, [this, newPage]() {
+        if (documentTabs != nullptr
+                && documentTabs->currentWidget() == newPage->getView()) {
+            updatePluginDependencyBanner();
+        }
+    });
     // Play/render/pause/stop buttons in the widget layout now report through
     // DocumentPage; tabbed documents act on their own tab.
     connect(newPage, &DocumentPage::playRequested, this, [this, newPage]() {
@@ -9162,6 +9418,7 @@ int CsoundQt::makeNewPage(QString fileName, QString text, bool activate, int ins
             documentTabs->setCurrentIndex(curPage);
         documentTabs->blockSignals(signalsBlocked);
     }
+    updatePluginDependencyBanner();
 
     midiHandler->addListener(newPage);
     newPage->getEngine()->setMidiHandler(midiHandler);
@@ -9402,8 +9659,8 @@ void CsoundQt::convertToCsd()
             QDir(directory).filePath(baseName + ".csd"_L1);
 
     QString orchestra = page->getBasicText();
-    if (!orchestra.isEmpty() && !orchestra.endsWith(QLatin1Char('\n')))
-        orchestra += QLatin1Char('\n');
+    if (!orchestra.isEmpty() && !orchestra.endsWith('\n'_L1))
+        orchestra += '\n'_L1;
 
     QString score;
     const int scoreOpenIndex = isOpen(scoreFileName);
@@ -9414,8 +9671,8 @@ void CsoundQt::convertToCsd()
     else if (QFile::exists(scoreFileName)) {
         score = readUtf8TextFile(scoreFileName);
     }
-    if (!score.isEmpty() && !score.endsWith(QLatin1Char('\n')))
-        score += QLatin1Char('\n');
+    if (!score.isEmpty() && !score.endsWith('\n'_L1))
+        score += '\n'_L1;
 
     const int openIndex = isOpen(destination);
     if (QFile::exists(destination)) {
@@ -9550,10 +9807,10 @@ QString CsoundQt::strippedName(const QString &fullFileName)
 static QString shellQuoteArg(const QString &arg)
 {
 #ifdef Q_OS_WIN32
-    if (arg.contains(QLatin1Char(' ')) || arg.contains(QLatin1Char('"'))) {
+    if (arg.contains(' '_L1) || arg.contains('"'_L1)) {
         QString quoted = arg;
-        quoted.replace(QLatin1Char('"'), QLatin1String("\\\""));
-        return QLatin1Char('"') + quoted + QLatin1Char('"');
+        quoted.replace('"'_L1, "\\\""_L1);
+        return '"'_L1 + quoted + '"'_L1;
     }
     return arg;
 #else
@@ -9569,8 +9826,8 @@ static QString shellQuoteArg(const QString &arg)
     if (!needsQuote)
         return arg;
     QString quoted = arg;
-    quoted.replace(QLatin1Char('\''), QLatin1String("'\\''"));
-    return QLatin1Char('\'') + quoted + QLatin1Char('\'');
+    quoted.replace('\''_L1, "'\\''"_L1);
+    return '\''_L1 + quoted + '\''_L1;
 #endif
 }
 

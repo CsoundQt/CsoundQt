@@ -42,7 +42,114 @@
 
 #include <QDir>
 #include <QFileInfo>
+#include <QJsonArray>
+#include <QJsonDocument>
 #include <QMessageBox>
+using namespace Qt::StringLiterals;
+
+namespace {
+
+QStringList parseTomlPluginArray(const QString &toml)
+{
+    static const QRegularExpression pluginsAssignment(
+                uR"((?:^|\n)[\t ]*plugins[\t ]*=[\t ]*\[)"_s);
+    const QRegularExpressionMatch assignment = pluginsAssignment.match(toml);
+    if (!assignment.hasMatch())
+        return {};
+
+    int pos = assignment.capturedEnd(); // immediately after '['
+    QStringList plugins;
+    auto skipWhitespaceAndComments = [&]() {
+        while (pos < toml.size()) {
+            if (toml.at(pos).isSpace()) {
+                ++pos;
+            } else if (toml.at(pos) == '#'_L1) {
+                while (pos < toml.size() && toml.at(pos) != '\n'_L1)
+                    ++pos;
+            } else {
+                break;
+            }
+        }
+    };
+
+    while (pos < toml.size()) {
+        skipWhitespaceAndComments();
+        if (pos >= toml.size())
+            return {};
+        if (toml.at(pos) == ']'_L1)
+            return plugins;
+
+        const QChar quote = toml.at(pos);
+        if (quote != '"'_L1 && quote != '\''_L1)
+            return {}; // plugins must be an array of TOML strings
+
+        const int tokenStart = pos++;
+        bool closed = false;
+        while (pos < toml.size()) {
+            const QChar c = toml.at(pos++);
+            if (c == quote) {
+                closed = true;
+                break;
+            }
+            if (quote == '"'_L1 && c == '\\'_L1) {
+                if (pos >= toml.size())
+                    return {};
+                ++pos; // escaped character; JSON below decodes basic escapes
+            }
+        }
+        if (!closed)
+            return {};
+
+        const QString token = toml.mid(tokenStart, pos - tokenStart);
+        QString plugin;
+        if (quote == '"'_L1) {
+            const QJsonDocument decoded = QJsonDocument::fromJson(
+                        (u"["_s + token + u"]"_s)
+                        .toUtf8());
+            if (!decoded.isArray() || decoded.array().size() != 1
+                    || !decoded.array().first().isString())
+                return {};
+            plugin = decoded.array().first().toString();
+        } else {
+            plugin = token.mid(1, token.size() - 2); // TOML literal string
+        }
+        plugin = plugin.trimmed();
+        if (plugin.isEmpty())
+            return {};
+        if (!plugins.contains(plugin))
+            plugins.append(plugin);
+
+        skipWhitespaceAndComments();
+        if (pos < toml.size() && toml.at(pos) == ','_L1) {
+            ++pos;
+            continue;
+        }
+        if (pos < toml.size() && toml.at(pos) == ']'_L1)
+            return plugins;
+        return {};
+    }
+    return {};
+}
+
+QStringList pluginDependenciesFromCsd(const QString &text)
+{
+    static const QRegularExpression metaBlock(
+                uR"(<CsMeta\b[^>]*>([\s\S]*?)</CsMeta\s*>)"_s,
+                QRegularExpression::CaseInsensitiveOption);
+    QStringList result;
+    auto blocks = metaBlock.globalMatch(text);
+    while (blocks.hasNext()) {
+        const QStringList plugins = parseTomlPluginArray(
+                    blocks.next().captured(1));
+        for (const QString &plugin : plugins) {
+            if (!result.contains(plugin))
+                result.append(plugin);
+        }
+    }
+    return result;
+}
+
+} // namespace
 
 // TODO is is possible to move the editor to a separate child class, to be able to use a cleaner class?
 DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree,
@@ -169,7 +276,14 @@ void DocumentPage::toggleParameterMode()
 int DocumentPage::setTextString(QString &text)
 {
 	int ret = 0;
-	if (!fileName.endsWith(".csd") && !fileName.isEmpty()) {
+	const QStringList requiredPlugins =
+	        (fileName.isEmpty() || fileName.endsWith(".csd", Qt::CaseInsensitive))
+	        ? pluginDependenciesFromCsd(text) : QStringList();
+	if (m_requiredPlugins != requiredPlugins) {
+		m_requiredPlugins = requiredPlugins;
+		emit pluginDependenciesChanged();
+	}
+	if (!fileName.endsWith(".csd", Qt::CaseInsensitive) && !fileName.isEmpty()) {
         // Put all text since not a csd file (and not default file which has no name)
         m_view->setFullText(text, true);
 		m_view->setModified(false);
@@ -556,7 +670,7 @@ QStringList DocumentPage::embeddedFileNames()
 
 QString DocumentPage::workingDirectory() const
 {
-	if (fileName.isEmpty() || fileName.startsWith(QLatin1String(":/")))
+	if (fileName.isEmpty() || fileName.startsWith(":/"_L1))
 		return QDir::currentPath();
 	return QFileInfo(fileName).absolutePath();
 }
@@ -826,7 +940,7 @@ void DocumentPage::print(QPagedPaintDevice *device)
 	// put light text on a dark background, which is unreadable on paper and
 	// wastes a lot of ink.
 	const QString previousTheme = m_colorTheme;
-	const QString lightTheme = QStringLiteral("light");
+	const QString lightTheme = u"light"_s;
 	if (previousTheme != lightTheme)
 		setHighlightingTheme(lightTheme);
 
@@ -1193,19 +1307,19 @@ void DocumentPage::showGoToAnything()
 		QString label;
 		switch (definition.kind) {
 		case CodeScan::Kind::Udo:
-			label = QStringLiteral("opcode ") + definition.name;
+			label = u"opcode "_s + definition.name;
 			break;
 		case CodeScan::Kind::Instrument:
-			label = QStringLiteral("instr ")
+			label = u"instr "_s
 					+ (definition.text.isEmpty() ? definition.name : definition.text);
 			break;
 		default:
 			return;
 		}
 		if (!definition.file.isEmpty()) {
-			label += QStringLiteral("  —  ")
+			label += u"  —  "_s
 					+ QFileInfo(definition.file).fileName()
-					+ QLatin1Char(':') + QString::number(definition.line);
+					+ ':'_L1 + QString::number(definition.line);
 		}
 		entries.append({label, definition.file, definition.line, definition.column});
 	};
@@ -1220,7 +1334,7 @@ void DocumentPage::showGoToAnything()
 			append(definition);
 	}
 	if (m_scan->scoreLine >= 1)
-		entries.append({QStringLiteral("<CsScore>"), QString(), m_scan->scoreLine, 0});
+		entries.append({u"<CsScore>"_s, QString(), m_scan->scoreLine, 0});
 	for (const CodeScan::Definition &definition : m_scan->udos) {
 		if (!definition.file.isEmpty())
 			append(definition);
@@ -1502,13 +1616,13 @@ void DocumentPage::applyScan(const CodeScan::ResultPtr &scan)
              it != definition.localVariables.cend(); ++it) {
             const CodeScan::Definition::Variable &variable = it.value();
             scope.variables.insert(it.key(), variable.type);
-            names.append(it.key() + QLatin1Char(':') + variable.type
+            names.append(it.key() + ':'_L1 + variable.type
                          + (variable.array ? u"[]"_s : QString()));
         }
         names.sort();
-        variableSignature += QString::number(scope.startLine) + QLatin1Char('-')
-                + QString::number(scope.endLine) + QLatin1Char(':')
-                + names.join(QLatin1Char(',')) + QLatin1Char('\n');
+        variableSignature += QString::number(scope.startLine) + '-'_L1
+                + QString::number(scope.endLine) + ':'_L1
+                + names.join(','_L1) + '\n'_L1;
         scopes.append(scope);
     };
     for (const CodeScan::Definition &instrument : scan->instruments)

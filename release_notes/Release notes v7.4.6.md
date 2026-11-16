@@ -224,6 +224,34 @@ The source and binaries can be downloaded from:
   the editor's syntax highlighting once risset detection finishes. Risset is
   detected only through the managed executable or a `risset` script on `PATH`;
   CsoundQt no longer probes system Python modules.
+* **Plugin manager:** once risset is installed, the Plugins window lists the
+  plugins that have a binary for the current platform and Csound version. The
+  window shows a spinner while it checks risset and loads the list; the table
+  appears only when the data is ready. Each row shows the name, installed
+  state and installed version, the latest version, short description, an
+  **Info** button that opens `risset show` output, and an upgrade checkbox for
+  installed plugins with a newer compatible version. Plugins without an
+  upgrade get no checkbox, and the Upgrade column is hidden entirely when no
+  plugin can be upgraded. An extra **All** row selects every available upgrade.
+  Only the install/upgrade checkboxes are interactive. In Fusion dark the table
+  rows use a slightly lighter background so the native checkbox stays visible;
+  all other styles keep their native table appearance. Checking or unchecking
+  a row and pressing **Apply** or **OK** installs, removes or upgrades the
+  plugin; **Cancel** discards the changes. Apply stays disabled while there is
+  nothing to do. After an update, risset's `opcodes.xml` is regenerated and the
+  editor's opcode highlighter, completion data and opcode insert bar are
+  refreshed, so newly installed opcodes appear and removed ones disappear.
+  **Update** runs `risset update`; **Update Documentation** runs
+  `risset makedocs`. CSDs can declare required plugins in a TOML `plugins`
+  array inside `<CsMeta>`. Without such a declaration, plugin opcodes used in
+  the orchestra are matched against an opcode map bundled with CsoundQt, so
+  missing plugins are still detected, even before risset is installed. The
+  banner names up to three triggering opcodes per plugin with their line
+  numbers. If all dependencies are available, **Install Plugins** opens a
+  filtered dialog with the missing plugins preselected; if any have no
+  compatible binary, the banner identifies them and offers **Manage Plugins**
+  instead. The banner can be dismissed with its close button. Risset commands
+  show output in a collapsible panel.
 * **risset 4 command line:** generating `opcodes.xml` now uses
   `risset dev opcodesxml --outfile <path>`, the order required by risset 4. The
   previous argument order is tried as a fallback for older installations. With
@@ -248,6 +276,9 @@ The source and binaries can be downloaded from:
 * The bundled examples were modernized for Csound 7 and the current widget
   format. Obsolete or broken examples were removed, and the McCurdy haikus
   were reorganized.
+* The Examples menu now honours an optional `.order` file in any example
+  folder. It lists the folder's files and subfolders one per line in the
+  desired menu order; entries it does not mention follow alphabetically.
 
 ### Removed or changed
 
@@ -304,4 +335,3 @@ The source and binaries can be downloaded from:
   rewriting helpers are documented there.
 * The Qt string-literal convention now uses `u"..."_s` and `"..."_L1` where
   possible.
-

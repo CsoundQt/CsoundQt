@@ -10,8 +10,13 @@
 #include <QJsonParseError>
 #include <QJsonValue>
 #include <QDir>
+#include <QFile>
+#include <QRegularExpression>
+#include <QSet>
+#include <algorithm>
 #include <iostream>
 #include "types.h"
+using namespace Qt::StringLiterals;
 
 /**
  * @brief like unix' which, but cross-platform. Based on python shutil.which
@@ -61,7 +66,7 @@ bool is_running_in_flatpak() {
 QString Risset::executableSuffix()
 {
 #ifdef Q_OS_WIN
-    return QStringLiteral(".exe");
+    return u".exe"_s;
 #else
     return QString();
 #endif
@@ -103,7 +108,7 @@ QDir Risset::pluginPythonDir()
 
 QString Risset::localRissetExecutable()
 {
-    return pluginBinDir().filePath(QStringLiteral("risset") + executableSuffix());
+    return pluginBinDir().filePath(u"risset"_s + executableSuffix());
 }
 
 Risset::Risset()
@@ -119,6 +124,7 @@ Risset::Risset()
         rissetScriptPath = which("risset", QString());
     if (rissetScriptPath.isEmpty() || !QFile::exists(rissetScriptPath)) {
         isInstalled = false;
+        loadBundledOpcodeMap();
         QDEBUG << "Risset script not found in the path or at"
                << localRissetExecutable();
         return;
@@ -130,6 +136,7 @@ Risset::Risset()
     auto finishok = proc.waitForFinished();
     if (!finishok) {
         isInstalled = false;
+        loadBundledOpcodeMap();
         QDEBUG << "Risset script not runnable" << rissetScriptPath
                << proc.errorString();
         return;
@@ -143,6 +150,7 @@ Risset::Risset()
     rissetVersion = root.value("version").toString();
     if(rissetVersion.isEmpty()) {
         isInstalled = false;
+        loadBundledOpcodeMap();
         QDEBUG << "Risset did not execute correctly: " << proc.errorString();
         return;
     }
@@ -166,6 +174,8 @@ Risset::Risset()
         QDEBUG << "Risset - parsing plugin" << pluginName;
         auto plugindef = plugins.value(pluginName).toObject();
         bool installed = plugindef.value("installed").toBool();
+        pluginAvailable[pluginName] =
+                plugindef.value("available").toBool(installed);
         auto opcodesInPlugin = plugindef.value("opcodes").toArray();
         QStringList opcodesList;
         for(auto opcodeName: opcodesInPlugin) {
@@ -185,6 +195,220 @@ Risset::Risset()
     opcodeIndexDone = true;
 }
 
+
+void Risset::loadBundledOpcodeMap()
+{
+    QFile file(u":/risset-opcodemap.json"_s);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QDEBUG << "Could not open the bundled risset opcode map";
+        return;
+    }
+    QJsonParseError error{};
+    const QJsonDocument document = QJsonDocument::fromJson(file.readAll(), &error);
+    if (error.error != QJsonParseError::NoError || !document.isObject()) {
+        QDEBUG << "Could not parse the bundled risset opcode map:"
+               << error.errorString();
+        return;
+    }
+
+    const QJsonObject plugins = document.object()
+            .value(u"plugins"_s).toObject();
+    for (auto it = plugins.constBegin(); it != plugins.constEnd(); ++it) {
+        const QString pluginName = it.key();
+        const QJsonArray opcodes = it.value().toObject()
+                .value(u"opcodes"_s).toArray();
+        QStringList opcodeList;
+        for (const QJsonValue &value : opcodes) {
+            const QString opcode = value.toString();
+            if (opcode.isEmpty())
+                continue;
+            opcodeToPlugin.insert(opcode, pluginName);
+            opcodeNames.append(opcode);
+            opcodeList.append(opcode);
+        }
+        pluginOpcodes.insert(pluginName, opcodeList);
+    }
+    opcodeIndexDone = !opcodeToPlugin.isEmpty();
+    QDEBUG << "Loaded bundled risset opcode map:" << plugins.size()
+           << "plugins," << opcodeToPlugin.size() << "opcodes";
+}
+
+namespace {
+
+// A copy of the text with comments and strings blanked out, keeping newlines
+// so offsets and line numbers still match the original. This makes variable
+// and opcode recognition less error-prone.
+QString cleanCsoundText(const QString &source)
+{
+    QString cleaned = source;
+    const int length = source.size();
+    const auto blank = [&cleaned](int start, int end) {
+        end = qMin(end, int(cleaned.size()));
+        for (int i = start; i < end; ++i) {
+            if (cleaned.at(i) != '\n'_L1 && cleaned.at(i) != '\r'_L1)
+                cleaned[i] = ' ';
+        }
+    };
+
+    int i = 0;
+    while (i < length) {
+        const QChar c = source.at(i);
+        if (c == ';'_L1
+                || (c == '/'_L1 && i + 1 < length
+                    && source.at(i + 1) == '/'_L1)) {
+            int end = int(source.indexOf('\n'_L1, i + 1));
+            if (end < 0)
+                end = length;
+            blank(i, end);
+            i = end;
+            continue;
+        }
+        if (c == '/'_L1 && i + 1 < length && source.at(i + 1) == '*'_L1) {
+            int end = int(source.indexOf(u"*/"_s, i + 2));
+            end = end < 0 ? length : end + 2;
+            blank(i, end);
+            i = end;
+            continue;
+        }
+        if (c == '{'_L1 && i + 1 < length && source.at(i + 1) == '{'_L1) {
+            int end = int(source.indexOf(u"}}"_s, i + 2));
+            end = end < 0 ? length : end + 2;
+            blank(i, end);
+            i = end;
+            continue;
+        }
+        if (c == '"'_L1 || c == '\''_L1) {
+            const QChar quote = c;
+            int end = i + 1;
+            while (end < length) {
+                const QChar d = source.at(end++);
+                if (d == '\\'_L1) {
+                    if (end < length)
+                        ++end;
+                    continue;
+                }
+                if (d == quote)
+                    break;
+            }
+            blank(i, end);
+            i = end;
+            continue;
+        }
+        ++i;
+    }
+    return cleaned;
+}
+
+void collectNames(const QRegularExpression &expression, const QString &text,
+                  QSet<QString> &names)
+{
+    auto matches = expression.globalMatch(text);
+    while (matches.hasNext())
+        names.insert(matches.next().captured(1));
+}
+
+} // namespace
+
+QVector<Risset::PluginUsage> Risset::pluginUsagesInText(const QString &text) const
+{
+    QVector<PluginUsage> usages;
+    if (opcodeToPlugin.isEmpty() || text.isEmpty())
+        return usages;
+
+    // Only the orchestra can call opcodes; ignore widgets and score text.
+    QString source = text;
+    int contentStart = 0;
+    static const QRegularExpression instruments(
+                uR"(<CsInstruments\b[^>]*>([\s\S]*?)</CsInstruments\s*>)"_s,
+                QRegularExpression::CaseInsensitiveOption);
+    const QRegularExpressionMatch instrumentsMatch = instruments.match(text);
+    if (instrumentsMatch.hasMatch()) {
+        contentStart = int(instrumentsMatch.capturedStart(1));
+        source = instrumentsMatch.captured(1);
+    }
+
+    const QString cleaned = cleanCsoundText(source);
+
+    // Lines are reported as they appear in the whole document, not in the
+    // extracted orchestra section.
+    int line = 1 + int(text.left(contentStart).count('\n'_L1));
+
+    // Names that cannot be opcodes. A UDO defined here shadows a plugin opcode
+    // with the same name. Variables are recognised by typed declarations/uses
+    // ("accum:k"), assignment targets ("accum = ...") and array subscripts
+    // ("accum[0]"); once a name appears in one of these positions it is a
+    // variable everywhere in the document.
+    QSet<QString> excluded;
+    static const QRegularExpression udo(uR"(\bopcode\s+([A-Za-z_]\w*))"_s);
+    static const QRegularExpression typedVariable(
+                uR"(\b([A-Za-z_]\w*)\s*:\s*(?:\[|[A-Za-z_]\w*))"_s);
+    static const QRegularExpression assignment(
+                uR"(\b([A-Za-z_]\w*)\s*=(?!=))"_s);
+    static const QRegularExpression subscript(
+                uR"(\b([A-Za-z_]\w*)\s*\[)"_s);
+    collectNames(udo, cleaned, excluded);
+    collectNames(typedVariable, cleaned, excluded);
+    collectNames(assignment, cleaned, excluded);
+    collectNames(subscript, cleaned, excluded);
+
+    const auto addUse = [&usages](const QString &plugin, const QString &opcode,
+                                  int lineNumber) {
+        for (PluginUsage &usage : usages) {
+            if (usage.plugin != plugin)
+                continue;
+            for (const OpcodeLocation &location : usage.opcodes) {
+                if (location.opcode == opcode)
+                    return; // keep the first occurrence
+            }
+            usage.opcodes.append(OpcodeLocation{opcode, lineNumber});
+            return;
+        }
+        PluginUsage usage;
+        usage.plugin = plugin;
+        usage.opcodes.append(OpcodeLocation{opcode, lineNumber});
+        usages.append(usage);
+    };
+
+    const int length = cleaned.size();
+    int i = 0;
+    while (i < length) {
+        const QChar c = cleaned.at(i);
+        if (c == '\n'_L1) {
+            ++line;
+            ++i;
+            continue;
+        }
+        if (c.isLetter() || c == '_'_L1) {
+            const int start = i;
+            while (i < length
+                   && (cleaned.at(i).isLetterOrNumber()
+                       || cleaned.at(i) == '_'_L1))
+                ++i;
+            const QString token = cleaned.mid(start, i - start);
+            if (excluded.contains(token))
+                continue;
+            int previous = start - 1;
+            while (previous >= 0
+                   && (cleaned.at(previous) == ' ' || cleaned.at(previous) == '\t'))
+                --previous;
+            if (previous >= 0
+                    && (cleaned.at(previous) == '.'_L1
+                        || cleaned.at(previous) == ':'_L1))
+                continue; // struct member or type name
+            const auto plugin = opcodeToPlugin.constFind(token);
+            if (plugin != opcodeToPlugin.constEnd())
+                addUse(plugin.value(), token, line);
+            continue;
+        }
+        ++i;
+    }
+
+    std::sort(usages.begin(), usages.end(),
+              [](const PluginUsage &left, const PluginUsage &right) {
+        return left.plugin.compare(right.plugin, Qt::CaseInsensitive) < 0;
+    });
+    return usages;
+}
 
 void Risset::markOpcodeTree(OpEntryParser *tree) {
     // Mark the opcodes which are not installed. This information can be used, for example
@@ -366,6 +590,5 @@ void Risset::cleanupProcesses()
     }
     QDEBUG << "Running processes: " << runningProcesses.size();
 }
-
 
 
