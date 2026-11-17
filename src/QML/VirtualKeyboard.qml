@@ -48,9 +48,9 @@ Rectangle {
                         //Layout.preferredWidth: layout.width/3 - 10 //model-2*spacing
                         Layout.fillWidth: true
                         ccNumber: index+1
-                        onCcValueChanged: function(value) {
-                            //console.log("CC:", channel, ccNumber, value)
-                            newCCvalue(channel, ccNumber, value )
+                        onCcValueChanged: function(controller, value) {
+                            //console.log("CC:", channel, controller, value)
+                            newCCvalue(channel, controller, value)
                         }
                         Keys.forwardTo: keyboard
                     }
