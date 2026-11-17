@@ -1364,14 +1364,7 @@ void CsoundEngine::flushQueues()
     }
 
     while (!messageQueue.isEmpty()) {
-        QString msg = messageQueue.takeFirst();
-        ConsoleWidget *console = nullptr;
-        for (int i = 0; i < consoles.size(); i++) {
-            console = consoles[i];
-            console->appendMessage(msg);
-        }
-        ud->wl->appendMessage(msg);
-
+        emit passMessages(messageQueue.takeFirst());
     }
     m_messageMutex.unlock();
     ud->wl->flushGraphBuffer();
