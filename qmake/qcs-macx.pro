@@ -86,8 +86,15 @@ _dir2 = $$dirname(_dir1)
 CSOUND_FRAMEWORK_ROOT = $$dirname(_dir2)
 exists($${CSOUND_FRAMEWORK_ROOT}/$${MAC_LIB}.framework) {
     LCSOUND = -F$${CSOUND_FRAMEWORK_ROOT} -framework $${MAC_LIB}
+    # The framework's install name is @rpath/$${MAC_LIB}.framework/Versions/...,
+    # so an un-bundled build (`make` without `make install`) needs an rpath
+    # pointing at the framework root used at link time. Without it, running
+    # bin/CsoundQt-d-cs7.app fails with "Library not loaded: @rpath/..."
+    # unless Csound happens to live in one of the app's other rpath dirs.
+    QMAKE_RPATHDIR *= $${CSOUND_FRAMEWORK_ROOT}
 } else {
     LCSOUND = -L$${CSOUND_LIBRARY_DIR} -l$${MAC_LIB}
+    QMAKE_RPATHDIR *= $${CSOUND_LIBRARY_DIR}
 }
 
 
