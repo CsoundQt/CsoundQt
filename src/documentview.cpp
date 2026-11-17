@@ -37,6 +37,7 @@
 #include <QCursor>
 #include <QFileInfo>
 #include <QGuiApplication>
+#include <QHash>
 #include <QListWidget>
 #include <QPainter>
 #include <QScreen>
@@ -1855,6 +1856,57 @@ QStringList DocumentView::getCurrentScopeStringVariables() const
     return strings;
 }
 
+// Common opcodes are listed before the rest when the completion conditions are
+// otherwise equal (same category, same output-type match). The score only
+// breaks those ties; a type match still ranks higher than an unrelated opcode.
+// Names not listed here get the default priority.
+static int opcodeCompletionPriority(const QString &opcodeName)
+{
+    static constexpr int defaultPriority = 1;
+    static const QHash<QString, int> priorities = {
+        {u"schedule"_s, 10},
+        {u"schedulek"_s, 9},
+        {u"turnoff"_s, 10},
+        {u"metro"_s, 4},
+        {u"changed"_s, 4},
+        {u"outvalue"_s, 10},
+        {u"invalue"_s, 4},
+        {u"xout"_s, 10},
+        {u"xin"_s, 3},
+        {u"chnget"_s, 4},
+        {u"chnset"_s, 4},
+        {u"create"_s, 4},
+        {u"dbamp"_s, 4},
+        {u"diskin2"_s, 4},
+        {u"setksmps"_s, 4},
+        {u"println"_s, 4},
+        {u"prints"_s, 4},
+        {u"exitnow"_s, 4},
+        {u"ftgen"_s, 4},
+        {u"ftlen"_s, 3},
+        {u"ftgenonce"_s, 3},
+        {u"init"_s, 10},
+        {u"isreleasing"_s, 10},
+        {u"pause"_s, 4},
+        {u"perf"_s, 4},
+        {u"interp"_s, 10},
+        {u"ksmps"_s, 4},
+        {u"lenarray"_s, 4},
+        {u"linsegr"_s, 4},
+        {u"tabw"_s, 4},
+        {u"tabwi"_s, 4},
+        {u"timeinstk"_s, 2},
+        {u"eventcycles"_s, 2},
+        {u"undersample"_s, 2},
+        {u"turnoff2"_s, 2},
+        {u"chnmix"_s, 3},
+        {u"chnclear"_s, 3},
+        {u"compress2"_s, 2},
+        {u"alwayson"_s, 2},
+    };
+    return priorities.value(opcodeName, defaultPriority);
+}
+
 
 void DocumentView::scheduleAutoComplete(int delay)
 {
@@ -2352,6 +2404,8 @@ void DocumentView::autoCompleteAtCursor(bool force) {
                 QAction *action = syntaxMenu->addCompletion(
                             text, syntaxText, syntaxText, 0, this,
                             SLOT(insertAutoCompleteText()));
+                action->setProperty("autocompleteOpcodePriority",
+                                    opcodeCompletionPriority(opcodeName));
                 if (!expectedOutputType.isNull() && !opcodedefs[i].outArgs.isEmpty()
                         && opcodedefs[i].outArgs.at(0) == expectedOutputType) {
                     action->setProperty("autocompleteRank", 100);
@@ -4359,8 +4413,15 @@ void MySyntaxMenu::refreshCompletions(int maxVisibleLines, int widthCharacters)
             return priorityA < priorityB;
         // Higher rank first within a priority group (e.g. opcodes whose output
         // type matches the typed output variable).
-        return a->property("autocompleteRank").toInt()
-                > b->property("autocompleteRank").toInt();
+        const int rankA = a->property("autocompleteRank").toInt();
+        const int rankB = b->property("autocompleteRank").toInt();
+        if (rankA != rankB)
+            return rankA > rankB;
+        // Finally prefer common opcodes over the rest. Non-opcode entries do
+        // not set this property, but they are already separated by the
+        // category priority above.
+        return a->property("autocompleteOpcodePriority").toInt()
+                > b->property("autocompleteOpcodePriority").toInt();
     });
 
     bool haveOpcode = false;
