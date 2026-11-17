@@ -557,14 +557,14 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     // channelsSetupMethod every time the dialog opens. updateChannelControls()
     // only replaces an invalid selection (e.g. Device for PortAudio).
 
-    numChannelsSpinBox->setMinimum(0);
+    numChannelsSpinBox->setMinimum(1);
     numChannelsSpinBox->setMaximum(64);
-    m_overrideOutputChannels = m_options->numChannels;
+    m_overrideOutputChannels = qMax(1, m_options->numChannels);
     numChannelsSpinBox->setValue(m_overrideOutputChannels);
 
-    numInputChannelsSpinBox->setMinimum(0);
+    numInputChannelsSpinBox->setMinimum(1);
     numInputChannelsSpinBox->setMaximum(64);
-    m_overrideInputChannels = m_options->numInputChannels;
+    m_overrideInputChannels = qMax(1, m_options->numInputChannels);
     numInputChannelsSpinBox->setValue(m_overrideInputChannels);
     connect(numChannelsSpinBox, QOverload<int>::of(&QSpinBox::valueChanged),
             this, [this](int value) {

@@ -192,7 +192,7 @@
                    </size>
                   </property>
                   <property name="toolTip">
-                   <string>Number of input channels (corresponds nchnls_i)</string>
+                   <string>Number of output channels (corresponds nchnls). To disable audio output, select the Disabled output device.</string>
                   </property>
                  </widget>
                 </item>
@@ -271,7 +271,7 @@
                    </size>
                   </property>
                   <property name="toolTip">
-                   <string>Number of input channels (corresponds nchnls_i)</string>
+                   <string>Number of input channels (corresponds nchnls_i). To disable audio input, select the Disabled input device.</string>
                   </property>
                   <property name="frame">
                    <bool>true</bool>
