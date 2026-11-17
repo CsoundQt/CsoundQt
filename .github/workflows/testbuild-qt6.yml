@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       run_risset_install_test:
-        description: 'Install risset through CsoundQt (network test)'
+        description: 'Run risset end-to-end network tests'
         required: false
         default: false
         type: boolean

@@ -720,6 +720,8 @@ e
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -729,17 +731,13 @@ e
  <height>247</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="nobackground">
-  <r>232</r>
-  <g>232</g>
-  <b>232</b>
- </bgcolor>
+ <bgcolor mode="background">#e8e8e8</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>5</y>
-  <width>379</width>
-  <height>143</height>
+  <width>378</width>
+  <height>154</height>
   <uuid>{33a86a23-e29a-4833-8f9c-c1fdaa9f1752}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -747,9 +745,11 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>Stria
+  <label>## Stria
 
 by John Chowning
+
+----------------
 
 Reconstruction - ORChestra csound code Kevin Dahan 2007
 kevin.dahan@wanadoo.fr
@@ -757,33 +757,22 @@ kevin.dahan@wanadoo.fr
 The basis for this code was the original MUS10 orchestra file with modifications by John Chowning and Kevin Dahan</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Liberation Sans</font>
+  <font>Noto Sans</font>
   <fontsize>12</fontsize>
-  <padding>5</padding>
+  <padding>10</padding>
+  <textformat>markdown</textformat>
   <locked>false</locked>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>203</r>
-   <g>215</g>
-   <b>220</b>
-  </bgcolor>
-  <bordercolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bordercolor>
+  <color>#414141</color>
+  <bgcolor mode="background">#cbd7dc</bgcolor>
+  <bordercolor>#000000</bordercolor>
   <bordermode>false</bordermode>
-  <borderradius>3</borderradius>
+  <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBGraph" version="2">
   <objectName>graph1</objectName>
   <x>6</x>
-  <y>153</y>
+  <y>172</y>
   <width>744</width>
   <height>437</height>
   <uuid>{38315abe-d31c-48f2-8280-3b86eb15f50f}</uuid>
@@ -809,6 +798,7 @@ The basis for this code was the original MUS10 orchestra file with modifications
   <enableTables>false</enableTables>
   <enableDisplays>true</enableDisplays>
   <all>true</all>
+  <bgcolor>#212121</bgcolor>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

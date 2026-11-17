@@ -231,6 +231,8 @@ e
 </CsoundSynthesizer>
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -240,7 +242,7 @@ e
  <height>477</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="nobackground">#e6ddd5</bgcolor>
+ <bgcolor mode="background">#e6ddd5</bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
@@ -255,7 +257,6 @@ e
   <midicc>-3</midicc>
   <description/>
   <label>;       Score for final project in Digital Audio Processing
-;       ---------------------------------------------------
 
 ;           Piece entitled :  X A N A D U (short version)
 ;                           Joseph T. Kung, 12/12/88
@@ -282,12 +283,12 @@ e
   <fontsize>14</fontsize>
   <padding>5</padding>
   <locked>false</locked>
-  <color>#000000</color>
-  <bgcolor mode="background">#ffffff</bgcolor>
-  <bordercolor>#000000</bordercolor>
-  <bordermode>border</bordermode>
+  <color>#1e1e1e</color>
+  <bgcolor mode="background">#f5f5f5</bgcolor>
+  <bordercolor>#7a7a7a</bordercolor>
+  <bordermode>true</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>4</borderwidth>
+  <borderwidth>2</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Play</objectName>
@@ -306,7 +307,6 @@ e
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>Start</text>
-  <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
@@ -339,7 +339,6 @@ e
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>Pause/Resume</text>
-  <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
