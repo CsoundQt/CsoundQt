@@ -453,8 +453,14 @@ jobs:
       # risset info --full, plugin installation, Csound) and CsoundQt's own
       # re-detection, not a copy of those commands. A throw-away HOME /
       # LOCALAPPDATA keeps the runner clean.
+      # Besides a manual workflow_dispatch, the test runs on a normal push when
+      # the pushed head commit message contains [risset-ci], e.g.
+      #   git commit -m "try risset fix [risset-ci]"
+      # That avoids cancelling the push-triggered run and dispatching manually.
       - name: Risset end-to-end tests (opt-in network test)
-        if: github.event_name == 'workflow_dispatch' && github.event.inputs.run_risset_install_test == 'true'
+        if: |
+          (github.event_name == 'workflow_dispatch' && github.event.inputs.run_risset_install_test == 'true') ||
+          (github.event_name == 'push' && contains(github.event.head_commit.message, '[risset-ci]'))
         env:
           QT_QPA_PLATFORM: offscreen
         run: |
