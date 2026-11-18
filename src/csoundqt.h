@@ -333,6 +333,8 @@ private slots:
 	void showMidiLearn();
 	void virtualMidiIn(QVariant on, QVariant note, QVariant channel, QVariant velocity);
 	void virtualCCIn(int channel, int cc, int value);
+	void virtualKeyboardSettingsChanged(int layout, int channel, int velocity,
+	                                    int octave, bool clickPositionVelocity);
 	void handleTableSyntax(QString syntax);
 	void openManualExample(QString fileName);
     //void openExternalBrowser(QUrl url = QUrl()); // moved to public slots to connect with helpPanel
@@ -539,6 +541,9 @@ private:
 
 	QQuickWidget *m_virtualKeyboard, *m_tableEditor;
 	QPointer <QQuickWidget> m_virtualKeyboardPointer, m_tableEditorPointer; // to control, if the object is deleted
+	// The most recently started real-time page receives virtual MIDI. This can
+	// be a detached widget-only page (e.g. AudioMidiTest), not documentPages[curPage].
+	QPointer<DocumentPage> m_virtualMidiTargetPage;
 
 #if defined(CSQT_QTHTML)
 public: CsoundHtmlView *csoundHtmlView;
@@ -578,6 +583,7 @@ public: CsoundHtmlView *csoundHtmlView;
     void refreshRenderHistoryTable();
 
 private:
+	DocumentPage *virtualMidiTargetPage() const;
 	//    QString m_widgetClipboard;
 	Inspector *m_inspector;
 #ifdef CSQT_DEBUGGER

@@ -2207,6 +2207,8 @@ bool CsoundQt::playDetached(DocumentPage *page)
                                                          page->getOptionsText());
 
     const int ret = page->play(m_options);
+    if (ret == 0)
+        m_virtualMidiTargetPage = page;
     if (ret != 0)
         removePlaybackTempFile(page);
     // The main window's Run action reflects its own document; the detached
@@ -3634,6 +3636,8 @@ void CsoundQt::play(bool realtime, int index)
         runAct->setChecked(true);  // In case the call comes from a button
     }
     int ret = page->play(m_options);
+    if (ret == 0 && realtime)
+        m_virtualMidiTargetPage = page;
     if (ret != 0) {
         // No engine is using the session copy. Its source document is still in
         // memory, so keeping the copy would only create false recovery data.
@@ -5139,10 +5143,25 @@ void CsoundQt::showVirtualKeyboard(bool show)
         // larger, empty window - as good as unresizable.
         m_virtualKeyboard->setResizeMode(QQuickWidget::SizeRootObjectToView);
         QObject *rootObject = m_virtualKeyboard->rootObject();
+        // Restore the keyboard settings before showing it. The QML controls
+        // bind to these initial values.
+        QSettings settings("csoundqt", "csoundqt");
+        rootObject->setProperty("initialLayout", qBound(0,
+                settings.value("virtualKeyboardLayout", 0).toInt(), 7));
+        rootObject->setProperty("initialChannel", qBound(1,
+                settings.value("virtualKeyboardChannel", 1).toInt(), 16));
+        rootObject->setProperty("initialVelocity", qBound(1,
+                settings.value("virtualKeyboardVelocity", 64).toInt(), 127));
+        rootObject->setProperty("initialOctave", qBound(0,
+                settings.value("virtualKeyboardOctave", 5).toInt(), 12));
+        rootObject->setProperty("initialClickPositionVelocity",
+                settings.value("virtualKeyboardClickPositionVelocity", false).toBool());
         m_virtualKeyboard->setFocus();
         connect(rootObject, SIGNAL(genNote(QVariant,QVariant,QVariant,QVariant)),
                 this, SLOT(virtualMidiIn(QVariant,QVariant,QVariant,QVariant)));
         connect(rootObject, SIGNAL(newCCvalue(int,int,int)), this, SLOT(virtualCCIn(int,int,int)));
+        connect(rootObject, SIGNAL(keyboardSettingsChanged(int,int,int,int,bool)),
+                this, SLOT(virtualKeyboardSettingsChanged(int,int,int,int,bool)));
         m_virtualKeyboard->setVisible(true);
         connect(m_virtualKeyboard, SIGNAL(destroyed(QObject*)),
                 this, SLOT(virtualKeyboardActOff(QObject*)));
@@ -5242,7 +5261,8 @@ void CsoundQt::virtualMidiIn(QVariant on, QVariant note, QVariant channel, QVari
     message.push_back(status);
     message.push_back(note.toInt());
     message.push_back(velocity.toInt());
-    documentPages[curPage]->queueVirtualMidiIn(message);
+    if (DocumentPage *page = virtualMidiTargetPage())
+        page->queueVirtualMidiIn(message);
 }
 
 void CsoundQt::virtualCCIn(int channel, int cc, int value)
@@ -5253,7 +5273,30 @@ void CsoundQt::virtualCCIn(int channel, int cc, int value)
     message.push_back(status);
     message.push_back(cc);
     message.push_back(value);
-    documentPages[curPage]->queueVirtualMidiIn(message);
+    if (DocumentPage *page = virtualMidiTargetPage())
+        page->queueVirtualMidiIn(message);
+}
+
+DocumentPage *CsoundQt::virtualMidiTargetPage() const
+{
+    if (m_virtualMidiTargetPage != nullptr)
+        return m_virtualMidiTargetPage;
+    if (curPage >= 0 && curPage < documentPages.size())
+        return documentPages[curPage];
+    return nullptr;
+}
+
+void CsoundQt::virtualKeyboardSettingsChanged(int layout, int channel,
+                                              int velocity, int octave,
+                                              bool clickPositionVelocity)
+{
+    QSettings settings("csoundqt", "csoundqt");
+    settings.setValue("virtualKeyboardLayout", qBound(0, layout, 7));
+    settings.setValue("virtualKeyboardChannel", qBound(1, channel, 16));
+    settings.setValue("virtualKeyboardVelocity", qBound(1, velocity, 127));
+    settings.setValue("virtualKeyboardOctave", qBound(0, octave, 12));
+    settings.setValue("virtualKeyboardClickPositionVelocity",
+                      clickPositionVelocity);
 }
 
 void CsoundQt::handleTableSyntax(QString syntax)
