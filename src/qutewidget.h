@@ -103,6 +103,10 @@ public:
 	bool isTransitoryProperty(const QString &name) const;
 	virtual QString getWidgetType() = 0;
 	virtual QuteWidgetType getWidgetTypeID() = 0;
+	// Widgets that are always square show a single "Size" field in the
+	// properties dialog instead of separate width and height fields, and
+	// interactive resizing keeps both sides equal.
+	virtual bool hasSquareSize() const { return false; }
 	virtual void refreshWidget() { ;}
 
 	// The "enabled" flag (dynamic property CSQT_enabled). A disabled widget

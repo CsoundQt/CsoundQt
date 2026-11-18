@@ -112,6 +112,8 @@ QuteWidget(QWidget *parent):
 	m_value = 0.0;
 	m_value2 = 0.0;
 	m_stringValue = "";
+	wSpinBox = nullptr;
+	hSpinBox = nullptr;
 	m_valueChanged = false;
 	m_value2Changed = false;
 	m_locked = false;
@@ -221,6 +223,14 @@ void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
 		                .arg(h),
 		                (int) MessageRole::Error);
 		return;
+	}
+	if (hasSquareSize()) {
+		// Square widgets keep both sides equal through every geometry path
+		// (drag resize, properties, runtime width/height messages, undo).
+		const int side = qMax(w, h);
+		w = h = side;
+		setProperty("CSQT_width", side);
+		setProperty("CSQT_height", side);
 	}
 	this->setGeometry(QRect(x,y,w,h));
 	m_widget->blockSignals(true);
@@ -624,6 +634,7 @@ QString QuteWidget::propertyType(const QString &name) const
         {u"latch"_s, u"boolean"_s},
         {u"momentaryMidiButton"_s, u"boolean"_s},
         {u"flatStyle"_s, u"boolean"_s},
+        {u"circle"_s, u"boolean"_s},
         {u"fillMode"_s, u"string"_s},
         {u"backgroundMode"_s, u"string"_s},
         {u"rulermode"_s, u"string"_s},
@@ -716,6 +727,7 @@ QString QuteWidget::propertyDescription(const QString &name) const
         {u"textorientation"_s, u"Text orientation: horizontal, vertical-up or vertical-down"_s},
         {u"exponent"_s, u"Skew of the value curve (1 = linear)"_s},
         {u"flatStyle"_s, u"Use a flat, platform-independent style"_s},
+        {u"circle"_s, u"Draw a flat checkbox as a circle"_s},
         {u"checkstyle"_s, u"Check mark style: \"x\" or \"full\""_s},
         {u"latch"_s, u"Stays pressed until clicked again"_s},
         {u"latched"_s, u"Current latched state"_s},
@@ -1254,21 +1266,28 @@ void QuteWidget::createPropertiesDialog()
 	layout->addWidget(ySpinBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
     ++row;
 
-    label = new QLabel(tr("Width ="), dialog);
+    const bool squareSize = hasSquareSize();
+    label = new QLabel(squareSize ? tr("Size =") : tr("Width ="), dialog);
     layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     wSpinBox = new QSpinBox(dialog);
     wSpinBox->unsetLocale();
 	wSpinBox->setMaximum(9999);
+	if (squareSize)
+		wSpinBox->setToolTip(tr("Width and height of the widget (it is always square)"));
 	layout->addWidget(wSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
-    label = new QLabel(tr("Height ="), dialog);
-    layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
+	if (!squareSize) {
+		label = new QLabel(tr("Height ="), dialog);
+		layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 
-    hSpinBox = new QSpinBox(dialog);
-    hSpinBox->unsetLocale();
-	hSpinBox->setMaximum(9999);
-	layout->addWidget(hSpinBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+		hSpinBox = new QSpinBox(dialog);
+		hSpinBox->unsetLocale();
+		hSpinBox->setMaximum(9999);
+		layout->addWidget(hSpinBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	} else {
+		hSpinBox = nullptr;
+	}
     ++row;
 
     // Row 2 holds a single property row of some widgets (e.g. knob min/max),
@@ -1368,8 +1387,12 @@ void QuteWidget::createPropertiesDialog()
 #endif
 	xSpinBox->setValue(this->x());
 	ySpinBox->setValue(this->y());
-	wSpinBox->setValue(this->width());
-	hSpinBox->setValue(this->height());
+	// Existing rectangular checkboxes (e.g. from older files) are normalised
+	// to the smaller side, which is the size of the square indicator they draw.
+	wSpinBox->setValue(squareSize ? qMin(this->width(), this->height())
+								  : this->width());
+	if (hSpinBox)
+		hSpinBox->setValue(this->height());
 	nameLineEdit->setText(getChannelName());
     widgetNameLineEdit->setText(getWidgetName());
     descriptionLineEdit->setText(getDescription());
@@ -1406,8 +1429,9 @@ void QuteWidget::applyProperties()
 	setProperty("CSQT_enabled", enabledCheckBox->isChecked());
 	setProperty("CSQT_x", xSpinBox->value());
 	setProperty("CSQT_y",ySpinBox->value());
-	setProperty("CSQT_width", wSpinBox->value());
-	setProperty("CSQT_height", hSpinBox->value());
+	const int widgetWidth = wSpinBox->value();
+	setProperty("CSQT_width", widgetWidth);
+	setProperty("CSQT_height", hSpinBox ? hSpinBox->value() : widgetWidth);
 	if (acceptsMidi()) {
 		setProperty("CSQT_midicc", midiccSpinBox->value());
 		setProperty("CSQT_midichan", midichanSpinBox->value());

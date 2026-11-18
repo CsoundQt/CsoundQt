@@ -37,6 +37,9 @@ public:
 
 	void setFlatStyle(bool enable) { m_flat = enable; update(); }
 	bool isFlatStyle() const { return m_flat; }
+	// Draw the widget as a circle instead of a rounded rectangle.
+	void setCircle(bool circle) { m_circle = circle; update(); }
+	bool isCircle() const { return m_circle; }
 	// Invalid colours mean "inherit from the palette".
 	void setBackgroundColor(const QColor &c) { m_background = c; update(); }
 	void setBorderColor(const QColor &c) { m_bordercolor = c; update(); }
@@ -52,6 +55,7 @@ protected:
 
 private:
 	bool m_flat = false;
+	bool m_circle = false;
 	QColor m_background = QColor(243, 243, 243);
 	QColor m_bordercolor = QColor(173, 173, 173);
 	QColor m_foreground = QColor(32, 32, 32);
@@ -93,6 +97,7 @@ public:
 protected:
 	virtual void applyProperties();
 	virtual void createPropertiesDialog();
+	bool hasSquareSize() const override { return true; }
 
 
 private:
@@ -106,6 +111,8 @@ private:
 	SelectColorButton *foregroundColorButton = nullptr;
 	QSpinBox *borderWidthSpinBox = nullptr;
 	QSpinBox *borderRadiusSpinBox = nullptr;
+	QLabel *borderRadiusLabel = nullptr;
+	QCheckBox *circleCheckBox = nullptr;
 	QSpinBox *paddingSpinBox = nullptr;
 	QComboBox *checkStyleComboBox = nullptr;
 	QList<QWidget *> m_flatControls; // widgets enabled only when flat is on

@@ -1859,6 +1859,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
                  || nodeName == "enabled"
                  || nodeName == "locked"
                  || nodeName == "flatStyle"
+                 || nodeName == "circle"
                  || nodeName == "antialias"
                  || nodeName == "showArrows"
                  || nodeName == "bold"
@@ -3305,10 +3306,19 @@ void WidgetLayout::widgetResized(QPair<int, int> delta)
     widgetsMutex.lock();
     for (int i = 0; i< editWidgets.size(); i++) {
         if (editWidgets[i]->isSelected()) {
-            int neww = m_widgets[i]->width() + delta.first;
-            int newh = m_widgets[i]->height() + delta.second;
+            const int w = m_widgets[i]->width();
+            const int h = m_widgets[i]->height();
+            int neww = w + delta.first;
+            int newh = h + delta.second;
             neww = neww > 5 ? neww : 5;
             newh = newh > 5 ? newh : 5;
+            if (m_widgets[i]->hasSquareSize()) {
+                // Use the axis the pointer moved along most in this step, so
+                // both dragging right and dragging down grow the square.
+                const int side = qMax(5, qAbs(delta.first) >= qAbs(delta.second)
+                                      ? w + delta.first : h + delta.second);
+                neww = newh = side;
+            }
             m_widgets[i]->setWidgetGeometry(m_widgets[i]->x(), m_widgets[i]->y(), neww, newh);
             editWidgets[i]->resize(neww, newh);
 			// set the position to properties otherwis MidiLearn -> applyInetrnalProperties sets it to wrong (old) position
@@ -3339,6 +3349,15 @@ void WidgetLayout::widgetResizedTopLeft(QPair<int, int> delta)
         int newy = y + dy;
         int neww = w - dx;
         int newh = h - dy;
+        if (m_widgets[i]->hasSquareSize()) {
+            // Keep the opposite corner fixed while both sides follow the
+            // dominant axis of this drag step.
+            const int side = qMax(5, qAbs(delta.first) >= qAbs(delta.second)
+                                  ? w - dx : h - dy);
+            neww = newh = side;
+            newx = x + w - side;
+            newy = y + h - side;
+        }
         m_widgets[i]->setWidgetGeometry(newx, newy, neww, newh);
         editWidgets[i]->setGeometry(newx, newy, neww, newh);
         // Keep the properties in sync (see widgetResized()).

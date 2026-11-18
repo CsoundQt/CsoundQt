@@ -125,9 +125,12 @@ void QuteFlatCheckBox::paintEvent(QPaintEvent *event)
 	} else {
 		painter.setPen(Qt::NoPen);
 	}
-	painter.drawRoundedRect(square, m_borderradius, m_borderradius);
+	if (m_circle)
+		painter.drawEllipse(square);
+	else
+		painter.drawRoundedRect(square, m_borderradius, m_borderradius);
 
-	// Check mark. "full" fills the square, "x" draws a diagonal cross. The
+	// Check mark. "full" fills the indicator, "x" draws a diagonal cross. The
 	// padding keeps the mark away from the inner edge of the border.
 	if (isChecked()) {
 		const qreal inset = qMax(0.0, half) + qMax(0, m_padding);
@@ -136,8 +139,12 @@ void QuteFlatCheckBox::paintEvent(QPaintEvent *event)
 			painter.setPen(Qt::NoPen);
 			painter.setBrush(fg);
 			if (m_checkstyle == "full"_L1) {
-				const int radius = qMax(0, m_borderradius - m_borderwidth - m_padding);
-				painter.drawRoundedRect(fillArea, radius, radius);
+				if (m_circle) {
+					painter.drawEllipse(fillArea);
+				} else {
+					const int radius = qMax(0, m_borderradius - m_borderwidth - m_padding);
+					painter.drawRoundedRect(fillArea, radius, radius);
+				}
 			} else {
 				QPen pen(fg, qMax(2.0, double(m_borderwidth)));
 				pen.setCapStyle(Qt::RoundCap);
@@ -188,6 +195,7 @@ QuteCheckBox::QuteCheckBox(QWidget *parent) : QuteWidget(parent)
 	setProperty("CSQT_borderRadius", 3);
 	setProperty("CSQT_padding", 3);
 	setProperty("CSQT_checkstyle", "x");
+	setProperty("CSQT_circle", false);
 
 	m_currentValue = 0;
 
@@ -328,6 +336,7 @@ QString QuteCheckBox::getWidgetXmlText()
 	s.writeTextElement("borderRadius", QString::number(property("CSQT_borderRadius").toInt()));
 	s.writeTextElement("padding", QString::number(property("CSQT_padding").toInt()));
 	s.writeTextElement("checkstyle", property("CSQT_checkstyle").toString());
+	s.writeTextElement("circle", property("CSQT_circle").toBool() ? "true" : "false");
 	s.writeEndElement();
 
 #ifdef  USE_WIDGET_MUTEX
@@ -421,6 +430,10 @@ bool QuteCheckBox::applyProperty(const QString &name)
 		checkbox()->setCheckStyle(property("CSQT_checkstyle").toString());
 		return true;
 	}
+	if (name == "CSQT_circle") {
+		checkbox()->setCircle(property("CSQT_circle").toBool());
+		return true;
+	}
 	return QuteWidget::applyProperty(name);
 }
 
@@ -441,6 +454,7 @@ void QuteCheckBox::applyInternalProperties()
 	w->setBorderRadius(property("CSQT_borderRadius").toInt());
 	w->setPadding(property("CSQT_padding").toInt());
 	w->setCheckStyle(property("CSQT_checkstyle").toString());
+	w->setCircle(property("CSQT_circle").toBool());
 	w->setFlatStyle(property("CSQT_flatStyle").toBool());
 	updateIndicatorStyleSheet();
 }
@@ -481,6 +495,7 @@ void QuteCheckBox::applyProperties()
 	setProperty("CSQT_borderRadius", borderRadiusSpinBox->value());
 	setProperty("CSQT_padding", paddingSpinBox->value());
 	setProperty("CSQT_checkstyle", checkStyleComboBox->currentText());
+	setProperty("CSQT_circle", circleCheckBox->isChecked());
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -573,6 +588,7 @@ void QuteCheckBox::createPropertiesDialog()
 
 	label = new QLabel("Radius", dialog);
 	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+	borderRadiusLabel = label;
 	m_flatControls << label;
 	borderRadiusSpinBox = new QSpinBox(dialog);
 	borderRadiusSpinBox->unsetLocale();
@@ -610,13 +626,26 @@ void QuteCheckBox::createPropertiesDialog()
 	m_flatControls << paddingSpinBox;
 	++row;
 
+	circleCheckBox = new QCheckBox(tr("Circle"), dialog);
+	circleCheckBox->setToolTip(tr("Draw the checkbox as a circle. The Radius "
+								  "setting then has no effect."));
+	circleCheckBox->setChecked(property("CSQT_circle").toBool());
+	layout->addWidget(circleCheckBox, row, 1,
+					  Qt::AlignLeft|Qt::AlignVCenter);
+	m_flatControls << circleCheckBox;
+	++row;
+
 
 	auto refreshFlatControls = [this]() {
 		const bool flat = flatStyleCheckBox->isChecked();
 		for (QWidget *w : m_flatControls) {
 			w->setEnabled(flat);
 		}
+		const bool radiusEnabled = flat && !circleCheckBox->isChecked();
+		borderRadiusLabel->setEnabled(radiusEnabled);
+		borderRadiusSpinBox->setEnabled(radiusEnabled);
 	};
 	connect(flatStyleCheckBox, &QCheckBox::toggled, this, refreshFlatControls);
+	connect(circleCheckBox, &QCheckBox::toggled, this, refreshFlatControls);
 	refreshFlatControls();
 }
