@@ -879,6 +879,19 @@ void QuteText::createPropertiesDialog()
 		dialog->setWindowTitle("Label");
 		channelLabel->hide();
 		nameLineEdit->hide();
+		// Labels have no channel, so let the Name field use the left column.
+		if (widgetGroup != nullptr && widgetNameLabel != nullptr
+		        && widgetNameLineEdit != nullptr) {
+			auto *groupLayout = qobject_cast<QGridLayout *>(widgetGroup->layout());
+			if (groupLayout != nullptr) {
+				groupLayout->removeWidget(widgetNameLabel);
+				groupLayout->removeWidget(widgetNameLineEdit);
+				groupLayout->addWidget(widgetNameLabel, 0, 0,
+				                       Qt::AlignRight|Qt::AlignVCenter);
+				groupLayout->addWidget(widgetNameLineEdit, 0, 1,
+				                       Qt::AlignLeft|Qt::AlignVCenter);
+			}
+		}
 	}
 	else if (m_type == "display") {
 		dialog->setWindowTitle("Display");
@@ -997,24 +1010,28 @@ void QuteText::createPropertiesDialog()
         }
         font->setFont(preview);
     });
-    layout->addWidget(font, row, 1, 1, 2, Qt::AlignLeft|Qt::AlignVCenter);
-
-    label = new QLabel(dialog);
-	label->setText(tr("Size"));
-    layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
-    labelPtrs["fontSize"] = label;
-
     fontSize = new QSpinBox(dialog);
     fontSize->unsetLocale();
 	fontSize->setMaximum(999); // allow also very big fonts
-    layout->addWidget(fontSize, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
+    // Keep the size field right next to the font family, regardless of the
+    // grid's label-column widths.
+    auto *fontRow = new QHBoxLayout;
+    fontRow->setContentsMargins(0, 0, 0, 0);
+    fontRow->setSpacing(6);
+    fontRow->addWidget(font);
+    fontRow->addWidget(fontSize);
+    
     if (m_type == "display") {
         boldCheckBox = new QCheckBox(tr("Bold"), dialog);
         boldCheckBox->setToolTip(tr("Draw the display text with a bold face."));
         boldCheckBox->setChecked(property("CSQT_bold").toBool());
-        layout->addWidget(boldCheckBox, row, 4, Qt::AlignLeft|Qt::AlignVCenter);
+        fontRow->addWidget(boldCheckBox);
+        // layout->addWidget(boldCheckBox, row, 4, Qt::AlignLeft|Qt::AlignVCenter);
     }
+    
+    fontRow->addStretch();
+    layout->addLayout(fontRow, row, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
     if (m_type == "label" || m_type == "display") {
         ++row;
@@ -1033,13 +1050,12 @@ void QuteText::createPropertiesDialog()
                     "vertical-down");
         textOrientationComboBox->setToolTip(
                     tr("Rotate the text inside the fixed widget rectangle."));
-        const QString orientation = property("CSQT_textorientation").toString()
-                .trimmed().toLower();
+        const QString orientation = property("CSQT_textorientation").toString().trimmed().toLower();
         int orientationIndex = textOrientationComboBox->findData(orientation);
         if (orientationIndex < 0)
             orientationIndex = 0;
         textOrientationComboBox->setCurrentIndex(orientationIndex);
-        layout->addWidget(textOrientationComboBox, row, 1, 1, 3,
+        layout->addWidget(textOrientationComboBox, row, 1, 1, 4,
                           Qt::AlignLeft|Qt::AlignVCenter);
     }
 
@@ -1052,14 +1068,12 @@ void QuteText::createPropertiesDialog()
     labelPtrs["textColor"] = label;
 
     textColor = new SelectColorButton(dialog);
-    textColor->setColor(property("CSQT_color").value<QColor>());
     layout->addWidget(textColor, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
     // connect(textColor, SIGNAL(released()), this, SLOT(selectTextColor()));
 
     bg = new QCheckBox("Background", dialog);
     layout->addWidget(bg, row, 2, Qt::AlignRight|Qt::AlignVCenter);
     bgColor = new SelectColorButton(dialog);
-    bgColor->setColor(property("CSQT_bgcolor").value<QColor>());
     layout->addWidget(bgColor, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
     
     // -------------------------------------------
@@ -1125,8 +1139,6 @@ void QuteText::createPropertiesDialog()
     {
         QColor storedBorder = property("CSQT_bordercolor").value<QColor>();
         m_borderColorSet = storedBorder.isValid();
-        borderColor->setColor(m_borderColorSet ? storedBorder
-                                               : property("CSQT_color").value<QColor>());
     }
     layout->addWidget(borderColor, row, isLabel ? 1 : 3, Qt::AlignLeft|Qt::AlignVCenter);
     // While the border color is unset it follows the text color.
@@ -1217,6 +1229,17 @@ void QuteText::createPropertiesDialog()
     }
 
     // connect(bgColor, SIGNAL(released()), this, SLOT(selectBgColor()));
+    // Let subclasses caption the colour buttons before the initial colours are
+    // painted: captioned buttons use an icon swatch, uncaptioned ones fill the
+    // whole button.
+    configureColorButtons();
+    textColor->setColor(property("CSQT_color").value<QColor>());
+    bgColor->setColor(property("CSQT_bgcolor").value<QColor>());
+    {
+        QColor storedBorder = property("CSQT_bordercolor").value<QColor>();
+        borderColor->setColor(m_borderColorSet ? storedBorder
+                                               : textColor->getColor());
+    }
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
@@ -1748,6 +1771,11 @@ QuteScrollNumber::QuteScrollNumber(QWidget* parent) : QuteText(parent)
 	setProperty("CSQT_color", QColor("#34393a"));
 	setProperty("CSQT_bordercolor", QColor("#aebdc2"));
 	setProperty("CSQT_padding", 4);
+	// Optional triangle prefix at the left edge, as a Max/MSP number box has.
+	setProperty("CSQT_showTriangle", false);
+	setProperty("CSQT_prefixBaseline", 0);
+	setProperty("CSQT_prefixVSize", 80);
+	setProperty("CSQT_prefixHSize", 68);
 
 	setProperty("CSQT_label", QVariant()); // Remove this property which is part of parent class.
 	setProperty("CSQT_precision", QVariant()); // Remove this property which is part of parent class.
@@ -1762,6 +1790,66 @@ QuteScrollNumber::~QuteScrollNumber()
 
 
 QuteWidgetType QuteScrollNumber::getWidgetTypeID() { return QuteWidgetType::SCROLLNUMBER; }
+
+void ScrollNumberWidget::paintEvent(QPaintEvent *event)
+{
+	// Let QLabel draw the stylesheet background, border and value text, then
+	// add the optional triangle prefix in the space reserved for it.
+	QLabel::paintEvent(event);
+	if (!m_triangleVisible)
+		return;
+
+	QPainter painter(this);
+	painter.setRenderHint(QPainter::Antialiasing, true);
+
+	QColor color = palette().color(QPalette::WindowText);
+	if (!isEnabled())
+		color = QuteWidget::disabledColor(color);
+	painter.setPen(Qt::NoPen);
+	painter.setBrush(color);
+
+	const int usableHeight = rect().height() - 2 * (m_triangleBorder + 1);
+	const int height = qMin(triangleHeight(), usableHeight);
+	if (height < 2)
+		return;
+	const int width = qMax(2, qRound(height * 0.8660254037844386
+	                                 * (m_triangleHSize / 100.0)));
+	const qreal left = rect().left() + m_triangleBorder + m_trianglePadding;
+	qreal top = rect().center().y() - height / 2.0 - m_triangleBaseline;
+	// Keep the triangle inside the widget even for large baseline offsets.
+	const qreal minTop = rect().top() + m_triangleBorder + 1;
+	const qreal maxTop = rect().bottom() - m_triangleBorder - 1 - height;
+	top = qBound(minTop, top, maxTop);
+	QPolygonF triangle;
+	triangle << QPointF(left, top)
+	         << QPointF(left, top + height)
+	         << QPointF(left + width, top + height / 2.0);
+	painter.drawPolygon(triangle);
+}
+
+void QuteScrollNumber::applyTriangleStyle()
+{
+	auto *w = static_cast<ScrollNumberWidget*>(m_widget);
+	const bool visible = property("CSQT_showTriangle").toBool();
+	const int fontSize = qMax(1, qRound(property("CSQT_fontsize").toDouble()));
+	const int borderWidth = qMax(0, property("CSQT_borderwidth").toInt());
+	const int padding = qMax(0, property("CSQT_padding").toInt());
+	const int baseline = property("CSQT_prefixBaseline").toInt();
+	const int vSize = property("CSQT_prefixVSize").toInt();
+	const int hSize = property("CSQT_prefixHSize").toInt();
+	w->setTriangle(visible, fontSize, borderWidth, padding,
+	               baseline, vSize, hSize);
+
+	if (visible) {
+		// The base class only emits the shorthand "padding" rule. Appending a
+		// per-side rule for the same selector lets the text start after the
+		// triangle without changing the other three sides.
+		w->setStyleSheet(w->styleSheet()
+		                 + "QLabel { padding-left: "
+		                 + QString::number(padding + w->triangleExtraWidth())
+		                 + "px; }");
+	}
+}
 
 
 
@@ -1839,6 +1927,13 @@ QString QuteScrollNumber::getWidgetXmlText()
 	s.writeTextElement("borderradius", QString::number(property("CSQT_borderradius").toInt()));
 	s.writeTextElement("borderwidth", QString::number(property("CSQT_borderwidth").toInt()));
 	s.writeTextElement("padding", QString::number(property("CSQT_padding").toInt()));
+	if (property("CSQT_showTriangle").toBool()) {
+		// Off by default, so only write the prefix settings when enabled.
+		s.writeTextElement("showTriangle", "true");
+		s.writeTextElement("prefixBaseline", QString::number(property("CSQT_prefixBaseline").toInt()));
+		s.writeTextElement("prefixVSize", QString::number(property("CSQT_prefixVSize").toInt()));
+		s.writeTextElement("prefixHSize", QString::number(property("CSQT_prefixHSize").toInt()));
+	}
 	s.writeStartElement("randomizable");
 	s.writeAttribute("group", QString::number(property("CSQT_randomizableGroup").toInt()));
 	s.writeCharacters(property("CSQT_randomizable").toBool() ? "true": "false");
@@ -1892,13 +1987,20 @@ void QuteScrollNumber::refreshWidget()
 	m_widget->blockSignals(false);
 }
 
+void QuteScrollNumber::configureColorButtons()
+{
+	textColor->setText(tr("Text"));
+	bgColor->setText(tr("Fill"));
+	borderColor->setText(tr("Border"));
+}
+
 void QuteScrollNumber::createPropertiesDialog()
 {
 	//   qDebug("QuteScrollNumber::createPropertiesDialog()");
 	QuteText::createPropertiesDialog();
 
 	text->setText(QString::number(m_value, 'f', 8));
-	dialog->setWindowTitle("Scroll Number");
+	dialog->setWindowTitle(tr("Scroll Number"));
 
 	// The scroll number has no editable text and does not use the inherited
 	// numeric precision; it formats its value according to its resolution.
@@ -1911,35 +2013,194 @@ void QuteScrollNumber::createPropertiesDialog()
 			precisionLabel->hide();
 		precisionSpinBox = nullptr;
 	}
+	vertAlignmentComboBox->hide();
+	if (QLabel *vertLabel = labelPtrs.value("vertAlign"))
+		vertLabel->hide();
 
-	int row = 2; // rows above the shared text widget block
-	QLabel *label = new QLabel(dialog);
-	label->setText("Min =");
-	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+	// The shared dialog lays all widgets out in one flat grid. With this many
+	// scroll-number options that becomes hard to scan, so rebuild the dialog
+	// with labelled groups and move the existing controls into them.
+	const auto oldLabels = dialog->findChildren<QLabel *>(
+				QString(), Qt::FindDirectChildrenOnly);
+	for (QLabel *oldLabel : oldLabels) {
+		oldLabel->hide();
+	}
+
+	QWidget *buttonBar = nullptr;
+	for (QPushButton *button : dialog->findChildren<QPushButton *>()) {
+		if (button->text() == tr("Apply")) {
+			buttonBar = button->parentWidget();
+			break;
+		}
+	}
+	delete layout;
+	layout = new QGridLayout(dialog);
+	layout->setVerticalSpacing(10);
+
+	auto addField = [](QGridLayout *grid, int row, int column,
+	                   const QString &text, QWidget *field) -> QLabel * {
+		QWidget *parent = grid->parentWidget();
+		auto *fieldLabel = new QLabel(text, parent);
+		grid->addWidget(fieldLabel, row, column,
+		                Qt::AlignRight|Qt::AlignVCenter);
+		grid->addWidget(field, row, column + 1,
+		                Qt::AlignLeft|Qt::AlignVCenter);
+		return fieldLabel;
+	};
+
+	auto prepareGroupLayout = [](QGridLayout *grid) {
+		// Keep label-to-field gaps tight. The wider gap between label/field
+		// pairs comes from an explicit spacer column (2), not from the grid's
+		// uniform column spacing.
+		grid->setHorizontalSpacing(6);
+		grid->setColumnMinimumWidth(2, 12);
+		grid->setColumnStretch(5, 1);
+	};
+
+	// All value spin boxes share one width so the group reads as a unit.
+	const int valueFieldWidth = 140;
 	minSpinBox = new QDoubleSpinBox(dialog);
 	minSpinBox->setDecimals(4);
 	minSpinBox->setRange(-999999999999.0, 999999999999.0);
-	minSpinBox->setMaximumWidth(100);
-	layout->addWidget(minSpinBox, row,1, Qt::AlignLeft|Qt::AlignVCenter);
-	label = new QLabel(dialog);
-	label->setText("Max =");
-	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
+	minSpinBox->setFixedWidth(valueFieldWidth);
+	minSpinBox->setToolTip(tr("Minimum value"));
 	maxSpinBox = new QDoubleSpinBox(dialog);
 	maxSpinBox->setDecimals(4);
 	maxSpinBox->setRange(-999999999999.0, 999999999999.0);
-	maxSpinBox->setMaximumWidth(100);
-	layout->addWidget(maxSpinBox, row,3, Qt::AlignLeft|Qt::AlignVCenter);
-	++row;
-
-	// Row 3 is the common channel row; continue above the text block.
-	row = 4;
-	label = new QLabel(dialog);
-	label->setText("Resolution");
-	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+	maxSpinBox->setFixedWidth(valueFieldWidth);
+	maxSpinBox->setToolTip(tr("Maximum value"));
 	resolutionSpinBox = new QDoubleSpinBox(dialog);
 	resolutionSpinBox->setDecimals(6);
-	layout->addWidget(resolutionSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
-	++row;
+	resolutionSpinBox->setFixedWidth(valueFieldWidth);
+	resolutionSpinBox->setToolTip(tr("Value change per wheel/scroll step"));
+
+	auto *valueGroup = new QGroupBox(tr("Value"), dialog);
+	auto *valueLayout = new QGridLayout(valueGroup);
+	valueLayout->addWidget(new QLabel(tr("Range"), valueGroup), 0, 0,
+	                       Qt::AlignRight|Qt::AlignVCenter);
+	valueLayout->addWidget(minSpinBox, 0, 1,
+	                       Qt::AlignLeft|Qt::AlignVCenter);
+	valueLayout->addWidget(new QLabel(u"–"_s, valueGroup), 0, 2,
+	                       Qt::AlignHCenter|Qt::AlignVCenter);
+	valueLayout->addWidget(maxSpinBox, 0, 3,
+	                       Qt::AlignLeft|Qt::AlignVCenter);
+	addField(valueLayout, 1, 0, tr("Resolution"), resolutionSpinBox);
+	prepareGroupLayout(valueLayout);
+
+	// The colour buttons carry their own captions, so no separate labels are
+	// needed. The scroll number always has a background, so the background
+	// checkbox is dropped and only its colour swatch remains.
+	bg->setChecked(true);
+	bg->hide();
+	// The colour buttons read as a row, so give them one common width.
+	const int colorButtonWidth = qMax(textColor->sizeHint().width(),
+	                                  qMax(bgColor->sizeHint().width(),
+	                                       borderColor->sizeHint().width()));
+	textColor->setFixedWidth(colorButtonWidth);
+	bgColor->setFixedWidth(colorButtonWidth);
+	borderColor->setFixedWidth(colorButtonWidth);
+
+	auto *appearanceGroup = new QGroupBox(tr("Appearance"), dialog);
+	auto *appearanceLayout = new QGridLayout(appearanceGroup);
+
+	auto *colorLabel = new QLabel(tr("Colors"), appearanceGroup);
+	appearanceLayout->addWidget(colorLabel, 0, 0,
+	                            Qt::AlignRight|Qt::AlignVCenter);
+
+	auto *colorRow = new QWidget(appearanceGroup);
+	auto *colorLayout = new QHBoxLayout(colorRow);
+	colorLayout->setContentsMargins(0, 0, 0, 0);
+	colorLayout->setSpacing(12);
+	colorLayout->addWidget(textColor);
+	colorLayout->addWidget(bgColor);
+	colorLayout->addWidget(borderColor);
+	colorLayout->addStretch();
+	appearanceLayout->addWidget(colorRow, 0, 1, 1, 5);
+
+	auto *fontLabel = new QLabel(tr("Font"), appearanceGroup);
+	appearanceLayout->addWidget(fontLabel, 1, 0,
+	                            Qt::AlignRight|Qt::AlignVCenter);
+	appearanceLayout->addWidget(font, 1, 1, 1, 3,
+	                            Qt::AlignLeft|Qt::AlignVCenter);
+	fontSize->setToolTip(tr("Font size in pixels"));
+	appearanceLayout->addWidget(fontSize, 1, 4,
+	                            Qt::AlignLeft|Qt::AlignVCenter);
+
+	addField(appearanceLayout, 2, 0, tr("Border Width"), borderWidth);
+	addField(appearanceLayout, 2, 3, tr("Border Radius"), borderRadius);
+	addField(appearanceLayout, 3, 0, tr("Padding"), paddingSpinBox);
+	addField(appearanceLayout, 3, 3, tr("Alignment"), alignment);
+	prepareGroupLayout(appearanceLayout);
+
+	// Prefix settings are grouped together; the shape controls are only
+	// enabled while the prefix is shown.
+	auto *prefixGroup = new QGroupBox(tr("Prefix"), dialog);
+	auto *prefixLayout = new QGridLayout(prefixGroup);
+	triangleCheckBox = new QCheckBox(tr("Show"), prefixGroup);
+	triangleCheckBox->setToolTip(
+				tr("Draw a small triangle to the left of the value, like a "
+				   "Max/MSP number box."));
+	triangleCheckBox->setChecked(property("CSQT_showTriangle").toBool());
+	prefixLayout->addWidget(triangleCheckBox, 0, 0, 1, 2,
+	                        Qt::AlignLeft|Qt::AlignVCenter);
+
+	prefixBaselineSpinBox = new QSpinBox(prefixGroup);
+	prefixBaselineSpinBox->unsetLocale();
+	prefixBaselineSpinBox->setRange(-999, 999);
+	prefixBaselineSpinBox->setValue(property("CSQT_prefixBaseline").toInt());
+	QLabel *prefixBaselineLabel = addField(prefixLayout, 0, 3, tr("Baseline"),
+	                                       prefixBaselineSpinBox);
+	prefixBaselineLabel->setToolTip(
+				tr("Vertical offset of the triangle in pixels. Positive moves "
+				   "it up, negative moves it down. 0 centres it."));
+
+	prefixVSizeSpinBox = new QSpinBox(prefixGroup);
+	prefixVSizeSpinBox->unsetLocale();
+	prefixVSizeSpinBox->setRange(1, 500);
+	prefixVSizeSpinBox->setSuffix(u" %"_s);
+	prefixVSizeSpinBox->setValue(property("CSQT_prefixVSize").toInt());
+	QLabel *prefixVSizeLabel = addField(prefixLayout, 1, 0, tr("Height"),
+	                                    prefixVSizeSpinBox);
+	prefixVSizeLabel->setToolTip(
+				tr("Triangle height as a percentage of the font size."));
+
+	prefixHSizeSpinBox = new QSpinBox(prefixGroup);
+	prefixHSizeSpinBox->unsetLocale();
+	prefixHSizeSpinBox->setRange(1, 500);
+	prefixHSizeSpinBox->setSuffix(u" %"_s);
+	prefixHSizeSpinBox->setValue(property("CSQT_prefixHSize").toInt());
+	QLabel *prefixHSizeLabel = addField(prefixLayout, 1, 3, tr("Width"),
+	                                    prefixHSizeSpinBox);
+	prefixHSizeLabel->setToolTip(
+				tr("Triangle width as a percentage of a regular triangle. "
+				   "Below 100% makes it flatter."));
+	prepareGroupLayout(prefixLayout);
+
+	auto updatePrefixControls = [prefixBaselineLabel, prefixVSizeLabel,
+	                             prefixHSizeLabel, this](bool enabled) {
+		prefixBaselineLabel->setEnabled(enabled);
+		prefixBaselineSpinBox->setEnabled(enabled);
+		prefixVSizeLabel->setEnabled(enabled);
+		prefixVSizeSpinBox->setEnabled(enabled);
+		prefixHSizeLabel->setEnabled(enabled);
+		prefixHSizeSpinBox->setEnabled(enabled);
+	};
+	connect(triangleCheckBox, &QCheckBox::toggled, this, updatePrefixControls);
+	updatePrefixControls(triangleCheckBox->isChecked());
+
+	int nextRow = 0;
+	layout->addWidget(geometryGroup, nextRow++, 0, 1, 4);
+	layout->addWidget(valueGroup, nextRow++, 0, 1, 4);
+	layout->addWidget(appearanceGroup, nextRow++, 0, 1, 4);
+	layout->addWidget(prefixGroup, nextRow++, 0, 1, 4);
+	if (widgetGroup != nullptr)
+		layout->addWidget(widgetGroup, nextRow++, 0, 1, 4);
+
+	if (midiGroup != nullptr)
+		layout->addWidget(midiGroup, nextRow++, 0, 1, 4);
+
+	layout->addWidget(buttonBar, nextRow, 0, 1, 4);
+
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
@@ -1947,9 +2208,6 @@ void QuteScrollNumber::createPropertiesDialog()
 	resolutionSpinBox->setValue(property("CSQT_resolution").toDouble());
 	minSpinBox->setValue(property("CSQT_minimum").toDouble());
 	maxSpinBox->setValue(property("CSQT_maximum").toDouble());
-
-    vertAlignmentComboBox->hide();
-    labelPtrs["vertAlign"]->hide();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -1964,6 +2222,18 @@ void QuteScrollNumber::applyProperties()
 	setProperty("CSQT_value",text->toPlainText().toDouble());
 	setProperty("CSQT_minimum",minSpinBox->value());
 	setProperty("CSQT_maximum",maxSpinBox->value());
+	if (triangleCheckBox != nullptr) {
+		setProperty("CSQT_showTriangle", triangleCheckBox->isChecked());
+	}
+	if (prefixBaselineSpinBox != nullptr) {
+		setProperty("CSQT_prefixBaseline", prefixBaselineSpinBox->value());
+	}
+	if (prefixVSizeSpinBox != nullptr) {
+		setProperty("CSQT_prefixVSize", prefixVSizeSpinBox->value());
+	}
+	if (prefixHSizeSpinBox != nullptr) {
+		setProperty("CSQT_prefixHSize", prefixHSizeSpinBox->value());
+	}
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -1989,12 +2259,22 @@ bool QuteScrollNumber::applyProperty(const QString &name)
 		setTextColor(property("CSQT_color").value<QColor>());
 		return true;
 	}
+	if (name == "CSQT_showTriangle" || name == "CSQT_prefixBaseline"
+	        || name == "CSQT_prefixVSize" || name == "CSQT_prefixHSize") {
+		// The prefix geometry is part of the generated style sheet (it reserves
+		// the left padding), so rebuild the whole style.
+		applyInternalProperties();
+		return true;
+	}
 	return QuteWidget::applyProperty(name);
 }
 
 void QuteScrollNumber::applyInternalProperties()
 {
 	//  qDebug() << "QuteScrollNumber::applyInternalProperties()";
+
+	// A scroll number always has a background; only its colour is configurable.
+	setProperty("CSQT_bgcolormode", true);
 
     // QuteWidget::applyInternalProperties();
     QuteText::applyInternalProperties();
@@ -2020,6 +2300,7 @@ void QuteScrollNumber::applyInternalProperties()
 	}
 	static_cast<ScrollNumberWidget*>(m_widget)->setAlignment(align);
 	setTextColor(property("CSQT_color").value<QColor>());
+	applyTriangleStyle();
     /*
 	QString borderStyle = (property("CSQT_bordermode").toString() == "border" ? "solid": "none");
 

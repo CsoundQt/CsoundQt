@@ -738,6 +738,10 @@ QString QuteWidget::propertyDescription(const QString &name) const
         {u"alignment"_s, u"Horizontal text alignment"_s},
         {u"valignment"_s, u"Vertical text alignment"_s},
         {u"padding"_s, u"Inner padding in pixels"_s},
+        {u"showTriangle"_s, u"Draw a triangle prefix at the left edge"_s},
+        {u"prefixBaseline"_s, u"Prefix baseline in pixels (positive = up)"_s},
+        {u"prefixVSize"_s, u"Prefix height as a percentage of the font size"_s},
+        {u"prefixHSize"_s, u"Prefix width as a percentage of a regular triangle"_s},
         {u"midicc"_s, u"MIDI controller number"_s},
         {u"midichan"_s, u"MIDI channel"_s},
         {u"findfft"_s, u"Variable name given to dispfft"_s},
@@ -1249,112 +1253,133 @@ void QuteWidget::createPropertiesDialog()
 	
     QLabel *label;
 
-    label = new QLabel("X =", dialog);
-    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+    const bool squareSize = hasSquareSize();
+    geometryGroup = new QGroupBox(tr("Geometry"), dialog);
+    auto *geometryLayout = new QGridLayout(geometryGroup);
+    geometryLayout->setHorizontalSpacing(6);
 
-    xSpinBox = new QSpinBox(dialog);
+    label = new QLabel(tr("X"), geometryGroup);
+    geometryLayout->addWidget(label, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    xSpinBox = new QSpinBox(geometryGroup);
     xSpinBox->unsetLocale();
 	xSpinBox->setMaximum(9999);
-	layout->addWidget(xSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	geometryLayout->addWidget(xSpinBox, 0, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
-    label = new QLabel("Y =", dialog);
-    layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
+    geometryLayout->setColumnMinimumWidth(2, 12);
 
-    ySpinBox = new QSpinBox(dialog);
+    label = new QLabel(tr("Y"), geometryGroup);
+    geometryLayout->addWidget(label, 0, 3, Qt::AlignRight|Qt::AlignVCenter);
+
+    ySpinBox = new QSpinBox(geometryGroup);
     ySpinBox->unsetLocale();
 	ySpinBox->setMaximum(9999);
-	layout->addWidget(ySpinBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
-    ++row;
+	geometryLayout->addWidget(ySpinBox, 0, 4, Qt::AlignLeft|Qt::AlignVCenter);
 
-    const bool squareSize = hasSquareSize();
-    label = new QLabel(squareSize ? tr("Size =") : tr("Width ="), dialog);
-    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+    label = new QLabel(squareSize ? tr("Size") : tr("Width"), geometryGroup);
+    geometryLayout->addWidget(label, 1, 0, Qt::AlignRight|Qt::AlignVCenter);
 
-    wSpinBox = new QSpinBox(dialog);
+    wSpinBox = new QSpinBox(geometryGroup);
     wSpinBox->unsetLocale();
 	wSpinBox->setMaximum(9999);
 	if (squareSize)
 		wSpinBox->setToolTip(tr("Width and height of the widget (it is always square)"));
-	layout->addWidget(wSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	geometryLayout->addWidget(wSpinBox, 1, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
 	if (!squareSize) {
-		label = new QLabel(tr("Height ="), dialog);
-		layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
+		label = new QLabel(tr("Height"), geometryGroup);
+		geometryLayout->addWidget(label, 1, 3, Qt::AlignRight|Qt::AlignVCenter);
 
-		hSpinBox = new QSpinBox(dialog);
+		hSpinBox = new QSpinBox(geometryGroup);
 		hSpinBox->unsetLocale();
 		hSpinBox->setMaximum(9999);
-		layout->addWidget(hSpinBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+		geometryLayout->addWidget(hSpinBox, 1, 4, Qt::AlignLeft|Qt::AlignVCenter);
 	} else {
 		hSpinBox = nullptr;
 	}
-    ++row;
-
-    // Row 2 holds a single property row of some widgets (e.g. knob min/max),
-    // so the channel goes below it.
-    row = 3;
-
-    channelLabel = new QLabel(tr("Channel ="), dialog);
-    layout->addWidget(channelLabel, row, 0, Qt::AlignRight|Qt::AlignVCenter);
-
-    nameLineEdit = new QLineEdit(dialog);
-	nameLineEdit->setFocus(Qt::OtherFocusReason);
-	nameLineEdit->selectAll();
-	nameLineEdit->setFixedWidth(160);
-    layout->addWidget(nameLineEdit, row, 1, 1, 2, Qt::AlignLeft|Qt::AlignVCenter);
-    ++row;
+    geometryLayout->setColumnStretch(5, 1);
+    layout->addWidget(geometryGroup, 0, 0, 1, -1);
 
     // Subclasses add their own property rows here, up to row 14.
     row = firstFooterRow;
 
-    label = new QLabel(tr("Name ="), dialog);
-    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+    // Group the primary channel and the widget's identity together.
+    widgetGroup = new QGroupBox(tr("Widget"), dialog);
+    auto *identityLayout = new QGridLayout(widgetGroup);
+    identityLayout->setHorizontalSpacing(6);
 
-    widgetNameLineEdit = new QLineEdit(dialog);
+    channelLabel = new QLabel(tr("Channel"), widgetGroup);
+    identityLayout->addWidget(channelLabel, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    nameLineEdit = new QLineEdit(widgetGroup);
+	nameLineEdit->setFocus(Qt::OtherFocusReason);
+	nameLineEdit->selectAll();
+	nameLineEdit->setFixedWidth(160);
+    identityLayout->addWidget(nameLineEdit, 0, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
+    identityLayout->setColumnMinimumWidth(2, 12);
+
+    label = new QLabel(tr("Name"), widgetGroup);
+    identityLayout->addWidget(label, 0, 3, Qt::AlignRight|Qt::AlignVCenter);
+    widgetNameLabel = label;
+
+    widgetNameLineEdit = new QLineEdit(widgetGroup);
     widgetNameLineEdit->setToolTip(tr("Optional unique name to address this widget (must be unique within the file)"));
     widgetNameLineEdit->setFixedWidth(160);
-    layout->addWidget(widgetNameLineEdit, row, 1, 1, 2, Qt::AlignLeft|Qt::AlignVCenter);
+    identityLayout->addWidget(widgetNameLineEdit, 0, 4, Qt::AlignLeft|Qt::AlignVCenter);
 
-    enabledCheckBox = new QCheckBox(tr("Enabled"), dialog);
+    label = new QLabel(tr("Description"), widgetGroup);
+    identityLayout->addWidget(label, 1, 0, Qt::AlignRight|Qt::AlignVCenter);
+    descriptionLabel = label;
+
+    descriptionLineEdit = new QLineEdit(widgetGroup);
+    descriptionLineEdit->setMinimumWidth(240);
+    descriptionLineEdit->setMaximumWidth(400);
+    identityLayout->addWidget(descriptionLineEdit, 1, 1, 1, 4, Qt::AlignVCenter);
+
+    enabledCheckBox = new QCheckBox(tr("Enabled"), widgetGroup);
     enabledCheckBox->setToolTip(tr("When unchecked the widget is disabled: it ignores "
                                    "both user input and updates from Csound, and is "
                                    "drawn greyed out. It can also be toggled from Csound "
                                    "with outvalue \"<channel>/enabled\", <0 or 1>."));
     enabledCheckBox->setChecked(property("CSQT_enabled").toBool());
-    layout->addWidget(enabledCheckBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
-    ++row;
+    identityLayout->addWidget(enabledCheckBox, 2, 1, 1, 4,
+                              Qt::AlignLeft|Qt::AlignVCenter);
+    identityLayout->setColumnStretch(4, 1);
 
-    label = new QLabel(tr("Description ="), dialog);
-    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
-    descriptionLabel = label;
-
-    descriptionLineEdit = new QLineEdit(dialog);
-    descriptionLineEdit->setMinimumWidth(240);
-    descriptionLineEdit->setMaximumWidth(960);
-    
-    layout->addWidget(descriptionLineEdit, row, 1, 1, -1, Qt::AlignVCenter);
+    layout->addWidget(widgetGroup, row, 0, 1, -1);
     ++row;
 
 
     if (acceptsMidi()) { // only when MIDI-enabled widgets
-        label = new QLabel("MIDI CC =", dialog);
-        layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+        // Keep the MIDI controls together, like in the ScrollNumber dialog.
+        midiGroup = new QGroupBox(tr("MIDI"), dialog);
+        auto *midiLayout = new QGridLayout(midiGroup);
+        midiLayout->setHorizontalSpacing(6);
 
-        midiccSpinBox = new QSpinBox(dialog);
+        label = new QLabel(tr("CC"), midiGroup);
+        midiLayout->addWidget(label, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+        midiccSpinBox = new QSpinBox(midiGroup);
         midiccSpinBox->unsetLocale();
 		midiccSpinBox->setRange(0,119);
-        layout->addWidget(midiccSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+        midiLayout->addWidget(midiccSpinBox, 0, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
-        label = new QLabel("MIDI Channel =", dialog);
-        layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
+        midiLayout->setColumnMinimumWidth(2, 12);
 
-        midichanSpinBox = new QSpinBox(dialog);
+        label = new QLabel(tr("Channel"), midiGroup);
+        midiLayout->addWidget(label, 0, 3, Qt::AlignRight|Qt::AlignVCenter);
+
+        midichanSpinBox = new QSpinBox(midiGroup);
         midichanSpinBox->unsetLocale();
 		midichanSpinBox->setRange(0,127);
-        layout->addWidget(midichanSpinBox, row,3, Qt::AlignLeft|Qt::AlignVCenter);
+        midiLayout->addWidget(midichanSpinBox, 0, 4, Qt::AlignLeft|Qt::AlignVCenter);
 
-        midiLearnButton = new QPushButton(tr("MIDI learn"));
-		layout->addWidget(midiLearnButton, row, 4, Qt::AlignLeft|Qt::AlignVCenter);
+        midiLearnButton = new QPushButton(tr("MIDI learn"), midiGroup);
+		midiLayout->addWidget(midiLearnButton, 0, 5, Qt::AlignLeft|Qt::AlignVCenter);
+		midiLayout->setColumnStretch(6, 1);
+
+        layout->addWidget(midiGroup, row, 0, 1, -1);
 	}
     ++row;
 	

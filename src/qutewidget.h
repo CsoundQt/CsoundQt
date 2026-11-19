@@ -185,6 +185,10 @@ protected:
 	QSpinBox *midiccSpinBox;
 	QSpinBox *midichanSpinBox;
 	QPushButton *midiLearnButton;
+	QGroupBox *geometryGroup = nullptr;
+	QGroupBox *widgetGroup = nullptr;
+	QLabel *widgetNameLabel = nullptr;
+	QGroupBox *midiGroup = nullptr;
 	QCheckBox *enabledCheckBox;
 	QWidget *m_widget;
 	QDialog *dialog;

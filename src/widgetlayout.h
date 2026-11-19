@@ -358,6 +358,7 @@ public slots:
 	void propertiesDialog();
 	void applyProperties();
 	void selectBgColor();
+	void selectFgColor();
 	void setEditEnabled(bool enabled);
 	void setEditMode(bool active);
 	// Offline render: keep receiving values and keep sending input values to
@@ -521,6 +522,7 @@ private:
 	// For the properties dialog - they store the configuration data for the widget panel
 	QPoint currentPosition;  //TODO use proper variables instead of storing data in the widgets...
 	QPushButton *bgButton;
+	QPushButton *fgButton = nullptr;
 	bool m_restoringBackground = false; // guards re-applying the panel palette
 	int closing; // to control timer when destroying this object
     // XXXX: flag to control updateData
@@ -642,7 +644,7 @@ private:
 	QString createKnob(int x, int y, int width, int height, const QString &channel, double minimum, double maximum, double resolution, double value);
 	QString createCheckBox(int x, int y, int width, int height, const QString &channel, bool checked);
 	QString createMenu(int x, int y, int width, int height, const QString &channel, const QString &items, int selectedIndex);
-	QString createMeter(int x, int y, int width, int height, const QString &channel, const QString &channel2, const QColor &color, const QString &meterType, double xValue, double yValue, int pointSize, int fadeSpeed);
+	QString createMeter(int x, int y, int width, int height, const QString &channel, const QString &channel2, const QColor &color, const QString &meterType, double xValue, double yValue, int pointSize);
 	QString createConsole(int x, int y, int width, int height);
 	QString createGraph(int x, int y, int width, int height);
 	QString createScope(int x, int y, int width, int height, const QString &scopeType, double zoom, int channels);

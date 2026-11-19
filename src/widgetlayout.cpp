@@ -1018,6 +1018,8 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
     // mode) will change this background and make many existing scripts/examples
     // unreadable.
     setBackground(true,  isLightTheme ? QColor(240, 240, 240) : QColor(53, 53, 53));
+    // Per-panel default foreground colour for widgets which do not specify one.
+    setProperty("CSQT_defaultForeground", QColor("#202020"));
     // A colour-theme change replaces the application palette. The panel's own
     // background is document data, so re-assert it after the new palette has
     // been installed instead of letting the theme alter the design.
@@ -1139,6 +1141,8 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
         publishChannelSnapshot();
         return;
     }
+    const bool hasPanelForeground =
+            !p.toElement().firstChildElement("foreground").isNull();
     QDomNodeList c = p.childNodes();
     int version = 0;
     for (int i = 0; i < c.size(); i++) {
@@ -1157,6 +1161,13 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
         if (ret > version) {
             version = ret;
         }
+    }
+    if (!hasPanelForeground) {
+        // Older panels did not store a foreground colour. Derive a sensible one
+        // from this panel's own background.
+        setProperty("CSQT_defaultForeground",
+                    panelBackgroundIsDark() ? QColor("#f0f0f0")
+                                            : QColor("#202020"));
     }
     restoreRuntimeState(runtimeState);
     if (version > QString(CSQT_CURRENT_XML_VERSION).toInt()) {
@@ -1274,6 +1285,11 @@ QString WidgetLayout::getWidgetsText()
     auto bg = this->property("CSQT_bg").toBool()? QString("background"):QString("nobackground");
     txts << "<bgcolor mode=\"" << bg << "\">" << bgColor.name(QColor::HexRgb)
          << "</bgcolor>\n";
+    QColor foregroundColor = property("CSQT_defaultForeground").value<QColor>();
+    if (!foregroundColor.isValid())
+        foregroundColor = QColor("#202020");
+    txts << "<foreground>" << foregroundColor.name(QColor::HexRgb)
+         << "</foreground>\n";
 
     layoutMutex.unlock();
     widgetsMutex.lock();
@@ -1837,7 +1853,10 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
                  || nodeName == "thumbRadius"
                  || nodeName == "linewidth"
                  || nodeName == "pointradius"
-                 || nodeName == "selectedIndex" ) {  // INT type
+                 || nodeName == "selectedIndex"
+                 || nodeName == "prefixBaseline"
+                 || nodeName == "prefixVSize"
+                 || nodeName == "prefixHSize" ) {  // INT type
             QDomNode n = node.firstChild();
             if (nodeName == "borderWidth" || nodeName == "borderwidth")
                 hasBorderWidth = true;
@@ -1862,6 +1881,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
                  || nodeName == "circle"
                  || nodeName == "antialias"
                  || nodeName == "showArrows"
+                 || nodeName == "showTriangle"
                  || nodeName == "bold"
                  || nodeName == "instant" ) {  // BOOL type
             QDomNode n = node.firstChild();
@@ -3501,7 +3521,9 @@ QString WidgetLayout::createNewLabel(int x, int y, QString channel)
     } else {
         dialog = false;
     }
-    QColor fgColor = qApp->palette().color(QPalette::WindowText);
+    QColor fgColor = property("CSQT_defaultForeground").value<QColor>();
+    if (!fgColor.isValid())
+        fgColor = QColor("#202020");
     QColor bgColor = qApp->palette().color(QPalette::Window);
     uuid = createText(posx, posy, 80, 25, "label", QString(),
                       "left", defaultWidgetFontFamily(), 10, fgColor, bgColor,
@@ -3651,7 +3673,7 @@ QString WidgetLayout::createNewButton(int x, int y, QString channel)
         dialog = false;
     }
     //IS IT OK if the channel name is alsoset as the text of the button?
-    uuid = createButton(posx, posy, 100, 30, channel, "event", 1.0, channel, "i1 0 10");
+    uuid = createButton(posx, posy, 100, 30, channel, "event", 1.0, channel, "");
     m_widgets.last()->setProperty("CSQT_font", defaultWidgetFontFamily());
     applyFlatStyleToNewWidget(m_widgets.last());
     widgetChanged();
@@ -3676,6 +3698,15 @@ QString WidgetLayout::createNewKnob(int x, int y, QString channel)
         dialog = false;
     }
     uuid = createKnob(posx, posy, 80, 80, channel, 0.0, 1.0, 0.01, 0.0);
+    if (panelBackgroundIsDark()) {
+        QuteWidget *widget = m_widgets.last();
+        if (widget != nullptr) {
+            widget->setProperty("CSQT_textcolor", QColor("#f57c00").name());
+            widget->setProperty("CSQT_border", 1);
+            widget->setProperty("CSQT_borderColor", QString("#f57c00"));
+            widget->applyInternalProperties();
+        }
+    }
     applyFlatStyleToNewWidget(m_widgets.last());
     widgetChanged();
     if (dialog && getOpenProperties()) {
@@ -3750,7 +3781,7 @@ QString WidgetLayout::createNewMeter(int x, int y, QString channel)
     QString channel2 = "hor" + QString::number(m_widgets.size());
     // Legacy default meter color {0, 60000, 0} in 0-65535 range
     uuid = createMeter(posx, posy, 30, 80, channel, channel2,
-                       QColor(0, 234, 0), "fill", 0.0, 0.0, 1, 0);
+                       QColor(0, 234, 0), "fill", 0.0, 0.0, 1);
     widgetChanged();
     if (dialog && getOpenProperties()) {
         m_widgets.last()->openProperties();
@@ -3962,12 +3993,12 @@ bool WidgetLayout::destroyWidget(QString widgetid)
 void WidgetLayout::propertiesDialog()
 {
     QDialog *dialog = new QDialog(this);
-    dialog->resize(300, 120);
+    dialog->resize(300, 150);
     dialog->setModal(true);
     dialog->setWindowTitle("Widget Panel");
     QGridLayout *layout = new QGridLayout(dialog);
     QLabel *label = new QLabel(dialog);
-    label->setText("Color");
+    label->setText(tr("Background"));
     label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
     layout->addWidget(label, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
     bgButton = new QPushButton(dialog);
@@ -3981,17 +4012,32 @@ void WidgetLayout::propertiesDialog()
     pixmap.fill(color);
     bgButton->setIcon(pixmap);
     layout->addWidget(bgButton, 0, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
+    label = new QLabel(dialog);
+    label->setText(tr("Foreground"));
+    label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, 1, 0, Qt::AlignRight|Qt::AlignVCenter);
+    fgButton = new QPushButton(dialog);
+    QColor foreground = property("CSQT_defaultForeground").value<QColor>();
+    if (!foreground.isValid())
+        foreground = QColor("#202020");
+    fgButton->setProperty("CSQT_color", QVariant(foreground));
+    pixmap.fill(foreground);
+    fgButton->setIcon(pixmap);
+    layout->addWidget(fgButton, 1, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
     QPushButton *applyButton = new QPushButton(tr("Apply"));
-    layout->addWidget(applyButton, 1, 1, Qt::AlignCenter|Qt::AlignVCenter);
+    layout->addWidget(applyButton, 2, 1, Qt::AlignCenter|Qt::AlignVCenter);
     QPushButton *cancelButton = new QPushButton(tr("Cancel"));
-    layout->addWidget(cancelButton, 1, 2, Qt::AlignCenter|Qt::AlignVCenter);
+    layout->addWidget(cancelButton, 2, 2, Qt::AlignCenter|Qt::AlignVCenter);
     QPushButton *acceptButton = new QPushButton(tr("Ok"));
-    layout->addWidget(acceptButton, 1, 3, Qt::AlignCenter|Qt::AlignVCenter);
+    layout->addWidget(acceptButton, 2, 3, Qt::AlignCenter|Qt::AlignVCenter);
     connect(acceptButton, SIGNAL(released()), dialog, SLOT(accept()));
     connect(dialog, SIGNAL(accepted()), this, SLOT(applyProperties()));
     connect(applyButton, SIGNAL(released()), this, SLOT(applyProperties()));
     connect(cancelButton, SIGNAL(released()), dialog, SLOT(close()));
     connect(bgButton, SIGNAL(released()), this, SLOT(selectBgColor()));
+    connect(fgButton, SIGNAL(released()), this, SLOT(selectFgColor()));
     dialog->exec();
 }
 
@@ -3999,6 +4045,9 @@ void WidgetLayout::applyProperties()
 {
     QColor color = bgButton->property("CSQT_color").value<QColor>();
     setBackground(true, color);
+    QColor foreground = fgButton->property("CSQT_color").value<QColor>();
+    if (foreground.isValid())
+        setProperty("CSQT_defaultForeground", foreground);
     widgetChanged();
     mouseBut2 = 0;  // Button un clicked is not propagated after opening the edit dialog. Do it artificially here
 }
@@ -4016,6 +4065,20 @@ void WidgetLayout::selectBgColor()
         QPixmap pixmap(64,64);
         pixmap.fill(color);
         bgButton->setIcon(pixmap);
+    }
+}
+
+void WidgetLayout::selectFgColor()
+{
+    QColor current = property("CSQT_defaultForeground").value<QColor>();
+    if (!current.isValid())
+        current = QColor("#202020");
+    QColor color = QColorDialog::getColor(current, this);
+    if (color.isValid()) {
+        fgButton->setProperty("CSQT_color", QVariant(color));
+        QPixmap pixmap(64, 64);
+        pixmap.fill(color);
+        fgButton->setIcon(pixmap);
     }
 }
 
@@ -5296,6 +5359,11 @@ int WidgetLayout::parseXmlNode(QDomNode node)
         // "nobackground" settings.
         setBackground(true, getColorFromElement(nodeElement));
     }
+    else if (name == "foreground") {
+        QColor color = getColorFromElement(node.toElement());
+        if (color.isValid())
+            setProperty("CSQT_defaultForeground", color);
+    }
     else if (name == "bsbObject") {
         ret = newXmlWidget(node);
     }
@@ -5388,6 +5456,8 @@ QString WidgetLayout::createScrollNumber(int x, int y, int width, int height,
     widget->setProperty("CSQT_bgcolormode", bgMode);
     widget->setProperty("CSQT_bordermode", borderMode);
     widget->setProperty("CSQT_value", value);
+    // New scroll numbers show the Max/MSP-style triangle prefix by default.
+    widget->setProperty("CSQT_showTriangle", true);
     widget->applyInternalProperties();
     registerWidget(widget);
     return widget->getUuid();
@@ -5540,7 +5610,7 @@ QString WidgetLayout::createMeter(int x, int y, int width, int height,
                                   const QColor &color,
                                   const QString &meterType,
                                   double xValue, double yValue,
-                                  int pointSize, int fadeSpeed)
+                                  int pointSize)
 {
     QuteMeter *widget = new QuteMeter(this);
     widget->setProperty("CSQT_x", x);
@@ -5554,7 +5624,6 @@ QString WidgetLayout::createMeter(int x, int y, int width, int height,
     widget->setProperty("CSQT_xValue", xValue);
     widget->setProperty("CSQT_objectName", channel);
     widget->setProperty("CSQT_pointsize", pointSize);
-    widget->setProperty("CSQT_fadeSpeed", fadeSpeed);
     widget->setProperty("CSQT_xMin", 0.0);
     widget->setProperty("CSQT_xMax", 1.0);
     widget->setProperty("CSQT_yMin", 0.0);
@@ -5591,8 +5660,8 @@ QString WidgetLayout::createGraph(int x, int y, int width, int height)
     graphWidgets.append(widget);
     emit requestCsoundUserData(widget);
     emit registerGraph(widget);
-    registerWidget(widget);
     widget->applyInternalProperties();
+    registerWidget(widget);
     return widget->getUuid();
 }
 
@@ -5609,8 +5678,8 @@ QString WidgetLayout::createScope(int x, int y, int width, int height,
     widget->setProperty("CSQT_value", channels);
     emit registerScope(widget);
     scopeWidgets.append(widget);
-    registerWidget(widget);
     widget->applyInternalProperties();
+    registerWidget(widget);
     return widget->getUuid();
 }
 
@@ -5624,8 +5693,8 @@ QString WidgetLayout::createTableDisplay(int x, int y, int width, int height)
     widget->setProperty("CSQT_tableNumber", 0);
 
     emit requestCsoundUserData(widget);
-    registerWidget(widget);
     widget->applyInternalProperties();
+    registerWidget(widget);
     return widget->getUuid();
 }
 
@@ -5640,9 +5709,9 @@ QString WidgetLayout::createWaveform(int x, int y, int width, int height)
     widget->setProperty("CSQT_objectName", base + "Table");
     widget->setProperty("CSQT_objectName2", base + "Cursor");
     emit requestCsoundUserData(widget);
+    widget->applyInternalProperties();
     registerWidget(widget);
     waveformWidgets.append(widget);
-    widget->applyInternalProperties();
     return widget->getUuid();
 }
 
@@ -5653,8 +5722,8 @@ QString WidgetLayout::createVUMeter(int x, int y, int width, int height)
     widget->setProperty("CSQT_y", y);
     widget->setProperty("CSQT_width", width);
     widget->setProperty("CSQT_height", height);
-    registerWidget(widget);
     widget->applyInternalProperties();
+    registerWidget(widget);
     return widget->getUuid();
 }
 

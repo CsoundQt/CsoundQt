@@ -197,6 +197,7 @@ public:
     virtual void setColor(QColor c);
     virtual void setTextColor(QColor c);
     QuteWidgetType getWidgetTypeID() override;
+	bool hasSquareSize() const override { return true; }
 	
 
 protected:

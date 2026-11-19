@@ -480,24 +480,24 @@ void QuteComboBox::createPropertiesDialog()
 {
 	QuteWidget::createPropertiesDialog();
 	dialog->setWindowTitle("Menu");
+	// Let the Items field use the extra horizontal space when the dialog is
+	// resized instead of leaving it in a trailing empty column.
+	layout->setColumnStretch(5, 0);
+	layout->setColumnStretch(4, 1);
 	int row = 4;
 
-	QLabel *label = new QLabel(dialog);
-
-    auto spacer = new QSpacerItem(20, 20, QSizePolicy::Expanding);
-    layout->addItem(spacer, row, 4, Qt::AlignLeft);
+	QLabel *label = nullptr;
 	++row;
 
 	label = new QLabel(dialog);
-    label->setText("Items (comma-separated)");
+    label->setText(tr("Items"));
     layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
 	text = new QLineEdit(dialog);
-    text->setToolTip("Items in the menu, separated by commas");
-    text->setMinimumWidth(420);
+    text->setToolTip(tr("Items in the menu, separated by commas"));
+    text->setMinimumWidth(300);
     text->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    layout->addWidget(text, row,1,1,4, Qt::AlignLeft|Qt::AlignVCenter);
-    // text->setSizePolicy()
+    layout->addWidget(text, row, 1, 1, 4);
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
@@ -507,6 +507,12 @@ void QuteComboBox::createPropertiesDialog()
 #endif
 
 	++row;
+	auto *itemsHint = new QLabel(tr("Comma-separated items"), dialog);
+	itemsHint->setStyleSheet(u"color: palette(mid);"_s);
+	layout->addWidget(itemsHint, row, 1, 1, 4,
+	                  Qt::AlignLeft|Qt::AlignVCenter);
+	++row;
+
 	label = new QLabel(tr("Font"), dialog);
 	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	fontComboBox = new QComboBox(dialog);
@@ -514,72 +520,93 @@ void QuteComboBox::createPropertiesDialog()
 	fontComboBox->addItems(BundledFonts::allFamilies());
 	fontComboBox->setCurrentText(
 	            BundledFonts::resolveFamily(property("CSQT_font").toString()));
-	layout->addWidget(fontComboBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
-	label = new QLabel(tr("Size"), dialog);
-	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 	fontSizeSpinBox = new QSpinBox(dialog);
 	fontSizeSpinBox->setRange(1, 200);
 	fontSizeSpinBox->setValue(property("CSQT_fontsize").toInt());
-	layout->addWidget(fontSizeSpinBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+
+	// Font family and size sit together, without a "Size" label.
+	auto *fontRow = new QHBoxLayout;
+	fontRow->setContentsMargins(0, 0, 0, 0);
+	fontRow->setSpacing(6);
+	fontRow->addWidget(fontComboBox);
+	fontRow->addWidget(fontSizeSpinBox);
+	fontRow->addStretch();
+	layout->addLayout(fontRow, row, 1, 1, 4, Qt::AlignLeft|Qt::AlignVCenter);
 
 	// Flat-menu appearance. The controls are only meaningful when the flat
-	// style is enabled, so they are disabled otherwise.
+	// style is enabled, so they are grouped and disabled otherwise.
 	++row;
-	flatStyleCheckBox = new QCheckBox(tr("Flat style"), dialog);
+	auto *flatGroup = new QGroupBox(tr("Flat"), dialog);
+	auto *flatLayout = new QGridLayout(flatGroup);
+	flatLayout->setHorizontalSpacing(6);
+
+	flatStyleCheckBox = new QCheckBox(tr("Flat style"), flatGroup);
 	flatStyleCheckBox->setToolTip(tr("Draw the menu with explicit colours and border "
 	                                 "instead of the native widget style."));
 	flatStyleCheckBox->setChecked(property("CSQT_flatStyle").toBool());
-	layout->addWidget(flatStyleCheckBox, row, 0, 1, 2,
-	                  Qt::AlignLeft|Qt::AlignVCenter);
-	++row;
+	flatLayout->addWidget(flatStyleCheckBox, 0, 0, 1, 2,
+	                      Qt::AlignLeft|Qt::AlignVCenter);
 
-	label = new QLabel(tr("Background"), dialog);
-	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
-	backgroundColorButton = new SelectColorButton(dialog);
+	QLabel *backgroundLabel = new QLabel(tr("Background"), flatGroup);
+	flatLayout->addWidget(backgroundLabel, 1, 0,
+	                      Qt::AlignRight|Qt::AlignVCenter);
+	backgroundColorButton = new SelectColorButton(flatGroup);
 	{
 		QColor color = menuColorFromProperty(property("CSQT_bgcolor"));
 		backgroundColorButton->setColor(color.isValid() ? color : QColor("#eff0f1"));
 	}
-	layout->addWidget(backgroundColorButton, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	flatLayout->addWidget(backgroundColorButton, 1, 1,
+	                      Qt::AlignLeft|Qt::AlignVCenter);
 
-	label = new QLabel(tr("Foreground"), dialog);
-	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
-	foregroundColorButton = new SelectColorButton(dialog);
+	QLabel *foregroundLabel = new QLabel(tr("Foreground"), flatGroup);
+	flatLayout->addWidget(foregroundLabel, 1, 2,
+	                      Qt::AlignRight|Qt::AlignVCenter);
+	foregroundColorButton = new SelectColorButton(flatGroup);
 	{
 		QColor color = menuColorFromProperty(property("CSQT_foreground"));
 		foregroundColorButton->setColor(color.isValid() ? color : QColor("#34393a"));
 	}
-	layout->addWidget(foregroundColorButton, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
-	++row;
+	flatLayout->addWidget(foregroundColorButton, 1, 3,
+	                      Qt::AlignLeft|Qt::AlignVCenter);
 
-	label = new QLabel(tr("Border"), dialog);
-	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
-	borderColorButton = new SelectColorButton(dialog);
+	QLabel *borderLabel = new QLabel(tr("Border"), flatGroup);
+	flatLayout->addWidget(borderLabel, 2, 0,
+	                      Qt::AlignRight|Qt::AlignVCenter);
+	borderColorButton = new SelectColorButton(flatGroup);
 	{
 		QColor color = menuColorFromProperty(property("CSQT_bordercolor"));
 		borderColorButton->setColor(color.isValid() ? color : QColor("#adbdc2"));
 	}
-	layout->addWidget(borderColorButton, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	flatLayout->addWidget(borderColorButton, 2, 1,
+	                      Qt::AlignLeft|Qt::AlignVCenter);
 
-	label = new QLabel(tr("Border Width"), dialog);
-	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
-	borderWidthSpinBox = new QSpinBox(dialog);
+	QLabel *borderWidthLabel = new QLabel(tr("Border Width"), flatGroup);
+	flatLayout->addWidget(borderWidthLabel, 2, 2,
+	                      Qt::AlignRight|Qt::AlignVCenter);
+	borderWidthSpinBox = new QSpinBox(flatGroup);
 	borderWidthSpinBox->setRange(0, 20);
 	borderWidthSpinBox->setValue(property("CSQT_borderWidth").toInt());
-	layout->addWidget(borderWidthSpinBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
-	++row;
+	flatLayout->addWidget(borderWidthSpinBox, 2, 3,
+	                      Qt::AlignLeft|Qt::AlignVCenter);
 
-	label = new QLabel(tr("Border Radius"), dialog);
-	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
-	borderRadiusSpinBox = new QSpinBox(dialog);
+	QLabel *borderRadiusLabel = new QLabel(tr("Border Radius"), flatGroup);
+	flatLayout->addWidget(borderRadiusLabel, 3, 0,
+	                      Qt::AlignRight|Qt::AlignVCenter);
+	borderRadiusSpinBox = new QSpinBox(flatGroup);
 	borderRadiusSpinBox->setRange(0, 50);
 	borderRadiusSpinBox->setValue(property("CSQT_borderRadius").toInt());
-	layout->addWidget(borderRadiusSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	flatLayout->addWidget(borderRadiusSpinBox, 3, 1,
+	                      Qt::AlignLeft|Qt::AlignVCenter);
+
+	layout->addWidget(flatGroup, row, 0, 1, -1);
+	++row;
 
 	const QList<QWidget *> flatControls = {
-		backgroundColorButton, foregroundColorButton, borderColorButton,
-		borderWidthSpinBox, borderRadiusSpinBox
+		backgroundLabel, backgroundColorButton, foregroundLabel,
+		foregroundColorButton, borderLabel, borderColorButton,
+		borderWidthLabel, borderWidthSpinBox, borderRadiusLabel,
+		borderRadiusSpinBox
 	};
 	const auto refreshFlatControls = [this, flatControls]() {
 		const bool flat = flatStyleCheckBox->isChecked();

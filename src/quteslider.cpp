@@ -1120,35 +1120,55 @@ void QuteSlider::createPropertiesDialog()
 	QuteWidget::createPropertiesDialog();
 	dialog->setWindowTitle("Slider");
 	int row = 2;
-	QLabel *label = new QLabel(dialog);
-	label->setText("Min =");
-	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
-	minSpinBox = new QDoubleSpinBox(dialog);
+	auto *valueGroup = new QGroupBox(tr("Value"), dialog);
+	auto *valueLayout = new QGridLayout(valueGroup);
+	valueLayout->setHorizontalSpacing(6);
+	valueLayout->addWidget(new QLabel(tr("Range"), valueGroup), 0, 0,
+	                       Qt::AlignRight|Qt::AlignVCenter);
+
+	minSpinBox = new QDoubleSpinBox(valueGroup);
 	minSpinBox->setDecimals(4);
 	minSpinBox->setRange(-99999.0, 99999.0);
 	minSpinBox->setMaximumWidth(100);
-	layout->addWidget(minSpinBox, row,1, Qt::AlignLeft|Qt::AlignVCenter);
-	label = new QLabel(dialog);
-	label->setText("Max =");
-	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
-	maxSpinBox = new QDoubleSpinBox(dialog);
+	minSpinBox->setValue(property("CSQT_minimum").toDouble());
+
+	maxSpinBox = new QDoubleSpinBox(valueGroup);
 	maxSpinBox->setDecimals(4);
 	maxSpinBox->setRange(-99999.0, 99999.0);
 	maxSpinBox->setMaximumWidth(100);
-	layout->addWidget(maxSpinBox, row,3, Qt::AlignLeft|Qt::AlignVCenter);
-	++row;
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForWrite();
-#endif
-	minSpinBox->setValue(property("CSQT_minimum").toDouble());
 	maxSpinBox->setValue(property("CSQT_maximum").toDouble());
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
+
+	auto *rangeRow = new QHBoxLayout;
+	rangeRow->setContentsMargins(0, 0, 0, 0);
+	rangeRow->setSpacing(6);
+	rangeRow->addWidget(minSpinBox);
+	rangeRow->addWidget(new QLabel(tr("–"), valueGroup));
+	rangeRow->addWidget(maxSpinBox);
+	rangeRow->addStretch();
+	valueLayout->addLayout(rangeRow, 0, 1, 1, 3,
+	                       Qt::AlignLeft|Qt::AlignVCenter);
+
+	valueLayout->addWidget(new QLabel(tr("Exponent"), valueGroup), 1, 0,
+	                       Qt::AlignRight|Qt::AlignVCenter);
+	exponentSpinBox = new QDoubleSpinBox(valueGroup);
+	exponentSpinBox->setDecimals(3);
+	exponentSpinBox->setRange(0.001, 100.0);
+	exponentSpinBox->setSingleStep(0.1);
+	exponentSpinBox->setValue(property("CSQT_exponent").toDouble());
+	exponentSpinBox->setToolTip(tr("Skew of the value curve: 1 is linear, "
+	                               "values > 1 give finer control near the "
+	                               "minimum, values < 1 finer control near the "
+	                               "maximum."));
+	valueLayout->addWidget(exponentSpinBox, 1, 1,
+	                       Qt::AlignLeft|Qt::AlignVCenter);
+
+	layout->addWidget(valueGroup, row, 0, 1, -1);
+	++row;
 
 	// Row 3 is the common channel row; the flat-style rows start below it.
 	row = 4;
 	m_flatControls.clear();
+	QLabel *label = nullptr;
 
 	flatStyleCheckBox = new QCheckBox(tr("Flat style"), dialog);
 	flatStyleCheckBox->setToolTip(tr("Draw the slider with a flat, platform-independent "
@@ -1267,19 +1287,6 @@ void QuteSlider::createPropertiesDialog()
 	thumbRadiusSpinBox->setFixedWidth(60);
 	layout->addWidget(thumbRadiusSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 	m_flatControls << thumbRadiusSpinBox;
-
-	label = new QLabel(tr("Exponent ="), dialog);
-	label->setToolTip(tr("Skew of the value curve: 1 is linear, values > 1 give "
-	                     "finer control near the minimum, values < 1 finer "
-	                     "control near the maximum."));
-	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
-	exponentSpinBox = new QDoubleSpinBox(dialog);
-	exponentSpinBox->setDecimals(3);
-	exponentSpinBox->setRange(0.001, 100.0);
-	exponentSpinBox->setSingleStep(0.1);
-	exponentSpinBox->setValue(property("CSQT_exponent").toDouble());
-	exponentSpinBox->setToolTip(label->toolTip());
-	layout->addWidget(exponentSpinBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
 	++row;
 
 	label = new QLabel(tr("Mode"), dialog);

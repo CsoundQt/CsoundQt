@@ -391,36 +391,44 @@ void QuteSpinBox::createPropertiesDialog()
 	QuteText::createPropertiesDialog();
 	dialog->setWindowTitle("SpinBox");
 
-	int row = 2; // rows above the shared text widget block
-	QLabel *label = new QLabel(dialog);
-	label->setText("Min =");
-	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
-	minSpinBox = new QDoubleSpinBox(dialog);
+	auto *valueGroup = new QGroupBox(tr("Value"), dialog);
+	auto *valueLayout = new QGridLayout(valueGroup);
+	valueLayout->setHorizontalSpacing(6);
+	valueLayout->addWidget(new QLabel(tr("Range"), valueGroup), 0, 0,
+	                       Qt::AlignRight|Qt::AlignVCenter);
+
+	minSpinBox = new QDoubleSpinBox(valueGroup);
 	minSpinBox->setDecimals(4);
 	minSpinBox->setRange(-999999999999.0, 999999999999.0);
 	minSpinBox->setMaximumWidth(100);
-	layout->addWidget(minSpinBox, row,1, Qt::AlignLeft|Qt::AlignVCenter);
-	label = new QLabel(dialog);
-	label->setText("Max =");
-	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
-	maxSpinBox = new QDoubleSpinBox(dialog);
+	minSpinBox->setValue(property("CSQT_minimum").toDouble());
+
+	maxSpinBox = new QDoubleSpinBox(valueGroup);
 	maxSpinBox->setDecimals(4);
 	maxSpinBox->setRange(-999999999999.0, 999999999999.0);
 	maxSpinBox->setMaximumWidth(100);
-	layout->addWidget(maxSpinBox, row,3, Qt::AlignLeft|Qt::AlignVCenter);
-	++row;
+	maxSpinBox->setValue(property("CSQT_maximum").toDouble());
 
-	// Row 3 is the common channel row; continue above the text block.
-	row = 4;
-	label = new QLabel(dialog);
-	label->setText("Resolution");
-	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
-	resolutionSpinBox = new QDoubleSpinBox(dialog);
+	auto *rangeRow = new QHBoxLayout;
+	rangeRow->setContentsMargins(0, 0, 0, 0);
+	rangeRow->setSpacing(6);
+	rangeRow->addWidget(minSpinBox);
+	rangeRow->addWidget(new QLabel(tr("–"), valueGroup));
+	rangeRow->addWidget(maxSpinBox);
+	rangeRow->addStretch();
+	valueLayout->addLayout(rangeRow, 0, 1, 1, 3,
+	                       Qt::AlignLeft|Qt::AlignVCenter);
+
+	valueLayout->addWidget(new QLabel(tr("Resolution"), valueGroup), 1, 0,
+	                       Qt::AlignRight|Qt::AlignVCenter);
+	resolutionSpinBox = new QDoubleSpinBox(valueGroup);
 	resolutionSpinBox->setDecimals(6);
 	resolutionSpinBox->setRange(0,999999999999.0);
 	resolutionSpinBox->setMaximumWidth(100);
-	layout->addWidget(resolutionSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
-	++row;
+	valueLayout->addWidget(resolutionSpinBox, 1, 1,
+	                       Qt::AlignLeft|Qt::AlignVCenter);
+
+	layout->addWidget(valueGroup, 2, 0, 1, -1);
 
 	text->hide();
 	if (labelPtrs.contains("text"))
@@ -434,7 +442,7 @@ void QuteSpinBox::createPropertiesDialog()
 	// Background is always enabled for a spin box; keep the colour control but
 	// replace the old checkbox with a plain label.
 	bg->hide();
-	label = new QLabel(tr("Background"), dialog);
+	QLabel *label = new QLabel(tr("Background"), dialog);
 	layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
 	{
 		QColor bgValue = property("CSQT_bgcolor").value<QColor>();

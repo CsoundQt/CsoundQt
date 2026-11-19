@@ -1079,15 +1079,35 @@ void QuteWaveform::createPropertiesDialog()
 	dialog->setWindowTitle("Waveform");
 
 	int row = 4;
-	channelLabel->setText("Table Channel name =");
+	channelLabel->setText(tr("Table Channel"));
 
-	QLabel *label = new QLabel("Cursor Channel name =", dialog);
-	layout->addWidget(label, row, 0, Qt::AlignRight | Qt::AlignVCenter);
-	name2LineEdit = new QLineEdit(dialog);
-	name2LineEdit->setText(getChannel2Name());
-	name2LineEdit->setFixedWidth(160);
-	layout->addWidget(name2LineEdit, row, 1, 1, 3, Qt::AlignLeft | Qt::AlignVCenter);
-	++row;
+	QLabel *label = nullptr;
+	// Put the cursor channel in the shared Widget group, between the table
+	// channel and the description.
+	if (widgetGroup != nullptr) {
+		auto *groupLayout = qobject_cast<QGridLayout *>(widgetGroup->layout());
+		if (groupLayout != nullptr) {
+			groupLayout->removeWidget(descriptionLabel);
+			groupLayout->removeWidget(descriptionLineEdit);
+			groupLayout->removeWidget(enabledCheckBox);
+
+			label = new QLabel(tr("Cursor Channel"), widgetGroup);
+			groupLayout->addWidget(label, 1, 0, Qt::AlignRight | Qt::AlignVCenter);
+
+			name2LineEdit = new QLineEdit(widgetGroup);
+			name2LineEdit->setText(getChannel2Name());
+			name2LineEdit->setFixedWidth(160);
+			groupLayout->addWidget(name2LineEdit, 1, 1, 1, 4,
+			                       Qt::AlignLeft | Qt::AlignVCenter);
+
+			groupLayout->addWidget(descriptionLabel, 2, 0,
+			                       Qt::AlignRight | Qt::AlignVCenter);
+			groupLayout->addWidget(descriptionLineEdit, 2, 1, 1, 4,
+			                       Qt::AlignVCenter);
+			groupLayout->addWidget(enabledCheckBox, 3, 1, 1, 4,
+			                       Qt::AlignLeft | Qt::AlignVCenter);
+		}
+	}
 
 	label = new QLabel("Table number", dialog);
 	layout->addWidget(label, row, 0, Qt::AlignRight | Qt::AlignVCenter);

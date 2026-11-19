@@ -459,37 +459,39 @@ void QuteKnob::createPropertiesDialog()
 #endif
 	dialog->setWindowTitle("Knob");
 
-    int row = 2;
     QLabel *label;
 
-    label = new QLabel("Min =", dialog);
-	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+    auto *valueGroup = new QGroupBox(tr("Value"), dialog);
+    auto *valueLayout = new QGridLayout(valueGroup);
+    valueLayout->setHorizontalSpacing(6);
+    valueLayout->addWidget(new QLabel(tr("Range"), valueGroup), 0, 0,
+                           Qt::AlignRight|Qt::AlignVCenter);
 
-	minSpinBox = new QDoubleSpinBox(dialog);
+    minSpinBox = new QDoubleSpinBox(valueGroup);
     minSpinBox->setDecimals(4);
 	minSpinBox->setRange(-99999.0, 99999.0);
 	minSpinBox->setMaximumWidth(100);
 	minSpinBox->setValue(property("CSQT_minimum").toDouble());
-	layout->addWidget(minSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
-    label = new QLabel("Max =", dialog);
-    layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
-
-    maxSpinBox = new QDoubleSpinBox(dialog);
+    maxSpinBox = new QDoubleSpinBox(valueGroup);
     maxSpinBox->setDecimals(4);
 	maxSpinBox->setRange(-99999.0, 99999.0);
 	maxSpinBox->setMaximumWidth(100);
 	maxSpinBox->setValue(property("CSQT_maximum").toDouble());
-    layout->addWidget(maxSpinBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
-    ++row;
 
-    // Row 3 is the common channel row.
-    row = 4;
+    auto *rangeRow = new QHBoxLayout;
+    rangeRow->setContentsMargins(0, 0, 0, 0);
+    rangeRow->setSpacing(6);
+    rangeRow->addWidget(minSpinBox);
+    rangeRow->addWidget(new QLabel(tr("–"), valueGroup));
+    rangeRow->addWidget(maxSpinBox);
+    rangeRow->addStretch();
+    valueLayout->addLayout(rangeRow, 0, 1, 1, 3,
+                           Qt::AlignLeft|Qt::AlignVCenter);
 
-    label = new QLabel("Exponent =", dialog);
-    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
-
-    exponentSpinBox = new QDoubleSpinBox(dialog);
+    valueLayout->addWidget(new QLabel(tr("Exponent"), valueGroup), 1, 0,
+                           Qt::AlignRight|Qt::AlignVCenter);
+    exponentSpinBox = new QDoubleSpinBox(valueGroup);
     exponentSpinBox->setDecimals(3);
     exponentSpinBox->setRange(0.001, 100.0);
     exponentSpinBox->setSingleStep(0.1);
@@ -497,8 +499,11 @@ void QuteKnob::createPropertiesDialog()
     exponentSpinBox->setToolTip("Skew of the value curve: 1 is linear, "
                                 "values > 1 give finer control near the minimum, "
                                 "values < 1 finer control near the maximum");
-    layout->addWidget(exponentSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
-    ++row;
+    valueLayout->addWidget(exponentSpinBox, 1, 1,
+                           Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(valueGroup, 2, 0, 1, -1);
+
+    int row = 4;
 
     // label->setText("Resolution");
     // layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);

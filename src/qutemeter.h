@@ -85,11 +85,10 @@ private:
     // QPushButton*  bgColorButton;
     SelectColorButton *bgColorButton;
     SelectColorButton *borderColorButton;
+    QLabel *borderColorLabel = nullptr;
 
 	QComboBox* typeComboBox;
 	QSpinBox* pointSizeSpinBox;
-	QSpinBox* fadeSpeedSpinBox;
-	QComboBox* behaviorComboBox;
 	QDoubleSpinBox* m_xMinBox;
 	QDoubleSpinBox* m_xMaxBox;
 	QDoubleSpinBox* m_yMinBox;

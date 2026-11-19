@@ -1,5 +1,6 @@
 
 
+
 /*
 	Copyright (C) 2008, 2009 Andres Cabrera
 	mantaraya36@gmail.com
@@ -467,11 +468,6 @@ void QuteButton::createPropertiesDialog()
 	const int currentType = typeComboBox->findData(
 	            normalizedButtonType(property("CSQT_type").toString()));
 	typeComboBox->setCurrentIndex(currentType >= 0 ? currentType : 0);
-	layout->addWidget(typeComboBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
-
-	label = new QLabel(dialog);
-	label->setText("Value");
-	layout->addWidget(label, row, 2, Qt::AlignRight|Qt::AlignVCenter);
 
     valueBox = new QDoubleSpinBox(dialog);
 	valueBox->setDecimals(6);
@@ -479,15 +475,24 @@ void QuteButton::createPropertiesDialog()
 	valueBox->setValue(m_value);
 	valueBox->setMaximumWidth(100);
 	valueBox->setDecimals(4);
-	layout->addWidget(valueBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+
+	// The value field belongs to the Type selector and needs no label.
+	auto *typeRow = new QHBoxLayout;
+	typeRow->setContentsMargins(0, 0, 0, 0);
+	typeRow->setSpacing(6);
+	typeRow->addWidget(typeComboBox);
+	typeRow->addWidget(valueBox);
+	typeRow->addStretch();
+	layout->addLayout(typeRow, row, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
 	++row;
 
 	label = new QLabel(dialog);
 	label->setText("Event");
 	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 	line = new QLineEdit(dialog);
-	line->setMinimumWidth(320);
+	line->setMinimumWidth(200);
 	line->setText(property("CSQT_eventLine").toString());
+	line->setPlaceholderText(tr("i 1 0 10"));
 	{
 		// Score events are code, so use the same monospaced family as the editor.
 		QSettings settings("csoundqt", "csoundqt");
@@ -519,12 +524,15 @@ void QuteButton::createPropertiesDialog()
 	++row;
 
     label = new QLabel(dialog);
-	label->setText("Text:");
-	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+	label->setText("Text");
+	layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignTop);
 
     text = new QTextEdit(dialog);
-	text->setMinimumWidth(320);
+	text->setMinimumWidth(200);
 	text->setText(property("CSQT_text").toString());
+	// Keep the text editor compact: two lines are enough for a button caption.
+	text->setFixedHeight(text->fontMetrics().lineSpacing() * 2
+	                     + 2 * text->frameWidth() + 8);
     layout->addWidget(text, row, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
     ++row;
 
@@ -537,27 +545,29 @@ void QuteButton::createPropertiesDialog()
 	layout->addWidget(flatStyleCheckBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 	++row;
 
-    label = new QLabel(dialog);
-    label->setText(tr("Font Size"));
-    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
-
     fontSizeSpinBox = new QSpinBox(dialog);
     fontSizeSpinBox->unsetLocale();
     fontSizeSpinBox->setMinimum(6);
     fontSizeSpinBox->setMaximum(999);
     fontSizeSpinBox->setValue(property("CSQT_fontsize").toInt());
-    layout->addWidget(fontSizeSpinBox, row, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
-    QLabel *fontFamilyLabel = new QLabel(dialog);
-    fontFamilyLabel->setText(tr("Font"));
+    QLabel *fontFamilyLabel = new QLabel(tr("Font"), dialog);
     fontFamilyLabel->setToolTip(tr("Font family used by the flat button."));
-    layout->addWidget(fontFamilyLabel, row, 2, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(fontFamilyLabel, row, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     fontComboBox = new QComboBox(dialog);
     populateFontFamilyComboBox(fontComboBox);
     fontComboBox->setCurrentText(BundledFonts::resolveFamily(property("CSQT_font").toString()));
     fontComboBox->setToolTip(fontFamilyLabel->toolTip());
-    layout->addWidget(fontComboBox, row, 3, Qt::AlignLeft|Qt::AlignVCenter);
+
+    // Font family and size sit together; the size field has no separate label.
+    auto *fontRow = new QHBoxLayout;
+    fontRow->setContentsMargins(0, 0, 0, 0);
+    fontRow->setSpacing(6);
+    fontRow->addWidget(fontComboBox);
+    fontRow->addWidget(fontSizeSpinBox);
+    fontRow->addStretch();
+    layout->addLayout(fontRow, row, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
 	// The font family only applies to the self-painted (flat) button.
 	m_flatControls << fontFamilyLabel << fontComboBox;
@@ -677,7 +687,7 @@ void QuteButton::createPropertiesDialog()
 	});
 
 	useMomentaryMidiButtonCheckBox = new QCheckBox(dialog);
-	useMomentaryMidiButtonCheckBox->setText(tr("Momentary (MIDI toggles latch)"));
+	useMomentaryMidiButtonCheckBox->setText(tr("Momentary"));
 	const QString momentaryHelp = tr("Only active when Latch is enabled. Each MIDI press "
 	                                 "toggles the latch; the MIDI release is ignored.");
 	useMomentaryMidiButtonCheckBox->setToolTip(momentaryHelp);
@@ -687,10 +697,18 @@ void QuteButton::createPropertiesDialog()
 	connect(latchCheckBox, &QCheckBox::toggled,
 	        useMomentaryMidiButtonCheckBox, &QWidget::setEnabled);
 
-	const int midiRow = layout->rowCount()-2;
-	layout->removeWidget(midiLearnButton);
-	layout->addWidget(useMomentaryMidiButtonCheckBox, midiRow, 4, Qt::AlignLeft|Qt::AlignVCenter);
-	layout->addWidget(midiLearnButton, midiRow, 5, Qt::AlignLeft|Qt::AlignVCenter);
+	auto *midiLayout = midiGroup != nullptr
+	        ? qobject_cast<QGridLayout *>(midiGroup->layout()) : nullptr;
+	if (midiLayout != nullptr) {
+		// Keep the extra button option inside the MIDI group, before MIDI learn.
+		midiLayout->removeWidget(midiLearnButton);
+		midiLayout->addWidget(useMomentaryMidiButtonCheckBox, 0, 5,
+		                      Qt::AlignLeft|Qt::AlignVCenter);
+		midiLayout->addWidget(midiLearnButton, 0, 6,
+		                      Qt::AlignLeft|Qt::AlignVCenter);
+		midiLayout->setColumnStretch(6, 0);
+		midiLayout->setColumnStretch(7, 1);
+	}
 
 
 

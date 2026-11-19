@@ -60,6 +60,10 @@ public:
 protected:
 	virtual void createPropertiesDialog();
 	virtual void applyProperties();
+	// Set captions on the colour buttons (if any) before their colours are
+	// painted for the first time. Captioned buttons show the colour as a small
+	// icon swatch; uncaptioned buttons keep the old filled-button look.
+	virtual void configureColorButtons() {}
 
 	// Render the current label text using the configured text format. Labels
 	// can show GitHub-flavoured Markdown; every other text widget stays plain.
@@ -163,12 +167,21 @@ protected:
 	virtual void refreshWidget();
 	virtual void createPropertiesDialog();
 	virtual void applyProperties();
+	virtual void configureColorButtons();
 
 	QDoubleSpinBox* resolutionSpinBox;
 	QDoubleSpinBox *minSpinBox;
 	QDoubleSpinBox *maxSpinBox;
+	QCheckBox *triangleCheckBox = nullptr;
+	QSpinBox *prefixBaselineSpinBox = nullptr;
+	QSpinBox *prefixVSizeSpinBox = nullptr;
+	QSpinBox *prefixHSizeSpinBox = nullptr;
 	int m_places;
 	double m_min, m_max;
+
+	// Rebuild the label style so the optional triangle prefix gets its own
+	// column at the left edge, independent of the configured text alignment.
+	void applyTriangleStyle();
 
 public slots:
 	void setResolution(double resolution);
@@ -197,7 +210,35 @@ public:
 		m_resolution = resolution;
 	}
 
+	// Configure the optional triangle prefix (like a Max/MSP number box).
+	// fontSize/borderWidth/padding are needed to place the triangle inside the
+	// widget's text area and to keep the text clear of it. baseline is a pixel
+	// offset (positive moves the triangle up), verticalSize is a percentage of
+	// fontSize, and horizontalSize is a percentage of a regular triangle.
+	void setTriangle(bool visible, int fontSize, int borderWidth, int padding,
+	                 int baseline, int verticalSize, int horizontalSize)
+	{
+		m_triangleVisible = visible;
+		m_triangleFontSize = qMax(1, fontSize);
+		m_triangleBorder = qMax(0, borderWidth);
+		m_trianglePadding = qMax(0, padding);
+		m_triangleBaseline = baseline;
+		m_triangleVSize = qMax(1, verticalSize);
+		m_triangleHSize = qMax(1, horizontalSize);
+		update();
+	}
+
+	// Horizontal space (triangle plus gap) the text has to leave free at the
+	// left edge. Zero when the triangle is hidden.
+	int triangleExtraWidth() const
+	{
+		if (!m_triangleVisible)
+			return 0;
+		return triangleWidth() + triangleGap();
+	}
+
 protected:
+	virtual void paintEvent(QPaintEvent *event) override;
 	virtual void mouseMoveEvent(QMouseEvent * event)
 	{
 		if (pressed) {
@@ -233,6 +274,29 @@ private:
 //	double m_min, m_max;
 	int oldy;
 	bool pressed;
+
+	bool m_triangleVisible = false;
+	int m_triangleFontSize = 12;
+	int m_triangleBorder = 0;
+	int m_trianglePadding = 0;
+	int m_triangleBaseline = 0;
+	int m_triangleVSize = 80;
+	int m_triangleHSize = 68;
+
+	int triangleHeight() const
+	{
+		return qMax(1, qRound(m_triangleFontSize * (m_triangleVSize / 100.0)));
+	}
+	int triangleWidth() const
+	{
+		// 100% is an equilateral (regular) triangle; lower values flatten it.
+		return qMax(1, qRound(triangleHeight() * 0.8660254037844386
+		                       * (m_triangleHSize / 100.0)));
+	}
+	int triangleGap() const
+	{
+		return qMax(2, m_triangleFontSize / 4);
+	}
 
 signals:
 	void addValue(double delta);
