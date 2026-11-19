@@ -1,24 +1,18 @@
 <CsoundSynthesizer>
-<CsOptions>
--odac
---messagelevel = 134
-</CsOptions>
 <CsInstruments>
 
-sr = 44100
 ksmps = 64
-nchnls = 4
-0dbfs = 1
+0dbfs  = 1
 A4 = 442
 
 chn_k "peak", 1  ; Channel to get peak information from graph
 
-gi_fftSizes[] = fillarray(2048, 4096, 8192, 16384)
+gi_fftSizes[] = [2048, 4096, 8192, 16384]
 gk_fftSize    = init(4096)
 gk_peakFreq   = init(0)
 gk_peakGain   = init(0)
 
-gi_refreshRates[] = fillarray(10, 12, 15, 18, 20, 24, 30)
+gi_refreshRates[] = [10, 12, 15, 18, 20, 24, 30]
 gk_refreshRate    = init(20)
 
 
@@ -35,13 +29,13 @@ instr Spectrum
   k1 = chnget("ch2")
   k2 = chnget("ch3")
   k3 = chnget("ch4")
-  kfftSizeIndex = chnget("fftsize")
-  kplayPeak = chnget("playpeak")
-  kfilterlow = chnget("filterlow")
-  kinGain = chnget("ingain")
+  kplayPeak   = chnget("playpeak")
+  kfilterlow  = chnget("filterlow")
+  kinGain     = chnget("ingain")
   gk_peakGain = chnget("peakgain")
   krefreshRateIdx = chnget("refreshrateidx")
-
+  kfftSizeIndex   = chnget("fftsize")
+  
   ; We need to use chnget to receive the peak information
   kpeak = chnget("peak")
   khasPeak = kpeak > 0 ? 1:0
@@ -49,9 +43,9 @@ instr Spectrum
 
   if kplayPeak == 1 && changed(khasPeak) == 1 then
     if khasPeak == 1 then
-      schedulek("PlayPeak", 0, -1)
+      schedulek(PlayPeak, 0, -1)
     else
-      turnoff2("PlayPeak", 0, 1)
+      turnoff2(PlayPeak, 0, 1)
     endif
   endif
 
@@ -104,6 +98,14 @@ instr PostInit
   ; 16384 / sr (16384 / 44100 = 0.37...)
   outvalue "spectrum/findfft", "aspectrum"
   outvalue "spectrum/peakchannel", "peak"
+  for idx in [1 ... nchnls] do
+    outvalue sprintfk("ch%d/enabled", idx), 1
+  od
+  if nchnls < 4 then
+    for idx in [nchnls+1 ... 4] do
+      outvalue sprintfk("ch%d/enabled", idx), 0
+    od
+  endif
   turnoff
 endin
 
@@ -146,6 +148,8 @@ schedule "PostInit", 16384/sr + 0.01, -1
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -156,6 +160,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">#212121</bgcolor>
+ <foreground>#f0f0f0</foreground>
  <bsbObject type="BSBGraph" version="2">
   <objectName>spectrum</objectName>
   <x>10</x>
@@ -212,6 +217,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderRadius>0</borderRadius>
   <padding>5</padding>
   <checkstyle>x</checkstyle>
+  <circle>false</circle>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>ch2</objectName>
@@ -226,7 +232,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description>Enable Channel 1</description>
-  <selected>false</selected>
+  <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
@@ -238,6 +244,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderRadius>0</borderRadius>
   <padding>5</padding>
   <checkstyle>x</checkstyle>
+  <circle>false</circle>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>ch3</objectName>
@@ -248,7 +255,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <uuid>{cb2805f4-c9ec-4a28-ba5c-459a2e3cec59}</uuid>
   <widgetName/>
   <visible>true</visible>
-  <enabled>true</enabled>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description>Enable Channel 1</description>
@@ -264,6 +271,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderRadius>0</borderRadius>
   <padding>5</padding>
   <checkstyle>x</checkstyle>
+  <circle>false</circle>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>ch4</objectName>
@@ -274,7 +282,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <uuid>{2192eed2-7818-45d5-8593-200cb766966c}</uuid>
   <widgetName/>
   <visible>true</visible>
-  <enabled>true</enabled>
+  <enabled>false</enabled>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description>Enable Channel 1</description>
@@ -290,6 +298,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderRadius>0</borderRadius>
   <padding>5</padding>
   <checkstyle>x</checkstyle>
+  <circle>false</circle>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>fftsize</objectName>
@@ -416,6 +425,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderRadius>0</borderRadius>
   <padding>5</padding>
   <checkstyle>x</checkstyle>
+  <circle>false</circle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -449,7 +459,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <x>585</x>
   <y>565</y>
   <width>56</width>
-  <height>54</height>
+  <height>56</height>
   <uuid>{ce2ca6ad-fa91-4b89-a2eb-7c092f529f22}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -505,7 +515,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <x>720</x>
   <y>565</y>
   <width>56</width>
-  <height>54</height>
+  <height>56</height>
   <uuid>{5951dec6-0e29-4eed-a7c9-3438955fabc4}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -608,6 +618,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderRadius>0</borderRadius>
   <padding>5</padding>
   <checkstyle>x</checkstyle>
+  <circle>false</circle>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>refreshrateidx</objectName>
