@@ -10,7 +10,7 @@ ksmps = 32
 nchnls = 8
 
   instr 1
-Sfile      =          "ClassGuit.wav"
+Sfile      =          "ClassivalGuitar.wav"
 p3         filelen    Sfile
 aSnd[]     diskin     Sfile
 kAzim      line       0, p3, 360 ;counterclockwise (!)

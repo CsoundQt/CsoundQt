@@ -12,7 +12,7 @@ nchnls = 2
 ; the name of the sound file used is defined as a string variable -
 ; - as it will be used twice in the code.
 ; This simplifies adapting the orchestra to use a different sound file
-gSfile = "ClassGuit.wav"
+gSfile = "ClassivalGuitar.wav"
 
 ; waveform used for granulation
 giSound  ftgen 1,0,0,1,gSfile,0,0,0

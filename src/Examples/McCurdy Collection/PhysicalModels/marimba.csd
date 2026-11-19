@@ -597,7 +597,7 @@ i 4 0 0.1   ; Init
   <midicc>0</midicc>
   <label>-------------------------------------------------------------------
 'marimba' is a physical model of a marimba tone. 
-'Stick Hardness' and 'Strike Position' create some variation in tone but this is quite subtle. 'Decay Time' controls the time before the end of the note when damping is introduced. By replacing the sample suggested for the strike impulse (marmstk1.wav) with a longer sample (Songpan.wav for example), a longer duration tone is possible.
+'Stick Hardness' and 'Strike Position' create some variation in tone but this is quite subtle. 'Decay Time' controls the time before the end of the note when damping is introduced. By replacing the sample suggested for the strike impulse (marmstk1.wav) with a longer sample (Songpan.flac for example), a longer duration tone is possible.
 'Doubles' and 'Triples' controls the percentage chance of a double or triple strike occurring respectively.
 This instrument can be triggered either from the GUI button or via a connected MIDI keyboard.</label>
   <alignment>left</alignment>

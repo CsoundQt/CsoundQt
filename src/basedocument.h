@@ -61,7 +61,7 @@ public:
 	// Get internal components
 	WidgetLayout *getWidgetLayout();  // Needed to pass for placing in widget dock panel
 	ConsoleWidget *getConsole();  // Needed to pass for placing in console dock panel
-	CsoundEngine *getEngine(); // Needed to pass to python interpreter
+	CsoundEngine *getEngine(); // Needed to pass to documents
 	QString getHtml();
 
 	// controls if midiCC messages are accepted and forwarded to widdget layout

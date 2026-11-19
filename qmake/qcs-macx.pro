@@ -42,22 +42,6 @@ DEFAULT_CSOUND_LIBRARY_DIRS = $${HOME_DIRECTORY}/$${CSOUND_FRAMEWORK_DIR} \
 build32:DEFAULT_CSOUND_LIBS = CsoundLib
 build64:DEFAULT_CSOUND_LIBS = CsoundLib64
 
-# For OS X, the PythonQt.1.0.0.dylib and the libPythonQt.1.dylib must be on /usr/local/lib or other lib path
-DEFAULT_PYTHON_INCLUDE_DIR = /usr/local/include \
-        /usr/include
-DEFAULT_PYTHONQT_LIBRARY_DIRS = /usr/local/lib \
-        /usr/lib
-
-PYTHONQT_VARIANTS = "pythonqt" "PythonQt3.2" "PythonQt3.1" "PythonQt3.0" "PythonQt" "PythonQt2.0.1"
-for (pyqtdir, PYTHONQT_VARIANTS) {
-	DEFAULT_PYTHONQT_SRC_DIRS += ../../../$$pyqtdir \
-		../$$pyqtdir \
-		$$pyqtdir
-}
-
-#PYTHONQT_LIB = PythonQt_QtAll$${DEBUG_EXT}
-PYTHONQT_LIB = PythonQt
-
 # Do configuration step
 include(config.pri)
 

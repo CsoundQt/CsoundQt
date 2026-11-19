@@ -692,6 +692,9 @@ signals:
 	void showMidiLearn(QuteWidget *);
 	void logMessage(const QString &message, int role); // User facing message from a widget, forwarded to the Csound console (role: MessageRole)
     void windowStatus(bool);
+	// Per-document widget panel detach/attach requests. Handled by CsoundQt.
+	void detachRequested();
+	void attachRequested();
 	void widgetHovered(QuteWidget *widget);
 	void widgetChannelsHighlightRequested(const QStringList &channels);
 	void editingEscapePressed();

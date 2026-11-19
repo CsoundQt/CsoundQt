@@ -468,6 +468,8 @@ static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.bat";
 static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.sh";
 #endif
 
+static QString documentPathKey(const QString &fileName);
+
 #define MAX_THREAD_COUNT 32 // to enable up to MAX_THREAD_COUNT documents/consoles have messageDispatchers
 
 // Colours for the transient performance summary in the status bar. Kept as
@@ -1437,12 +1439,14 @@ void CsoundQt::changePage(int index)
         auto page = documentPages[curPage];
         page->hideWidgets();
         if (!m_options->widgetsIndependent) {
-            QRect panelGeometry = widgetPanel->geometry();
-            if (!widgetPanel->isFloating()) {
-                panelGeometry.setX(-1);
-                panelGeometry.setY(-1);
+            if (!m_detachedWidgetPages.contains(page)) {
+                QRect panelGeometry = widgetPanel->geometry();
+                if (!widgetPanel->isFloating()) {
+                    panelGeometry.setX(-1);
+                    panelGeometry.setY(-1);
+                }
+                widgetPanel->takeWidgetLayout(panelGeometry);
             }
-            widgetPanel->takeWidgetLayout(panelGeometry);
         } else {
             page->setWidgetLayoutOuterGeometry(QRect());
         }
@@ -1456,14 +1460,22 @@ void CsoundQt::changePage(int index)
         //    documentPages[curPage]->passWidgetClipboard(m_widgetClipboard);
         if (!m_options->widgetsIndependent) {
             WidgetLayout *w = page->getWidgetLayout();
-            widgetPanel->addWidgetLayout(w);
-            setWidgetPanelGeometry();
+            if (m_detachedWidgetPages.contains(page)) {
+                widgetPanel->hide();
+            } else {
+                widgetPanel->addWidgetLayout(w);
+                setWidgetPanelGeometry();
+            }
         } else {
             WidgetLayout *w = page->getWidgetLayout();
             w->adjustWidgetSize();
         }
         if (!page->getFileName().endsWith(".csd") && !page->getFileName().isEmpty()) {
             widgetPanel->hide();
+        }
+        else if (m_detachedWidgetPages.contains(page)) {
+            widgetPanel->hide();
+            page->showWidgets(showWidgetsAct->isChecked());
         }
         else {
             if (!m_options->widgetsIndependent) {
@@ -1666,20 +1678,19 @@ void CsoundQt::open()
 
 void CsoundQt::reload()
 {
-    if (documentPages[curPage]->isModified()) {
-        QString fileName = documentPages[curPage]->getFileName();
-        if (fileName.isEmpty()) {
-            // There is no file on disk to reload. Keep the unsaved content.
-            Notification::showTransient(this, tr("Save the document before reloading it"), 3000);
-            return;
-        }
-        deleteTab();
-        loadFile(fileName);
-        // auto doc = documentPages[curPage];
-
-    } else {
-        Notification::showTransient(this, tr("File was not modified"), 3000);
+    if (curPage < 0 || curPage >= documentPages.size())
+        return;
+    const QString fileName = documentPages[curPage]->getFileName();
+    if (fileName.isEmpty()) {
+        // There is no file on disk to reload. Keep the unsaved content.
+        Notification::showTransient(this, tr("Save the document before reloading it"), 3000);
+        return;
     }
+    // Reload unconditionally: the user explicitly asked for the on-disk
+    // version. Included files are rescanned as part of the same action.
+    deleteTab();
+    loadFile(fileName);
+    m_scanService->reloadDependencies();
 }
 
 void CsoundQt::onExternalFileChanged(const QString &path)
@@ -2006,7 +2017,7 @@ void CsoundQt::evaluateString(QString evalCode)
             qDebug() << "Not Csound code or cannot compile";
         }
     }
-    if (testTree) { // when the code is csound code, but with errors, it will be sent to python interpreter too
+    if (testTree) { // when the code is csound code, but with errors, send the event
         evaluateCsound(evalCode);
     }
 }
@@ -2101,8 +2112,10 @@ WidgetWindow *CsoundQt::openWidgetWindow(const QString &fileName, bool readOnly,
                                          bool autoPlay)
 {
     // Reuse an already open widget-only document.
+    const QString key = documentPathKey(fileName);
     for (WidgetWindow *existing : m_widgetWindows) {
-        if (existing->fileName() == fileName) {
+        if (existing->fileName() == fileName
+                || documentPathKey(existing->fileName()) == key) {
             existing->showWidgets();
             if (autoPlay)
                 playDetached(existing->page());
@@ -2121,14 +2134,100 @@ WidgetWindow *CsoundQt::openWidgetWindow(const QString &fileName, bool readOnly,
     QString text = decoder(file.readAll());
     text.replace("\r\n", "\n");
     text.replace('\r'_L1, '\n'_L1);
+    return openWidgetWindowFromText(fileName, text, readOnly, autoPlay);
+}
 
-    auto *window = new WidgetWindow(this, fileName, text, readOnly);
+WidgetWindow *CsoundQt::openWidgetWindowFromText(const QString &fileName,
+                                                 const QString &text,
+                                                 bool readOnly, bool autoPlay,
+                                                 bool canReturnToNormalMode)
+{
+    auto *window = new WidgetWindow(this, fileName, text, readOnly,
+                                    canReturnToNormalMode);
     m_widgetWindows.append(window);
     connect(window, &WidgetWindow::closed, this, &CsoundQt::removeWidgetWindow);
     window->showWidgets();
     if (autoPlay)
         playDetached(window->page());
     return window;
+}
+
+void CsoundQt::switchWidgetWindowToEditor(WidgetWindow *window)
+{
+    if (window == nullptr || !window->canReturnToNormalMode())
+        return;
+    DocumentPage *page = window->page();
+    if (page == nullptr)
+        return;
+
+    const QString fileName = window->fileName();
+    const QString text = page->getFullText();
+    const bool readOnly = page->readOnly;
+    const bool modified = page->isModified();
+
+    page->stop();
+    removePlaybackTempFile(page);
+
+    // makeNewPage() bypasses the normal-open guard, so the editor can be
+    // created before the Kiosk window is removed. If creating the tab fails,
+    // the widget window stays alive.
+    const int index = makeNewPage(fileName, text, true, -1, readOnly);
+    if (index < 0) {
+        window->show();
+        return;
+    }
+    if (modified)
+        documentPages[index]->setModified(true);
+
+    window->hide();
+    m_widgetWindows.removeAll(window);
+    window->deleteLater();
+}
+
+void CsoundQt::openCurrentInNoEditorMode()
+{
+    DocumentPage *page = getCurrentDocumentPage();
+    if (page == nullptr)
+        return;
+
+    const QString fileName = page->getFileName();
+    if (!fileName.isEmpty() && !fileName.startsWith(":/"_L1)) {
+        const QString key = documentPathKey(fileName);
+        for (WidgetWindow *window : m_widgetWindows) {
+            if (window != nullptr
+                    && documentPathKey(window->fileName()) == key) {
+                window->showWidgets();
+                QMessageBox::information(
+                            this, tr("CsoundQt"),
+                            tr("\"%1\" is already open in NoEditor mode.")
+                            .arg(QFileInfo(fileName).fileName()));
+                return;
+            }
+        }
+    }
+
+    // Build the widget-only document from the live editor buffer first. Only
+    // close the editor after the new window was created successfully.
+    const QString fullText = page->getFullText();
+    const bool readOnly = page->readOnly;
+    page->stop();
+    removePlaybackTempFile(page);
+
+    WidgetWindow *window = openWidgetWindowFromText(fileName, fullText, readOnly,
+                                                    false, true);
+    if (window == nullptr)
+        return;
+
+    const int index = documentPages.indexOf(page);
+    if (index < 0)
+        return;
+    m_detachedWidgetPages.remove(page);
+    deleteTab(index);
+    if (documentPages.isEmpty()) {
+        newFile();
+    } else {
+        changePage(curPage);
+    }
 }
 
 WidgetWindow *CsoundQt::activeWidgetWindow() const
@@ -2438,12 +2537,15 @@ void CsoundQt::deleteTab(int index)
     removePlaybackTempFile(d);
     midiHandler->removeListener(d);
     if (!m_options->widgetsIndependent) {
-        QRect panelGeometry = widgetPanel->geometry();
-        if (!widgetPanel->isFloating()) {
-            panelGeometry.setX(-1);
-            panelGeometry.setY(-1);
+        if (!m_detachedWidgetPages.contains(d)) {
+            QRect panelGeometry = widgetPanel->geometry();
+            if (!widgetPanel->isFloating()) {
+                panelGeometry.setX(-1);
+                panelGeometry.setY(-1);
+            }
+            widgetPanel->takeWidgetLayout(panelGeometry);
         }
-        widgetPanel->takeWidgetLayout(panelGeometry);
+        m_detachedWidgetPages.remove(d);
     }
     documentTabs->widget(index)->clearFocus();
     // Stop watching the file before the document is destroyed
@@ -2669,10 +2771,6 @@ void CsoundQt::focusToTab(int tab) {
         break;
     // 6 is  Live events that is independent window
 
-    case 7:
-        qDebug() << "python not supported";
-        break;
-
     case 8:
         qDebug()<<"Raise Codepad";
         panel = m_scratchPad;
@@ -2719,7 +2817,8 @@ void CsoundQt::focusWidgets()
     DocumentPage *doc = getCurrentDocumentPage();
     if (doc == nullptr)
         return;
-    if (m_options->widgetsIndependent) {
+    const bool detached = m_detachedWidgetPages.contains(doc);
+    if (m_options->widgetsIndependent || detached) {
         WidgetLayout *wl = doc->getWidgetLayout();
         if (wl == nullptr)
             return;
@@ -2921,18 +3020,23 @@ void CsoundQt::toggleWidgetsPanel()
     DocumentPage *doc = getCurrentDocumentPage();
     if (doc == nullptr)
         return;
+    const bool detached = m_detachedWidgetPages.contains(doc);
     bool visible;
-    if (m_options->widgetsIndependent) {
+    if (m_options->widgetsIndependent || detached) {
         WidgetLayout *wl = doc->getWidgetLayout();
         visible = wl != nullptr && wl->isVisible();
     } else {
         visible = isDockWidgetActive(this, widgetPanel);
     }
     if (visible) {
-        if (m_options->widgetsIndependent)
+        if (detached) {
+            if (WidgetLayout *wl = doc->getWidgetLayout())
+                wl->hide();
+        } else if (m_options->widgetsIndependent) {
             doc->showWidgets(false);
-        else
+        } else {
             widgetPanel->hide();
+        }
         showWidgetsAct->setChecked(false);
         return;
     }
@@ -2940,7 +3044,7 @@ void CsoundQt::toggleWidgetsPanel()
         focusWidgets();
         return;
     }
-    if (m_options->widgetsIndependent)
+    if (m_options->widgetsIndependent || detached)
         doc->showWidgets(true);
     else
         widgetPanel->showAndRaise(true);
@@ -3568,8 +3672,7 @@ void CsoundQt::play(bool realtime, int index)
         return;
     }
     if (!fileName.isEmpty()
-            && !fileName.endsWith(".csd",Qt::CaseInsensitive)
-            && !fileName.endsWith(".py",Qt::CaseInsensitive))  {
+            && !fileName.endsWith(".csd",Qt::CaseInsensitive))  {
         if (page->askForFile)
             getCompanionFileName();
         // FIXME run orc file when sco companion is currently active
@@ -3666,7 +3769,15 @@ void CsoundQt::play(bool realtime, int index)
         if (realtime)
             updatePerformanceInfo(page);
         if (m_options->showWidgetsOnRun && isCsd) {
-            if (!m_options->widgetsIndependent) {
+            if (m_detachedWidgetPages.contains(page)) {
+                page->widgetsVisible(true);
+                if (WidgetLayout *layout = page->getWidgetLayout()) {
+                    layout->show();
+                    layout->raise();
+                    layout->activateWindow();
+                }
+                showWidgetsAct->setChecked(true);
+            } else if (!m_options->widgetsIndependent) {
                 // Show and raise the panel even when docked: if it was hidden
                 // or its tab sits behind another dock (e.g. Help), it must be
                 // brought forward, otherwise the widgets stay hidden until the
@@ -3679,7 +3790,8 @@ void CsoundQt::play(bool realtime, int index)
                 page->widgetsVisible(true);
                 showWidgetsAct->setChecked(true);
             }
-            widgetPanel->setFocus(Qt::OtherFocusReason);
+            if (!m_detachedWidgetPages.contains(page))
+                widgetPanel->setFocus(Qt::OtherFocusReason);
             page->focusWidgets();
         }
     } else {
@@ -6093,6 +6205,14 @@ void CsoundQt::applyWidgetModeChange()
     const bool independent = m_options->widgetsIndependent;
     m_appliedWidgetsIndependent = independent;
 
+    // Per-document detach is a mode of the normal docked panel; switching the
+    // global independent-window mode resets it.
+    for (DocumentPage *page : documentPages) {
+        if (WidgetLayout *layout = page->getWidgetLayout())
+            layout->setProperty("csqtDetached", false);
+    }
+    m_detachedWidgetPages.clear();
+
     // Hide the windows first: a layout that is re-parented while it is still
     // visible would flash as a separate window.
     for (DocumentPage *page : documentPages)
@@ -6127,6 +6247,84 @@ void CsoundQt::applyWidgetModeChange()
         }
         widgetPanel->setVisible(showWidgetsAct->isChecked());
     }
+}
+
+void CsoundQt::detachWidgetsForPage(DocumentPage *page)
+{
+    if (page == nullptr || m_options->widgetsIndependent)
+        return;
+    WidgetLayout *layout = page->getWidgetLayout();
+    if (layout == nullptr)
+        return;
+    if (m_detachedWidgetPages.contains(page)) {
+        layout->show();
+        layout->raise();
+        layout->activateWindow();
+        showWidgetsAct->setChecked(true);
+        return;
+    }
+
+    // Detaching is a property of the document currently shown in the dock.
+    const int index = documentPages.indexOf(page);
+    if (index < 0)
+        return;
+    if (index != curPage) {
+        documentTabs->setCurrentIndex(index);
+        changePage(index);
+    }
+
+    QRect panelGeometry = widgetPanel->geometry();
+    if (!widgetPanel->isFloating()) {
+        panelGeometry.setX(-1);
+        panelGeometry.setY(-1);
+    }
+    WidgetLayout *removed = widgetPanel->takeWidgetLayout(panelGeometry);
+    if (removed != nullptr && removed != layout) {
+        // Defensive: never leave the shared dock holding another document's
+        // layout after a failed detach.
+        widgetPanel->addWidgetLayout(removed);
+        return;
+    }
+
+    layout->setProperty("csqtDetached", true);
+    layout->setContained(false);
+    layout->setParent(nullptr);
+    layout->setWindowFlags(Qt::Window);
+    layout->show();
+    layout->raise();
+    layout->activateWindow();
+    m_detachedWidgetPages.insert(page);
+    widgetPanel->hide();
+    showWidgetsAct->setChecked(true);
+}
+
+void CsoundQt::attachWidgetsForPage(DocumentPage *page)
+{
+    if (page == nullptr || !m_detachedWidgetPages.contains(page))
+        return;
+    WidgetLayout *layout = page->getWidgetLayout();
+    if (layout == nullptr)
+        return;
+
+    layout->hide();
+    layout->setProperty("csqtDetached", false);
+    layout->setWindowFlags(Qt::Widget);
+    layout->setParent(nullptr);
+    m_detachedWidgetPages.remove(page);
+
+    const int index = documentPages.indexOf(page);
+    if (index < 0)
+        return;
+    if (index != curPage) {
+        documentTabs->setCurrentIndex(index);
+        changePage(index);
+        return;
+    }
+
+    widgetPanel->addWidgetLayout(layout);
+    setWidgetPanelGeometry();
+    widgetPanel->showAndRaise(true);
+    showWidgetsAct->setChecked(true);
 }
 
 void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
@@ -6707,7 +6905,6 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     goToAnythingAct->setShortcut(tr("Ctrl+Shift+P"));
     goBackAct->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Left));
     goToSourceAct->setShortcut(tr("Ctrl+B"));
-    reloadDependenciesAct->setShortcut(tr("Ctrl+Shift+B"));
     lineNumbersAct->setShortcut(tr("Shift+Alt+L"));
     showOccurrencesAct->setShortcut(tr("Ctrl+Shift+A"));
     toggleToolbarAct->setShortcut(tr("Ctrl+T, T"));
@@ -6873,7 +7070,7 @@ void CsoundQt::createActions()
     connect(openAct, SIGNAL(triggered()), this, SLOT(open()));
 
     reloadAct = new QAction(icon("reload.svg"), tr("Reload"), this);
-    reloadAct->setStatusTip(tr("Reload file from disk, discarding changes"));
+    reloadAct->setStatusTip(tr("Reload the file and its included files from disk, discarding changes"));
     //   reloadAct->setIconText(tr("Reload"));
     reloadAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(reloadAct, SIGNAL(triggered()), this, SLOT(reload()));
@@ -6908,12 +7105,19 @@ void CsoundQt::createActions()
     convertToCsdAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(convertToCsdAct, SIGNAL(triggered()), this, SLOT(convertToCsd()));
 
-    closeTabAct = new QAction(tr("Close current tab"), this);
-    closeTabAct->setStatusTip(tr("Close current tab"));
+    closeTabAct = new QAction(tr("Close Tab"), this);
+    closeTabAct->setStatusTip(tr("Close the current tab"));
     //   closeTabAct->setIconText(tr("Close"));
     closeTabAct->setIcon(icon("edit-close.svg"));
     closeTabAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(closeTabAct, SIGNAL(triggered()), this, SLOT(closeTab()));
+
+    openInNoEditorAct = new QAction(tr("Switch to Kiosk mode"), this);
+    openInNoEditorAct->setStatusTip(
+                tr("Close the editor and keep this document open in a widget-only window"));
+    openInNoEditorAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(openInNoEditorAct, &QAction::triggered,
+            this, &CsoundQt::openCurrentInNoEditorMode);
 
     exportPdfAct = new QAction(tr("Export to PDF..."), this);
     exportPdfAct->setStatusTip(tr("Export the current document as a PDF file"));
@@ -7191,7 +7395,6 @@ void CsoundQt::createActions()
 
     showScratchPadAct = new QAction(icon("scratchpad.svg"), tr("Codepad"), this);
     showScratchPadAct->setCheckable(true);
-    //  showPythonConsoleAct->setChecked(true);  // Unnecessary because it is set by options
     showScratchPadAct->setStatusTip(tr("Show Codepad"));
     showScratchPadAct->setIconText(tr("Codepad"));
     showScratchPadAct->setProperty("shortcutName", tr("Toggle Codepad"));
@@ -7417,14 +7620,6 @@ void CsoundQt::createActions()
     goToSourceAct->setStatusTip(tr("Go to the definition of the opcode or instrument at the cursor"));
     goToSourceAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(goToSourceAct, &QAction::triggered, [this]() { this->goToSource(); });
-
-    reloadDependenciesAct = new QAction(tr("Reload Included Files"), this);
-    reloadDependenciesAct->setStatusTip(
-                tr("Re-read the files pulled in by #include and scan the document again"));
-    // Document/editing action: scoped to the editor by applyEditorActions().
-    reloadDependenciesAct->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    connect(reloadDependenciesAct, &QAction::triggered,
-            [this]() { m_scanService->reloadDependencies(); });
 
     aboutAct = new QAction(tr("About"), this);
     aboutAct->setStatusTip(tr("Show the application's About box"));
@@ -7686,7 +7881,6 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(goToAnythingAct);
     m_keyActions.append(goBackAct);
     m_keyActions.append(goToSourceAct);
-    m_keyActions.append(reloadDependenciesAct);
     m_keyActions.append(evaluateAct);
     m_keyActions.append(selectInstrOpcodeAct);
     m_keyActions.append(lineNumbersAct);
@@ -7748,7 +7942,7 @@ void CsoundQt::connectActions()
         // Evaluation is editor-only, not application-global.
         evaluateAct,
         // Document-level editor commands.
-        checkSyntaxAct, reloadDependenciesAct, lineNumbersAct, selectInstrOpcodeAct
+        checkSyntaxAct, lineNumbersAct, selectInstrOpcodeAct
     };
     doc->applyEditorActions(editorActions);
     if (auto *codePad = qobject_cast<LiveCodeEditor *>(m_scratchPad->widget()))
@@ -7928,17 +8122,17 @@ void CsoundQt::createMenus()
     fileMenu->addAction(openAct);
     fileMenu->addAction(saveAct);
     fileMenu->addAction(saveAsAct);
-    fileMenu->addAction(saveNoWidgetsAct);
-    fileMenu->addAction(qmlAct);
+    fileMenu->addAction(closeTabAct);
     fileMenu->addAction(reloadAct);
-    fileMenu->addAction(reloadDependenciesAct);
     fileMenu->addAction(switchOrcScoAct);
     fileMenu->addAction(convertToCsdAct);
-    fileMenu->addAction(closeTabAct);
-    fileMenu->addAction(exportPdfAct);
+    fileMenu->addAction(openInNoEditorAct);
     fileMenu->addAction(embeddedFilesAct);
     fileMenu->addAction(pluginsAct);
-    fileMenu->addAction(infoAct);
+    QMenu *exportMenu = fileMenu->addMenu(tr("Export"));
+    exportMenu->addAction(saveNoWidgetsAct);
+    exportMenu->addAction(qmlAct);
+    exportMenu->addAction(exportPdfAct);
     fileMenu->addSeparator();
     recentMenu = fileMenu->addMenu(tr("Recent files"));
     fileMenu->addSeparator();
@@ -9239,6 +9433,18 @@ void changeNewLines(QByteArray &line) {
     }
 }
 
+// Stable key for matching an open document to a file path. Resource paths are
+// kept as-is; normal files use the canonical path when available so symlinks
+// and relative/absolute spellings do not create duplicate opens.
+static QString documentPathKey(const QString &fileName)
+{
+    if (fileName.isEmpty() || fileName.startsWith(":/"_L1))
+        return fileName;
+    const QFileInfo info(fileName);
+    const QString canonical = info.canonicalFilePath();
+    return canonical.isEmpty() ? info.absoluteFilePath() : canonical;
+}
+
 void CsoundQt::loadPendingSessionFile()
 {
     if (m_pendingSessionFiles.isEmpty())
@@ -9264,6 +9470,23 @@ int CsoundQt::loadFile(QString fileName, bool runNow, bool activate, int insertA
     if (fileName.endsWith(".pdf")) {
         openPdfFile(fileName);
         return 0;
+    }
+    if (!noEditor && !fileName.isEmpty()) {
+        // A file open in a NoEditor widget window is deliberately exclusive:
+        // opening the same path in the editor again would create two live
+        // copies of the same document.
+        const QString key = documentPathKey(fileName);
+        for (WidgetWindow *window : m_widgetWindows) {
+            if (window != nullptr
+                    && documentPathKey(window->fileName()) == key) {
+                window->showWidgets();
+                QMessageBox::information(
+                            this, tr("CsoundQt"),
+                            tr("\"%1\" is already open in NoEditor mode.")
+                            .arg(QFileInfo(fileName).fileName()));
+                return -1;
+            }
+        }
     }
     if (noEditor) {
         // Widget-only documents are detached from the editor: they are not
@@ -9412,6 +9635,19 @@ int CsoundQt::makeNewPage(QString fileName, QString text, bool activate, int ins
             stop(index);
     });
     connect(newPage, &DocumentPage::renderRequested, this, &CsoundQt::render);
+    if (WidgetLayout *layout = newPage->getWidgetLayout()) {
+        connect(layout, &WidgetLayout::detachRequested, this,
+                [this, newPage]() { detachWidgetsForPage(newPage); });
+        connect(layout, &WidgetLayout::attachRequested, this,
+                [this, newPage]() { attachWidgetsForPage(newPage); });
+        connect(layout, &WidgetLayout::windowStatus, this,
+                [this, newPage](bool visible) {
+            if (documentPages.value(curPage) == newPage
+                    && m_detachedWidgetPages.contains(newPage)) {
+                showWidgetsAct->setChecked(visible);
+            }
+        });
+    }
 
     int insertPoint;
     if (documentPages.isEmpty() || curPage < 0) {
@@ -9615,6 +9851,10 @@ void CsoundQt::updateFileTypeActions()
         switchOrcScoAct->setEnabled(orc || sco);
     if (convertToCsdAct != nullptr)
         convertToCsdAct->setEnabled(orc);
+    if (openInNoEditorAct != nullptr)
+        openInNoEditorAct->setEnabled(page != nullptr
+                && (fileName.isEmpty()
+                    || fileName.endsWith(".csd"_L1, Qt::CaseInsensitive)));
     if (embeddedFilesAct != nullptr) {
         // <CsFileB> belongs to the CSD format; an unsaved page is a CSD.
         embeddedFilesAct->setEnabled(fileName.isEmpty()

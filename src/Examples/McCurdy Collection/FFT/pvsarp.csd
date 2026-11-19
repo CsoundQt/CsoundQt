@@ -744,7 +744,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>Songpan.wav</label>
+  <label>Songpan.flac</label>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
@@ -773,7 +773,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>Songpan.wav</stringvalue>
+  <stringvalue>Songpan.flac</stringvalue>
   <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>

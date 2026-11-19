@@ -581,7 +581,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>Songpan.wav</stringvalue>
+  <stringvalue>Songpan.flac</stringvalue>
   <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
@@ -636,7 +636,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>Songpan.wav</label>
+  <label>Songpan.flac</label>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>

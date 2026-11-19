@@ -10,7 +10,7 @@ nchnls = 2
 0dbfs = 1
 
   instr 1
-Sfile     =          "ClassGuit.wav"
+Sfile     =          "ClassivalGuitar.wav"
 ifilchnls filenchnls Sfile
  if ifilchnls == 1 then ;mono
 aL        soundin    Sfile

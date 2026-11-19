@@ -10,7 +10,7 @@ nchnls = 1
 
 ;store the samples in function tables (buffers)
 gifilA    ftgen     0, 0, 0, 1, "fox.wav", 0, 0, 1
-gifilB    ftgen     0, 0, 0, 1, "ClassGuit.wav", 0, 0, 1
+gifilB    ftgen     0, 0, 0, 1, "ClassivalGuitar.wav", 0, 0, 1
 
 
 ;general values for the pvstanal opcode

@@ -39,9 +39,6 @@
 class OpEntryParser;
 class ScanService;
 class DocumentView;
-class LiveEventFrame;
-class EventSheet;
-class LiveEventControl;
 class SndfileHandle;
 class MidiLearnDialog;
 class QuteWidget;

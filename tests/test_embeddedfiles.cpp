@@ -126,12 +126,12 @@ void TestEmbeddedFiles::testDecodedSize()
 
 void TestEmbeddedFiles::testValidateName()
 {
-    QVERIFY(EmbeddedFiles::validateName(u"sample.wav"_s).isEmpty());
+    QVERIFY(EmbeddedFiles::validateName(u"sample.flac"_s).isEmpty());
     QVERIFY(EmbeddedFiles::validateName(u"with space.wav"_s).isEmpty());
 
     QVERIFY(!EmbeddedFiles::validateName(QString()).isEmpty());
-    QVERIFY(!EmbeddedFiles::validateName(u"folder/sample.wav"_s).isEmpty());
-    QVERIFY(!EmbeddedFiles::validateName(u"folder\\sample.wav"_s).isEmpty());
+    QVERIFY(!EmbeddedFiles::validateName(u"folder/sample.flac"_s).isEmpty());
+    QVERIFY(!EmbeddedFiles::validateName(u"folder\\sample.flac"_s).isEmpty());
     QVERIFY(!EmbeddedFiles::validateName(u"bad\"name"_s).isEmpty());
     QVERIFY(!EmbeddedFiles::validateName(u"bad>name"_s).isEmpty());
     QVERIFY(!EmbeddedFiles::validateName(u" bad.wav"_s).isEmpty());

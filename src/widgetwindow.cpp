@@ -43,8 +43,10 @@
 #include <QToolBar>
 
 WidgetWindow::WidgetWindow(CsoundQt *mainWindow, const QString &fileName,
-                           const QString &text, bool readOnly)
-    : QMainWindow(nullptr), m_mainWindow(mainWindow), m_fileName(fileName)
+                           const QString &text, bool readOnly,
+                           bool canReturnToNormalMode)
+    : QMainWindow(nullptr), m_mainWindow(mainWindow), m_fileName(fileName),
+      m_canReturnToNormalMode(canReturnToNormalMode)
 {
     setAttribute(Qt::WA_QuitOnClose, false);
 
@@ -168,6 +170,12 @@ WidgetWindow::WidgetWindow(CsoundQt *mainWindow, const QString &fileName,
     connect(m_stopAction, &QAction::triggered, this, &WidgetWindow::stop);
 
     QMenu *fileMenu = menuBar()->addMenu(tr("File"));
+    if (m_canReturnToNormalMode) {
+        QAction *normalModeAction = fileMenu->addAction(tr("Switch to Normal Mode"));
+        connect(normalModeAction, &QAction::triggered, this, [this]() {
+            m_mainWindow->switchWidgetWindowToEditor(this);
+        });
+    }
     QAction *closeAction = fileMenu->addAction(tr("Close"));
     connect(closeAction, &QAction::triggered, this, &QWidget::close);
 

@@ -41,11 +41,13 @@ class WidgetWindow : public QMainWindow
 
 public:
     WidgetWindow(CsoundQt *mainWindow, const QString &fileName,
-                 const QString &text, bool readOnly = false);
+                 const QString &text, bool readOnly = false,
+                 bool canReturnToNormalMode = false);
     ~WidgetWindow();
 
     DocumentPage *page() const { return m_page; }
     QString fileName() const { return m_fileName; }
+    bool canReturnToNormalMode() const { return m_canReturnToNormalMode; }
     void showWidgets();
     void setPlaying(bool playing);
     // Keep the detached window's toolbar in sync with the application settings.
@@ -70,6 +72,7 @@ private:
     CsoundQt *m_mainWindow;
     DocumentPage *m_page = nullptr;
     QString m_fileName;
+    bool m_canReturnToNormalMode = false;
     QScrollArea *m_scrollArea = nullptr;
     QDockWidget *m_consoleDock = nullptr;
     int m_consoleExtraHeight = 0; // window height added while the console is docked

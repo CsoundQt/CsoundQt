@@ -97,11 +97,6 @@ win32 {
     message(Csound interfaces include directory is $${CSOUND_INTERFACES_INCLUDE_DIR})
     message(Csound library directory is $${CSOUND_LIBRARY_DIR})
     message(Csound library is $${DEFAULT_CSOUND_LIBS})
-    pythonqt {
-        win32:message(Python include directory is $${PYTHON_INCLUDE_DIR})
-        message(PythonQt source tree directory is $${PYTHONQT_SRC_DIR})
-        message(PythonQt lib directory is $${PYTHONQT_LIB_DIR})
-    }
     rtmidi {
         message(Using bundled RtMidi)
 		DEFINES += CSQT_RTMIDI
@@ -127,11 +122,6 @@ win32 {
     }
     !directoryExists($${CSOUND_API_INCLUDE_DIR}):error(Csound API include directory not found)
     !directoryExists($${CSOUND_LIBRARY_DIR}):error(Csound library directory not found)
-    pythonqt {
-        win32:!directoryExists($${PYTHON_INCLUDE_DIR}):error(Python include directory not found)
-		!directoryExists($${PYTHONQT_SRC_DIR}):error(PythonQt include directory not found)
-		!directoryExists($${PYTHONQT_LIB_DIR}):error(PythonQt build directory not found)
-    }
     !csoundApiHeaderExists(csound.h):error(csound.h not found)
     !csoundApiHeaderExists(csound.hpp):error(csound.hpp not found)
     !csoundApiHeaderExists(cwindow.h):error(cwindow.h not found)

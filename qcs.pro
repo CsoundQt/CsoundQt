@@ -4,7 +4,6 @@
 # qmake qcs.pro "CSOUND_INCLUDE_DIR = <path to csound.h>"
 # CSOUND_INCLUDE_DIR
 # CSOUND_LIBRARY_DIR
-# PYTHONQT_SRC_DIR
 # If the Csound headers and libraries you are using were built from source but
 # not installed, set CSOUND_SOURCE_TREE to the directory containing the Csound
 # source tree.  In this case, the CSOUND_INCLUDE_DIR and CSOUND_LIBRARY_DIR
@@ -237,9 +236,6 @@ macx {
 # -sign-for-notarization=\"Developer ID Application: Tarmo Johannes (DRQ77GKK9V)\" -dmg
     INSTALLS += first
 
-    # pythonlinks.path= $$PWD
-    # pythonlinks.commands = install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
-
     # bundle command: install_name_tool -change /Applications/Csound/CsoundLib64.framework/CsoundLib64 @rpath/CsoundLib64.framework/Versions/7.0/CsoundLib64 /Users/tarmojohannes/Documents/src/build-qcs-Qt_6_5_3_for_macOS-Release/bin/CsoundQt-d-cs7.app/Contents/MacOS/CsoundQt-d-cs7
     # sign with developer cert: codesign -s "Mac Developer: Tarmo Johannes (ND7C9HZ522)" --deep /Users/tarmojohannes/Documents/src/build-cs7-qcsQt_6_5_3_for_macOS-Release/bin/CsoundQt-d-cs7.app
     # install certificate name:
@@ -261,7 +257,7 @@ macx {
     final.path = $$PWD
     #final.commands += codesign -s - --deep $$OUT_PWD/$$DESTDIR/$${TARGET}.app ; #try codesigning to eliminate asking for Docuemtns folder permission every time
     #final.commands += hdiutil create -fs HFS+ -srcfolder $$OUT_PWD/$$DESTDIR/$${TARGET}.app -volname CsoundQt $$OUT_PWD/$$DESTDIR/$${TARGET}.dmg # untested!
-    INSTALLS += pythonlinks final
+    INSTALLS += final
 
 }
 

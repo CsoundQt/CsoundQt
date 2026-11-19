@@ -591,7 +591,7 @@ i 4 0 0.1   ; Init
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>-------------------------------------------------------------------
-'vibes' is a physical model of a vibraphone tone. 'Stick Hardness' and 'Strike Position' create some variation in tone but this is quite subtle. 'Decay Time' controls the time before the end of the note when damping is introduced. By replacing the sample suggested for the strike impulse (marmstk1.wav) with a longer sample  sample (Songpan.wav for example), a longer duration tone is possible.
+'vibes' is a physical model of a vibraphone tone. 'Stick Hardness' and 'Strike Position' create some variation in tone but this is quite subtle. 'Decay Time' controls the time before the end of the note when damping is introduced. By replacing the sample suggested for the strike impulse (marmstk1.wav) with a longer sample  sample (Songpan.flac for example), a longer duration tone is possible.
 This instrument can be triggered either from the GUI button or via a connected MIDI keyboard.
 Carrefull, audio file may give loud output !</label>
   <alignment>left</alignment>

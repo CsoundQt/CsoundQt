@@ -30,6 +30,7 @@ WidgetPanel::WidgetPanel(QWidget *parent)
 	: QDockWidget(parent)
 {
 	setWindowTitle("Widgets");
+	setProperty("csqtWidgetPanel", true);
 	setMinimumSize(200, 140);
 	//   connect(this,SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(dockLocationChanged(Qt::DockWidgetArea)));
 	//connect(this,SIGNAL(topLevelChanged(bool)), this, SLOT(dockStateChanged(bool)));

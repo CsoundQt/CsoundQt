@@ -220,7 +220,7 @@ i 1 0 1; plays the whole soundfile
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>impulse_big_hall.wav</label>
+  <label>impulse_big_hall.flac</label>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
@@ -250,7 +250,7 @@ i 1 0 1; plays the whole soundfile
   <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>impulse_big_hall.wav</stringvalue>
+  <stringvalue>impulse_big_hall.flac</stringvalue>
   <text>Browse Impulse Response File</text>
   <image>/</image>
   <eventLine/>

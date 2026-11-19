@@ -65,7 +65,6 @@ class DocumentView;
 class UtilitiesDialog;
 class Curve;
 class EventDispatcher;
-class EventSheet;
 class CsoundEngine;
 class MidiHandler;
 class MidiLearnDialog;
@@ -189,6 +188,12 @@ public slots:
 	int loadFileFromSystem(QString fileName);
 	void newFile();
 	bool closeTab(bool forceCloseApp = false, int index = -1);
+	// Per-document widget panel detach: only the current document's live
+	// WidgetLayout is moved, never a copy. The state is session-only.
+	void detachWidgetsForPage(DocumentPage *page);
+	void attachWidgetsForPage(DocumentPage *page);
+	// Convert the current editor document to a widget-only NoEditor window.
+	void openCurrentInNoEditorMode();
 	bool saveFile(const QString &fileName, bool saveWidgets = true);
 	void play(bool realtime = true, int index = -1);
 	// Start every detached widget-only document (used by --play --noeditor).
@@ -463,6 +468,13 @@ private:
 	// top-level widget window and are not part of documentPages/tabs.
 	WidgetWindow *openWidgetWindow(const QString &fileName, bool readOnly = false,
 	                               bool autoPlay = false);
+	WidgetWindow *openWidgetWindowFromText(const QString &fileName, const QString &text,
+	                                       bool readOnly = false, bool autoPlay = false,
+	                                       bool canReturnToNormalMode = false);
+	// Convert a user-created Kiosk/NoEditor window back into an editor tab.
+	// Only allowed when the window records that the user switched to Kiosk
+	// mode from the editor.
+	void switchWidgetWindowToEditor(WidgetWindow *window);
 	void removeWidgetWindow(WidgetWindow *window);
 	// The detached widget window that currently has focus, if any.
 	WidgetWindow *activeWidgetWindow() const;
@@ -608,7 +620,6 @@ private:
 	QMenu *editMenu;
 	QMenu *controlMenu;
 	QMenu *viewMenu;
-	QMenu *scriptsMenu;
 	QMenu *helpMenu;
 //	QToolBar *fileToolBar;
 //	QToolBar *editToolBar;
@@ -623,6 +634,7 @@ private:
 	QAction *switchOrcScoAct = nullptr;
 	QAction *convertToCsdAct = nullptr;
 	QAction *closeTabAct;
+	QAction *openInNoEditorAct;
 	QAction *exportPdfAct;
 	QAction *infoAct;
 	QAction *embeddedFilesAct = nullptr;
@@ -711,7 +723,6 @@ private:
     QAction *goBackAct = nullptr;
     QAction *goToSourceAct = nullptr;
     QAction *goToAnythingAct = nullptr;
-    QAction *reloadDependenciesAct = nullptr;
 	QAction *aboutAct;
 	QAction *donateAct;
 	//    QAction *aboutQtAct;
@@ -759,6 +770,9 @@ private:
 	bool m_closing; // CsoundQt is closing (to inform timer threads)
     QByteArray m_editorHiddenDockState; // dock layout saved while the editor is hidden
     QList<WidgetWindow *> m_widgetWindows; // detached widget-only documents
+    // Session-only set of editor documents whose widget layout is detached
+    // from the shared docked panel.
+    QSet<DocumentPage *> m_detachedWidgetPages;
     UtilitiesDialog *utilitiesDialog;
 	QString currentAudioFile;
 	QString initialDir;

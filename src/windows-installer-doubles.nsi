@@ -81,8 +81,6 @@ Section "Main" SEC01
   File "..\bin\QtNetwork4.dll"
   File "..\bin\QtGui4.dll"
   File "..\bin\QtCore4.dll"
-  File "..\bin\PythonQt_QtAll.dll"
-  File "..\bin\PythonQt.dll"
   File /a /r "Examples\McCurdy Collection\"
   File /a /r "..\examples\"
 

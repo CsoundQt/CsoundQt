@@ -365,7 +365,7 @@ private:
 
     bool colorVariables;
 	// TODO this is duplicated in documentview class. Should it be unified?
-	int m_mode; //type of text 0=csound 1=python 2=xml 3=orc 4=sco   -1=anything else
+	int m_mode; //type of text 0=csound 2=xml 3=orc 4=sco 5=inc 6=html -1=anything else
 
     bool m_scoreSyntaxHighlighting;
 

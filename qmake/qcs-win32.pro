@@ -30,9 +30,6 @@ win32-msvc2017:build32: DEFAULT_CSOUND_LIBS = csound7.lib
 win32-msvc2017:build64: DEFAULT_CSOUND_LIBS = csound7_64.lib
 win32-msvc:build64: DEFAULT_CSOUND_LIBS = csound7_64.lib
 
-DEFAULT_PYTHON_INCLUDE_DIRS = "$$(HOMEDRIVE)\\Python26\\include"
-DEFAULT_PYTHONQT_SRC_DIRS = "$$(PROGRAMFILES)\\PythonQt"
-
 # Do configuration step
 include(config.pri)
 

@@ -42,7 +42,6 @@ HEADERS = "src/about.h" \
     "src/embeddedfilesdialog.h" \
     "src/pluginsdialog.h" \
     "src/externallauncher.h" \
-    "src/eventsheet.h" \
     "src/findbar.h" \
     "src/widgetpropertyinfo.h" \
     "src/framewidget.h" \
@@ -68,7 +67,6 @@ HEADERS = "src/about.h" \
     "src/qutecombobox.h" \
     "src/quteconsole.h" \
     "src/csoundqt.h" \
-    "src/qutedummy.h" \
     "src/qutegraph.h" \
     "src/quteknob.h" \
     "src/qutemeter.h" \
@@ -89,7 +87,6 @@ HEADERS = "src/about.h" \
     "src/widgetpanel.h" \
     "src/widgetwindow.h" \
     "src/widgetpreset.h" \
-    "src/qutesheet.h" \
     "src/basedocument.h" \
     "src/baseview.h" \
     $$PWD/../src/csound_threaded_csqt.hpp \
@@ -123,7 +120,6 @@ SOURCES = "src/about.cpp" \
     "src/embeddedfilesdialog.cpp" \
     "src/pluginsdialog.cpp" \
     "src/externallauncher.cpp" \
-    "src/eventsheet.cpp" \
     "src/findbar.cpp" \
     "src/framewidget.cpp" \
     "src/bracketmatcher.cpp" \
@@ -148,7 +144,6 @@ SOURCES = "src/about.cpp" \
     "src/qutecombobox.cpp" \
     "src/quteconsole.cpp" \
     "src/csoundqt.cpp" \
-    "src/qutedummy.cpp" \
     "src/qutegraph.cpp" \
     "src/quteknob.cpp" \
     "src/qutemeter.cpp" \
@@ -167,7 +162,6 @@ SOURCES = "src/about.cpp" \
     "src/widgetpanel.cpp" \
     "src/widgetwindow.cpp" \
     "src/widgetpreset.cpp" \
-    "src/qutesheet.cpp" \
     "src/basedocument.cpp" \
     "src/baseview.cpp" \
     $$PWD/../src/risset.cpp \

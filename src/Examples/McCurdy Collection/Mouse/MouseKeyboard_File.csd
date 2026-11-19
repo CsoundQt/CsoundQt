@@ -376,7 +376,7 @@ i 2 0 3600  ; Ping-pong delay and reverb
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>flute.wav</stringvalue>
+  <stringvalue>flute.flac</stringvalue>
   <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
@@ -405,7 +405,7 @@ i 2 0 3600  ; Ping-pong delay and reverb
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>flute.wav</label>
+  <label>flute.flac</label>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>

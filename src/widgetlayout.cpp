@@ -3253,8 +3253,29 @@ void WidgetLayout::createContextMenu(QContextMenuEvent *event)
             p = p->parentWidget();
         }
     }
-    if (dock != nullptr)
-        DockPanelUtils::addPanelActions(dock, menu, false);
+    if (dock != nullptr) {
+        if (dock->property("csqtWidgetPanel").toBool()) {
+            DockPanelUtils::addPanelActions(dock, menu, false,
+                    [this](QMenu &panelMenu) {
+                QAction *detachAct = panelMenu.addAction(tr("Detach as Window"));
+                connect(detachAct, &QAction::triggered, this, [this]() {
+                    QTimer::singleShot(0, this, [this]() {
+                        emit detachRequested();
+                    });
+                });
+            });
+        } else {
+            DockPanelUtils::addPanelActions(dock, menu, false);
+        }
+    } else if (property("csqtDetached").toBool()) {
+        menu.addSeparator();
+        QAction *attachAct = menu.addAction(tr("Attach as Panel"));
+        connect(attachAct, &QAction::triggered, this, [this]() {
+            QTimer::singleShot(0, this, [this]() {
+                emit attachRequested();
+            });
+        });
+    }
 
     currentPosition = event->pos();
     //  if (m_sbActive) {

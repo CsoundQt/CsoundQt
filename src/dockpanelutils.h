@@ -21,6 +21,8 @@
 #include <QContextMenuEvent>
 #include <QCoreApplication>
 #include <QDockWidget>
+#include <QMenu>
+#include <functional>
 #include <QList>
 #include <QMainWindow>
 #include <QMenu>
@@ -87,7 +89,8 @@ inline void setKeepFloating(QDockWidget *dock, bool keep)
 
 // Adds the actions shared by the panel context menus. The actions are
 // deferred so that the menu is closed before the dock is floated or docked.
-inline void addPanelActions(QDockWidget *dock, QMenu &menu, bool separatorBeforeClose = true)
+inline void addPanelActions(QDockWidget *dock, QMenu &menu, bool separatorBeforeClose = true,
+                            const std::function<void(QMenu &)> &afterFloat = {})
 {
     const QByteArray context = dock->metaObject()->className();
     const auto tr = [&context](const char *text) {
@@ -108,6 +111,9 @@ inline void addPanelActions(QDockWidget *dock, QMenu &menu, bool separatorBefore
             }
         });
     });
+
+    if (afterFloat)
+        afterFloat(menu);
 
     if (dock->isFloating()) {
         QAction *keepAction = menu.addAction(tr("Keep Panel Floating"));

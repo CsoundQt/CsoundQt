@@ -1201,6 +1201,10 @@ void DocumentPage::hideWidgets()
 {
 	//  qDebug();
 	foreach (WidgetLayout *wl, m_widgetLayouts) {
+		// Detached widget windows are independent of the docked panel and
+		// must remain visible when their tab loses focus.
+		if (wl->property("csqtDetached").toBool())
+			continue;
 		wl->setVisible(false);
 	}
 }

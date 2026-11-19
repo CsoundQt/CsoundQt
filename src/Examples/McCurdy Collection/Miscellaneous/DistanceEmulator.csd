@@ -322,7 +322,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>Songpan.wav</stringvalue>
+  <stringvalue>Songpan.flac</stringvalue>
   <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
@@ -356,7 +356,7 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>Songpan.wav</label>
+  <label>Songpan.flac</label>
   <instant>true</instant>
   <alignment>left</alignment>
   <font>Liberation Sans</font>

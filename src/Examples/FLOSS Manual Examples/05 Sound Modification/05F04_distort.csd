@@ -21,7 +21,7 @@ instr 1
 ifn       =         p4
 ivol      =         p5
 kdist     line      0, p3, 1 ;increase the distortion over p3
-aL, aR    soundin   "ClassGuit.wav"
+aL, aR    soundin   "ClassivalGuitar.wav"
 aout1     distort   aL, kdist, ifn
 aout2     distort   aR, kdist, ifn
           outs      aout1*ivol, aout2*ivol

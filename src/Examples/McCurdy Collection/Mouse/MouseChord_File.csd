@@ -673,7 +673,7 @@ i 1000 0 3600  ; Reverb
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>choir.wav</stringvalue>
+  <stringvalue>choir.flac</stringvalue>
   <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
@@ -702,7 +702,7 @@ i 1000 0 3600  ; Reverb
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>choir.wav</label>
+  <label>choir.flac</label>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>

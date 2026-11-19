@@ -184,7 +184,7 @@ public:
 	// offline-render progress display.
 	double scoreTime();
 
-	// To pass to parent document for access from python scripting
+	// To pass to parent document for widget and display access
 	CSOUND * getCsound();
     CsoundUserData *getUserData();
     void clearConsoles(void);

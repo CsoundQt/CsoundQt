@@ -16,12 +16,12 @@ giCheb3 ftgen 5, 0, 513, 3, -1, 1, 0, 3, 0, 4
 giCheb4 ftgen 6, 0, 513, 3, -1, 1, 1, 0, 8, 0, 4
 giCheb5 ftgen 7, 0, 513, 3, -1, 1, 3, 20, -30, -60, 32, 48
 giFox   ftgen 8, 0, -121569, 1, "fox.wav", 0, 0, 1
-giGuit  ftgen 9, 0, -235612, 1, "ClassGuit.wav", 0, 0, 1
+giGuit  ftgen 9, 0, -235612, 1, "ClassivalGuitar.wav", 0, 0, 1
 
 instr 1
 iTrnsFnc  =         p4
 kEnv      linseg    0, .01, 1, p3-.2, 1, .01, 0
-aL, aR    soundin   "ClassGuit.wav"
+aL, aR    soundin   "ClassivalGuitar.wav"
 aIndxL    =         (aL + 1) / 2
 aWavShpL  tablei    aIndxL, iTrnsFnc, 1
 aIndxR    =         (aR + 1) / 2

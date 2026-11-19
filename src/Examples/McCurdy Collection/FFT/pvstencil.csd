@@ -335,7 +335,7 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>sample.wav</stringvalue>
+  <stringvalue>sample.flac</stringvalue>
   <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
@@ -364,7 +364,7 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>sample.wav</label>
+  <label>sample.flac</label>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>

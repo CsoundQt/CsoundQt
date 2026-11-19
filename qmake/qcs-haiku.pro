@@ -15,16 +15,6 @@ build64:DEFAULT_CSOUND_LIBS = libcsound64.so \
 	libcsound64.a
 #CSND_LIB = libcsnd.so
 
-DEFAULT_PYTHONQT_INCLUDE_DIRS = /boot/common/include
-DEFAULT_PYTHONQT_LIBRARY_DIRS = /boot/common/lib \
-        ../../../PythonQt2.0.1 \
-        ../PythonQt2.0.1 \
-        PythonQt2.0.1
-DEFAULT_PYTHONQT_TREE_DIRS = ../../../PythonQt2.0.1 \
-        ../PythonQt2.0.1 \
-        PythonQt2.0.1
-PYTHONQT_LIB = libPythonQt_QtAll$${DEBUG_EXT}.so
-
 
 # Do configuration step
 include(config.pri)

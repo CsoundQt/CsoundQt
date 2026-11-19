@@ -40,7 +40,7 @@
 #define CSQT_QUEUETIMER_DEFAULT_TIME 50
 // Maximum number of files in recent files menu
 #define CSQT_MAX_RECENT_FILES 20
-// Maximum undo history depth for widget panel and event sheet
+// Maximum undo history depth for the widget panel
 #define CSQT_MAX_UNDO 256
 
 // Maximum MIDI message queue size for internal control

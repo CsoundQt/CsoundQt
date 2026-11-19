@@ -1019,8 +1019,6 @@ void Highlighter::highlightBlock(const QString &text)
                 highlightCsoundBlock(*highlightText, false);
 
                 break;
-            case 1:  // Python mode
-                break;
             case 2:  // Xml mode
                 highlightXmlBlock(text);
                 break;
@@ -1031,7 +1029,7 @@ void Highlighter::highlightBlock(const QString &text)
                 highlightCsoundBlock(*highlightText, false);
                 break;
             case 5:  // Inc
-                highlightCsoundBlock(*highlightText, false); // maybe anything not python or xml should be higlighter as csound?
+                highlightCsoundBlock(*highlightText, false); // non-XML text falls back to Csound
                 break;
             case 6:  // Html
                 highlightHtmlBlock(text);
