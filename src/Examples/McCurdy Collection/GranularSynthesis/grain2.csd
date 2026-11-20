@@ -1770,4 +1770,3 @@ If density is thought of as grains per second then increasing 'Number of Overlap
 <value id="{716f5b71-705a-4ac8-9af6-09876c21d9a4}" mode="1" >0.00000000</value>
 </preset>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

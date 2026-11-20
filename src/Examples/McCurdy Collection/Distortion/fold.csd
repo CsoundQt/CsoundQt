@@ -73,7 +73,6 @@ i 1 0 3600  ; GUI
 
 
 
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="false" loopStart="0" loopEnd="0">    </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>

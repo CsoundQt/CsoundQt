@@ -172,19 +172,6 @@ e
 
 
 
-<EventPanel name="Theme 1" tempo="90.00000000" loop="8.00000000" x="586" y="279" width="680" height="492" visible="false" loopStart="2" loopEnd="8">    
-;type        ;inst        ;start        ;dur        ;note        ;veloc 
-i 1 0 1.25 57 100 
-i 1 1 1.5 47 100 
-i 1 2 1 35 100 
-i 1 3 0.75 58 100 
-i 1 4 1.75 51 100 
-i 1 5 0.5 36 100 
-i 1 6 2 52 100 
-    
-    
-    </EventPanel>
-<EventPanel name="Drone" tempo="60.00000000" loop="8.00000000" x="52" y="415" width="655" height="346" visible="false" loopStart="0" loopEnd="0">i 1 0 15 32 100 </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>

@@ -4990,4 +4990,3 @@ i 300 0 3600  ; Resetting of global audio variables
 <value id="{7d58a22e-fe0e-4e16-98f9-cc8c948d9da0}" mode="1" >0.00000000</value>
 </preset>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

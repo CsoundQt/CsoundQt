@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
--fdm0 --midi-key=4
+-d --midi-key=4
 </CsOptions>
 <CsInstruments>
 ; Physical Waveguide Midi synth with CsoundQt GUI by René Djack 2009.
@@ -303,7 +303,7 @@ opcode REVERB, aa, akkkkkkkkkkkk
     kMix_Rev\      ; knob Mix 0 à 1
     xin
 
-  setksmps 64
+  ; setksmps 64
 
   aoutL_Feed = init(0)
   aoutR_Feed = init(0)
@@ -703,37 +703,6 @@ i 99 0 3600
 
 
 
-<EventPanel name="New" tempo="100.00000000" loop="8.00000000" x="0" y="0" width="582" height="720" visible="false" loopStart="0" loopEnd="0">i 1 0 0.4 40 
-i 1 0.5 0.4 44 
-i 1 1 0.4 47 
-i 1 1.5 0.4 45 
-i 1 2 0.4 36 
-i 1 2.5 0.4 37 
-i 1 3 0.4 37 
-i 1 3.5 0.4 44 
-i 1 4 0.4 37 
-i 1 4.5 0.4 43 
-i 1 5 0.4 44 
-i 1 5.5 0.1 73 
-i 1 6 0.1 36 
-i 1 6.5 0.1 49 
-i 1 7 0.1 42 
-i 1 7.5 0.1 37 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    </EventPanel>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="118" y="351" width="655" height="346" visible="true" loopStart="0" loopEnd="0">i 1 0 0.1 73 </EventPanel>
-
-
-
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -744,6 +713,7 @@ i 1 7.5 0.1 37
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">#efefef</bgcolor>
+ <foreground>#202020</foreground>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
@@ -840,11 +810,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-20.00000000</minimum>
   <maximum>100.00000000</maximum>
-  <value>25.60000038</value>
+  <exponent>1.00000000</exponent>
+  <value>36.40000153</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -888,11 +874,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-20.00000000</minimum>
   <maximum>100.00000000</maximum>
-  <value>20.79999924</value>
+  <exponent>1.00000000</exponent>
+  <value>36.40000153</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -934,12 +936,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>20.800</label>
+  <label>36.400</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -963,11 +966,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.89999998</value>
+  <exponent>1.00000000</exponent>
+  <value>0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1009,12 +1028,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.900</label>
+  <label>0.500</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -1038,11 +1058,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-20.00000000</minimum>
   <maximum>100.00000000</maximum>
-  <value>20.79999924</value>
+  <exponent>1.00000000</exponent>
+  <value>10.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1084,12 +1120,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>20.800</label>
+  <label>10.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -1113,11 +1150,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.34000000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1159,12 +1212,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.340</label>
+  <label>0.500</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -1188,11 +1242,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-1.00000000</minimum>
   <maximum>0.00000000</maximum>
-  <value>-0.50000000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1234,12 +1304,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-0.500</label>
+  <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -1263,11 +1334,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>240.00000000</maximum>
-  <value>31.20000076</value>
+  <exponent>1.00000000</exponent>
+  <value>7.19999981</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1309,12 +1396,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>31.200</label>
+  <label>7.200</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -1338,11 +1426,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-1.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>-1.00000000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.30000001</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1384,12 +1488,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-1.000</label>
+  <label>0.300</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -1413,11 +1518,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>60.00000000</maximum>
-  <value>16.79999924</value>
+  <exponent>1.00000000</exponent>
+  <value>12.60000038</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1459,12 +1580,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>16.800</label>
+  <label>12.600</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -1488,11 +1610,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
-  <value>58.79999924</value>
+  <exponent>1.00000000</exponent>
+  <value>25.20000076</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1534,12 +1672,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>58.800</label>
+  <label>25.200</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -1563,11 +1702,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>24.00000000</minimum>
   <maximum>144.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>144.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1615,6 +1770,7 @@ i 1 7.5 0.1 37
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -1638,11 +1794,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>30.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1690,6 +1862,7 @@ i 1 7.5 0.1 37
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -1713,11 +1886,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>30.00000000</maximum>
-  <value>2.70000005</value>
+  <exponent>1.00000000</exponent>
+  <value>3.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1759,12 +1948,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>2.700</label>
+  <label>3.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -1788,11 +1978,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1840,6 +2046,7 @@ i 1 7.5 0.1 37
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -1863,11 +2070,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1915,6 +2138,7 @@ i 1 7.5 0.1 37
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -1938,11 +2162,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.50000000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.20000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1984,12 +2224,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.500</label>
+  <label>0.200</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -2013,11 +2254,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.54000002</value>
+  <exponent>1.00000000</exponent>
+  <value>0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2059,12 +2316,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.540</label>
+  <label>0.500</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -2088,11 +2346,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.25000000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.15000001</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2134,12 +2408,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.250</label>
+  <label>0.150</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -2190,11 +2465,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.66000003</value>
+  <exponent>1.00000000</exponent>
+  <value>0.81000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2236,12 +2527,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.660</label>
+  <label>0.810</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -2265,11 +2557,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
-  <value>79.19999695</value>
+  <exponent>1.00000000</exponent>
+  <value>86.40000153</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2311,12 +2619,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>79.200</label>
+  <label>86.400</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -2340,11 +2649,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2392,6 +2717,7 @@ i 1 7.5 0.1 37
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -2415,11 +2741,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.31999999</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2467,6 +2809,7 @@ i 1 7.5 0.1 37
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -2490,11 +2833,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.28000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2542,6 +2901,7 @@ i 1 7.5 0.1 37
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -2590,7 +2950,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <selected>true</selected>
+  <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
@@ -2602,6 +2962,7 @@ i 1 7.5 0.1 37
   <borderRadius>3</borderRadius>
   <padding>0</padding>
   <checkstyle>x</checkstyle>
+  <circle>false</circle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2645,11 +3006,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
-  <value>12.00000000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2691,12 +3068,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>12.000</label>
+  <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -2720,11 +3098,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
-  <value>67.19999695</value>
+  <exponent>1.00000000</exponent>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2766,12 +3160,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>67.200</label>
+  <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -2795,11 +3190,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2847,6 +3258,7 @@ i 1 7.5 0.1 37
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -2870,11 +3282,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
-  <value>67.19999695</value>
+  <exponent>1.00000000</exponent>
+  <value>108.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2916,12 +3344,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>67.200</label>
+  <label>108.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -2945,11 +3374,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
-  <value>97.19999695</value>
+  <exponent>1.00000000</exponent>
+  <value>60.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2991,12 +3436,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>97.200</label>
+  <label>60.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -3020,11 +3466,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.80000001</value>
+  <exponent>1.00000000</exponent>
+  <value>0.57999998</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3066,12 +3528,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.800</label>
+  <label>0.580</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -3122,11 +3585,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.38000000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3168,12 +3647,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.380</label>
+  <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -3234,6 +3714,7 @@ i 1 7.5 0.1 37
   <borderRadius>3</borderRadius>
   <padding>0</padding>
   <checkstyle>x</checkstyle>
+  <circle>false</circle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3277,11 +3758,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-60.00000000</minimum>
   <maximum>60.00000000</maximum>
-  <value>1.20000005</value>
+  <exponent>1.00000000</exponent>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3323,12 +3820,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>1.200</label>
+  <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -3352,11 +3850,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-1.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>-0.12000000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.20000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3398,12 +3912,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-0.120</label>
+  <label>0.200</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -3427,11 +3942,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-5.00000000</minimum>
   <maximum>0.00000000</maximum>
-  <value>-1.54999995</value>
+  <exponent>1.00000000</exponent>
+  <value>-1.89999998</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3473,12 +4004,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-1.550</label>
+  <label>-1.900</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -3502,11 +4034,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-2.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>-1.24000001</value>
+  <exponent>1.00000000</exponent>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3548,12 +4096,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-1.240</label>
+  <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -3604,11 +4153,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-90.00000000</minimum>
   <maximum>30.00000000</maximum>
-  <value>-60.00000000</value>
+  <exponent>1.00000000</exponent>
+  <value>-42.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3650,12 +4215,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-60.000</label>
+  <label>-42.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -3679,11 +4245,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3731,6 +4313,7 @@ i 1 7.5 0.1 37
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -3754,11 +4337,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
-  <value>7.19999981</value>
+  <exponent>1.00000000</exponent>
+  <value>12.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3800,12 +4399,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>7.200</label>
+  <label>12.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -3856,11 +4456,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-60.00000000</minimum>
   <maximum>60.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3908,6 +4524,7 @@ i 1 7.5 0.1 37
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -3931,11 +4548,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-1.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00000000</value>
+  <exponent>1.00000000</exponent>
+  <value>-0.12000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -3977,12 +4610,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.000</label>
+  <label>-0.120</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -4006,11 +4640,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-5.00000000</minimum>
   <maximum>0.00000000</maximum>
-  <value>0.00000000</value>
+  <exponent>1.00000000</exponent>
+  <value>-1.29999995</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -4052,12 +4702,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.000</label>
+  <label>-1.300</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -4081,11 +4732,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-2.00000000</minimum>
   <maximum>2.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -4133,6 +4800,7 @@ i 1 7.5 0.1 37
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -4183,11 +4851,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-1.00000000</minimum>
   <maximum>1.00000000</maximum>
+  <exponent>1.00000000</exponent>
   <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -4235,6 +4919,7 @@ i 1 7.5 0.1 37
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -4283,7 +4968,7 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <selected>false</selected>
+  <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
@@ -4295,6 +4980,7 @@ i 1 7.5 0.1 37
   <borderRadius>3</borderRadius>
   <padding>0</padding>
   <checkstyle>x</checkstyle>
+  <circle>false</circle>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -4338,11 +5024,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>-1.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.41999999</value>
+  <exponent>1.00000000</exponent>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -4384,12 +5086,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.420</label>
+  <label>1.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -4413,11 +5116,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>1.55999994</value>
+  <exponent>1.00000000</exponent>
+  <value>0.68000001</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -4459,12 +5178,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>1.560</label>
+  <label>0.680</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -4515,11 +5235,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00000000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -4561,12 +5297,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.000</label>
+  <label>0.500</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -4590,11 +5327,27 @@ i 1 7.5 0.1 37
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.34000000</value>
+  <exponent>1.00000000</exponent>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
+  <flatStyle>false</flatStyle>
+  <bgcolor>#f0f0f0</bgcolor>
+  <foreground>#34393a</foreground>
+  <fillcolor>#dfdfdf</fillcolor>
+  <bordercolor>#aebcd2</bordercolor>
+  <borderWidth>2</borderWidth>
+  <borderRadius>3</borderRadius>
+  <thumbWidth>4</thumbWidth>
+  <thumbPadding>0</thumbPadding>
+  <thumbRadius>2</thumbRadius>
+  <fillMode>fill</fillMode>
+  <backgroundMode>jump</backgroundMode>
+  <rulermode>hide</rulermode>
+  <rulerscale>linear</rulerscale>
+  <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -4636,12 +5389,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.340</label>
+  <label>0.000</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -4752,6 +5506,7 @@ i 1 7.5 0.1 37
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -4778,19 +5533,17 @@ i 1 7.5 0.1 37
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.42857099</xValue>
-  <yValue>0.13766154</yValue>
+  <xValue>0.00109676</xValue>
+  <yValue>0.00033873</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <exponent>1.00000000</exponent>
-  <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#32e632</borderColor>
+  <borderWidth>0</borderWidth>
   <color>#2dd02d</color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>#343434</bgcolor>
-  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor210</objectName>
@@ -4810,19 +5563,17 @@ i 1 7.5 0.1 37
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.42857099</xValue>
-  <yValue>0.09865567</yValue>
+  <xValue>0.00109676</xValue>
+  <yValue>0.00047502</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <exponent>1.00000000</exponent>
-  <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#32e632</borderColor>
+  <borderWidth>0</borderWidth>
   <color>#2dd02d</color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>#343434</bgcolor>
-  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -4897,18 +5648,16 @@ i 1 7.5 0.1 37
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.27777800</xValue>
-  <yValue>1.00000000</yValue>
+  <yValue>-1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <exponent>1.00000000</exponent>
-  <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
   <borderColor>#32e632</borderColor>
+  <borderWidth>0</borderWidth>
   <color>#3ed02d</color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>#343434</bgcolor>
-  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -4950,12 +5699,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>25.600</label>
+  <label>36.400</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
@@ -4986,6 +5736,7 @@ i 1 7.5 0.1 37
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
   <triggermode>TriggerUp</triggermode>
+  <bgcolor>#161616</bgcolor>
  </bsbObject>
  <bsbObject type="BSBScope" version="2">
   <objectName/>
@@ -5009,6 +5760,7 @@ i 1 7.5 0.1 37
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
   <triggermode>TriggerUp</triggermode>
+  <bgcolor>#161616</bgcolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>_GetPresetName</objectName>
@@ -5023,12 +5775,13 @@ i 1 7.5 0.1 37
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>Flute + Reverb 5</label>
+  <label>Cello + Reverb 3</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
   <fontsize>20</fontsize>
   <precision>3</precision>
+  <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="background">#ffdca2</bgcolor>
@@ -5058,8 +5811,9 @@ i 1 7.5 0.1 37
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
   <maximum>20</maximum>
+  <showArrows>true</showArrows>
   <randomizable group="0">false</randomizable>
-  <value>4</value>
+  <value>3</value>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Pause</objectName>
@@ -5078,7 +5832,6 @@ i 1 7.5 0.1 37
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>Pause</text>
-  <image>/</image>
   <eventLine/>
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
@@ -5111,7 +5864,6 @@ i 1 7.5 0.1 37
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>Stop</text>
-  <image>/</image>
   <eventLine/>
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
@@ -5144,7 +5896,6 @@ i 1 7.5 0.1 37
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>Play</text>
-  <image>/</image>
   <eventLine/>
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
@@ -5630,7 +6381,7 @@ i 1 7.5 0.1 37
 <value id="{4868e68a-6bc0-4401-b7d3-978bdfba9fae}" mode="1" >0.00000000</value>
 <value id="{4868e68a-6bc0-4401-b7d3-978bdfba9fae}" mode="4" >Bell + Reverb 6</value>
 </preset>
-<preset name="Cello + Reverb 3" number="3" >
+<preset name="Cello + Reverb 3" number="3" recalled="2026-11-20T09:58:34Z" >
 <value id="{7fd81566-d369-4ff6-9521-5075574ef5f4}" mode="1" >36.40000153</value>
 <value id="{bff2ae19-cec4-450c-810d-c6488d7eb3db}" mode="1" >36.40000153</value>
 <value id="{0fea90fb-ac1c-4925-bcd8-2b1e85d94751}" mode="1" >36.40000153</value>

@@ -201,4 +201,3 @@ The resolution of the clock output varies from operating system to operating sys
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

@@ -2226,4 +2226,3 @@ Overlaps</label>
 <value id="{43b6bfc8-a3ea-46d5-87bb-c487380b9a79}" mode="1" >0.00000000</value>
 </preset>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

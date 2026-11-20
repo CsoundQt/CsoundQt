@@ -1046,4 +1046,3 @@ MIDI controller 1 can be used to modulate glissando depth and CC#2 can be used t
 <value id="{ee3fa20e-dea1-4af9-97d7-f7ba52bdd47c}" mode="4" >276.025</value>
 </preset>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

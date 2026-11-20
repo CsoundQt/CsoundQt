@@ -354,7 +354,6 @@ e
 
 
 
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="381" y="517" width="655" height="346" visible="false" loopStart="0" loopEnd="0">i 1 0 1 440 100 </EventPanel>
 
 
 <bsbPanel>

@@ -3385,4 +3385,3 @@ Harm</label>
 <value id="{081ee69a-ca5f-4e21-8033-bd3353700c6a}" mode="4" >0.200</value>
 </preset>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

@@ -180,28 +180,3 @@ You can also set a loop range for each panel, and loop each panel independently.
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<EventPanel name="Demo 1" tempo="60.00000000" loop="8.00000000" x="616" y="297" width="603" height="374" visible="false" loopStart="0" loopEnd="7">    
-i 1 0 1 440 0.2 0.3 1 
-i 1 0 1 880 0.2 0.3 1 
-i 1 0 1 220 0.2 0.3 1 
-; You     ;can     ;label    ;columns 
-i 1 0 1 220 0.2 0.3 1 
-i 1 1 1 220 0.2 0.3 1 
-i 1 2 1 220 0.2 0.3 1 
-; Have  ;a  ;look   ;at the   ;text  ;view 
-    </EventPanel>
-<EventPanel name="Demo 2" tempo="60.00000000" loop="8.00000000" x="380" y="178" width="762" height="583" visible="false" loopStart="0" loopEnd="0">    
-i 1 0 1 440 0.2 0.3 1 
-i 1 0 1 880 0.2 0.3 1 
-i 1 0 1 220 0.2 0.3 1 
-    
-i 2 0 1 220 0.2 0.3 1 
-i 2 1 1 440 0.2 0.3 1 
-i 2 2 1 880 0.2 0.3 1 
-    
-i 2 0 5 440 0.2 0.3 1 
-;off    
-;You      ;can use     ;negative     ;p1     ;to     ;turn     ;off     ;notes 
-    
-    
-    </EventPanel>

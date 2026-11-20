@@ -1843,4 +1843,3 @@ Some GUI sliders are also controllable using MIDI controllers. Details are given
 <value id="{a77af4e0-33dd-453b-a8a5-f651f099be25}" mode="1" >0.00000000</value>
 </preset>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

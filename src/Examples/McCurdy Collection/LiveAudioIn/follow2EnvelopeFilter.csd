@@ -1063,4 +1063,3 @@ The user can choose between using a stored file or the live input as the source 
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

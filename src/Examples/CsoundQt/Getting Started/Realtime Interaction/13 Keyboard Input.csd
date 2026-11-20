@@ -154,4 +154,3 @@ f 0 3600
   <mouseControl act=""/>
  </bsbObject>
 </bsbPanel>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="261" y="207" width="513" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

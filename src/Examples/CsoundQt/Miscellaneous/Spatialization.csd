@@ -2724,4 +2724,3 @@ Channel</label>
  </bsbObject>
 </bsbPanel>
 
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="256" y="208" width="612" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

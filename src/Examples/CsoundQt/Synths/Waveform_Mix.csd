@@ -1255,12 +1255,3 @@ Volume</label>
   <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="543" y="318" width="614" height="322" visible="false" loopStart="0" loopEnd="0">i 1 0 3 
-    
-    
-    
-    
-    
-    
-    
-    </EventPanel>

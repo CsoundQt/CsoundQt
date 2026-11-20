@@ -2771,4 +2771,3 @@ http://joachimheintz.de/soft/softsamps/BratscheMono.wav</label>
 <value id="{a04e2aaa-8c72-49e4-ac27-a48d1b4d19dc}" mode="1" >300.00000000</value>
 </preset>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="612" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

@@ -147,7 +147,6 @@ e
 
 
 
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="612" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>

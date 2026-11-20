@@ -31,7 +31,6 @@ e 3600
 ; written by Alex Hofmann & Joachim Heintz (Dec. 2009) - Incontri HMT-Hannover 
 
 
-<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="60" y="304" width="513" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>

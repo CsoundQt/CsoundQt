@@ -45,13 +45,3 @@ e
 </CsScore>
 </CsoundSynthesizer>
 
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" name="" x="0" y="0" width="596" height="322"> 
-
-
-
-
-
-
-
-
-</EventPanel>

@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/main">
-        <file>opcodes.xml</file>
-    </qresource>
-    <qresource prefix="/">
-        <file>test.csd</file>
-    </qresource>
-</RCC>

@@ -595,4 +595,3 @@ e
   <randomizable group="0">false</randomizable>
  </bsbObject>
 </bsbPanel>
-<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="383" y="237" width="513" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

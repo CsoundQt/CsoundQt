@@ -1340,4 +1340,3 @@ i 2 0.01 0.01  ; Init
 <value id="{09b3e46f-2ebf-4a8f-8644-9c18f52fe46c}" mode="4" >0</value>
 </preset>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

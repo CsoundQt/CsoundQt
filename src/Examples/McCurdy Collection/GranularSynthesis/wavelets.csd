@@ -2214,4 +2214,3 @@ Gain</label>
 <value id="{92552f78-6b43-4ee5-9204-c45d22408a64}" mode="1" >15.00000000</value>
 </preset>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

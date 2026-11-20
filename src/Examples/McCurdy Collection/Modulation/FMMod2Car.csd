@@ -1409,4 +1409,3 @@ Frequency</label>
 <value id="{2acb9526-537a-48ce-8113-9e6f2781bf14}" mode="4" >0.300</value>
 </preset>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
