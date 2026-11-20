@@ -104,5 +104,3 @@ this will not become compiled :-), so I don't need the comment sign
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -503,5 +503,3 @@ An output gain control is added to allow for compensating for gain increase or d
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

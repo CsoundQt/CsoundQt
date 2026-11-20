@@ -1185,5 +1185,3 @@ Labels can also show **Markdown** </label>
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

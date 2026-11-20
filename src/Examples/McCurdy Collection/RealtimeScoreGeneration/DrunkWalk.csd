@@ -539,6 +539,4 @@ Valuator boxes indicate for the user whether the walker is taking a step up or d
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

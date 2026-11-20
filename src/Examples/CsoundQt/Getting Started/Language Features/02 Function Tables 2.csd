@@ -188,6 +188,4 @@ e
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="596" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

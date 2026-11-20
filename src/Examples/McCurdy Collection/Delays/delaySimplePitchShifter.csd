@@ -646,5 +646,3 @@ Very short settings of this parameter can lead to harmonic distortions of the in
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

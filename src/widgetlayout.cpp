@@ -20,10 +20,12 @@
         02111-1307 USA
 */
 
+#include <algorithm>
 #include <cstdlib>
 #include <cmath>
 
 #include <QApplication>
+#include <QDateTime>
 #include <QDrag>
 #include <QDragEnterEvent>
 #include <QDragLeaveEvent>
@@ -47,6 +49,7 @@
 #include <limits>
 
 #include "widgetlayout.h"
+#include "presetsdialog.h"
 #include "dockpanelutils.h"
 #include "qutewidget.h"
 #include "bundledfonts.h"
@@ -779,6 +782,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
     m_editMode = false;
     m_enableEdit = true;
     m_currentPreset = -1;
+    m_nextPresetIndex = 0;
     m_activeWidgets = 0;
     m_updateRate = 30;
     m_loadingWidgets = false;
@@ -995,11 +999,6 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
                                          tr("Center Vertically"), this);
     connect(alignCenterVerticalAct, SIGNAL(triggered()),
             this, SLOT(alignCenterVertical()));
-
-    storePresetAct = new QAction(tr("Store Preset"), this);
-    connect(storePresetAct, SIGNAL(triggered()), this, SLOT(savePreset()));
-    recallPresetAct = new QAction(tr("Recall Preset"), this);
-    connect(recallPresetAct, SIGNAL(triggered()), this, SLOT(loadPreset()));
 
     setFocusPolicy(Qt::StrongFocus);
 
@@ -1223,22 +1222,56 @@ void WidgetLayout::reportUnknownWidgetFonts()
     m_unknownWidgetFonts.clear();
 }
 
+static QString uniquePresetName(const QString &base, QSet<QString> &usedNames)
+{
+    QString name = base.trimmed();
+    if (name.isEmpty())
+        name = u"Preset"_s;
+    QString candidate = name;
+    int suffix = 2;
+    while (usedNames.contains(candidate.toLower())) {
+        candidate = name + u" ("_s + QString::number(suffix++) + u")"_s;
+    }
+    usedNames.insert(candidate.toLower());
+    return candidate;
+}
+
 void WidgetLayout::loadXmlPresets(QString xmlPresets)
 {
+    presets.clear();
+    m_currentPreset = -1;
+    m_nextPresetIndex = 0;
+
     QDomDocument doc;
     if (!doc.setContent(xmlPresets)) {
         qDebug() << "WidgetLayout::loadXmlPresets Error parsing preset text.";
+        emit presetsChanged();
+        return;
     }
     QDomElement pl = doc.firstChildElement("bsbPresets");
     QDomNodeList presetElements = pl.elementsByTagName("preset");
     QList<int> usedNumbers;
+    QSet<QString> usedNames;
     for (int i = 0; i < presetElements.size(); i++) {
         QDomElement presetElement = presetElements.item(i).toElement();
         int newNumber = presetElement.attribute("number", "0").toInt();
         if (!usedNumbers.contains(newNumber)) {
             WidgetPreset newPreset;
-            newPreset.setName(presetElement.attribute("name", ""));
+            const QString storedName = presetElement.attribute("name", "");
+            newPreset.setName(uniquePresetName(
+                                  storedName.isEmpty()
+                                      ? u"Preset %1"_s.arg(newNumber)
+                                      : storedName,
+                                  usedNames));
             newPreset.setNumber(newNumber);
+            newPreset.setDescription(
+                        presetElement.attribute("description", "").trimmed());
+            newPreset.setCreated(QDateTime::fromString(
+                                     presetElement.attribute("created", ""),
+                                     Qt::ISODate));
+            newPreset.setLastRecalled(QDateTime::fromString(
+                                          presetElement.attribute("recalled", ""),
+                                          Qt::ISODate));
             QDomNodeList presetValues = presetElement.elementsByTagName("value");
             for (int i = 0; i < presetValues.size(); i++) {
                 QDomElement valueElement = presetValues.item(i).toElement();
@@ -1259,11 +1292,13 @@ void WidgetLayout::loadXmlPresets(QString xmlPresets)
             }
             presets.append(newPreset);
             usedNumbers.append(newNumber);
+            m_nextPresetIndex = qMax(m_nextPresetIndex, newNumber + 1);
         }
         else {
             qDebug() << "WidgetLayout::loadXmlPresets duplicate number. Ignored. " << newNumber;
         }
     }
+    emit presetsChanged();
 }
 
 QString WidgetLayout::getWidgetsText()
@@ -1303,6 +1338,8 @@ QString WidgetLayout::getWidgetsText()
 
 QString WidgetLayout::getPresetsText()
 {
+    if (presets.isEmpty())
+        return QString();
     QStringList txts = {"<bsbPresets>\n"};
     for (int i = 0; i < presets.size(); i++) {
         txts << presets[i].getXmlText();
@@ -1804,6 +1841,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
                 || nodeName == "cursorcolor"
                 || nodeName == "foreground"
                 || nodeName == "gridcolor"
+                || nodeName == "backgroundColor"
                 || tableBackground) {  // COLOR type
             if (node.attribute("mode") == "background") {
                 widget->setProperty("CSQT_bgcolormode", true);
@@ -1883,6 +1921,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
                  || nodeName == "showArrows"
                  || nodeName == "showTriangle"
                  || nodeName == "bold"
+                 || nodeName == "usebackground"
                  || nodeName == "instant" ) {  // BOOL type
             QDomNode n = node.firstChild();
             if (nodeName == "randomizable") {
@@ -2773,25 +2812,6 @@ void WidgetLayout::refreshWidgets()
     }
 }
 
-QString WidgetLayout::getCsladspaLines()
-{
-    QString text = "";
-    int unsupported = 0;
-    widgetsMutex.lock();
-    foreach(QuteWidget *widget, m_widgets) {
-        QString line = widget->getCsladspaLine();
-        if (line != "") {
-            text += line + "\n";
-        }
-        else {
-            unsupported++;
-        }
-    }
-    widgetsMutex.unlock();
-    qDebug() << "WidgetPanel:getCsladspaLines() " << unsupported << " Unsupported widgets";
-    return text;
-}
-
 QString WidgetLayout::getQml()
 {
     QString qml = "import QtQuick 2.0\nimport QtQuick.Controls 2.0 // NB! Requires Qt 5.7 or later. Rewrite with QtQuick.Controls 1.X if using older Qt versions \n\n";
@@ -3159,6 +3179,11 @@ void WidgetLayout::addCreateWidgetActionsToMenu(QMenu &menu) {
 
 void WidgetLayout::createContextMenu(QContextMenuEvent *event)
 {
+    createContextMenu(event->pos(), event->globalPos());
+}
+
+void WidgetLayout::createContextMenu(const QPoint &position, const QPoint &globalPos)
+{
     QMenu menu;
     const bool editing = m_editMode;
     const bool hasSelection = !getSelectedWidgets().isEmpty();
@@ -3218,16 +3243,31 @@ void WidgetLayout::createContextMenu(QContextMenuEvent *event)
             this, [this]() { highlightWidgetChannels(nullptr); });
     menu.addSeparator();
 
-    // Presets are useful both while editing and during performance: storing and
-    // creating presets works with the live widget values, and recalling one
-    // applies them. A new preset is created from the Store Preset dialog
-    // (its "New Preset" button); Recall is only offered once one exists.
+    // Presets are useful both while editing and during performance. Manage
+    // opens the preset list, New asks for a name and stores the current state,
+    // and the stored presets follow as direct recall actions, by name.
     QMenu presetMenu(tr("Presets", "Preset submenu in widget layout popup"), &menu);
-    storePresetAct->setEnabled(true);
-    presetMenu.addAction(storePresetAct);
+    QAction *managePresetsAct = presetMenu.addAction(tr("Manage"));
+    connect(managePresetsAct, &QAction::triggered,
+            this, &WidgetLayout::managePresets);
+    QAction *newPresetAct = presetMenu.addAction(tr("New"));
+    connect(newPresetAct, &QAction::triggered,
+            this, &WidgetLayout::newPreset);
     if (!presets.isEmpty()) {
-        recallPresetAct->setEnabled(true);
-        presetMenu.addAction(recallPresetAct);
+        presetMenu.addSeparator();
+        QVector<WidgetPreset> sortedPresets = presets;
+        std::sort(sortedPresets.begin(), sortedPresets.end(),
+                  [](const WidgetPreset &a, const WidgetPreset &b) {
+            const int cmp = QString::compare(a.getName(), b.getName(),
+                                             Qt::CaseInsensitive);
+            return cmp == 0 ? a.getNumber() < b.getNumber() : cmp < 0;
+        });
+        for (const WidgetPreset &preset : sortedPresets) {
+            QAction *recallAct = presetMenu.addAction(preset.getName());
+            const int number = preset.getNumber();
+            connect(recallAct, &QAction::triggered, this,
+                    [this, number]() { loadPreset(number); });
+        }
     }
     menu.addMenu(&presetMenu);
 
@@ -3277,12 +3317,12 @@ void WidgetLayout::createContextMenu(QContextMenuEvent *event)
         });
     }
 
-    currentPosition = event->pos();
+    currentPosition = position;
     //  if (m_sbActive) {
     //    currentPosition.setX(currentPosition.x() + scrollArea->horizontalScrollBar()->value());
     //    currentPosition.setY(currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20);
     //  }
-    menu.exec(event->globalPos());
+    menu.exec(globalPos);
     //  menu.exec(event->pos());
 }
 
@@ -5884,75 +5924,55 @@ void WidgetLayout::clearHistory()
     m_historyIndex = 0;
 }
 
-int WidgetLayout::getPresetIndex(int number)
+int WidgetLayout::getPresetIndex(int number) const
 {
     for (int i = 0; i < presets.size(); i++) {
-        if (presets[i].getNumber() == number) {
+        if (presets[i].getNumber() == number)
             return i;
-        }
     }
     return -1;
 }
 
-void WidgetLayout::loadPreset()
+int WidgetLayout::nextPresetIndex() const
 {
-    QDialog d(this);
-    QVBoxLayout *l = new QVBoxLayout(&d);
-    QPushButton *okButton = new QPushButton(tr("Close"),&d);
-    QPushButton *newButton = new QPushButton(tr("New Preset"),&d);
+    int next = m_nextPresetIndex;
+    for (const WidgetPreset &preset : presets)
+        next = qMax(next, preset.getNumber() + 1);
+    return qMax(0, next);
+}
 
-    QTreeWidget *treeWidget = new QTreeWidget(&d);
-
-    treeWidget->setHeaderLabel(tr("Double-click Preset to Load"));
-    l->addWidget(treeWidget);
-    l->addWidget(okButton);
-    l->addWidget(newButton);
-
-    connect(okButton, SIGNAL(released()), &d, SLOT(accept()));
-    connect(newButton, SIGNAL(released()), this, SLOT(newPreset()));
-    connect(newButton, SIGNAL(released()), &d, SLOT(reject()));  // For now just close the load preset window (instead of refreshing...
-
-    treeWidget->setColumnCount(1);
-    QList<QTreeWidgetItem *> items;
-    for (int i = 0; i < presets.size(); i++) {
-        QString itemText = QString::number(presets[i].getNumber()) + "  " + presets[i].getName();
-        QTreeWidgetItem *item = new QTreeWidgetItem((QTreeWidget*)0, QStringList(itemText));
-        item->setData(0,Qt::UserRole,presets[i].getNumber());
-        items.append(item);
-    }
-    QList<QTreeWidgetItem *> sortedItems;
-    for (int i = 0; i < items.size(); i++) {
-        int j = 0;
-        for (j = 0; j < sortedItems.size(); j++) {
-            if (items[i]->data(0,Qt::UserRole).toInt() < sortedItems[j]->data(0,Qt::UserRole).toInt()) {
-                break;
-            }
+void WidgetLayout::fillPresetFromWidgets(WidgetPreset &preset)
+{
+    preset.clear();
+    widgetsMutex.lock();
+    for (int i = 0; i < m_widgets.size(); i++) {
+        auto w = m_widgets[i];
+        QString id = w->getUuid();
+        auto mtype = w->getWidgetTypeID();
+        if (mtype != QuteWidgetType::LABEL
+                && mtype != QuteWidgetType::LINEEDIT
+                && mtype != QuteWidgetType::BUTTON
+                && mtype != QuteWidgetType::CONSOLE) {
+            preset.addValue(id, w->getValue());
         }
-        sortedItems.insert(j, items[i]);
+        if (mtype == QuteWidgetType::BUTTON) {
+            if (static_cast<QuteButton *>(m_widgets[i])->property("CSQT_latch").toBool())
+                preset.addValue(id, m_widgets[i]->getValue());
+        }
+        if (mtype == QuteWidgetType::CONTROLLER)
+            preset.addValue2(id, m_widgets[i]->getValue2());
+        if (mtype == QuteWidgetType::BUTTON
+                || mtype == QuteWidgetType::LINEEDIT
+                || mtype == QuteWidgetType::DISPLAY)
+            preset.addStringValue(id, m_widgets[i]->getStringValue());
+        // BSBLabel is left out from presets.
     }
-    treeWidget->insertTopLevelItems(0, sortedItems);
-    connect(treeWidget,SIGNAL(itemDoubleClicked (QTreeWidgetItem * , int)),
-            this, SLOT(loadPresetFromItem(QTreeWidgetItem * , int)) );
-
-    d.setModal(false);
-    d.exec();
-}
-
-void WidgetLayout::loadPresetFromAction()
-{
-    QAction *s = static_cast<QAction *>(sender());
-    loadPreset(s->data().toInt());
-}
-
-void WidgetLayout::loadPresetFromItem(QTreeWidgetItem * item, int column)
-{
-    loadPreset(item->data(column,Qt::UserRole).toInt());
+    widgetsMutex.unlock();
 }
 
 void WidgetLayout::loadPreset(int num)
 {
-    int index = getPresetIndex(num);
-    loadPresetFromIndex(index);
+    loadPresetFromIndex(getPresetIndex(num));
 }
 
 void WidgetLayout::loadPresetFromIndex(int index)
@@ -5961,6 +5981,7 @@ void WidgetLayout::loadPresetFromIndex(int index)
         qDebug() << "WidgetLayout::loadPreset num invalid.";
         return;
     }
+    presets[index].setLastRecalled(QDateTime::currentDateTimeUtc());
     m_currentPreset = index;
     WidgetPreset p = presets[index];
     QStringList ids = p.getWidgetIds();
@@ -6024,160 +6045,197 @@ void WidgetLayout::loadPresetFromIndex(int index)
     newValue(channelValue2);
 }
 
+int WidgetLayout::currentPresetNumber() const
+{
+    if (m_currentPreset >= 0 && m_currentPreset < presets.size())
+        return presets[m_currentPreset].getNumber();
+    return -1;
+}
+
+QVector<WidgetPreset> WidgetLayout::getPresets() const
+{
+    return presets;
+}
+
+bool WidgetLayout::presetNameExists(const QString &name, int excludeNumber) const
+{
+    const QString candidate = name.trimmed();
+    if (candidate.isEmpty())
+        return false;
+    for (const WidgetPreset &preset : presets) {
+        if (preset.getNumber() == excludeNumber)
+            continue;
+        if (preset.getName().compare(candidate, Qt::CaseInsensitive) == 0)
+            return true;
+    }
+    return false;
+}
+
+int WidgetLayout::addPreset(const QString &name, const QString &description)
+{
+    const QString trimmedName = name.trimmed();
+    if (trimmedName.isEmpty() || presetNameExists(trimmedName))
+        return -1;
+
+    WidgetPreset preset;
+    preset.setName(trimmedName);
+    preset.setDescription(description.trimmed());
+    preset.setNumber(nextPresetIndex());
+    preset.setCreated(QDateTime::currentDateTimeUtc());
+    fillPresetFromWidgets(preset);
+
+    presets.append(preset);
+    m_nextPresetIndex = preset.getNumber() + 1;
+    m_currentPreset = presets.size() - 1;
+    setModified(true);
+    emit presetsChanged();
+    return preset.getNumber();
+}
+
+bool WidgetLayout::updatePreset(int number)
+{
+    const int index = getPresetIndex(number);
+    if (index < 0)
+        return false;
+
+    WidgetPreset updated;
+    updated.setName(presets[index].getName());
+    updated.setNumber(number);
+    updated.setDescription(presets[index].getDescription());
+    updated.setCreated(presets[index].getCreated());
+    updated.setLastRecalled(presets[index].getLastRecalled());
+    fillPresetFromWidgets(updated);
+
+    presets[index] = updated;
+    m_currentPreset = index;
+    setModified(true);
+    emit presetsChanged();
+    return true;
+}
+
+int WidgetLayout::removePreset(int number)
+{
+    const int index = getPresetIndex(number);
+    if (index < 0)
+        return -1;
+
+    presets.removeAt(index);
+    if (m_currentPreset == index)
+        m_currentPreset = -1;
+    else if (m_currentPreset > index)
+        --m_currentPreset;
+    setModified(true);
+    emit presetsChanged();
+    return index;
+}
+
+int WidgetLayout::restorePreset(int position, const WidgetPreset &preset)
+{
+    WidgetPreset restored = preset;
+    if (presetExists(restored.getNumber()))
+        restored.setNumber(nextPresetIndex());
+    if (presetNameExists(restored.getName(), restored.getNumber())) {
+        QSet<QString> usedNames;
+        for (const WidgetPreset &existing : presets)
+            usedNames.insert(existing.getName().toLower());
+        restored.setName(uniquePresetName(restored.getName(), usedNames));
+    }
+
+    position = qBound(0, position, presets.size());
+    presets.insert(position, restored);
+    if (m_currentPreset >= position)
+        ++m_currentPreset;
+    m_nextPresetIndex = qMax(m_nextPresetIndex, restored.getNumber() + 1);
+    setModified(true);
+    emit presetsChanged();
+    return restored.getNumber();
+}
+
 void WidgetLayout::newPreset()
 {
-    QDialog d(this);
-    QGridLayout *l = new QGridLayout(&d);
-    QLabel *nameLabel = new QLabel(tr("New Preset Name:"), &d);
-    QLineEdit *nameLineEdit = new QLineEdit(&d);
-    QLabel *numberLabel = new QLabel(tr("Number:"), &d);
-    QSpinBox *numberSpinBox = new QSpinBox(&d);
-    numberSpinBox->unsetLocale();
-    QPushButton *okButton = new QPushButton(tr("Ok"),&d);
-    QPushButton *cancelButton = new QPushButton(tr("Cancel"),&d);
-    l->addWidget(nameLabel, 0,0, Qt::AlignRight);
-    l->addWidget(nameLineEdit, 0,1, Qt::AlignLeft);
-    l->addWidget(numberLabel, 1,0, Qt::AlignRight);
-    l->addWidget(numberSpinBox, 1,1, Qt::AlignLeft);
-    l->addWidget(cancelButton, 2,0, Qt::AlignCenter);
-    l->addWidget(okButton, 2,1, Qt::AlignCenter);
-    connect(okButton, SIGNAL(released()), &d, SLOT(accept()));
-    connect(cancelButton, SIGNAL(released()), &d, SLOT(reject()));
+    QStringList names;
+    for (const WidgetPreset &preset : presets)
+        names << preset.getName();
 
-    int ret = d.exec();
-    if (ret == QDialog::Accepted) {
-        if (presetExists(numberSpinBox->value())) {
-            int ret = QMessageBox::question(this, tr("Preset Already Exists"),
-                                            tr("Preset %i already exists. Overwrite?").arg(numberSpinBox->value()),
-                                            QMessageBox::Yes|QMessageBox::No, QMessageBox::No);
-            if (ret == QMessageBox::Yes) {
-                savePreset(numberSpinBox->value(), nameLineEdit->text() );
-            }
-        }
-        else {
-            savePreset(numberSpinBox->value(), nameLineEdit->text() );
-        }
-    }
+    PresetNameDialog dialog(this);
+    dialog.setExistingNames(names);
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    addPreset(dialog.presetName(), dialog.description());
 }
 
-
-void WidgetLayout::savePreset()
+void WidgetLayout::managePresets()
 {
-    QDialog d(this);
-    d.setWindowTitle(tr("Presets"));
-    QVBoxLayout *l = new QVBoxLayout(&d);
-    QLabel *lab= new QLabel(&d);
-    QComboBox *box = new QComboBox(&d);
-    QPushButton *okButton = new QPushButton(tr("Ok"),&d);
-    QPushButton *cancelButton = new QPushButton(tr("Cancel"),&d);
-    QPushButton *newButton = new QPushButton(tr("New Preset"),&d);
-
-    lab->setText(tr("Select Preset to save"));
-    l->addWidget(lab);
-    l->addWidget(box);
-    l->addWidget(cancelButton);
-    l->addWidget(newButton);
-    l->addWidget(okButton);
-    connect(okButton, SIGNAL(released()), &d, SLOT(accept()));
-    connect(cancelButton, SIGNAL(released()), &d, SLOT(reject()));
-    connect(newButton, SIGNAL(released()), this, SLOT(newPreset()));
-    connect(newButton, SIGNAL(released()), &d, SLOT(reject()));  // For now just close the load preset window (instead of refreshing...
-    for (int i = 0; i < presets.size(); i++) {
-        QString itemText = QString::number(presets[i].getNumber()) + "  " + presets[i].getName();
-        box->addItem(itemText, presets[i].getNumber() );
+    if (auto *existing = findChild<PresetsDialog *>()) {
+        existing->show();
+        existing->raise();
+        existing->activateWindow();
+        return;
     }
-    box->setCurrentIndex(m_currentPreset);
-
-    int ret = d.exec();
-    if (ret == QDialog::Accepted) {
-        if (box->currentIndex() < 0) {
-            newPreset();
-        }
-        else {
-            savePreset(presets[box->currentIndex()].getNumber(), presets[box->currentIndex()].getName());
-        }
-    }
+    auto *dialog = new PresetsDialog(this, this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->show();
+    dialog->raise();
+    dialog->activateWindow();
 }
 
-void WidgetLayout::savePreset(int num, QString name)
+bool WidgetLayout::setPresetName(int num, QString name)
 {
-    int index = getPresetIndex(num);
-    WidgetPreset p;
-    p.setName(name);
-    p.setNumber(num);
-    if (index == -1) {
-        qDebug() << "WidgetLayout::savePreset new preset";
-        presets.append(p);
-        index = presets.size() - 1;
-    }
-    widgetsMutex.lock();
-    for (int i = 0; i < m_widgets.size(); i++) {
-        auto w = m_widgets[i];
-        QString id = w->getUuid();
-        auto mtype = w->getWidgetTypeID();
-        if (mtype != QuteWidgetType::LABEL
-                && mtype != QuteWidgetType::LINEEDIT
-                && mtype != QuteWidgetType::BUTTON
-                && mtype != QuteWidgetType::CONSOLE) {
-            p.addValue(id, w->getValue());
-        }
-        if (mtype == QuteWidgetType::BUTTON) {
-            if (static_cast<QuteButton *>(m_widgets[i])->property("CSQT_latch").toBool()) {
-                p.addValue(id, m_widgets[i]->getValue());
-            }
-        }
-        if (mtype == QuteWidgetType::CONTROLLER) {
-            p.addValue2(id, m_widgets[i]->getValue2());
-        }
-        if (mtype == QuteWidgetType::BUTTON
-                || mtype == QuteWidgetType::LINEEDIT
-                || mtype == QuteWidgetType::DISPLAY) {
-            p.addStringValue(id, m_widgets[i]->getStringValue());
-        }
-        // Note that BSBLabel is left out from presets
-    }
-    widgetsMutex.unlock();
-    presets[index] = p;
-    m_currentPreset = index;
+    const int index = getPresetIndex(num);
+    const QString trimmed = name.trimmed();
+    if (index < 0 || trimmed.isEmpty()
+            || presetNameExists(trimmed, num))
+        return false;
+    if (presets[index].getName() == trimmed)
+        return true;
+    presets[index].setName(trimmed);
+    setModified(true);
+    emit presetsChanged();
+    return true;
 }
 
-void WidgetLayout::setPresetName(int num, QString name)
+bool WidgetLayout::setPresetDescription(int num, const QString &description)
 {
-    if (num >= 0 && num < presets.size()) {
-        int index = getPresetIndex(num);
-        if (index >= 0) {
-            presets[getPresetIndex(num)].setName(name);
-        }
-        else {
-            qDebug() << "WidgetLayout::setPresetName invalid number.";
-        }
-    }
+    const int index = getPresetIndex(num);
+    if (index < 0)
+        return false;
+    const QString trimmed = description.trimmed();
+    if (presets[index].getDescription() == trimmed)
+        return true;
+    presets[index].setDescription(trimmed);
+    setModified(true);
+    emit presetsChanged();
+    return true;
 }
 
-QList<int> WidgetLayout::getPresetNums()
+QList<int> WidgetLayout::getPresetNums() const
 {
     QList<int> list;
-    for (int i = 0; i < presets.size(); i++) {
-        list.append(presets[i].getNumber());
-    }
+    for (const WidgetPreset &preset : presets)
+        list.append(preset.getNumber());
     return list;
 }
 
-QString WidgetLayout::getPresetName(int num)
+QString WidgetLayout::getPresetName(int num) const
 {
-    int index = getPresetIndex(num);
-    if (index >= 0) {
-        return presets[getPresetIndex(num)].getName();
-    }
-    else {
-        return QString();
-        qDebug() << "WidgetLayout::getPresetName invalid number.";
-    }
+    const int index = getPresetIndex(num);
+    if (index >= 0)
+        return presets[index].getName();
+    qDebug() << "WidgetLayout::getPresetName invalid number.";
+    return QString();
 }
 
-bool WidgetLayout::presetExists(int num)
+QString WidgetLayout::getPresetDescription(int num) const
 {
-    return getPresetNums().contains(num);
+    const int index = getPresetIndex(num);
+    if (index >= 0)
+        return presets[index].getDescription();
+    return QString();
+}
+
+bool WidgetLayout::presetExists(int num) const
+{
+    return getPresetIndex(num) >= 0;
 }
 
 QColor WidgetLayout::getColorFromElement(QDomElement elem)

@@ -155,5 +155,3 @@ This file shows the difference for a few intervals with Equal temperament and Ju
   <fontsize>10</fontsize>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

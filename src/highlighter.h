@@ -294,16 +294,13 @@ private:
 
     const QSet<QString> tagPatterns = {
         u"CsoundSynthesizer"_s,
-        u"MacOptions"_s,
-        u"csLADSPA"_s,
-        u"Cabbage"_s,
         u"CsInstruments"_s,
         u"CsOptions"_s,
         u"CsScore"_s,
         u"CsVersion"_s,
         u"CsHtml5"_s,
         u"CsFileB"_s,
-        u"CsLicense"_s, u"CsLincense"_s,
+        u"CsLicense"_s,
         u"CsMeta"_s,
     };
 

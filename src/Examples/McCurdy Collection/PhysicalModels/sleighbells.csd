@@ -799,6 +799,4 @@ sleigbells is a semi-physical model of sleighbells. It is one of the PhISEM perc
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

@@ -211,5 +211,3 @@ At each note the audio file is loaded (init).</label>
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

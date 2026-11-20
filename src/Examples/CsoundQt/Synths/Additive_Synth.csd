@@ -2715,5 +2715,3 @@ e
   <borderRadius>3</borderRadius>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

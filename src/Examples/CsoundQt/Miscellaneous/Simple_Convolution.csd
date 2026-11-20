@@ -663,5 +663,3 @@ i 1 0 1; plays the whole soundfile
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

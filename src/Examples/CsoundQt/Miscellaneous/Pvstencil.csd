@@ -314,5 +314,3 @@ For another application, see the Noise Reduction example.</label>
   <value>-18.0952</value>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

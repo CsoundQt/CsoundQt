@@ -837,5 +837,3 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -626,5 +626,3 @@ schedule(2, 0, 1000)
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

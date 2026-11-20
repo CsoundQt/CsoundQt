@@ -93,5 +93,3 @@ e
   <triggermode>TriggerUp</triggermode>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

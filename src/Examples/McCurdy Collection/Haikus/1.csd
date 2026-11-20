@@ -80,5 +80,3 @@ e 99999
   <b>240</b>
  </bgcolor>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

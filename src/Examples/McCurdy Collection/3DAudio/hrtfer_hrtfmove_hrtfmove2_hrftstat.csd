@@ -1001,5 +1001,3 @@ Off and On the instrument after changing Audio file.</label>
   <background>nobackground</background>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

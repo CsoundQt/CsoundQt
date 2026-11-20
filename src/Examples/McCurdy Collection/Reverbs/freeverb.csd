@@ -908,5 +908,3 @@ In this example the user can choose between a sound file input or the computer's
   <flatStyle>true</flatStyle>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

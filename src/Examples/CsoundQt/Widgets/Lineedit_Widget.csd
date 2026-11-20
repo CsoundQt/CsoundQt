@@ -558,5 +558,3 @@ e
   <borderwidth>2</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

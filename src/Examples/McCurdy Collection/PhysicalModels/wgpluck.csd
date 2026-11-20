@@ -1568,5 +1568,3 @@ I have included gain controls on the exitation signal and on the output signal o
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

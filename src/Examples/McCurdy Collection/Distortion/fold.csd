@@ -678,5 +678,3 @@ The amount of foldover is expressed as a multiple of the sampling rate therefore
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -106,7 +106,6 @@ public:
 	QString getWidgetsText(); // With full tags
 	QString getPresetsText();
 	QString getSelectedWidgetsText();
-	QString getCsladspaLines();
 	bool openMidiPort(int port);
 	void closeMidiPort();
 	QVector<QuteWidget *> getWidgets() {return m_widgets;}
@@ -218,10 +217,26 @@ public:
 	void engineStopped(); // To let the widgets know engine has stopped (to free unused curve buffers)
 
 	// Preset methods
-	void setPresetName(int num, QString name);
-	QList<int> getPresetNums();
-	QString getPresetName(int num);
-	bool presetExists(int num);
+	bool setPresetName(int num, QString name);
+	bool setPresetDescription(int num, const QString &description);
+	QList<int> getPresetNums() const;
+	QString getPresetName(int num) const;
+	QString getPresetDescription(int num) const;
+	bool presetExists(int num) const;
+	QVector<WidgetPreset> getPresets() const;
+	bool presetNameExists(const QString &name, int excludeNumber = -1) const;
+	int currentPresetNumber() const;
+	// Create a preset from the current widget values. The index is assigned
+	// automatically. Returns the new index, or -1 if the name is empty/taken.
+	int addPreset(const QString &name, const QString &description);
+	// Store the current widget values under an existing preset, keeping its
+	// name, description and timestamps.
+	bool updatePreset(int number);
+	// Remove the preset and return its position in the preset vector, or -1.
+	int removePreset(int number);
+	// Reinsert a removed preset (used by the presets dialog's undo). Returns the
+	// restored index; a conflicting name/index gets a fresh one.
+	int restorePreset(int position, const WidgetPreset &preset);
 
 	// Curves from API
 	void appendCurve(WINDAT *windat);
@@ -239,6 +254,8 @@ public:
 	//    void passWidgetClipboard(QString text);
 
 	void createContextMenu(QContextMenuEvent *event);  // When done outside container widget
+	// Show the same menu at a layout position and global screen position.
+	void createContextMenu(const QPoint &position, const QPoint &globalPos);
 
 	// Show (once) an informational dialog about widget fonts that are not
 	// bundled and were replaced; called after a file is loaded.
@@ -292,10 +309,6 @@ public:
 	QAction *distributeVerticalAct;
 	QAction *alignCenterHorizontalAct;
 	QAction *alignCenterVerticalAct;
-
-	// Preset actions
-	QAction *storePresetAct;
-	QAction *recallPresetAct;
 
     // Value changes buffer to store all value changes from widgets that
     // have been triggered from the GUI
@@ -392,15 +405,10 @@ public slots:
 	void setMouseOffset(int x, int y);
 
 	// Preset slots
-	void loadPreset(); // Show dialog and ask
-	void loadPresetFromAction();  // Triggered from menu item
-	void loadPresetFromItem(QTreeWidgetItem * item, int column);  // Triggered from tree widget
 	void loadPreset(int num);
 	void loadPresetFromIndex(int index);
-	void newPreset(); // Show dialog asking for name
-	//    void newPreset(int num, QString name);
-	void savePreset(); // Show dialog asking for name
-	void savePreset(int num, QString name);
+	void newPreset();      // Ask for a name/description and store the current state
+	void managePresets();  // Open the presets dialog
 
 	// Editing
 	void copy();
@@ -556,6 +564,7 @@ private:
 
 	QVector<WidgetPreset> presets;
 	int m_currentPreset; // If -1 no current preset
+	int m_nextPresetIndex = 0; // Session counter; new presets get increasing indexes
 
 	QList<RegisteredController> registeredControllers;
 
@@ -665,7 +674,9 @@ private:
 	void clearHistory();
 
 	// Preset Methods
-	int getPresetIndex(int number);
+	int getPresetIndex(int number) const;
+	int nextPresetIndex() const;
+	void fillPresetFromWidgets(WidgetPreset &preset);
 
 	//XML helper functions
 	QColor getColorFromElement(QDomElement elem);  // Converts an XML color element to a QColor structure
@@ -698,6 +709,7 @@ signals:
 	void widgetHovered(QuteWidget *widget);
 	void widgetChannelsHighlightRequested(const QStringList &channels);
 	void editingEscapePressed();
+	void presetsChanged();
 	void editModeChanged(bool active);
 	//    void setWidgetClipboardSignal(QString text);  // To propagate clipboard for sharing between pages
 };

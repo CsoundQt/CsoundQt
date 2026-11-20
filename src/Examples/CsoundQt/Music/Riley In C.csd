@@ -7356,5 +7356,3 @@ license: http://creativecommons.org</label>
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

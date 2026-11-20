@@ -772,5 +772,3 @@ Buttons can be set to "latch".</label>
   <borderRadius>8</borderRadius>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

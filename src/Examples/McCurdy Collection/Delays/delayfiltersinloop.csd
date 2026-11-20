@@ -1133,5 +1133,3 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

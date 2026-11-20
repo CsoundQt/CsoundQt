@@ -440,5 +440,3 @@ It has a cursor which can also be set via a channel.  The ruler can be hidden or
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -1853,5 +1853,3 @@ Channels</label>
   <fontsize>10</fontsize>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

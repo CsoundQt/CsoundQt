@@ -403,5 +403,3 @@
   <borderRadius>8</borderRadius>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

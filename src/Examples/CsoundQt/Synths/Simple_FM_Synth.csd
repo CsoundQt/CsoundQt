@@ -1053,5 +1053,3 @@ i 1 0 1 440
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

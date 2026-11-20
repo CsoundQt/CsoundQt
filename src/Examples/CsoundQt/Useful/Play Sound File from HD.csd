@@ -1189,5 +1189,3 @@ Length = 20.088, Samplerate = 44100, Channels = 2</label>
   <fontsize>12</fontsize>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

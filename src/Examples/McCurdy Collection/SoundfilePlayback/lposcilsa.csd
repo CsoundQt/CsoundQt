@@ -680,5 +680,3 @@ i 11 0 0.01  ; Init
   <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

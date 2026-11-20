@@ -38,10 +38,8 @@ public:
 	virtual void setMidiValue(int value);
 	virtual bool acceptsMidi() {return true;}
 	//    virtual void setResolution(double resolution);
-	virtual QString getCsladspaLine();
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();
-	virtual QString getCabbageLine();
     virtual QString getQml();
     
     QuteWidgetType getWidgetTypeID() override;

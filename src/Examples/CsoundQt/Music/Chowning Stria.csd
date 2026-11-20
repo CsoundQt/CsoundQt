@@ -801,5 +801,3 @@ The basis for this code was the original MUS10 orchestra file with modifications
   <bgcolor>#212121</bgcolor>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -64,7 +64,6 @@ public:
 	QuteComboBox(QWidget *parent);
 	~QuteComboBox();
 
-	virtual QString getCabbageLine();
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();
 	virtual QString getQml();

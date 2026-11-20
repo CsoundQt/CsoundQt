@@ -720,5 +720,3 @@ e 3600
   <randomizable group="0">false</randomizable>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

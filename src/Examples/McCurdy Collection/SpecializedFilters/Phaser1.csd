@@ -715,5 +715,3 @@ The phaser1 opcode is an implementation of an algorithm consisting of a user def
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -607,6 +607,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
         limiterSpinBox->setValue(m_options->limitValue);
     }
 
+	JackNameLineEdit->setMaxLength(CsoundOptions::MaxJackNameLength);
 	JackNameLineEdit->setText(m_options->rtJackName);
 	int midiModuleIndex = RtMidiModuleComboBox->findData(m_options->rtMidiModule);
 	if (midiModuleIndex < 0)

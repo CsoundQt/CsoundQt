@@ -252,26 +252,6 @@ double QuteCheckBox::getValue()
 //  return static_cast<QCheckBox *>(m_widget)->text();
 //}
 
-QString QuteCheckBox::getCabbageLine()
-{
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForRead();
-#endif
-	QString line = "checkbox channel(\"" + m_channel + "\"),  ";
-	line += QString("bounds(%1,%2,%3,%4), ").arg(x()).arg(y()).arg(width()).arg(height());
-	line += "value(" + (static_cast<QCheckBox *>(m_widget)->isChecked()?
-							QString("1"):QString("0")) + ")";
-	//line += QString(", caption(%1)").arg(m_channel);
-	if (property("CSQT_midicc").toInt() >= 0 && property("CSQT_midichan").toInt()>0) { // insert only if midi channel is above 0
-		line += ", midiCtrl(\"" + QString::number(property("CSQT_midichan").toInt()) + ",";
-		line +=  QString::number(property("CSQT_midicc").toInt()) + "\")";
-	}
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
-	return line;
-}
-
 QString QuteCheckBox::getWidgetType()
 {
     return QString("BSBCheckBox");

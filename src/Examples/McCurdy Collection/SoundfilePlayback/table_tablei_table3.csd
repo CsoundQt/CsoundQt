@@ -865,5 +865,3 @@ The example demonstrates the use of the table family of opcodes to playback a sa
   <flatStyle>true</flatStyle>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -352,5 +352,3 @@ Tableplots also define useful methods:
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

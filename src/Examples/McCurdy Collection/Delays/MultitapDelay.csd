@@ -1619,5 +1619,3 @@ In the design of this GUI, the fourth tap is the only one where the user specifi
   <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -410,5 +410,3 @@ schedule("Latency", 0, -1)
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

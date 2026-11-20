@@ -498,5 +498,3 @@ endin
   <mouseControl act="continuous"/>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

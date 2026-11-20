@@ -527,5 +527,3 @@ moogvcf is an emulation of the moog ladder diode resonant low-pass filter. The o
   <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -133,5 +133,3 @@ We can still use the traditional envelope generating opcodes line/expon/linseg/e
   <mode>0.00000000</mode>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

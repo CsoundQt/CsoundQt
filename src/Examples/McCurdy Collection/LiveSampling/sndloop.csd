@@ -618,5 +618,3 @@ Negative values for 'Pitch' result in reverse playback. This instrument also all
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

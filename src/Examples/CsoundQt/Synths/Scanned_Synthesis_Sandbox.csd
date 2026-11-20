@@ -1086,5 +1086,3 @@ New presets apply to new notes, no infulence during playing time.</label>
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

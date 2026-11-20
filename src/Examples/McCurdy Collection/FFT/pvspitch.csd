@@ -521,5 +521,3 @@ Threshold can be used to define a threshold beneath which sound components will 
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

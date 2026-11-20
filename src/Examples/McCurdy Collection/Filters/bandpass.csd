@@ -1450,5 +1450,3 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

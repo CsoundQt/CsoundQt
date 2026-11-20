@@ -772,5 +772,3 @@ Using sine waves creates circular motion, while other waveforms can simulate dif
   <rulercolor>#6d6d6d</rulercolor>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

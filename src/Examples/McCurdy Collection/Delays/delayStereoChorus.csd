@@ -963,5 +963,3 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -1100,5 +1100,3 @@ This example can also be played from an external MIDI keyboard. Pitch, note velo
   <randomizable group="0">false</randomizable>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -936,5 +936,3 @@ The appropriate table numbers can be derived by using the vco2ft opcode. If 'k-r
   <randomizable group="0">false</randomizable>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

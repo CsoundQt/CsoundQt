@@ -56,7 +56,6 @@ public:
 	//    virtual void setMidiValue2(int value);
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();
-	virtual QString getCabbageLine();
     virtual QString getQml();
 
 	//    void setChannel2Name(QString name);

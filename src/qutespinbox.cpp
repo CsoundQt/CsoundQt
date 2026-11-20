@@ -92,43 +92,6 @@ void QuteSpinBox::setMidiValue(int value)
 //  setProperty("CSQT_resolution", resolution);
 //}
 
-QString QuteSpinBox::getCsladspaLine()
-{
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForRead();
-#endif
-	QString line = "ControlPort=" + m_channel + "|" + m_channel + "\n";
-	line += "Range=-9999|9999";
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
-	return line;
-}
-
-QString QuteSpinBox::getCabbageLine()
-{
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForRead();
-#endif
-	QString line = "numberbox channel(\"" + m_channel + "\"),  ";
-	line += QString("bounds(%1,%2,%3,%4), ").arg(x()).arg(y()).arg(width()).arg(height());
-	//line += QString("text(%1), ").arg(m_channel); // Is it good idea to put channel as name?
-	line += QString( "range(%1,%2,%3,1,%4),  ").arg(property("CSQT_minimum").toDouble()).arg(property("CSQT_maximum").toDouble()).arg(m_value).arg(property("CSQT_resolution").toDouble());
-	//color does not work CsoundQt, why? Leave it out now... line += QString("colour(\"%1\")").arg( property("CSQT_color").toString());
-	QColor color = property("CSQT_color").value<QColor>();
-	line += "fontcolour(" + QString::number(color.red()) + "," +  QString::number(color.green()) + "," +  QString::number(color.blue()) + "), ";
-	color = property("CSQT_bgcolor").value<QColor>();
-	line += "colour(" + QString::number(color.red()) + "," +  QString::number(color.green()) + "," +  QString::number(color.blue()) + ") ";
-	if (property("CSQT_midicc").toInt() >= 0 && property("CSQT_midichan").toInt()>0) { // insert only if midi channel is above 0
-			line += ", midiCtrl(\"" + QString::number(property("CSQT_midichan").toInt()) + ",";
-			line +=  QString::number(property("CSQT_midicc").toInt()) + "\")";
-	}
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
-    return line;
-}
-
 QString QuteSpinBox::getQml()
 {
     QString qml = QString();

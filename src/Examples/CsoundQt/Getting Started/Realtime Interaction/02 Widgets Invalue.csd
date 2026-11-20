@@ -225,5 +225,3 @@ Now run Csound, and notice how the widget is controlling the frequency of the os
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -6455,8 +6455,6 @@ Channel = 1
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="664" y="320" width="655" height="346" visible="true" loopStart="0" loopEnd="0">i "play" 0 1 60 
 i "play" 1 1 62 
 i "play" 2 1 64 

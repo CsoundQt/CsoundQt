@@ -1077,5 +1077,3 @@ svfilter is an implementation of a resonant second order filter, with simultaneo
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

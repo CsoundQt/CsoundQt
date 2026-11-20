@@ -596,5 +596,3 @@ Click on a peak to display its frequency</label>
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

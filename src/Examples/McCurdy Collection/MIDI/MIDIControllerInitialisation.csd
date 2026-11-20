@@ -249,5 +249,3 @@ In this example the volume controller is initialised to its maximum setting and 
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

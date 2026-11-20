@@ -1989,5 +1989,3 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <value>2.42</value>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -1044,5 +1044,3 @@ Additive synthesis is the technique whereby sine waves of different frequencies 
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

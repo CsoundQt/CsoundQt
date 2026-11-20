@@ -1889,5 +1889,3 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

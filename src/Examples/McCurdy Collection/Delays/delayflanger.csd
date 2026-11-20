@@ -1093,5 +1093,3 @@ In this example the user can choose between a sound file as input or the compute
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

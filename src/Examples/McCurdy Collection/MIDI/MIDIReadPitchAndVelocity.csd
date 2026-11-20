@@ -276,5 +276,3 @@ More information on this opcode is given in the actual code of this example. The
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

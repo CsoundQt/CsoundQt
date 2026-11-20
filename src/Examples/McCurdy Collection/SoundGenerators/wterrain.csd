@@ -2905,5 +2905,3 @@ This example can also be played from a MIDI keyboard. In this mode MIDI pitch is
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

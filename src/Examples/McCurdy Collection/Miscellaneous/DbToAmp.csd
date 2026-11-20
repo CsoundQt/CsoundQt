@@ -344,5 +344,3 @@ This example converts decibel values into amplitude values that Csound uses to p
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

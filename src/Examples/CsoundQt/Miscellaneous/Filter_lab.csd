@@ -705,5 +705,3 @@ a1=-1.776      a2=0.952</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

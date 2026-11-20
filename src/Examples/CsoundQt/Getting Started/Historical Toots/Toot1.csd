@@ -115,5 +115,3 @@ e ; indicates the end of the score
   <mode>0.00000000</mode>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

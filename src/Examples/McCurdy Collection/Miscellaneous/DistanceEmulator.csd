@@ -1142,5 +1142,3 @@ This example is operated by activating 'On/Off' button and then operating the 'm
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

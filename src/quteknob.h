@@ -46,6 +46,8 @@ public:
     , m_exponent(1.0)
     , m_color(QColor(245, 124, 0))
     , m_textcolor(QColor(81, 41, 0))
+    , m_backgroundcolor(QColor(74, 37, 0))
+    , m_usebackground(false)
     , m_bordercolor(QColor(245, 124, 0))
     , m_border(0)
     , m_flat(true)
@@ -82,6 +84,21 @@ public:
     void setTextColor(QColor c) { m_textcolor = c; update(); }
 
     QColor getTextColor() { return m_textcolor; }
+
+    void setBackgroundColor(QColor c) {
+        if (!c.isValid()) {
+            qDebug() << "QVdial::setBackgroundColor: invalid color";
+            return;
+        }
+        m_backgroundcolor = c;
+        update();
+    }
+    QColor getBackgroundColor() const { return m_backgroundcolor; }
+    void setUseBackground(bool enable) {
+        m_usebackground = enable;
+        update();
+    }
+    bool useBackground() const { return m_usebackground; }
 
     void setFlatStyle(bool enable) { m_flat = enable; update(); }
     void setIntegerMode(bool enable) { m_intDisplay = enable; update(); }
@@ -150,6 +167,8 @@ private:
     double m_exponent;
     QColor m_color;
     QColor m_textcolor;
+    QColor m_backgroundcolor;
+    bool   m_usebackground;
     QColor m_bordercolor;
     int    m_border;
     bool   m_flat;
@@ -180,8 +199,6 @@ public:
 	~QuteKnob();
 
 	virtual void setWidgetGeometry(int x, int y, int width, int height);
-	virtual QString getCsladspaLine();
-	virtual QString getCabbageLine();
     virtual QString getQml();
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();
@@ -220,6 +237,8 @@ private:
     QCheckBox      *flatStyleCheckBox;
     SelectColorButton *knobColorButton;
     SelectColorButton *knobTextColorButton;
+    SelectColorButton *backgroundColorButton;
+    QCheckBox      *useBackgroundCheckBox;
     QCheckBox      *intModeCheckBox;
     QSpinBox  *borderWidthSpinBox;
     SelectColorButton *borderColorButton;

@@ -615,5 +615,3 @@ With long impulse files dconv will struggle to perform at all. The two impulse f
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

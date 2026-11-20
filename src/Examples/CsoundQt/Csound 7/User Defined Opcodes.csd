@@ -387,5 +387,3 @@ So the 500 Hz tone will output to channel 1, and the
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

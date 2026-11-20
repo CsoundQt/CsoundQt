@@ -347,5 +347,3 @@ f 0 3600
   <latched>false</latched>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

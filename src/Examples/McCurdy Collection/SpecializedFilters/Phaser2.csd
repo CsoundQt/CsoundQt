@@ -1060,5 +1060,3 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
   <randomizable group="0">false</randomizable>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

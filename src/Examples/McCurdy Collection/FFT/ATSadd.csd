@@ -1218,5 +1218,3 @@ Increment</label>
   <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

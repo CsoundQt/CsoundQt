@@ -211,5 +211,3 @@ A minus sign is placed in front of the the GEN routine number to ensure that the
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -1440,5 +1440,3 @@ Limit</label>
   <flatStyle>true</flatStyle>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

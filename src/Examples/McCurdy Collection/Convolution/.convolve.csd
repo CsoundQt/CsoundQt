@@ -729,5 +729,3 @@ Furthermore there does not seem to be a noticable drop in fidelity in pconvolve.
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

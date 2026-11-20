@@ -3180,5 +3180,3 @@ Time</label>
   <integerMode>false</integerMode>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

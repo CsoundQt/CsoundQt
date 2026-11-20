@@ -636,5 +636,3 @@ A 'Post Gain' control is included so that the user can compensate for the loss o
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

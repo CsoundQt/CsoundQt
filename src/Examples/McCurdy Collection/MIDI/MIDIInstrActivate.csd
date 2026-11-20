@@ -204,5 +204,3 @@ If you are not sure use the 'all available devices' value 'a'.  This example is 
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

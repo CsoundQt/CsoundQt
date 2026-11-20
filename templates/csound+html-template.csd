@@ -77,5 +77,3 @@ endin
   <latched>false</latched>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

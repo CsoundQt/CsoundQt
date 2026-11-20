@@ -537,5 +537,3 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

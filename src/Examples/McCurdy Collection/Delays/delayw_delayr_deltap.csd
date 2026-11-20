@@ -739,5 +739,3 @@ A gain control is provided to control the gain of the live input.</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -1884,5 +1884,3 @@ i "master" 0 3600
   <integerMode>false</integerMode>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

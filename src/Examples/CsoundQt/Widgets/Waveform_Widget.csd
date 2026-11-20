@@ -301,5 +301,3 @@ number of channels (0 = auto); channels are stacked in separate lanes.</label>
   <borderRadius>3</borderRadius>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

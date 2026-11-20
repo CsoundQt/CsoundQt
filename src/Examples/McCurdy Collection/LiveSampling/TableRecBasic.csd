@@ -635,5 +635,3 @@ If record is pressed for a second time the original recording is overwritten. Ma
   </bgcolor>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

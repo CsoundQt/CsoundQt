@@ -2555,5 +2555,3 @@ Version 1, November 2009</label>
   <randomizable group="0">false</randomizable>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

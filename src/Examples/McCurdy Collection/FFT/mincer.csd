@@ -1131,5 +1131,3 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

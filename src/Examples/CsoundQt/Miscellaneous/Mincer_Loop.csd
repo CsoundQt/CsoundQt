@@ -594,5 +594,3 @@ i 1 0 3600
   <offset>0</offset>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

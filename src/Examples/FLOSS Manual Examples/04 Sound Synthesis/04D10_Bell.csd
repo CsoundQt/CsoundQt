@@ -45,5 +45,3 @@ i "bell_like" 0 9
   <b>53</b>
  </bgcolor>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

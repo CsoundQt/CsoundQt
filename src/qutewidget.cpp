@@ -452,12 +452,6 @@ MouseParam QuteWidget::parseMouseParam(const QString& name)
 	return MouseParam::None;
 }
 
-QString QuteWidget::getCabbageLine()
-{
-	//Widgets return empty strings when not supported
-	return QString("");
-}
-
 void QuteWidget::createXmlWriter(QXmlStreamWriter &s)
 {
 	s.setAutoFormatting(true);
@@ -538,12 +532,6 @@ QString QuteWidget::getStringValue()
 QString QuteWidget::getDescription()
 {
     return m_description;
-}
-
-QString QuteWidget::getCsladspaLine()
-{
-	//Widgets return empty strings when not supported
-	return QString("");
 }
 
 QString QuteWidget::getQml()
@@ -634,6 +622,7 @@ QString QuteWidget::propertyType(const QString &name) const
         {u"latch"_s, u"boolean"_s},
         {u"momentaryMidiButton"_s, u"boolean"_s},
         {u"flatStyle"_s, u"boolean"_s},
+        {u"usebackground"_s, u"boolean"_s},
         {u"circle"_s, u"boolean"_s},
         {u"fillMode"_s, u"string"_s},
         {u"backgroundMode"_s, u"string"_s},
@@ -649,6 +638,7 @@ QString QuteWidget::propertyType(const QString &name) const
         {u"color"_s, u"color"_s},
         {u"pressedColor"_s, u"color"_s},
         {u"borderColor"_s, u"color"_s},
+        {u"backgroundColor"_s, u"color"_s},
         {u"textColor"_s, u"color"_s},
         {u"pressedTextColor"_s, u"color"_s},
         {u"bgcolor"_s, u"color"_s},
@@ -727,6 +717,8 @@ QString QuteWidget::propertyDescription(const QString &name) const
         {u"textorientation"_s, u"Text orientation: horizontal, vertical-up or vertical-down"_s},
         {u"exponent"_s, u"Skew of the value curve (1 = linear)"_s},
         {u"flatStyle"_s, u"Use a flat, platform-independent style"_s},
+        {u"backgroundColor"_s, u"Background colour when usebackground is enabled"_s},
+        {u"usebackground"_s, u"Use backgroundColor instead of deriving the background from the foreground"_s},
         {u"circle"_s, u"Draw a flat checkbox as a circle"_s},
         {u"checkstyle"_s, u"Check mark style: \"x\" or \"full\""_s},
         {u"latch"_s, u"Stays pressed until clicked again"_s},

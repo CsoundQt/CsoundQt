@@ -161,6 +161,28 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
 	menu.exec(event->globalPos());
 }
 
+void WidgetPanel::showBackgroundContextMenu(const QPoint &globalPos)
+{
+	QScrollArea *s = qobject_cast<QScrollArea *>(m_stack->currentWidget());
+	WidgetLayout *w = s ? qobject_cast<WidgetLayout *>(s->widget()) : nullptr;
+	if (w == nullptr) {
+		QMenu menu;
+		DockPanelUtils::addPanelActions(this, menu);
+		menu.exec(globalPos);
+		return;
+	}
+
+	// The dock tab lies outside the widget layout. Insert new widgets at the
+	// centre of the visible layout instead of using the tab position.
+	const QRect layoutGlobal(w->mapToGlobal(QPoint(0, 0)), w->size());
+	const QRect viewportGlobal(s->viewport()->mapToGlobal(QPoint(0, 0)),
+	                           s->viewport()->size());
+	const QRect visible = layoutGlobal.intersected(viewportGlobal);
+	const QPoint target = !visible.isEmpty() ? visible.center()
+	                                        : layoutGlobal.center();
+	w->createContextMenu(w->mapFromGlobal(target), globalPos);
+}
+
 void WidgetPanel::mousePressEvent(QMouseEvent * event)
 {
 	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();

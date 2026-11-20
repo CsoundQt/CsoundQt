@@ -434,5 +434,3 @@ i "Main"		0		1
   <borderRadius>3</borderRadius>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -87,5 +87,3 @@ schedule("reverb",0,-1)
   <b>240</b>
  </bgcolor>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -811,5 +811,3 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

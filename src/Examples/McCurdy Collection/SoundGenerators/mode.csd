@@ -5549,5 +5549,3 @@ Mode is a filtering opcode which is intended to be used as a resonator for modal
   <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -48,6 +48,12 @@ public:
 
 	void setJackNameSize(int size);
 
+	// Csound's rtjack module stores the JACK client name in a MAX_NAME_LEN + 1
+	// byte buffer (MAX_NAME_LEN is 32) and its configuration parser rejects
+	// values of 32 characters or more. 31 characters is therefore the longest
+	// name that can be passed through -+jack_client.
+	static constexpr int MaxJackNameLength = 31;
+
     // this is used to identify a document indenpendently of its filename (which might
     // be a temporary name)
     QString docName;

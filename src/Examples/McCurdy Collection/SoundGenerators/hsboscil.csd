@@ -1164,5 +1164,3 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

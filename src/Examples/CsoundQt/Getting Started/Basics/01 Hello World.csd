@@ -130,5 +130,3 @@ e 							    ; e - ends the score
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

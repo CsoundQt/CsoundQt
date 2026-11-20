@@ -93,5 +93,3 @@ e 3600
   <b>240</b>
  </bgcolor>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -763,5 +763,3 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -614,5 +614,3 @@ Clicking on a Scope widget freezes it.</label>
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

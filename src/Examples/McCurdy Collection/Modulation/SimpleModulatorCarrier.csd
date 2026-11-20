@@ -506,6 +506,4 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
   <all>true</all>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

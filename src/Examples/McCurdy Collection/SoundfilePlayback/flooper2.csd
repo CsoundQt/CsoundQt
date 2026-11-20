@@ -830,5 +830,3 @@ flooper2 plays a soundfile with a user definable loop. Loop start and end points
   <borderRadius>5</borderRadius>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

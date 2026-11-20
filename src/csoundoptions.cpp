@@ -27,6 +27,7 @@
 
 #include <QDir> // for static QDir::separator()
 #include <QDebug>
+#include <QFileInfo>
 #include <cstdlib> // for calloc
 #include <QRegularExpression>
 using namespace Qt::StringLiterals;
@@ -36,7 +37,7 @@ using namespace Qt::StringLiterals;
 CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 	m_configlists(configlists)
 {
-	m_jackNameSize = 16; //a small default
+	m_jackNameSize = MaxJackNameLength;
 
 	rt = true;
 
@@ -158,8 +159,9 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 			if (rtJackName != "" && rtAudioModule == "jack") {
 				QString jackName = rtJackName;
 				if (jackName.contains("*")) {
-                    // auto base = fileName1.mid(fileName1.lastIndexOf(QDir::separator())+1);
-                    auto base = docName.mid(docName.lastIndexOf(QDir::separator())+1);
+                    // Use the document name without its extension. completeBaseName()
+                    // keeps dots that belong to the name (e.g. "piece.v2.csd").
+                    const QString base = QFileInfo(docName).completeBaseName();
                     jackName.replace("*", base);
                     jackName.replace(" ", "_");
 				}
@@ -293,5 +295,5 @@ int CsoundOptions::generateCmdLine(char **argv)
 
 void CsoundOptions::setJackNameSize(int size)
 {
-	m_jackNameSize = size;
+	m_jackNameSize = qBound(1, size, MaxJackNameLength);
 }

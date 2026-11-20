@@ -1136,5 +1136,3 @@ Then, press the Start button.</label>
   <borderRadius>3</borderRadius>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -2721,6 +2721,72 @@ static QString codeOnlyLine(const QString &line, int startState, int *endState)
 	return code;
 }
 
+// CSD tags that form a block and therefore have a closing tag. Keeping the
+// list explicit avoids turning ordinary HTML such as <br> into a block when it
+// appears inside <CsHtml5>.
+static bool isXmlBlockTag(const QString &tagName)
+{
+    static const QSet<QString> tags = {
+        u"csoundsynthesizer"_s,
+        u"csoptions"_s,
+        u"csinstruments"_s,
+        u"csscore"_s,
+        u"csmeta"_s,
+        u"csfile"_s,
+        u"csfileb"_s,
+        u"cslicense"_s,
+        u"csversion"_s,
+        u"cshtml5"_s,
+    };
+    return tags.contains(tagName.toLower());
+}
+
+// Return the name of a CSD XML opener that occupies a whole line, such as
+// "<CsOptions>" or "<CsFileB filename=\"...\">". Self-closing tags, comments,
+// declarations and lines that mix the tag with other text are ignored.
+static QString xmlOpenerTag(const QString &line)
+{
+    static const QRegularExpression openerRx(
+                uR"(^\s*<([A-Za-z][A-Za-z0-9_.:-]*)(?:\s+[^<>]*)?>\s*$)"_s);
+    const QRegularExpressionMatch match = openerRx.match(line);
+    if (!match.hasMatch() || line.trimmed().endsWith(u"/>"_s))
+        return {};
+    const QString tagName = match.captured(1);
+    return isXmlBlockTag(tagName) ? tagName : QString();
+}
+
+// True when the XML opener for `tagName` has a matching closing tag at or after
+// `startBlock`. Nested tags with the same name are balanced so an inner closer
+// does not hide the outer one.
+static bool hasMatchingXmlEnd(QTextDocument *document,
+                              const QTextBlock &startBlock,
+                              const QString &tagName)
+{
+    if (document == nullptr || !startBlock.isValid() || tagName.isEmpty())
+        return false;
+
+    const QString escaped = QRegularExpression::escape(tagName);
+    const QRegularExpression openerRx(
+                uR"(<\s*%1(?:\s[^<>]*)?\s*>)"_s.arg(escaped),
+                QRegularExpression::CaseInsensitiveOption);
+    const QRegularExpression closerRx(
+                uR"(</\s*%1\s*>)"_s.arg(escaped),
+                QRegularExpression::CaseInsensitiveOption);
+
+    int depth = 1;
+    for (QTextBlock block = startBlock; block.isValid(); block = block.next()) {
+        const QString text = block.text();
+        if (closerRx.match(text).hasMatch()) {
+            --depth;
+            if (depth == 0)
+                return true;
+        } else if (openerRx.match(text).hasMatch()) {
+            ++depth;
+        }
+    }
+    return false;
+}
+
 // True when the block opened by `keyword` already has a matching closing tag
 // after `startBlock`. Matching uses a nesting count so a closer belonging to an
 // inner block does not hide the one for this opener.
@@ -2798,11 +2864,41 @@ void DocumentView::indentNewLine()
 	if (!leading.isEmpty())
 		m_mainEditor->insertPlainText(leading);
 
-	// After instr/opcode/if, for/while loops that end with "do", and switch
-	// blocks, add one indentation step for the body and the matching end tag on
-	// its own line. The cursor stays in the body.
+	// After instr/opcode/if, for/while loops that end with "do", switch blocks
+	// and CSD XML tags, add one indentation step for the body and the matching
+	// end tag on its own line. The cursor stays in the body.
 	if (!m_autoCloseBlocks || m_mode == EDIT_SCO_MODE)
 		return;
+
+	const QString step = indentString();
+	auto insertAutoClosedBlock = [&](const QString &closer) {
+		const QString bodyIndent = leading + step;
+		internalChange = true;
+		m_mainEditor->insertPlainText(step + '\n'_L1 + leading + closer);
+		// insertPlainText moves the cursor after the closing tag; put it back
+		// on the indented body line.
+		QTextCursor cursor = m_mainEditor->textCursor();
+		cursor.movePosition(QTextCursor::PreviousBlock);
+		cursor.movePosition(QTextCursor::StartOfBlock);
+		cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor,
+		                    bodyIndent.size());
+		m_mainEditor->setTextCursor(cursor);
+	};
+
+	// XML/CSD tags use the same auto-close behaviour as Csound blocks. A
+	// matching closing tag later in the document means the block is already
+	// complete, so only the body indentation is added.
+	const QString xmlTag = xmlOpenerTag(line);
+	if (!xmlTag.isEmpty()) {
+		if (hasMatchingXmlEnd(m_mainEditor->document(),
+		                      m_mainEditor->textCursor().block(), xmlTag)) {
+			m_mainEditor->insertPlainText(step);
+		} else {
+			insertAutoClosedBlock(u"</"_s + xmlTag + u">"_s);
+		}
+		return;
+	}
+
 	static const QRegularExpression openerRx(
 			uR"(^\s*(opcode|instr|if|for|while|switch)\b)"_s,
 			QRegularExpression::CaseInsensitiveOption);
@@ -2830,7 +2926,6 @@ void DocumentView::indentNewLine()
 		endTag = u"endsw"_s;
 	else
 		endTag = u"od"_s;
-	const QString step = indentString();
 
 	// Do not add a second closing tag when one already exists later in this
 	// block. This catches the common case of typing a newline after an existing
@@ -2841,17 +2936,7 @@ void DocumentView::indentNewLine()
 		return;
 	}
 
-	const QString bodyIndent = leading + step;
-	internalChange = true;
-	m_mainEditor->insertPlainText(step + '\n'_L1 + leading + endTag);
-	// insertPlainText moves the cursor after the end tag; put it back on the
-	// indented body line.
-	QTextCursor cursor = m_mainEditor->textCursor();
-	cursor.movePosition(QTextCursor::PreviousBlock);
-	cursor.movePosition(QTextCursor::StartOfBlock);
-	cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor,
-	                    bodyIndent.size());
-	m_mainEditor->setTextCursor(cursor);
+	insertAutoClosedBlock(endTag);
 }
 
 void DocumentView::findReplace()

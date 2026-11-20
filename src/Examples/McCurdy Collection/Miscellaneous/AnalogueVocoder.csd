@@ -1424,5 +1424,3 @@ If 'External' is chosen then audio is taken from the computer's right channel in
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

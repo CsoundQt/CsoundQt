@@ -120,8 +120,11 @@ void QVdial::paintEvent(QPaintEvent *event) {
     painter.setRenderHint(QPainter::Antialiasing);
     const bool enabled = isEnabled();
     const QColor fg = enabled ? m_color : QuteWidget::disabledColor(m_color);
-    const QColor bgcolor = enabled ? m_color.darker(330)
-                                   : QuteWidget::disabledColor(m_color.darker(330));
+    const QColor bgcolor = m_usebackground
+            ? (enabled ? m_backgroundcolor
+                       : QuteWidget::disabledColor(m_backgroundcolor))
+            : (enabled ? m_color.darker(330)
+                       : QuteWidget::disabledColor(m_color.darker(330)));
     const QColor border = enabled ? m_bordercolor : QuteWidget::disabledColor(m_bordercolor);
     double r = qMin(this->rect().height(), this->rect().width()) / 2.0;
     drawKnob(painter, m_border, fg, bgcolor, border);
@@ -181,6 +184,11 @@ QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
     setColor(QColor(245, 124, 0));
     QColor textColor =  isDarkTheme() ?  QColor(245, 124, 0) : qApp->palette().color(QPalette::WindowText); // yellowish color for dark theme
     setTextColor(textColor);
+    const QColor defaultBackground = QColor(245, 124, 0).darker(330);
+    setProperty("CSQT_backgroundColor", defaultBackground);
+    setProperty("CSQT_usebackground", false);
+    w->setBackgroundColor(defaultBackground);
+    w->setUseBackground(false);
     auto borderColor = QColor(81, 41, 0);
     setProperty("CSQT_borderColor", borderColor.name());
     setProperty("CSQT_border", 0);
@@ -261,6 +269,14 @@ bool QuteKnob::applyProperty(const QString &name)
 		w->setTextColor(QColor(property("CSQT_textcolor").toString()));
 		return true;
 	}
+	if (name == "CSQT_backgroundColor") {
+		w->setBackgroundColor(property("CSQT_backgroundColor").value<QColor>());
+		return true;
+	}
+	if (name == "CSQT_usebackground") {
+		w->setUseBackground(property("CSQT_usebackground").toBool());
+		return true;
+	}
 	if (name == "CSQT_showvalue") {
 		w->setDrawValue(property("CSQT_showvalue").toBool());
 		return true;
@@ -299,6 +315,8 @@ void QuteKnob::applyInternalProperties()
 
     w->setColor(property("CSQT_color").value<QColor>());
     w->setTextColor(QColor(property("CSQT_textcolor").toString()));
+    w->setBackgroundColor(property("CSQT_backgroundColor").value<QColor>());
+    w->setUseBackground(property("CSQT_usebackground").toBool());
     w->setDrawValue(property("CSQT_showvalue").toBool());
     w->setFlatStyle(property("CSQT_flatstyle").toBool());
     w->setIntegerMode(property("CSQT_integerMode").toBool());
@@ -314,41 +332,6 @@ void QuteKnob::setWidgetGeometry(int x, int y, int width, int height)
 	m_widget->blockSignals(true);
 	m_widget->setFixedSize(width, height);
 	m_widget->blockSignals(false);
-}
-
-QString QuteKnob::getCsladspaLine()
-{
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForRead();
-#endif
-	QString line = "ControlPort=" + m_channel + "|" + m_channel + "\n";
-	line += "Range=" + QString::number(property("CSQT_minimum").toDouble(), 'f', 8);
-	line += "|" + QString::number(property("CSQT_maximum").toDouble(), 'f', 8);
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
-	return line;
-}
-
-
-QString QuteKnob::getCabbageLine()
-{
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForWrite();
-#endif
-	QString line = "rslider ";
-	line += "channel(\"" + m_channel + "\"),  ";
-	line += QString("bounds(%1,%2,%3,%4), ").arg(x()).arg(y()).arg(width()).arg(height());
-	line += QString("range(%1,%2,%3), ").arg(property("CSQT_minimum").toDouble()).arg(property("CSQT_maximum").toDouble()).arg(m_value);
-    // insert only if midi channel is above 0
-    if (property("CSQT_midicc").toInt() >= 0 && property("CSQT_midichan").toInt() > 0) {
-		line += ", midiCtrl(\"" + QString::number(property("CSQT_midichan").toInt()) + ",";
-		line +=  QString::number(property("CSQT_midicc").toInt()) + "\")";
-	}
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
-    return line;
 }
 
 QString QuteKnob::getQml()
@@ -407,6 +390,10 @@ QString QuteKnob::getWidgetXmlText()
 
     QColor textcolor = static_cast<QVdial*>(m_widget)->getTextColor();
     writeColorElement(s, "textcolor", textcolor);
+    writeColorElement(s, "backgroundColor",
+                      property("CSQT_backgroundColor").value<QColor>());
+    s.writeTextElement("usebackground",
+                       property("CSQT_usebackground").toBool() ? "true" : "false");
     s.writeTextElement("border", QString::number(property("CSQT_border").toInt()));
     s.writeTextElement("borderColor", property("CSQT_borderColor").toString());
     s.writeTextElement("showvalue",
@@ -546,6 +533,24 @@ void QuteKnob::createPropertiesDialog()
     layout->addWidget(knobTextColorButton, row, 3, Qt::AlignLeft | Qt::AlignVCenter);
     ++row;
 
+    // Background fill
+    label = new QLabel("Background", dialog);
+    layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    backgroundColorButton = new SelectColorButton(dialog);
+    backgroundColorButton->setColor(property("CSQT_backgroundColor").value<QColor>());
+    layout->addWidget(backgroundColorButton, row, 1,
+                      Qt::AlignLeft | Qt::AlignVCenter);
+
+    useBackgroundCheckBox = new QCheckBox(tr("Use background"), dialog);
+    useBackgroundCheckBox->setToolTip(
+                tr("Fill the knob background with the selected colour instead "
+                   "of deriving it from the foreground colour"));
+    useBackgroundCheckBox->setChecked(property("CSQT_usebackground").toBool());
+    layout->addWidget(useBackgroundCheckBox, row, 2, 1, 2,
+                      Qt::AlignLeft | Qt::AlignVCenter);
+    ++row;
+
     // Border
     label = new QLabel("Border", dialog);
     layout->addWidget(label, row, 0, Qt::AlignRight|Qt::AlignVCenter);
@@ -578,6 +583,17 @@ void QuteKnob::createPropertiesDialog()
     connect(flatStyleCheckBox, SIGNAL(toggled(bool)),
             intModeCheckBox, SLOT(setEnabled(bool)));
 
+    auto updateBackgroundControls = [this]() {
+        const bool flat = flatStyleCheckBox->isChecked();
+        useBackgroundCheckBox->setEnabled(flat);
+        backgroundColorButton->setEnabled(
+                    flat && useBackgroundCheckBox->isChecked());
+    };
+    connect(flatStyleCheckBox, &QCheckBox::toggled,
+            this, [updateBackgroundControls](bool) { updateBackgroundControls(); });
+    connect(useBackgroundCheckBox, &QCheckBox::toggled,
+            this, [updateBackgroundControls](bool) { updateBackgroundControls(); });
+    updateBackgroundControls();
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -603,6 +619,13 @@ void QuteKnob::applyProperties()
     setProperty("CSQT_textcolor", textcolor.name());
     qDebug() << "knob textcolor" << textcolor;
     w->setTextColor(textcolor);
+
+    QColor backgroundColor = backgroundColorButton->getColor();
+    setProperty("CSQT_backgroundColor", backgroundColor);
+    w->setBackgroundColor(backgroundColor);
+    const bool useBackground = useBackgroundCheckBox->isChecked();
+    setProperty("CSQT_usebackground", useBackground);
+    w->setUseBackground(useBackground);
 
     w->setDisplayRange(minSpinBox->value(), maxSpinBox->value());
 

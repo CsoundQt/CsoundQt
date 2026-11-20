@@ -772,5 +772,3 @@ Vco provides a useful source for subtractive synthesis and could be used as the 
   <randomizable group="0">false</randomizable>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

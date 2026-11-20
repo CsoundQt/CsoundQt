@@ -177,5 +177,3 @@ In the Csound Manual you find some information under: printks </label>
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

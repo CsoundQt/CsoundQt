@@ -162,5 +162,3 @@ schedule "main", 0, -1
   <zoom>1.000000</zoom>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

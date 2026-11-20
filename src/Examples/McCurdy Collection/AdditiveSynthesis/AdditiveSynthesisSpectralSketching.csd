@@ -4007,5 +4007,3 @@ Frequency ratios can be randomized using the on-screen button.</label>
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

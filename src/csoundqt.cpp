@@ -39,6 +39,7 @@
 #include <QProcess>
 #include <QSaveFile>
 #include <QShortcut>
+#include <QTabBar>
 #include <QToolTip>
 #include <QHelpEvent>
 #include <QWhatsThis>
@@ -2991,6 +2992,25 @@ bool CsoundQt::eventFilter(QObject *obj, QEvent *event)
         }
     }
 
+    // Right-clicking the Widgets dock tab should offer the same menu as
+    // right-clicking the panel background. Qt stores the dock pointer in the
+    // tab bar item data (see isDockWidgetActive()).
+    if (event->type() == QEvent::ContextMenu && widgetPanel != nullptr) {
+        if (auto *tabBar = qobject_cast<QTabBar *>(obj)) {
+            auto *contextEvent = static_cast<QContextMenuEvent *>(event);
+            const int tab = tabBar->tabAt(contextEvent->pos());
+            if (tab >= 0
+                    && qvariant_cast<quintptr>(tabBar->tabData(tab))
+                        == reinterpret_cast<quintptr>(widgetPanel)) {
+                // Right-clicking an inactive tab should bring its panel
+                // forward before the menu actions act on it.
+                widgetPanel->showAndRaise(true);
+                widgetPanel->showBackgroundContextMenu(contextEvent->globalPos());
+                return true;
+            }
+        }
+    }
+
     // A resize of a right-column dock is a divider drag only if the window
     // width did not change; otherwise it is just the window being resized and
     // the ratio must not be overwritten with the old pixel width.
@@ -4862,7 +4882,7 @@ void CsoundQt::helpForEntry(QString entry, bool external) {
             fileName = dir + "/opcodes/0dbfs.html";
         else if (QSet<QString>({"CsoundSynthesizer", "CsOptions",
             "CsInstruments", "CsScore", "CsFileB", "CsFile",
-            "CsVersion", "CsLicense", "html", "Cabbage"}).contains(entry)) {
+            "CsVersion", "CsLicense", "html"}).contains(entry)) {
             fileName = dir + "/invoke/the-csd-file-format.html";
         }
         else if (entry.startsWith("chn_"))
@@ -6915,7 +6935,10 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 
     checkSyntaxAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
 
-    storeSettings();
+    // Do not store settings here: this slot is also called while readSettings()
+    // is still loading the other option groups, and an early write would
+    // replace the stored values with their defaults. The Settings dialog
+    // stores the result after it closes.
 }
 
 

@@ -433,5 +433,3 @@ Buzz creates a composite tone of harmonically related sine wave partials. The us
   <value>1</value>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

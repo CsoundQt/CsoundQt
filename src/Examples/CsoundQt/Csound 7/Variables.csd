@@ -340,5 +340,3 @@ Note that we do not write randomi:k here as usually the new parser will choose t
   <fontsize>16</fontsize>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

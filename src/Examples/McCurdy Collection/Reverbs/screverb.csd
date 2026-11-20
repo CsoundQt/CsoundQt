@@ -1116,5 +1116,3 @@ screverb is an implementation of an 8 delay line stereo FDN reverb, with feedbac
   <randomizable group="0">false</randomizable>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

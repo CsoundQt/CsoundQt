@@ -24,27 +24,36 @@
 
 WidgetPreset::WidgetPreset()
 {
+	m_number = 0;
 }
 
-QString WidgetPreset::getXmlText()
+QString WidgetPreset::getXmlText() const
 {
 	QString out = QString();
-	out += "<preset name=\"" + m_name + "\" number=\""  + QString::number(m_number) + "\" >\n";
+	out += "<preset name=\"" + m_name.toHtmlEscaped()
+			+ "\" number=\"" + QString::number(m_number) + "\"";
+	if (!m_description.isEmpty())
+		out += " description=\"" + m_description.toHtmlEscaped() + "\"";
+	if (m_created.isValid())
+		out += " created=\"" + m_created.toString(Qt::ISODate) + "\"";
+	if (m_lastRecalled.isValid())
+		out += " recalled=\"" + m_lastRecalled.toString(Qt::ISODate) + "\"";
+	out += " >\n";
 	for (int i = 0; i < m_data.size(); i++) {
 
 		if (m_data[i].mode & 1) {
-			out += "<value id=\"" + m_data[i].id + "\" mode=\"1\" >";
+			out += "<value id=\"" + m_data[i].id.toHtmlEscaped() + "\" mode=\"1\" >";
 			out += QString::number(m_data[i].value, 'f', 8);
 			out += "</value>\n";
 		}
 		if (m_data[i].mode & 2) {
-			out += "<value id=\"" + m_data[i].id + "\" mode=\"2\" >";
+			out += "<value id=\"" + m_data[i].id.toHtmlEscaped() + "\" mode=\"2\" >";
 			out += QString::number(m_data[i].value2, 'f', 8);
 			out += "</value>\n";
 		}
 		if (m_data[i].mode & 4) {
-			out += "<value id=\"" + m_data[i].id + "\" mode=\"4\" >";
-			out += m_data[i].stringValue;
+			out += "<value id=\"" + m_data[i].id.toHtmlEscaped() + "\" mode=\"4\" >";
+			out += m_data[i].stringValue.toHtmlEscaped();
 			out += "</value>\n";
 		}
 	}
@@ -53,17 +62,32 @@ QString WidgetPreset::getXmlText()
 	return out;
 }
 
-QString WidgetPreset::getName()
+QString WidgetPreset::getName() const
 {
 	return m_name;
 }
 
-int WidgetPreset::getNumber()
+int WidgetPreset::getNumber() const
 {
 	return m_number;
 }
 
-QStringList WidgetPreset::getWidgetIds()
+QString WidgetPreset::getDescription() const
+{
+	return m_description;
+}
+
+QDateTime WidgetPreset::getCreated() const
+{
+	return m_created;
+}
+
+QDateTime WidgetPreset::getLastRecalled() const
+{
+	return m_lastRecalled;
+}
+
+QStringList WidgetPreset::getWidgetIds() const
 {
 	QStringList list;
 	for (int i = 0; i < m_data.size(); i++) {
@@ -81,7 +105,7 @@ QStringList WidgetPreset::getWidgetIds()
 //  return -1;
 //}
 
-int WidgetPreset::getMode(int index)
+int WidgetPreset::getMode(int index) const
 {
 	return m_data[index].mode;
 }
@@ -96,7 +120,7 @@ int WidgetPreset::getMode(int index)
 //  return 0.0;
 //}
 
-double WidgetPreset::getValue(int index)
+double WidgetPreset::getValue(int index) const
 {
 	return m_data[index].value;
 }
@@ -111,7 +135,7 @@ double WidgetPreset::getValue(int index)
 //  return 0.0;
 //}
 
-double WidgetPreset::getValue2(int index)
+double WidgetPreset::getValue2(int index) const
 {
 	return m_data[index].value2;
 }
@@ -126,7 +150,7 @@ double WidgetPreset::getValue2(int index)
 //  return QString();
 //}
 
-QString WidgetPreset::getStringValue(int index)
+QString WidgetPreset::getStringValue(int index) const
 {
 	return m_data[index].stringValue;
 }
@@ -139,6 +163,21 @@ void WidgetPreset::setName(QString name)
 void WidgetPreset::setNumber(int number)
 {
 	m_number = number;
+}
+
+void WidgetPreset::setDescription(QString description)
+{
+	m_description = description;
+}
+
+void WidgetPreset::setCreated(const QDateTime &created)
+{
+	m_created = created;
+}
+
+void WidgetPreset::setLastRecalled(const QDateTime &lastRecalled)
+{
+	m_lastRecalled = lastRecalled;
 }
 
 void WidgetPreset::addValue(QString id, double value)
@@ -208,7 +247,7 @@ void WidgetPreset::clear()
 //  qDebug() << "Not implemented yet.";
 //}
 
-int WidgetPreset::idIndex(QString id)
+int WidgetPreset::idIndex(QString id) const
 {
 	int index = -1;
 	for (int i = 0; i < m_data.size(); i++) {

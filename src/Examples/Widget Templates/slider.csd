@@ -2217,5 +2217,3 @@ If you create a style you want to use later, do the opposite:  **copy** the styl
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -282,7 +282,9 @@ QString BaseDocument::getFullText()
     parts << m_view->getFullText();
     if (fileName.endsWith(".csd",Qt::CaseInsensitive) || fileName == "") {
         parts << getWidgetsText() ;
-        parts << getPresetsText() << "\n";
+        const QString presetsText = getPresetsText();
+        if (!presetsText.isEmpty())
+            parts << presetsText << "\n";
 	}
 	else { // Not a csd file
         for(auto wl: m_widgetLayouts) {

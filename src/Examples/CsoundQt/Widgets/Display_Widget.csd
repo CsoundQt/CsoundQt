@@ -413,5 +413,3 @@ i 1 0 3600
   <bgcolormode>true</bgcolormode>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

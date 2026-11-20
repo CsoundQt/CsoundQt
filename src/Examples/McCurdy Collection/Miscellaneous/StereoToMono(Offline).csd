@@ -86,5 +86,3 @@ i 1 0 0.01
   <randomizable group="0">false</randomizable>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

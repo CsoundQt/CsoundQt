@@ -1423,5 +1423,3 @@ This example can also be played from a MIDI keyboard.</label>
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

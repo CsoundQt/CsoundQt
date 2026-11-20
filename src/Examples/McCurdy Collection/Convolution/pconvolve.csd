@@ -693,5 +693,3 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

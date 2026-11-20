@@ -961,33 +961,6 @@ void QuteSlider::setWidgetGeometry(int x, int y, int w, int h)
 	slider->update();
 }
 
-QString QuteSlider::getCabbageLine()
-{
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForWrite();
-#endif
-	QString line = "";
-	if (m_widget->width() > m_widget->height()) {
-		line += "hslider ";
-	}
-	else {
-		line += "vslider ";
-	}
-	line += "channel(\"" + m_channel + "\"),  ";
-	line += QString("bounds(%1,%2,%3,%4), ").arg(x()).arg(y()).arg(width()).arg(height());
-	line += QString("range(%1,%2,%3) " ).arg(property("CSQT_minimum").toDouble()).arg(property("CSQT_maximum").toDouble()).arg(m_value);
-	//line += QString(", text(%1), ").arg(m_channel); // Is it good idea to put channel as name - not really since geometry probably does not allow it
-	if (property("CSQT_midicc").toInt() >= 0 && property("CSQT_midichan").toInt()>0) { // insert only if midi channel is above 0
-		line += ", midiCtrl(\"" + QString::number(property("CSQT_midichan").toInt()) + ",";
-		line +=  QString::number(property("CSQT_midicc").toInt()) + "\")";
-	}
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
-	return line;
-}
-
-
 QString QuteSlider::getQml()
 {
 	QString qml = QString();
@@ -1016,21 +989,6 @@ QString QuteSlider::getQml()
 #endif
 
 	return qml;
-}
-
-QString QuteSlider::getCsladspaLine()
-{
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForRead();
-#endif
-	QString line = "ControlPort=" + m_channel + "|" + m_channel + "\n";
-	line += "Range=" + QString::number(property("CSQT_minimum").toDouble(), 'f', 8)
-			+ "|" + QString::number(property("CSQT_maximum").toDouble(), 'f', 8);
-
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
-	return line;
 }
 
 QString QuteSlider::getWidgetXmlText()

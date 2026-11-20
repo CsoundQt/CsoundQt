@@ -641,5 +641,3 @@ Csound can also query the item as a string via `invalue` (see example)</label>
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

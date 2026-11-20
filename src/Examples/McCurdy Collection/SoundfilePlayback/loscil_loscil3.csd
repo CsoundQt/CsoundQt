@@ -1034,5 +1034,3 @@ This example demonstrates the use of loscil/loscil3 to playback a sample stored 
   <flatStyle>true</flatStyle>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -48,5 +48,3 @@ e
   <b>53</b>
  </bgcolor>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -87,6 +87,7 @@ HEADERS = "src/about.h" \
     "src/widgetpanel.h" \
     "src/widgetwindow.h" \
     "src/widgetpreset.h" \
+    "src/presetsdialog.h" \
     "src/basedocument.h" \
     "src/baseview.h" \
     $$PWD/../src/csound_threaded_csqt.hpp \
@@ -162,6 +163,7 @@ SOURCES = "src/about.cpp" \
     "src/widgetpanel.cpp" \
     "src/widgetwindow.cpp" \
     "src/widgetpreset.cpp" \
+    "src/presetsdialog.cpp" \
     "src/basedocument.cpp" \
     "src/baseview.cpp" \
     $$PWD/../src/risset.cpp \

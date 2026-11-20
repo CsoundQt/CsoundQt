@@ -1033,5 +1033,3 @@ The 'Rec. Ready' button must be on to begin scanning the input signal amplitude 
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

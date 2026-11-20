@@ -414,5 +414,3 @@ In this example file format is 32 bit floats at 44100. Care always needs to be t
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

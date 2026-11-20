@@ -74,8 +74,6 @@ public:
 	// Returns true if the property existed and was set, false otherwise.
 	bool setPropertyIfExists(const QString &name, const QVariant &value);
 
-	virtual QString getCabbageLine();
-	virtual QString getCsladspaLine();
     virtual QString getQml();
 	virtual QString getWidgetXmlText() = 0;
 	virtual QString getChannelName();

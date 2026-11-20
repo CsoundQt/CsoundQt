@@ -138,5 +138,3 @@ Move controller 1 on MIDI channel 1 or the modulation wheel on a MIDI keyboard s
   <mode>0.00000000</mode>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

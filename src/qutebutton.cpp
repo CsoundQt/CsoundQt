@@ -263,30 +263,6 @@ QString QuteButton::getStringValue()
 	return stringValue;
 }
 
-QString QuteButton::getCabbageLine()
-{
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForRead();
-#endif
-	QString line = "button channel(\"" + m_channel + "\"),  ";
-	line += QString("bounds(%1,%2,%3,%4), ").arg(x()).arg(y()).arg(width()).arg(height());
-	if (property("CSQT_latch").toBool()) {
-		line += QString("text(\"%1\", \"%2\"), ").arg(property("CSQT_text").toString() + " OFF").arg(property("CSQT_text").toString() + " ON"); // set different texts for ON/OFF if latced
-	} 	else  {
-		line += "text(\"" + property("CSQT_text").toString()+ " \"), "; // otherwise just the button text
-	}
-	line += QString("latched(%1)").arg((int)property("CSQT_latch").toBool());
-	if (property("CSQT_midicc").toInt() >= 0 && property("CSQT_midichan").toInt()>0) { // insert only if midi channel is above 0
-		line += ", midiCtrl(\"" + QString::number(property("CSQT_midichan").toInt()) + ",";
-		line +=  QString::number(property("CSQT_midicc").toInt()) + "\")";
-	}
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
-	//  qDebug() << "Warning: Cabbage does not support button values different than 1, images or event buttons";
-	return line;
-}
-
 QString QuteButton::getQml()
 {
 	QString qml = QString();

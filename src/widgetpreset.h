@@ -40,26 +40,32 @@ class WidgetPreset
 public:
 	WidgetPreset();
 
-	QString getXmlText();
-	QString getName();
-	int getNumber();
-	QStringList getWidgetIds();
+	QString getXmlText() const;
+	QString getName() const;
+	int getNumber() const;
+	QString getDescription() const;
+	QDateTime getCreated() const;
+	QDateTime getLastRecalled() const;
+	QStringList getWidgetIds() const;
 	//    int getMode(QString id);
 	//    double getValue(QString id);
 	//    double getValue2(QString id);
 	//    QString getStringValue(QString id);
-	int getMode(int index);
-	double getValue(int index);
-	double getValue2(int index);
-	QString getStringValue(int index);
+	int getMode(int index) const;
+	double getValue(int index) const;
+	double getValue2(int index) const;
+	QString getStringValue(int index) const;
 
 	void setName(QString name);
 	void setNumber(int number);
+	void setDescription(QString description);
+	void setCreated(const QDateTime &created);
+	void setLastRecalled(const QDateTime &lastRecalled);
 	void addValue(QString id, double value);
 	void addValue2(QString id, double value);
 	void addStringValue(QString id, QString value);
 
-	int idIndex(QString id);  // index of id data -1 if not exists
+	int idIndex(QString id) const;  // index of id data -1 if not exists
 
 	void clear();
 	//    void purge();
@@ -67,6 +73,9 @@ public:
 private:
 	QString m_name;
 	int m_number;
+	QString m_description;
+	QDateTime m_created;
+	QDateTime m_lastRecalled;
 	QVector<PresetData> m_data;
 };
 

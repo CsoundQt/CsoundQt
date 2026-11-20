@@ -1087,7 +1087,7 @@
                  </size>
                 </property>
                 <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use * for current filename. &lt;/p&gt;&lt;p&gt;This setting is used only when jack is selected as the RT audio module. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use * for the current document name, without its file extension. The name is limited to 31 characters.&lt;/p&gt;&lt;p&gt;This setting is used only when jack is selected as the RT audio module.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                 <property name="frame">
                  <bool>true</bool>
@@ -1513,6 +1513,9 @@
                </property>
                <property name="layoutDirection">
                 <enum>Qt::LayoutDirection::LeftToRight</enum>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
                </property>
                <property name="text">
                 <string>Allow simultaneous play</string>
@@ -2687,7 +2690,7 @@
                 <item row="7" column="0" colspan="2">
                  <widget class="QCheckBox" name="autoCloseBlocksCheckBox">
                   <property name="toolTip">
-                   <string>When pressing Enter after an instr, opcode, if, for ... do, while ... do or switch line, insert the matching endin/endop/endif/od/endsw and indent the body.</string>
+                   <string>When pressing Enter after an instr, opcode, if, for ... do, while ... do or switch line, or after a CSD XML tag such as &lt;CsOptions&gt;, insert the matching endin/endop/endif/od/endsw or closing tag and indent the body.</string>
                   </property>
                   <property name="text">
                    <string>Add end tag automatically</string>

@@ -123,5 +123,3 @@ hi hi   </EventPanel>
   <triggermode>NoTrigger</triggermode>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

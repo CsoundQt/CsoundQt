@@ -2475,5 +2475,3 @@ Third, select a method of time reading: phasor (constant speed), mouse input or 
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

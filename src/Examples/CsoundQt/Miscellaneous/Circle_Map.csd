@@ -859,5 +859,3 @@ f 0 36000
   <mode>0.00000000</mode>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

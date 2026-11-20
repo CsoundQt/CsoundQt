@@ -143,34 +143,6 @@ QString QuteMeter::getWidgetType()
     return QString("BSBController");
 }
 
-QString QuteMeter::getCabbageLine()
-{
-    // QString type = static_cast<MeterWidget *>(m_widget)->getType();
-    auto type = static_cast<MeterWidget*>(m_widget)->getMeterType();
-    if (!(type == MeterWidgetType::Crosshair || type == MeterWidgetType::Point)) {
-		qDebug()<<"Meter can be converted to XYpad only if the type is crosshair or point";
-		return QString();
-	}
-#ifdef  USE_WIDGET_MUTEX
-    widgetLock.lockForWrite();
-#endif
-    QString line = "xypad ";
-    line += QString("bounds(%1,%2,%3,%4), ").arg(x()).arg(y()).arg(width()).arg(height());
-    line += QString("channel(\"%1\",\"%2\"), ").arg(m_channel).arg(m_channel2);
-    line += QString("rangex(%1, %2, %3), ").arg(property("CSQT_xMin").toDouble()).arg(property("CSQT_xMax").toDouble()).arg(m_value);
-    line += QString("rangey(%1, %2, %3)").arg(property("CSQT_yMin").toDouble()).arg(property("CSQT_yMax").toDouble()).arg(m_value2);
-
-    //NB! meter does not have midi2 yet!
-    if (property("CSQT_midicc").toInt() >= 0 && property("CSQT_midichan").toInt()>0) { // insert only if midi channel is above 0
-        line += ", midiCtrl(\"" + QString::number(property("CSQT_midichan").toInt()) + ",";
-        line +=  QString::number(property("CSQT_midicc").toInt()) + "\")";
-    }
-#ifdef  USE_WIDGET_MUTEX
-    widgetLock.unlock();
-#endif
-    return line;
-}
-
 QString QuteMeter::getQml()
 {
     QString qml = QString();

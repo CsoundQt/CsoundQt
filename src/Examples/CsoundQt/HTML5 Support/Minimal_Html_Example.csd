@@ -124,5 +124,3 @@ f 0 3600
   <fontsize>10</fontsize>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

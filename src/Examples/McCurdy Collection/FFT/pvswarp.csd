@@ -865,6 +865,4 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <flatStyle>true</flatStyle>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

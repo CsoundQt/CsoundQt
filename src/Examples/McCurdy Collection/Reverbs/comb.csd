@@ -868,5 +868,3 @@ Delay time is expressed as 'Loop Time' in the context of this opcode but it is e
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

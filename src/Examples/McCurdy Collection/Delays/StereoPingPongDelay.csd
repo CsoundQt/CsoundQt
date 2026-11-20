@@ -726,5 +726,3 @@ This example implements the classic ping-pong delay effect. To implement the eff
   <rulercolor>#aebcd2</rulercolor>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

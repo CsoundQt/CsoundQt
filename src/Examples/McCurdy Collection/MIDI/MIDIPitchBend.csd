@@ -210,5 +210,3 @@ There is nothing to say that the pitch bend wheel must be used to drive the pitc
   <value>12</value>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

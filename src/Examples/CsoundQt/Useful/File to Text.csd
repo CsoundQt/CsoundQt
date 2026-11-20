@@ -611,5 +611,3 @@ To use, select file to process using the Browse button, then press the run butto
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

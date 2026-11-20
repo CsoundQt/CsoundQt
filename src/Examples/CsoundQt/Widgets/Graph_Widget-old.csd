@@ -432,5 +432,3 @@ Graph widgets can also show the spectrum from signals using the dispfft opcode, 
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

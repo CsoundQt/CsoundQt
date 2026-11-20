@@ -206,5 +206,3 @@ Ctrl7 is the best opcode to use for reading continuous controller data into csou
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

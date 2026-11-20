@@ -572,5 +572,3 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
   <value>9</value>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -1036,5 +1036,3 @@ The code makes use of macros to minimize code repetition.</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

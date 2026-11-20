@@ -1009,5 +1009,3 @@ To prevent out of control resonance, the sum of both feedback parameters should 
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
-<bsbPresets>
-</bsbPresets>

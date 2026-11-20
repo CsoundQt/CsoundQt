@@ -77,7 +77,6 @@ public:
 	void setLabel(QString label);
 	virtual double getValue(); // This value represents the state of the button
 	//    QString getLabel();
-	virtual QString getCabbageLine();
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();
     virtual QString getQml();

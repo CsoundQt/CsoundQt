@@ -42,6 +42,10 @@ public:
 	
 	QRect getOuterGeometry();
 
+	// Show the widget-background context menu even when the request comes from
+	// outside the panel content (for example from the dock tab).
+	void showBackgroundContextMenu(const QPoint &globalPos);
+
 	void setWidgetScrollBarsActive(bool active);
 
 
