@@ -183,6 +183,17 @@ The source and binaries can be downloaded from:
   file extension. 31 characters is the limit imposed by Csound's `rtjack`
   module; longer names would be rejected by Csound.
 
+### Plugin manager
+
+* On Linux, risset installation now prefers the distribution Python instead of
+  a uv-managed Python. Managed Python builds can be linked against an older
+  libffi than the distribution provides (`libffi.so.7` versus `libffi.so.8`),
+  which made risset fail on import. The tool environment is recreated so an
+  earlier broken installation is replaced.
+* If Qt's network backend cannot download the uv installer, for example because
+  TLS initialization fails in a packaged Qt build, CsoundQt retries the
+  download with `curl`, then `wget`.
+
 ### Application and legacy scripting
 
 * The old Python/EventSheet scripting support was removed. This includes the
@@ -192,6 +203,10 @@ The source and binaries can be downloaded from:
   tools are unaffected.
 * Python mode was removed from the syntax highlighter; non-XML text continues
   to fall back to Csound highlighting.
+* On Linux, the QML panels (virtual keyboard and table editor) now use Qt
+  Quick's software scene graph unless `QT_QUICK_BACKEND` is set explicitly.
+  This avoids freezes seen with some Qt 6.9/driver combinations while keeping
+  normal widget painting responsive.
 
 ### Examples
 

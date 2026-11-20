@@ -973,12 +973,14 @@ int main(int argc, char *argv[])
     QApplication qapp(argc, argv);
 
 #if defined(Q_OS_LINUX)
-    // Qt Quick's GPU backend on Wayland slows down the raster QWidget windows
-    // dramatically: as soon as a QQuickWidget is shown, the main window's
-    // repaints are throttled and stay slow even after the QML window is closed.
-    // The QML panels here are simple, so use the software scene graph on
-    // Wayland and keep normal QWidget painting unaffected.
-    if (QGuiApplication::platformName().startsWith(u"wayland"_s)
+    // Qt Quick's GPU backend can throttle raster QWidget painting (notably on
+    // Wayland) and can deadlock the application on some Qt/driver combinations
+    // when a QQuickWidget is shown. The QML panels here are simple, so use the
+    // software scene graph on Wayland, and with Qt 6.9 where the GPU path
+    // freeze has been observed, unless the user explicitly selected a backend.
+    const bool wayland =
+            QGuiApplication::platformName().startsWith(u"wayland"_s);
+    if ((wayland || QT_VERSION < QT_VERSION_CHECK(6, 10, 0))
             && !qEnvironmentVariableIsSet("QT_QUICK_BACKEND")) {
         qputenv("QT_QUICK_BACKEND", "software");
     }

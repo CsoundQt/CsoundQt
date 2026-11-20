@@ -75,6 +75,14 @@ QProcessEnvironment pluginEnvironment()
     environment.insert(u"UV_NO_PROGRESS"_s, u"1"_s);
     environment.insert(u"UV_COLOR"_s, u"never"_s);
     environment.insert(u"UV_LINK_MODE"_s, u"copy"_s);
+#ifdef Q_OS_LINUX
+    // uv-managed Python builds can be linked against an older libffi than the
+    // distribution provides (for example libffi.so.7 on systems that only ship
+    // libffi.so.8), which makes risset fail on import. Prefer the system
+    // Python on Linux; uv falls back to a managed Python only when no
+    // compatible system interpreter exists.
+    environment.insert(u"UV_PYTHON_PREFERENCE"_s, u"system"_s);
+#endif
     return environment;
 }
 
@@ -1269,8 +1277,9 @@ void PluginsDialog::downloadUvInstaller()
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
         reply->deleteLater();
         if (reply->error() != QNetworkReply::NoError) {
-            fail(tr("Could not download the uv installer:\n%1")
-                 .arg(reply->errorString()));
+            const QString networkError = reply->errorString();
+            logLine(tr("Qt network download failed: %1").arg(networkError));
+            downloadUvInstallerWithExternalTools(networkError);
             return;
         }
         QFile file(m_uvInstallerPath);
@@ -1284,6 +1293,76 @@ void PluginsDialog::downloadUvInstaller()
         logLine(tr("Downloaded the uv installer."));
         runUvInstaller();
     });
+}
+
+void PluginsDialog::downloadUvInstallerWithExternalTools(
+        const QString &networkError)
+{
+    // Qt's network backend depends on the platform TLS plugin. Some packaged
+    // Qt installations (e.g. on openSUSE) fail with "TLS initialization
+    // failed" even though the system has a working curl/wget. Retry with
+    // those tools before giving up.
+    struct Downloader {
+        QString program;
+        QStringList arguments;
+    };
+    QList<Downloader> downloaders;
+
+    const QString curl = QStandardPaths::findExecutable(u"curl"_s);
+    if (!curl.isEmpty()) {
+        downloaders.append({
+            curl,
+            {u"-fL"_s, u"--retry"_s, u"3"_s,
+             u"--connect-timeout"_s, u"30"_s,
+             u"-o"_s, m_uvInstallerPath, uvInstallerUrl()}
+        });
+    }
+    const QString wget = QStandardPaths::findExecutable(u"wget"_s);
+    if (!wget.isEmpty()) {
+        downloaders.append({
+            wget,
+            {u"-O"_s, m_uvInstallerPath,
+             u"--tries=3"_s, u"--timeout=30"_s, uvInstallerUrl()}
+        });
+    }
+
+    if (downloaders.isEmpty()) {
+        fail(tr("Could not download the uv installer:\n%1\n\n"
+                "No curl or wget was found to retry the download.")
+             .arg(networkError));
+        return;
+    }
+
+    auto attempt = std::make_shared<std::function<void(int)>>();
+    *attempt = [this, networkError, downloaders, attempt](int index) {
+        if (index >= downloaders.size()) {
+            fail(tr("Could not download the uv installer:\n%1\n\n"
+                    "The curl/wget retries also failed.")
+                 .arg(networkError));
+            return;
+        }
+
+        const Downloader downloader = downloaders.at(index);
+        const QString toolName = QFileInfo(downloader.program).fileName();
+        QFile::remove(m_uvInstallerPath);
+        logLine(tr("Retrying the uv installer download with %1.").arg(toolName));
+        runProcess(downloader.program, downloader.arguments,
+                   QProcessEnvironment::systemEnvironment(),
+                   [this, networkError, attempt, index, downloader, toolName]
+                   (bool success, const QString &error) {
+            if (success && QFileInfo(m_uvInstallerPath).size() > 0) {
+                logLine(tr("Downloaded the uv installer with %1.")
+                        .arg(toolName));
+                runUvInstaller();
+                return;
+            }
+            logLine(tr("%1 could not download the installer: %2")
+                    .arg(toolName, error));
+            QFile::remove(m_uvInstallerPath);
+            (*attempt)(index + 1);
+        });
+    };
+    (*attempt)(0);
 }
 
 void PluginsDialog::runUvInstaller()
@@ -1336,6 +1415,14 @@ void PluginsDialog::installRissetWithUv(const QString &uvPath)
                        Risset::pluginToolDir().absolutePath());
     environment.insert(u"UV_PYTHON_INSTALL_DIR"_s,
                        Risset::pluginPythonDir().absolutePath());
+
+#ifdef Q_OS_LINUX
+    // Recreate the tool environment so a previous risset installation made
+    // with a uv-managed Python (and an incompatible libffi) is replaced by one
+    // using the system Python.
+    QDir(Risset::pluginToolDir().filePath(u"risset"_s)).removeRecursively();
+    QFile::remove(Risset::localRissetExecutable());
+#endif
 
     runProcess(uvPath,
                {u"tool"_s, u"install"_s,

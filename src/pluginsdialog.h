@@ -71,6 +71,7 @@ private:
     void fail(const QString &message);
     QString findUv() const;
     void downloadUvInstaller();
+    void downloadUvInstallerWithExternalTools(const QString &networkError);
     void runUvInstaller();
     void installRissetWithUv(const QString &uvPath);
     void verifyRisset();
