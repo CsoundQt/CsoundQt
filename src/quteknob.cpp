@@ -328,6 +328,22 @@ void QuteKnob::applyInternalProperties()
 
 void QuteKnob::setWidgetGeometry(int x, int y, int width, int height)
 {
+    // Knobs used to be saved with independent width and height. The old
+    // drawing code centred the knob in that rectangle and used its smaller
+    // side as the diameter. When such a file is loaded (or pasted), convert
+    // the geometry to a square and shift x/y so the knob stays exactly where
+    // it was drawn.
+    if (width > 0 && height > 0 && width != height) {
+        const int side = qMin(width, height);
+        x += (width - side) / 2;
+        y += (height - side) / 2;
+        width = height = side;
+        setProperty("CSQT_x", x);
+        setProperty("CSQT_y", y);
+        setProperty("CSQT_width", side);
+        setProperty("CSQT_height", side);
+    }
+
 	QuteWidget::setWidgetGeometry(x,y,width,height);
 	m_widget->blockSignals(true);
 	m_widget->setFixedSize(width, height);

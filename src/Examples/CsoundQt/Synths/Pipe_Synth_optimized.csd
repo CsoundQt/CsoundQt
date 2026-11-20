@@ -685,9 +685,6 @@ endin
 
 instr 99  ; Reverb unit
 
-  ; Running LED, just for fun ***********************
-  ktempo = lfo(1, 0.5, 2)
-  chnset ktempo, "tempo"
   ; **********************************************
 
   kTime_Rev  = chnget("kC38")  ; knob Time
@@ -710,8 +707,8 @@ instr 99  ; Reverb unit
   ; vu-meters
   kLeft  = rms(aoutL)
   kRight = rms(aoutR)
-  chnset kLeft, "vu_Left"
-  chnset kRight, "vu_Right"
+  chnset dbamp(kLeft), "vuL"
+  chnset dbamp(kRight), "vuR"
 
   out(aoutL*10000, aoutR*10000)
 
@@ -735,6 +732,8 @@ i 99 0 3600
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 
@@ -835,26 +834,26 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC1</objectName>
-  <x>23</x>
+  <x>25</x>
   <y>71</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{7fd81566-d369-4ff6-9521-5075574ef5f4}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>-20.00000000</minimum>
   <maximum>100.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>25.60000038</value>
+  <value>23.20000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -862,9 +861,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -899,26 +898,26 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC2</objectName>
-  <x>68</x>
-  <y>71</y>
-  <width>19</width>
+  <x>75</x>
+  <y>70</y>
+  <width>16</width>
   <height>100</height>
   <uuid>{bff2ae19-cec4-450c-810d-c6488d7eb3db}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>-20.00000000</minimum>
   <maximum>100.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>20.79999924</value>
+  <value>5.20000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -926,9 +925,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -974,7 +973,7 @@ i 99 0 3600
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>20.800</label>
+  <label>5.200</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -991,16 +990,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC3</objectName>
-  <x>114</x>
+  <x>118</x>
   <y>71</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{466c1f2d-3d92-45cb-9c78-0e7e7c2e0e51}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
@@ -1010,7 +1009,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -1018,9 +1017,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -1083,16 +1082,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC4</objectName>
-  <x>159</x>
+  <x>163</x>
   <y>71</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{43be06ea-c25a-46b0-af06-752d2cff8551}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>-20.00000000</minimum>
   <maximum>100.00000000</maximum>
@@ -1102,7 +1101,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -1110,9 +1109,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -1175,16 +1174,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC5</objectName>
-  <x>207</x>
+  <x>211</x>
   <y>71</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{28520397-fba4-4c4b-8150-b52fa58d9b99}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
@@ -1194,7 +1193,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -1202,9 +1201,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -1267,16 +1266,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC6</objectName>
-  <x>253</x>
+  <x>257</x>
   <y>71</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{24c1b37e-83f8-4b0b-9b02-3b9def7ecfa5}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>-1.00000000</minimum>
   <maximum>0.00000000</maximum>
@@ -1286,7 +1285,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -1294,9 +1293,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -1361,7 +1360,7 @@ i 99 0 3600
   <objectName>kC38</objectName>
   <x>164</x>
   <y>423</y>
-  <width>19</width>
+  <width>16</width>
   <height>80</height>
   <uuid>{a986b8e4-01de-477e-85b6-714e13688232}</uuid>
   <widgetName/>
@@ -1378,7 +1377,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -1386,9 +1385,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -1453,7 +1452,7 @@ i 99 0 3600
   <objectName>kC39</objectName>
   <x>217</x>
   <y>423</y>
-  <width>19</width>
+  <width>16</width>
   <height>80</height>
   <uuid>{671ab614-13de-4602-8709-f5db18fa64bc}</uuid>
   <widgetName/>
@@ -1470,7 +1469,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -1478,9 +1477,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -1545,7 +1544,7 @@ i 99 0 3600
   <objectName>kC40</objectName>
   <x>271</x>
   <y>423</y>
-  <width>19</width>
+  <width>16</width>
   <height>80</height>
   <uuid>{4e074954-5881-4b46-a89e-301e06cae77f}</uuid>
   <widgetName/>
@@ -1562,7 +1561,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -1570,9 +1569,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -1637,7 +1636,7 @@ i 99 0 3600
   <objectName>kC41</objectName>
   <x>323</x>
   <y>423</y>
-  <width>19</width>
+  <width>16</width>
   <height>80</height>
   <uuid>{0eb610ed-724e-4bb9-b114-c02de5747bf9}</uuid>
   <widgetName/>
@@ -1654,7 +1653,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -1662,9 +1661,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -1729,7 +1728,7 @@ i 99 0 3600
   <objectName>kC42</objectName>
   <x>376</x>
   <y>423</y>
-  <width>19</width>
+  <width>16</width>
   <height>80</height>
   <uuid>{99c0b327-ffcd-4bc9-a90e-1fe3bda7b065}</uuid>
   <widgetName/>
@@ -1746,7 +1745,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -1754,9 +1753,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -1821,7 +1820,7 @@ i 99 0 3600
   <objectName>kC43</objectName>
   <x>429</x>
   <y>423</y>
-  <width>19</width>
+  <width>16</width>
   <height>80</height>
   <uuid>{1fa0c649-a386-4006-992a-a95697f3f7c0}</uuid>
   <widgetName/>
@@ -1838,7 +1837,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -1846,9 +1845,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -1913,7 +1912,7 @@ i 99 0 3600
   <objectName>kC44</objectName>
   <x>482</x>
   <y>423</y>
-  <width>19</width>
+  <width>16</width>
   <height>80</height>
   <uuid>{90efec9c-f402-4cfd-8904-fa607901e247}</uuid>
   <widgetName/>
@@ -1930,7 +1929,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -1938,9 +1937,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -2005,7 +2004,7 @@ i 99 0 3600
   <objectName>kC45</objectName>
   <x>535</x>
   <y>423</y>
-  <width>19</width>
+  <width>16</width>
   <height>80</height>
   <uuid>{9de7cc67-9fc7-471e-8145-8d1a6d6eeff6}</uuid>
   <widgetName/>
@@ -2022,7 +2021,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -2030,9 +2029,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -2097,7 +2096,7 @@ i 99 0 3600
   <objectName>kC46</objectName>
   <x>588</x>
   <y>423</y>
-  <width>19</width>
+  <width>16</width>
   <height>80</height>
   <uuid>{374207f4-395f-42d7-8882-eedb7adb808a}</uuid>
   <widgetName/>
@@ -2114,7 +2113,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -2122,9 +2121,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -2189,7 +2188,7 @@ i 99 0 3600
   <objectName>kC47</objectName>
   <x>641</x>
   <y>423</y>
-  <width>19</width>
+  <width>16</width>
   <height>80</height>
   <uuid>{8d683189-6b51-44c6-a767-893da9e946ff}</uuid>
   <widgetName/>
@@ -2206,7 +2205,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -2214,9 +2213,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -2281,7 +2280,7 @@ i 99 0 3600
   <objectName>kC48</objectName>
   <x>694</x>
   <y>423</y>
-  <width>19</width>
+  <width>16</width>
   <height>80</height>
   <uuid>{10e3f36f-cc25-415a-a68a-e91700369291}</uuid>
   <widgetName/>
@@ -2298,7 +2297,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -2306,9 +2305,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -2373,7 +2372,7 @@ i 99 0 3600
   <objectName>kC49</objectName>
   <x>747</x>
   <y>423</y>
-  <width>19</width>
+  <width>16</width>
   <height>80</height>
   <uuid>{724ee7ed-0664-4d23-8c8f-8a838961033e}</uuid>
   <widgetName/>
@@ -2390,7 +2389,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -2398,9 +2397,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -2490,16 +2489,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC7</objectName>
-  <x>320</x>
+  <x>324</x>
   <y>71</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{0ecb0018-3c93-4429-a1a2-2b24b39abb2b}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
@@ -2509,7 +2508,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -2517,9 +2516,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -2582,16 +2581,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC8</objectName>
-  <x>374</x>
+  <x>378</x>
   <y>71</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{030982cd-2ca9-4d8c-a4c5-bd52986694fc}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
@@ -2601,7 +2600,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -2609,9 +2608,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -2674,16 +2673,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC9</objectName>
-  <x>427</x>
+  <x>431</x>
   <y>71</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{b0b80165-f444-46ab-b910-2460e89832ca}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
@@ -2693,7 +2692,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -2701,9 +2700,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -2766,16 +2765,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC10</objectName>
-  <x>480</x>
+  <x>484</x>
   <y>71</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{786c1d28-38eb-4413-a727-f694abd512c1}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
@@ -2785,7 +2784,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -2793,9 +2792,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -2858,16 +2857,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC11</objectName>
-  <x>533</x>
+  <x>537</x>
   <y>71</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{fa7b7b5d-9826-4a5c-b7a4-bb79e9b8a1cd}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
@@ -2877,7 +2876,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -2885,9 +2884,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -2986,19 +2985,19 @@ i 99 0 3600
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
-  <color>#0c0c0c</color>
-  <borderColor>#525252</borderColor>
-  <textColor>#dfdfdf</textColor>
-  <borderWidth>1</borderWidth>
+  <flatStyle>true</flatStyle>
+  <color>#e3e3e3</color>
+  <borderColor>#a8a8a8</borderColor>
+  <textColor>#545454</textColor>
+  <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
-  <padding>0</padding>
+  <padding>3</padding>
   <checkstyle>x</checkstyle>
   <circle>false</circle>
  </bsbObject>
@@ -3031,16 +3030,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC32</objectName>
-  <x>643</x>
+  <x>646</x>
   <y>243</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{489e07b5-3656-4234-90e3-4a624792042a}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
@@ -3050,7 +3049,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -3058,9 +3057,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -3123,16 +3122,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC33</objectName>
-  <x>696</x>
+  <x>699</x>
   <y>243</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{ea8d2f19-8b05-4949-9475-f5c979385b29}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
@@ -3142,7 +3141,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -3150,9 +3149,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -3215,16 +3214,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC34</objectName>
-  <x>750</x>
+  <x>753</x>
   <y>243</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{dec2259d-53e8-4816-8889-79df24673d63}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
@@ -3234,7 +3233,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -3242,9 +3241,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -3307,16 +3306,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC35</objectName>
-  <x>802</x>
+  <x>805</x>
   <y>243</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{d5d6958b-3384-4309-b3c2-32bb51af3b54}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
@@ -3326,7 +3325,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -3334,9 +3333,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -3399,16 +3398,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC36</objectName>
-  <x>855</x>
+  <x>858</x>
   <y>243</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{c0341d29-c062-4ea0-9eba-bc3506bac638}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
@@ -3418,7 +3417,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -3426,9 +3425,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -3491,16 +3490,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC37</objectName>
-  <x>908</x>
+  <x>911</x>
   <y>243</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{4e745abf-a50b-4f6b-9116-83e74d208f0d}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
@@ -3510,7 +3509,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -3518,9 +3517,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -3610,16 +3609,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC13</objectName>
-  <x>642</x>
+  <x>646</x>
   <y>71</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{ff8df6e8-8296-44ae-b47f-4557ed73739c}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
@@ -3629,7 +3628,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -3637,9 +3636,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -3738,19 +3737,19 @@ i 99 0 3600
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
-  <color>#0c0c0c</color>
-  <borderColor>#525252</borderColor>
-  <textColor>#dfdfdf</textColor>
-  <borderWidth>1</borderWidth>
+  <flatStyle>true</flatStyle>
+  <color>#e3e3e3</color>
+  <borderColor>#a8a8a8</borderColor>
+  <textColor>#545454</textColor>
+  <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
-  <padding>0</padding>
+  <padding>3</padding>
   <checkstyle>x</checkstyle>
   <circle>false</circle>
  </bsbObject>
@@ -3783,16 +3782,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC15</objectName>
-  <x>746</x>
+  <x>750</x>
   <y>71</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{75058e27-8b12-4dc2-a7ae-647dd9de3e49}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>-60.00000000</minimum>
   <maximum>60.00000000</maximum>
@@ -3802,7 +3801,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -3810,9 +3809,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -3875,16 +3874,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC16</objectName>
-  <x>797</x>
+  <x>801</x>
   <y>71</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{7780e271-fc33-403c-88cc-3001b50553bb}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>-1.00000000</minimum>
   <maximum>1.00000000</maximum>
@@ -3894,7 +3893,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -3902,9 +3901,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -3967,16 +3966,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC17</objectName>
-  <x>849</x>
+  <x>853</x>
   <y>71</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{506f081b-e5c7-4e53-9971-c3764aad174c}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>-5.00000000</minimum>
   <maximum>0.00000000</maximum>
@@ -3986,7 +3985,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -3994,9 +3993,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -4059,16 +4058,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC18</objectName>
-  <x>902</x>
+  <x>906</x>
   <y>71</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{b009a56e-e255-4ca5-a236-a8f6a076ed77}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>-2.00000000</minimum>
   <maximum>2.00000000</maximum>
@@ -4078,7 +4077,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -4086,9 +4085,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -4180,24 +4179,24 @@ i 99 0 3600
   <objectName>kC19</objectName>
   <x>17</x>
   <y>243</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{292cb4d1-41a9-44cb-a8fd-bc375600433f}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>-90.00000000</minimum>
   <maximum>30.00000000</maximum>
   <exponent>1.00000000</exponent>
-  <value>-60.00000000</value>
+  <value>-45.60000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -4205,9 +4204,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -4253,7 +4252,7 @@ i 99 0 3600
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-60.000</label>
+  <label>-45.600</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -4272,14 +4271,14 @@ i 99 0 3600
   <objectName>kC20</objectName>
   <x>71</x>
   <y>243</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{53f7ad7e-4353-4adf-b1af-b8668cb8d86d}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
@@ -4289,7 +4288,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -4297,9 +4296,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -4364,14 +4363,14 @@ i 99 0 3600
   <objectName>kC21</objectName>
   <x>124</x>
   <y>243</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{4147e11e-5c11-41cf-9cc9-a14dbd1b17fa}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>120.00000000</maximum>
@@ -4381,7 +4380,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -4389,9 +4388,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -4483,14 +4482,14 @@ i 99 0 3600
   <objectName>kC22</objectName>
   <x>184</x>
   <y>243</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{7fd7515c-a091-4d27-955d-5a6e08c44e0b}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>-60.00000000</minimum>
   <maximum>60.00000000</maximum>
@@ -4500,7 +4499,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -4508,9 +4507,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -4575,14 +4574,14 @@ i 99 0 3600
   <objectName>kC23</objectName>
   <x>239</x>
   <y>243</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{ebf38056-f6fe-46de-87ab-89f0b4e5aa81}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>-1.00000000</minimum>
   <maximum>1.00000000</maximum>
@@ -4592,7 +4591,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -4600,9 +4599,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -4667,14 +4666,14 @@ i 99 0 3600
   <objectName>kC24</objectName>
   <x>292</x>
   <y>243</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{2234b84c-6d59-4de2-84a6-486454385684}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>-5.00000000</minimum>
   <maximum>0.00000000</maximum>
@@ -4684,7 +4683,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -4692,9 +4691,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -4759,14 +4758,14 @@ i 99 0 3600
   <objectName>kC25</objectName>
   <x>344</x>
   <y>243</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{72fc9987-a42a-46e8-96f6-0a02f25ae92f}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>-2.00000000</minimum>
   <maximum>2.00000000</maximum>
@@ -4776,7 +4775,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -4784,9 +4783,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -4876,16 +4875,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC26</objectName>
-  <x>453</x>
+  <x>456</x>
   <y>243</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{86f9ba4b-d465-4b9c-9401-e96243ae08fa}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>-1.00000000</minimum>
   <maximum>1.00000000</maximum>
@@ -4895,7 +4894,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -4903,9 +4902,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -5004,19 +5003,19 @@ i 99 0 3600
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
-  <selected>false</selected>
+  <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
-  <color>#0c0c0c</color>
-  <borderColor>#525252</borderColor>
-  <textColor>#dfdfdf</textColor>
-  <borderWidth>1</borderWidth>
+  <flatStyle>true</flatStyle>
+  <color>#e3e3e3</color>
+  <borderColor>#a8a8a8</borderColor>
+  <textColor>#545454</textColor>
+  <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
-  <padding>0</padding>
+  <padding>3</padding>
   <checkstyle>x</checkstyle>
   <circle>false</circle>
  </bsbObject>
@@ -5049,16 +5048,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC28</objectName>
-  <x>526</x>
+  <x>529</x>
   <y>243</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{69cc53a4-30b2-4a5e-900a-4acc0bddb704}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>-1.00000000</minimum>
   <maximum>1.00000000</maximum>
@@ -5068,7 +5067,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -5076,9 +5075,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -5141,16 +5140,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>kC29</objectName>
-  <x>580</x>
+  <x>583</x>
   <y>243</y>
-  <width>19</width>
+  <width>16</width>
   <height>100</height>
   <uuid>{49df04c2-baac-4801-80dc-1dc7ee81b0f0}</uuid>
   <widgetName/>
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
@@ -5160,7 +5159,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -5168,9 +5167,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -5262,7 +5261,7 @@ i 99 0 3600
   <objectName>kC30</objectName>
   <x>28</x>
   <y>423</y>
-  <width>19</width>
+  <width>16</width>
   <height>80</height>
   <uuid>{03ca5ad6-5038-43dd-aab6-1ff801b9a819}</uuid>
   <widgetName/>
@@ -5279,7 +5278,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -5287,9 +5286,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -5354,7 +5353,7 @@ i 99 0 3600
   <objectName>kC31</objectName>
   <x>82</x>
   <y>423</y>
-  <width>19</width>
+  <width>16</width>
   <height>80</height>
   <uuid>{e0f63106-0a7d-46cd-8200-f9e62336cf10}</uuid>
   <widgetName/>
@@ -5371,7 +5370,7 @@ i 99 0 3600
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
-  <flatStyle>false</flatStyle>
+  <flatStyle>true</flatStyle>
   <bgcolor>#f0f0f0</bgcolor>
   <foreground>#34393a</foreground>
   <fillcolor>#dfdfdf</fillcolor>
@@ -5379,9 +5378,9 @@ i 99 0 3600
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
   <thumbWidth>4</thumbWidth>
-  <thumbPadding>0</thumbPadding>
+  <thumbPadding>2</thumbPadding>
   <thumbRadius>2</thumbRadius>
-  <fillMode>fill</fillMode>
+  <fillMode>thumb</fillMode>
   <backgroundMode>jump</backgroundMode>
   <rulermode>hide</rulermode>
   <rulerscale>linear</rulerscale>
@@ -5458,10 +5457,10 @@ i 99 0 3600
   <label>MAIN</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Liberation Sans</font>
+  <font>Noto Sans</font>
   <fontsize>14</fontsize>
-  <padding>5</padding>
-  <locked>false</locked>
+  <padding>8</padding>
+  <locked>true</locked>
   <color>#202020</color>
   <bgcolor mode="background">#ffc290</bgcolor>
   <bordercolor>#9e9e9e</bordercolor>
@@ -5471,8 +5470,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>kC50</objectName>
-  <x>815</x>
-  <y>454</y>
+  <x>805</x>
+  <y>453</y>
   <width>60</width>
   <height>60</height>
   <uuid>{d1d11f9a-d929-4b2d-bf8e-a057790e14f2}</uuid>
@@ -5484,16 +5483,16 @@ i 99 0 3600
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>5.00000000</maximum>
-  <exponent>1.00000000</exponent>
-  <value>0.50000000</value>
+  <exponent>2.00000000</exponent>
+  <value>1.15680500</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>#dc8730</color>
-  <textcolor>#492d10</textcolor>
-  <backgroundColor>#4a2600</backgroundColor>
-  <usebackground>false</usebackground>
+  <textcolor>#86521d</textcolor>
+  <backgroundColor>#733a00</backgroundColor>
+  <usebackground>true</usebackground>
   <border>1</border>
   <borderColor>#492d10</borderColor>
   <showvalue>true</showvalue>
@@ -5502,8 +5501,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>819</x>
-  <y>525</y>
+  <x>809</x>
+  <y>513</y>
   <width>100</width>
   <height>35</height>
   <uuid>{15d2b8f3-a681-489c-84c8-8cfdf3391aa2}</uuid>
@@ -5527,98 +5526,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBDisplay" version="2">
-  <objectName>kC50</objectName>
-  <x>824</x>
-  <y>543</y>
-  <width>80</width>
-  <height>30</height>
-  <uuid>{f1edd2c7-0b12-4fd9-a6e1-67d43da336a7}</uuid>
-  <widgetName/>
-  <visible>true</visible>
-  <enabled>true</enabled>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <label>0.500</label>
-  <alignment>left</alignment>
-  <valignment>top</valignment>
-  <font>Liberation Sans</font>
-  <fontsize>14</fontsize>
-  <precision>3</precision>
-  <format/>
-  <padding>5</padding>
-  <color>#202020</color>
-  <bgcolor mode="nobackground">#e0e0e0</bgcolor>
-  <bordercolor>#000000</bordercolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>0</borderwidth>
- </bsbObject>
- <bsbObject type="BSBController" version="2">
-  <objectName>hor210</objectName>
-  <x>899</x>
-  <y>411</y>
-  <width>14</width>
-  <height>146</height>
-  <uuid>{62b015b8-119a-4016-8372-b47f22d0a073}</uuid>
-  <widgetName/>
-  <visible>true</visible>
-  <enabled>true</enabled>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <objectName2>vu_Left</objectName2>
-  <xMin>0.00000000</xMin>
-  <xMax>1.00000000</xMax>
-  <yMin>0.00000000</yMin>
-  <yMax>1.00000000</yMax>
-  <xValue>0.00109676</xValue>
-  <yValue>0.00000127</yValue>
-  <type>fill</type>
-  <pointsize>1</pointsize>
-  <exponent>1.00000000</exponent>
-  <bordermode>border</bordermode>
-  <borderColor>#32e632</borderColor>
-  <borderWidth>0</borderWidth>
-  <color>#2dd02d</color>
-  <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>#343434</bgcolor>
- </bsbObject>
- <bsbObject type="BSBController" version="2">
-  <objectName>hor210</objectName>
-  <x>916</x>
-  <y>411</y>
-  <width>14</width>
-  <height>146</height>
-  <uuid>{b076f37e-0a9e-4351-bd25-7a00befe5542}</uuid>
-  <widgetName/>
-  <visible>true</visible>
-  <enabled>true</enabled>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <objectName2>vu_Right</objectName2>
-  <xMin>0.00000000</xMin>
-  <xMax>1.00000000</xMax>
-  <yMin>0.00000000</yMin>
-  <yMax>1.00000000</yMax>
-  <xValue>0.00109676</xValue>
-  <yValue>0.00000217</yValue>
-  <type>fill</type>
-  <pointsize>1</pointsize>
-  <exponent>1.00000000</exponent>
-  <bordermode>border</bordermode>
-  <borderColor>#32e632</borderColor>
-  <borderWidth>0</borderWidth>
-  <color>#2dd02d</color>
-  <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>#343434</bgcolor>
- </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>898</x>
-  <y>557</y>
+  <x>887</x>
+  <y>556</y>
   <width>30</width>
   <height>30</height>
   <uuid>{185aa014-45f3-4492-902c-bb1a2932f484}</uuid>
@@ -5644,8 +5555,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>914</x>
-  <y>557</y>
+  <x>904</x>
+  <y>556</y>
   <width>30</width>
   <height>30</height>
   <uuid>{7bcfd5cc-868d-4cd8-9b06-7e9fb33cfc48}</uuid>
@@ -5668,36 +5579,6 @@ i 99 0 3600
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
- </bsbObject>
- <bsbObject type="BSBController" version="2">
-  <objectName/>
-  <x>839</x>
-  <y>399</y>
-  <width>10</width>
-  <height>10</height>
-  <uuid>{148f2aec-4b3e-4dd6-87ab-4ff2f32a5b6f}</uuid>
-  <widgetName/>
-  <visible>true</visible>
-  <enabled>true</enabled>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <objectName2>tempo</objectName2>
-  <xMin>0.00000000</xMin>
-  <xMax>1.00000000</xMax>
-  <yMin>0.00000000</yMin>
-  <yMax>1.00000000</yMax>
-  <xValue>0.27777800</xValue>
-  <yValue>1.00000000</yValue>
-  <type>fill</type>
-  <pointsize>1</pointsize>
-  <exponent>1.00000000</exponent>
-  <bordermode>border</bordermode>
-  <borderColor>#32e632</borderColor>
-  <borderWidth>0</borderWidth>
-  <color>#3ed02d</color>
-  <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>#343434</bgcolor>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -5739,18 +5620,18 @@ i 99 0 3600
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>25.600</label>
+  <label>23.20</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
+  <precision>2</precision>
   <format/>
   <padding>5</padding>
   <color>#202020</color>
   <bgcolor mode="nobackground">#e0e0e0</bgcolor>
   <bordercolor>#000000</bordercolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
@@ -5776,7 +5657,8 @@ i 99 0 3600
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
   <triggermode>TriggerUp</triggermode>
-  <bgcolor>#161616</bgcolor>
+  <antialias>true</antialias>
+  <bgcolor>#313131</bgcolor>
  </bsbObject>
  <bsbObject type="BSBScope" version="2">
   <objectName/>
@@ -5800,7 +5682,8 @@ i 99 0 3600
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
   <triggermode>TriggerUp</triggermode>
-  <bgcolor>#161616</bgcolor>
+  <antialias>true</antialias>
+  <bgcolor>#313131</bgcolor>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>_GetPresetName</objectName>
@@ -5857,8 +5740,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Pause</objectName>
-  <x>822</x>
-  <y>615</y>
+  <x>812</x>
+  <y>614</y>
   <width>100</width>
   <height>25</height>
   <uuid>{0de26e96-b126-4753-8fba-13e3ddb3a1c2}</uuid>
@@ -5866,7 +5749,7 @@ i 99 0 3600
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
@@ -5877,10 +5760,10 @@ i 99 0 3600
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
-  <font/>
-  <flatStyle>false</flatStyle>
-  <color>#666666</color>
-  <pressedColor/>
+  <font>Liberation Sans</font>
+  <flatStyle>true</flatStyle>
+  <color>#888888</color>
+  <pressedColor>#503d2d</pressedColor>
   <borderColor>#444444</borderColor>
   <textColor>#ffffff</textColor>
   <pressedTextColor/>
@@ -5889,8 +5772,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Stop</objectName>
-  <x>822</x>
-  <y>648</y>
+  <x>812</x>
+  <y>647</y>
   <width>100</width>
   <height>25</height>
   <uuid>{3c5cfd97-9bf2-45c7-b66d-8026870f0a92}</uuid>
@@ -5898,7 +5781,7 @@ i 99 0 3600
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
@@ -5909,10 +5792,10 @@ i 99 0 3600
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
-  <font/>
-  <flatStyle>false</flatStyle>
-  <color>#666666</color>
-  <pressedColor/>
+  <font>Liberation Sans</font>
+  <flatStyle>true</flatStyle>
+  <color>#888888</color>
+  <pressedColor>#503d2d</pressedColor>
   <borderColor>#444444</borderColor>
   <textColor>#ffffff</textColor>
   <pressedTextColor/>
@@ -5921,8 +5804,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Play</objectName>
-  <x>822</x>
-  <y>581</y>
+  <x>812</x>
+  <y>580</y>
   <width>100</width>
   <height>25</height>
   <uuid>{768a8172-bac8-4099-aa9b-7c382b00502d}</uuid>
@@ -5930,7 +5813,7 @@ i 99 0 3600
   <visible>true</visible>
   <enabled>true</enabled>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
@@ -5941,15 +5824,65 @@ i 99 0 3600
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
-  <font/>
-  <flatStyle>false</flatStyle>
-  <color>#666666</color>
-  <pressedColor/>
+  <font>Liberation Sans</font>
+  <flatStyle>true</flatStyle>
+  <color>#888888</color>
+  <pressedColor>#503d2d</pressedColor>
   <borderColor>#444444</borderColor>
   <textColor>#ffffff</textColor>
   <pressedTextColor/>
   <borderWidth>0</borderWidth>
   <borderRadius>3</borderRadius>
+ </bsbObject>
+ <bsbObject type="BSBVUMeter" version="2">
+  <objectName>vuL</objectName>
+  <x>887</x>
+  <y>415</y>
+  <width>16</width>
+  <height>140</height>
+  <uuid>{af7aa04b-8940-4f5e-8bfd-8c2e1bb33e35}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <minimum>-90.00000000</minimum>
+  <maximum>0.00000000</maximum>
+  <objectName2/>
+  <rulermode>hide</rulermode>
+  <rulercolor>#5a5a5a</rulercolor>
+  <exponent>0.50000000</exponent>
+  <cursorcolor>#ffffff</cursorcolor>
+  <cursorwidth>1</cursorwidth>
+  <bgcolor>#313131</bgcolor>
+  <bgcolormode>true</bgcolormode>
+  <bordercolor>#5a5a5a</bordercolor>
+ </bsbObject>
+ <bsbObject type="BSBVUMeter" version="2">
+  <objectName>vuR</objectName>
+  <x>905</x>
+  <y>409</y>
+  <width>32</width>
+  <height>152</height>
+  <uuid>{a0093780-e3a4-4041-8ed9-4cd1ee58bc2b}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <enabled>true</enabled>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <minimum>-90.00000000</minimum>
+  <maximum>0.00000000</maximum>
+  <objectName2/>
+  <rulermode>compact</rulermode>
+  <rulercolor>#5a5a5a</rulercolor>
+  <exponent>0.50000000</exponent>
+  <cursorcolor>#ffffff</cursorcolor>
+  <cursorwidth>1</cursorwidth>
+  <bgcolor>#313131</bgcolor>
+  <bgcolormode>true</bgcolormode>
+  <bordercolor>#5a5a5a</bordercolor>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

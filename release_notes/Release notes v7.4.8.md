@@ -93,6 +93,9 @@ The source and binaries can be downloaded from:
   background field is now labelled **Background**.
 * Knobs are square widgets. The defaults for dark panels use `#f57c00` for the
   text and a 1 px `#f57c00` border.
+* Old rectangular knob geometry is converted on load using the smaller side,
+  with x/y shifted so the knob stays at the same visual centre. This also
+  applies after pasting old widget XML.
 * Knobs have a configurable **Background** colour and a **Use background**
   option. When the option is off (the default), the background is still derived
   from the foreground colour; when it is on, the selected colour is used as the
