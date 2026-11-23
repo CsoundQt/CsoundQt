@@ -8,6 +8,11 @@
 #ifndef CSOUND_STUB_H
 #define CSOUND_STUB_H
 
+#include <stdint.h>
+
 typedef double cs_float;
+
+// risset.cpp communicates this version to risset through LIBCSOUND_VERSION.
+static inline int32_t csoundGetVersion(void) { return 7000; }
 
 #endif

@@ -6,6 +6,7 @@
 
 #include <QAbstractButton>
 #include <QCheckBox>
+#include <QClipboard>
 #include <QCoreApplication>
 #include <QDialogButtonBox>
 #include <QDir>
@@ -13,6 +14,7 @@
 #include <QFileInfo>
 #include <QFontDatabase>
 #include <QFontMetrics>
+#include <QGuiApplication>
 #include <QHBoxLayout>
 #include <QHeaderView>
 #include <QJsonDocument>
@@ -30,7 +32,9 @@
 #include <QPushButton>
 #include <QRegularExpression>
 #include <QSignalBlocker>
+#include <QSslSocket>
 #include <QStandardPaths>
+#include <QTextStream>
 #include <QStyle>
 #include <QStyledItemDelegate>
 #include <QStyleOptionViewItem>
@@ -67,22 +71,23 @@ QString uvInstallerSuffix()
 
 QProcessEnvironment pluginEnvironment()
 {
-    QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
+    QProcessEnvironment environment = Risset::processEnvironment();
     environment.insert(u"UV_UNMANAGED_INSTALL"_s,
                        Risset::pluginBinDir().absolutePath());
+    environment.insert(u"UV_TOOL_BIN_DIR"_s,
+                       Risset::pluginBinDir().absolutePath());
+    environment.insert(u"UV_TOOL_DIR"_s,
+                       Risset::pluginToolDir().absolutePath());
+    environment.insert(u"UV_PYTHON_INSTALL_DIR"_s,
+                       Risset::pluginPythonDir().absolutePath());
     environment.insert(u"UV_NO_MODIFY_PATH"_s, u"1"_s);
     environment.insert(u"UV_DISABLE_UPDATE"_s, u"1"_s);
     environment.insert(u"UV_NO_PROGRESS"_s, u"1"_s);
     environment.insert(u"UV_COLOR"_s, u"never"_s);
     environment.insert(u"UV_LINK_MODE"_s, u"copy"_s);
-#ifdef Q_OS_LINUX
-    // uv-managed Python builds can be linked against an older libffi than the
-    // distribution provides (for example libffi.so.7 on systems that only ship
-    // libffi.so.8), which makes risset fail on import. Prefer the system
-    // Python on Linux; uv falls back to a managed Python only when no
-    // compatible system interpreter exists.
-    environment.insert(u"UV_PYTHON_PREFERENCE"_s, u"system"_s);
-#endif
+    // A user-wide Python environment must not leak into the interpreter uv
+    // manages for risset. The interpreter is selected explicitly below.
+    environment.remove(u"UV_PYTHON_PREFERENCE"_s);
     return environment;
 }
 
@@ -100,6 +105,105 @@ QString withoutAnsiEscapes(QString text)
     static const QRegularExpression ansi(u"\x1b\\[[0-9;]*[A-Za-z]"_s);
     text.remove(ansi);
     return text;
+}
+
+struct PythonProbe
+{
+    bool ok = false;
+    bool ctypesOk = false;
+    QString version;
+    QString ctypesError;
+    QString output;
+};
+
+// Runs the interpreter itself, before risset is installed. The exit status only
+// says whether the interpreter starts and the probe script runs. A broken
+// ctypes/libffi is reported separately: risset 4.1.3+ does not need ctypes
+// when CsoundQt supplies LIBCSOUND_VERSION.
+PythonProbe probePython(const QString &path)
+{
+    PythonProbe result;
+    if (path.isEmpty() || !QFileInfo::exists(path)) {
+        result.output = QCoreApplication::translate(
+                    "PluginsDialog", "Interpreter not found: %1").arg(path);
+        return result;
+    }
+
+    QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
+    environment.remove(u"PYTHONHOME"_s);
+    environment.remove(u"PYTHONPATH"_s);
+
+    const QString code = uR"PY(
+import sys
+print("VERSION:" + sys.version.split()[0])
+try:
+    import ctypes
+    ctypes.CFUNCTYPE(None)(lambda: None)
+    print("CTYPES:ok")
+except BaseException as exc:
+    print("CTYPES:failed:" + repr(exc))
+)PY"_s;
+
+    QProcess process;
+    process.setProcessChannelMode(QProcess::MergedChannels);
+    process.setProcessEnvironment(environment);
+    process.start(path, {u"-c"_s, code});
+    if (!process.waitForStarted(3000)) {
+        result.output = QCoreApplication::translate(
+                    "PluginsDialog", "Could not start %1: %2")
+                .arg(path, process.errorString());
+        return result;
+    }
+    if (!process.waitForFinished(15000)) {
+        process.kill();
+        process.waitForFinished(1000);
+        result.output = QCoreApplication::translate(
+                    "PluginsDialog", "Timed out while probing %1.").arg(path);
+        return result;
+    }
+
+    result.output = withoutAnsiEscapes(
+                QString::fromLocal8Bit(process.readAllStandardOutput())).trimmed();
+    const QStringList lines = result.output.split('\n'_L1, Qt::SkipEmptyParts);
+    for (const QString &line : lines) {
+        const QString trimmed = line.trimmed();
+        if (trimmed.startsWith(u"VERSION:"_s)) {
+            result.version = trimmed.mid(8).trimmed();
+        } else if (trimmed == u"CTYPES:ok"_s) {
+            result.ctypesOk = true;
+        } else if (trimmed.startsWith(u"CTYPES:failed:"_s)) {
+            result.ctypesError = trimmed.mid(14).trimmed();
+        }
+    }
+    result.ok = process.exitStatus() == QProcess::NormalExit
+            && process.exitCode() == 0;
+    if (!result.ok && result.output.isEmpty()) {
+        result.output = QCoreApplication::translate(
+                    "PluginsDialog", "Process exited with code %1.")
+                .arg(process.exitCode());
+    }
+    return result;
+}
+
+// uv python find prints the interpreter path on stdout. Warnings may be mixed
+// in, so pick the last existing absolute path.
+QString pythonPathFromUvOutput(const QString &output)
+{
+    const QStringList lines = output.split('\n'_L1, Qt::SkipEmptyParts);
+    for (auto it = lines.crbegin(); it != lines.crend(); ++it) {
+        QString line = it->trimmed();
+        if (line.startsWith('"'_L1) && line.endsWith('"'_L1)
+                && line.size() >= 2)
+            line = line.mid(1, line.size() - 2);
+        if (line.isEmpty()
+                || line.startsWith(u"warning"_s, Qt::CaseInsensitive)
+                || line.startsWith(u"error"_s, Qt::CaseInsensitive))
+            continue;
+        const QFileInfo info(line);
+        if (info.isAbsolute() && info.exists() && info.isFile())
+            return info.absoluteFilePath();
+    }
+    return {};
 }
 
 bool hasVersionUpgrade(const QString &available, const QString &installed)
@@ -349,6 +453,14 @@ PluginsDialog::PluginsDialog(CsoundQt *mainWindow, QWidget *parent)
                          {u"makedocs"_s}, false, false);
     });
 
+    m_diagnosticsButton = new QPushButton(tr("Diagnostics"), this);
+    m_diagnosticsButton->setAutoDefault(false);
+    m_diagnosticsButton->setDefault(false);
+    m_diagnosticsButton->setToolTip(
+                tr("Show Qt TLS, uv, Python and risset status"));
+    connect(m_diagnosticsButton, &QPushButton::clicked,
+            this, &PluginsDialog::showDiagnostics);
+
     m_buttons = new QDialogButtonBox(QDialogButtonBox::Close, this);
     m_buttons->setObjectName(u"pluginsButtonBox"_s);
     connect(m_buttons, &QDialogButtonBox::clicked,
@@ -356,6 +468,7 @@ PluginsDialog::PluginsDialog(CsoundQt *mainWindow, QWidget *parent)
     auto *footer = new QHBoxLayout;
     footer->addWidget(m_updateRissetButton);
     footer->addWidget(m_updateDocsButton);
+    footer->addWidget(m_diagnosticsButton);
     footer->addStretch(1);
     footer->addWidget(m_buttons);
     layout->addLayout(footer);
@@ -556,6 +669,7 @@ void PluginsDialog::startInfoProcess(bool withOutfile)
     QStringList arguments = {u"info"_s, u"--full"_s};
     if (withOutfile)
         arguments << u"--outfile"_s << m_infoFilePath;
+    m_infoProcess->setProcessEnvironment(pluginEnvironment());
     m_infoProcess->start(m_infoExecutable, arguments);
 }
 
@@ -882,7 +996,7 @@ void PluginsDialog::runRissetCommand(const QString &label,
     loggedCommand.append(arguments);
     logLine(u"$ %1"_s.arg(loggedCommand.join(' '_L1)));
 
-    runProcess(executable, arguments, QProcessEnvironment::systemEnvironment(),
+    runProcess(executable, arguments, pluginEnvironment(),
                [this, reloadPlugins, regenerateOpcodes](bool success,
                                                         const QString &error) {
         m_applying = false;
@@ -1081,7 +1195,7 @@ void PluginsDialog::runNextPluginOperation()
     logLine(operationLabel);
     runProcess(executable,
                arguments,
-               QProcessEnvironment::systemEnvironment(),
+               pluginEnvironment(),
                [this, name, kind = operation.kind](bool success,
                                                    const QString &error) {
         if (!success) {
@@ -1142,6 +1256,7 @@ void PluginsDialog::setPluginUiEnabled(bool enabled)
     m_buttons->setEnabled(enabled);
     m_updateRissetButton->setEnabled(enabled);
     m_updateDocsButton->setEnabled(enabled);
+    m_diagnosticsButton->setEnabled(enabled);
     if (enabled)
         updateApplyState();
 }
@@ -1193,7 +1308,126 @@ void PluginsDialog::showPluginInfo(const QString &name)
                         .arg(process->errorString()));
         }
     });
+    process->setProcessEnvironment(pluginEnvironment());
     process->start(executable, {u"show"_s, name});
+    dialog.exec();
+}
+
+QString PluginsDialog::diagnosticsText() const
+{
+    QString text;
+    QTextStream out(&text);
+    out << "CsoundQt " << CSQT_VERSION << "\n";
+    out << "Qt " << QT_VERSION_STR << " (runtime " << qVersion() << ")\n";
+    out << "Platform: " << QGuiApplication::platformName() << "\n";
+    out << "Plugin root: " << Risset::pluginRootDir().absolutePath() << "\n";
+    const QString libcsoundVersion =
+            Risset::processEnvironment().value(u"LIBCSOUND_VERSION"_s);
+    out << "LIBCSOUND_VERSION: "
+        << (libcsoundVersion.isEmpty() ? u"(not set)"_s : libcsoundVersion)
+        << "\n";
+    const QString uv = m_uvPath.isEmpty() ? findUv() : m_uvPath;
+    out << "uv: " << (uv.isEmpty() ? u"(not found)"_s : uv) << "\n";
+    const QString rissetPath = Risset::localRissetExecutable();
+    out << "risset executable: "
+        << (QFileInfo::exists(rissetPath) ? rissetPath
+                                           : u"(not installed)"_s)
+        << "\n";
+
+    const QString venvConfig =
+            QDir(Risset::pluginToolDir().filePath(u"risset"_s))
+            .filePath(u"pyvenv.cfg"_s);
+    if (QFile::exists(venvConfig)) {
+        QFile file(venvConfig);
+        if (file.open(QIODevice::ReadOnly)) {
+            const QStringList lines = QString::fromUtf8(file.readAll())
+                    .split('\n'_L1, Qt::SkipEmptyParts);
+            for (const QString &line : lines) {
+                if (line.startsWith(u"home = "_s)
+                        || line.startsWith(u"version_info = "_s))
+                    out << "risset venv: " << line.trimmed() << "\n";
+            }
+        }
+    }
+
+    if (m_mainWindow != nullptr) {
+        out << "risset detected: "
+            << (m_mainWindow->rissetIsInstalled() ? "yes" : "no") << "\n";
+        if (m_mainWindow->rissetIsInstalled())
+            out << "risset version: " << m_mainWindow->rissetVersion() << "\n";
+    }
+    out << "\n" << Risset::networkDiagnostics() << "\n";
+
+    const QDir pythonDir(Risset::pluginPythonDir().absolutePath());
+    out << "Managed Python installations:\n";
+    const QStringList managed = pythonDir.entryList(
+                QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
+    if (managed.isEmpty())
+        out << "  (none)\n";
+    else
+        for (const QString &entry : managed)
+            out << "  " << pythonDir.filePath(entry) << "\n";
+
+    const QString systemPython = QStandardPaths::findExecutable(u"python3"_s);
+    out << "System python3: ";
+    if (systemPython.isEmpty()) {
+        out << "(not found)\n";
+    } else {
+        out << systemPython << "\n";
+        const PythonProbe probe = probePython(systemPython);
+        out << "  probe: " << (probe.ok ? "ok" : "failed") << "\n";
+        if (!probe.version.isEmpty())
+            out << "  version: " << probe.version << "\n";
+        out << "  ctypes: " << (probe.ctypesOk ? "ok" : "failed") << "\n";
+        if (!probe.ctypesOk && !probe.ctypesError.isEmpty())
+            out << "  ctypes error: " << probe.ctypesError.left(1000) << "\n";
+        if (!probe.ok)
+            out << "  error:\n" << probe.output.left(4000) << "\n";
+    }
+
+    if (!m_selectedPython.isEmpty()) {
+        out << "Selected Python: " << m_selectedPython;
+        if (!m_pythonVersion.isEmpty())
+            out << " (" << m_pythonVersion << ")";
+        out << " [" << (m_usingSystemPython ? "system" : "uv-managed") << "]\n";
+        out << "  ctypes: " << (m_selectedPythonCtypesOk ? "ok" : "failed");
+        if (!m_selectedPythonCtypesOk
+                && !m_selectedPythonCtypesError.isEmpty())
+            out << " (" << m_selectedPythonCtypesError.left(1000) << ")";
+        out << "\n";
+    }
+    if (!m_pythonProbeError.isEmpty())
+        out << "Managed Python probe error:\n"
+            << m_pythonProbeError.left(4000) << "\n";
+    if (!m_lastInstallError.isEmpty())
+        out << "Last installation error:\n"
+            << m_lastInstallError.left(4000) << "\n";
+    return text;
+}
+
+void PluginsDialog::showDiagnostics()
+{
+    QDialog dialog(this);
+    dialog.setWindowTitle(tr("Plugin manager diagnostics"));
+    dialog.resize(780, 600);
+    auto *layout = new QVBoxLayout(&dialog);
+    auto *text = new QPlainTextEdit(&dialog);
+    text->setReadOnly(true);
+    text->setLineWrapMode(QPlainTextEdit::NoWrap);
+    text->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+    text->setPlainText(diagnosticsText());
+    layout->addWidget(text, 1);
+
+    auto *buttons = new QDialogButtonBox(QDialogButtonBox::Close, &dialog);
+    QPushButton *copy = buttons->addButton(
+                tr("Copy to clipboard"), QDialogButtonBox::ActionRole);
+    copy->setAutoDefault(false);
+    copy->setDefault(false);
+    connect(copy, &QPushButton::clicked, &dialog, [text]() {
+        QGuiApplication::clipboard()->setText(text->toPlainText());
+    });
+    connect(buttons, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+    layout->addWidget(buttons);
     dialog.exec();
 }
 
@@ -1223,6 +1457,13 @@ void PluginsDialog::startInstallation()
         return;
 
     m_installationFinished = false;
+    m_selectedPython.clear();
+    m_pythonVersion.clear();
+    m_selectedPythonCtypesError.clear();
+    m_pythonProbeError.clear();
+    m_lastInstallError.clear();
+    m_usingSystemPython = false;
+    m_selectedPythonCtypesOk = false;
 
     const QString binDir = Risset::pluginBinDir().absolutePath();
     const QString toolDir = Risset::pluginToolDir().absolutePath();
@@ -1267,6 +1508,15 @@ void PluginsDialog::downloadUvInstaller()
                       .arg(QCoreApplication::applicationPid())
                       .arg(uvInstallerSuffix()));
 
+    if (!QSslSocket::supportsSsl()) {
+        const QString reason =
+                tr("Qt TLS is unavailable (QSslSocket::supportsSsl() is false).");
+        logLine(reason);
+        logLine(Risset::networkDiagnostics());
+        downloadUvInstallerWithExternalTools(reason);
+        return;
+    }
+
     if (m_network == nullptr)
         m_network = new QNetworkAccessManager(this);
 
@@ -1279,6 +1529,7 @@ void PluginsDialog::downloadUvInstaller()
         if (reply->error() != QNetworkReply::NoError) {
             const QString networkError = reply->errorString();
             logLine(tr("Qt network download failed: %1").arg(networkError));
+            logLine(Risset::networkDiagnostics());
             downloadUvInstallerWithExternalTools(networkError);
             return;
         }
@@ -1404,38 +1655,170 @@ void PluginsDialog::runUvInstaller()
 
 void PluginsDialog::installRissetWithUv(const QString &uvPath)
 {
+    m_uvPath = uvPath;
+
+    // Do not throw away a working environment. An existing installation may
+    // have been created by an earlier run or by a system risset.
+    if (QFile::exists(Risset::localRissetExecutable())) {
+        m_detailLabel->setText(tr("Checking the existing risset installation..."));
+        logLine(tr("An existing risset installation was found; checking it."));
+        runProcess(Risset::localRissetExecutable(),
+                   {u"info"_s, u"--full"_s},
+                   pluginEnvironment(),
+                   [this, uvPath](bool success, const QString &error) {
+            if (success) {
+                logLine(tr("The existing risset installation works; keeping it."));
+                installationSucceeded();
+                return;
+            }
+            logLine(tr("The existing risset installation could not be used: %1")
+                    .arg(error));
+            probeManagedPython(uvPath);
+        });
+        return;
+    }
+
+    probeManagedPython(uvPath);
+}
+
+void PluginsDialog::probeManagedPython(const QString &uvPath)
+{
+    m_detailLabel->setText(tr("Preparing the uv-managed Python..."));
+    logLine(tr("Preparing the uv-managed Python."));
+
+    const QProcessEnvironment environment = pluginEnvironment();
+    runProcess(uvPath,
+               {u"python"_s, u"install"_s, u"--managed-python"_s},
+               environment,
+               [this, uvPath, environment](bool success,
+                                           const QString &error) {
+        if (!success) {
+            m_pythonProbeError = error;
+            logLine(tr("Could not prepare a uv-managed Python: %1").arg(error));
+            fallbackToSystemPython(uvPath, error);
+            return;
+        }
+
+        runProcessWithOutput(
+                    uvPath,
+                    {u"python"_s, u"find"_s, u"--managed-python"_s},
+                    environment,
+                    [this, uvPath](bool found, const QString &findError,
+                                   const QString &output) {
+            if (!found) {
+                m_pythonProbeError = findError;
+                logLine(tr("Could not locate the uv-managed Python: %1")
+                        .arg(findError));
+                fallbackToSystemPython(uvPath, findError);
+                return;
+            }
+
+            const QString pythonPath = pythonPathFromUvOutput(output);
+            if (pythonPath.isEmpty()) {
+                const QString message =
+                        tr("uv did not report a managed Python path.\n%1")
+                        .arg(output.trimmed());
+                m_pythonProbeError = message;
+                logLine(message);
+                fallbackToSystemPython(uvPath, message);
+                return;
+            }
+
+            logLine(tr("Using uv-managed Python: %1").arg(pythonPath));
+            const PythonProbe probe = probePython(pythonPath);
+            if (!probe.ok) {
+                m_pythonProbeError = probe.output;
+                logLine(tr("Probing the uv-managed Python failed:\n%1")
+                        .arg(probe.output));
+                fallbackToSystemPython(uvPath, probe.output);
+                return;
+            }
+
+            logLine(tr("Python probe: ok (%1)").arg(probe.version));
+            m_selectedPythonCtypesOk = probe.ctypesOk;
+            m_selectedPythonCtypesError = probe.ctypesError;
+            if (!probe.ctypesOk) {
+                logLine(tr("ctypes probe: failed (%1); risset will use "
+                           "LIBCSOUND_VERSION instead.")
+                        .arg(probe.ctypesError.isEmpty()
+                             ? tr("unknown error") : probe.ctypesError));
+            }
+            installRissetWithPython(uvPath, pythonPath, probe.version, true);
+        });
+    });
+}
+
+void PluginsDialog::fallbackToSystemPython(
+        const QString &uvPath, const QString &managedError)
+{
+#ifdef Q_OS_LINUX
+    const QString systemPython = QStandardPaths::findExecutable(u"python3"_s);
+    if (systemPython.isEmpty()) {
+        fail(tr("The uv-managed Python could not be used:\n%1\n\n"
+                "No system python3 was found for a fallback.")
+             .arg(managedError));
+        return;
+    }
+
+    logLine(tr("Falling back to the system Python: %1").arg(systemPython));
+    const PythonProbe probe = probePython(systemPython);
+    if (!probe.ok) {
+        fail(tr("The uv-managed Python could not be used:\n%1\n\n"
+                "The system Python (%2) also failed:\n%3")
+             .arg(managedError, systemPython, probe.output));
+        return;
+    }
+
+    logLine(tr("Python probe: ok (%1)").arg(probe.version));
+    m_selectedPythonCtypesOk = probe.ctypesOk;
+    m_selectedPythonCtypesError = probe.ctypesError;
+    if (!probe.ctypesOk) {
+        logLine(tr("ctypes probe: failed (%1); risset will use "
+                   "LIBCSOUND_VERSION instead.")
+                .arg(probe.ctypesError.isEmpty()
+                     ? tr("unknown error") : probe.ctypesError));
+    }
+    installRissetWithPython(uvPath, systemPython, probe.version, false);
+#else
+    Q_UNUSED(uvPath);
+    fail(tr("The uv-managed Python could not be used:\n%1")
+         .arg(managedError));
+#endif
+}
+
+void PluginsDialog::installRissetWithPython(
+        const QString &uvPath, const QString &pythonPath,
+        const QString &pythonVersion, bool managed)
+{
+    m_selectedPython = pythonPath;
+    m_pythonVersion = pythonVersion;
+    m_usingSystemPython = !managed;
+
     m_detailLabel->setText(
                 tr("Installing risset... This can take a few minutes."));
-    logLine(tr("Installing risset with uv."));
+    logLine(tr("Installing risset with %1 Python: %2")
+            .arg(managed ? tr("the uv-managed") : tr("the system"),
+                 pythonPath));
+    if (!pythonVersion.isEmpty())
+        logLine(tr("Python version: %1").arg(pythonVersion));
 
-    QProcessEnvironment environment = pluginEnvironment();
-    environment.insert(u"UV_TOOL_BIN_DIR"_s,
-                       Risset::pluginBinDir().absolutePath());
-    environment.insert(u"UV_TOOL_DIR"_s,
-                       Risset::pluginToolDir().absolutePath());
-    environment.insert(u"UV_PYTHON_INSTALL_DIR"_s,
-                       Risset::pluginPythonDir().absolutePath());
+    QStringList arguments = {u"tool"_s, u"install"_s, u"--force"_s};
+    arguments << (managed ? u"--managed-python"_s : u"--no-managed-python"_s);
+    arguments << u"--python"_s << pythonPath << u"risset"_s;
 
-#ifdef Q_OS_LINUX
-    // Recreate the tool environment so a previous risset installation made
-    // with a uv-managed Python (and an incompatible libffi) is replaced by one
-    // using the system Python.
-    QDir(Risset::pluginToolDir().filePath(u"risset"_s)).removeRecursively();
-    QFile::remove(Risset::localRissetExecutable());
-#endif
-
-    runProcess(uvPath,
-               {u"tool"_s, u"install"_s,
-                u"--force"_s, u"risset"_s},
-               environment,
+    runProcess(uvPath, arguments, pluginEnvironment(),
                [this](bool success, const QString &error) {
         if (!success) {
+            m_lastInstallError = error;
             fail(tr("Could not install risset:\n%1").arg(error));
             return;
         }
         if (!QFile::exists(Risset::localRissetExecutable())) {
-            fail(tr("uv finished, but the risset executable was not found at:\n%1")
-                 .arg(Risset::localRissetExecutable()));
+            const QString message =
+                    tr("uv finished, but the risset executable was not found at:\n%1")
+                    .arg(Risset::localRissetExecutable());
+            m_lastInstallError = message;
+            fail(message);
             return;
         }
         logLine(tr("risset installed at %1")
@@ -1449,21 +1832,36 @@ void PluginsDialog::verifyRisset()
     m_detailLabel->setText(tr("Checking the risset installation..."));
     runProcess(Risset::localRissetExecutable(),
                {u"info"_s, u"--full"_s},
-               QProcessEnvironment::systemEnvironment(),
+               pluginEnvironment(),
                [this](bool success, const QString &error) {
         if (!success) {
-            fail(tr("risset was installed but could not be started:\n%1")
-                 .arg(error));
+            const QString interpreter = m_selectedPython.isEmpty()
+                    ? tr("unknown Python")
+                    : tr("%1 Python: %2")
+                      .arg(m_usingSystemPython ? tr("system")
+                                               : tr("uv-managed"),
+                           m_selectedPython);
+            const QString message =
+                    tr("risset was installed but could not be started:\n%1\n\n"
+                       "Interpreter: %2")
+                    .arg(error, interpreter);
+            m_lastInstallError = message;
+            fail(message);
             return;
         }
-        emitInstallationFinished(true, QString());
-        if (m_mainWindow != nullptr) {
-            m_statusLabel->setText(tr("Risset installed. Detecting..."));
-            m_detailLabel->setText(
-                        tr("CsoundQt is looking for the risset installation."));
-            m_mainWindow->recheckRisset();
-        }
+        installationSucceeded();
     });
+}
+
+void PluginsDialog::installationSucceeded()
+{
+    emitInstallationFinished(true, QString());
+    if (m_mainWindow != nullptr) {
+        m_statusLabel->setText(tr("Risset installed. Detecting..."));
+        m_detailLabel->setText(
+                    tr("CsoundQt is looking for the risset installation."));
+        m_mainWindow->recheckRisset();
+    }
 }
 
 QString PluginsDialog::findUv() const
@@ -1486,6 +1884,19 @@ void PluginsDialog::runProcess(
         const QProcessEnvironment &environment,
         const std::function<void(bool, const QString &)> &done)
 {
+    runProcessWithOutput(
+                program, arguments, environment,
+                [done](bool success, const QString &error, const QString &) {
+        done(success, error);
+    });
+}
+
+void PluginsDialog::runProcessWithOutput(
+        const QString &program, const QStringList &arguments,
+        const QProcessEnvironment &environment,
+        const std::function<void(bool, const QString &,
+                                 const QString &)> &done)
+{
     auto *process = new QProcess(this);
     m_process = process;
     process->setProcessChannelMode(QProcess::MergedChannels);
@@ -1497,24 +1908,35 @@ void PluginsDialog::runProcess(
     if (pluginRoot.exists())
         process->setWorkingDirectory(pluginRoot.absolutePath());
 
+    auto output = std::make_shared<QString>();
     auto finished = std::make_shared<bool>(false);
-    auto finish = [this, process, done, finished](bool success,
-                                                  const QString &error) {
+    auto finish = [this, process, done, finished, output](
+            bool success, const QString &error) {
         if (*finished)
             return;
         *finished = true;
         if (m_process == process)
             m_process = nullptr;
         process->deleteLater();
-        done(success, error);
+        done(success, error, *output);
     };
 
     connect(process, &QProcess::readyReadStandardOutput, this,
-            [this, process]() {
-        logLine(QString::fromLocal8Bit(process->readAllStandardOutput()));
+            [this, process, output]() {
+        const QString chunk =
+                QString::fromLocal8Bit(process->readAllStandardOutput());
+        output->append(chunk);
+        logLine(chunk);
     });
     connect(process, &QProcess::finished, this,
-            [process, finish](int exitCode, QProcess::ExitStatus status) {
+            [this, process, finish, output](int exitCode,
+                                            QProcess::ExitStatus status) {
+        const QString rest =
+                QString::fromLocal8Bit(process->readAllStandardOutput());
+        if (!rest.isEmpty()) {
+            output->append(rest);
+            logLine(rest);
+        }
         const bool success = status == QProcess::NormalExit && exitCode == 0;
         finish(success,
                success ? QString()
@@ -1568,6 +1990,7 @@ void PluginsDialog::emitInstallationFinished(bool success, const QString &error)
 void PluginsDialog::fail(const QString &message)
 {
     m_installing = false;
+    m_lastInstallError = message;
     m_spinner->stop();
     m_bottomSpacer->hide();
     m_progress->hide();

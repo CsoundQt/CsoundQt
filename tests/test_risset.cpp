@@ -19,6 +19,8 @@ class TestRisset : public QObject
 private slots:
     void initTestCase();
     void pluginPaths();
+    void networkDiagnostics();
+    void rissetEnvironment();
     void missingRissetDoesNotInvokePython();
     void detectsRissetScript();
     void prefersManagedRisset();
@@ -113,6 +115,29 @@ void TestRisset::pluginPaths()
             .filePath(u"risset"_s + Risset::executableSuffix());
     QCOMPARE(QDir::cleanPath(Risset::localRissetExecutable()),
              QDir::cleanPath(expected));
+}
+
+void TestRisset::networkDiagnostics()
+{
+    const QString text = Risset::networkDiagnostics();
+    QVERIFY(text.contains(u"Qt TLS:"_s));
+    QVERIFY(text.contains(u"supportsSsl="_s));
+    QVERIFY(text.contains(u"library paths:"_s));
+    QVERIFY(text.contains(u"curl:"_s));
+}
+
+void TestRisset::rissetEnvironment()
+{
+    qputenv("PYTHONHOME", "/nonexistent");
+    qputenv("PYTHONPATH", "/nonexistent");
+
+    const QProcessEnvironment environment = Risset::processEnvironment();
+    QCOMPARE(environment.value(u"LIBCSOUND_VERSION"_s), u"7.0"_s);
+    QVERIFY(!environment.contains(u"PYTHONHOME"_s));
+    QVERIFY(!environment.contains(u"PYTHONPATH"_s));
+
+    qunsetenv("PYTHONHOME");
+    qunsetenv("PYTHONPATH");
 }
 
 void TestRisset::missingRissetDoesNotInvokePython()

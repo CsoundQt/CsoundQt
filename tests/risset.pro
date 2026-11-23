@@ -6,7 +6,7 @@
 #   make
 #   ./test_risset
 
-QT += core xml testlib
+QT += core xml network testlib
 CONFIG += testcase console
 CONFIG -= app_bundle
 

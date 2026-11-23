@@ -49,6 +49,10 @@ public:
     // reported through the status labels and pluginApplyFinished().
     void setSilent(bool silent) { m_silent = silent; }
 
+    // Qt TLS, uv, Python and risset status. Used by the Diagnostics dialog and
+    // included in the self-test reports.
+    QString diagnosticsText() const;
+
 signals:
     // The installation commands have finished. On success CsoundQt still has
     // to re-detect risset; watch CsoundQt::rissetDetectionFinished for that.
@@ -74,10 +78,24 @@ private:
     void downloadUvInstallerWithExternalTools(const QString &networkError);
     void runUvInstaller();
     void installRissetWithUv(const QString &uvPath);
+    void probeManagedPython(const QString &uvPath);
+    void fallbackToSystemPython(const QString &uvPath,
+                                const QString &managedError);
+    void installRissetWithPython(const QString &uvPath,
+                                 const QString &pythonPath,
+                                 const QString &pythonVersion,
+                                 bool managed);
     void verifyRisset();
+    void installationSucceeded();
+    void showDiagnostics();
     void runProcess(const QString &program, const QStringList &arguments,
                     const QProcessEnvironment &environment,
                     const std::function<void(bool, const QString &)> &done);
+    void runProcessWithOutput(
+            const QString &program, const QStringList &arguments,
+            const QProcessEnvironment &environment,
+            const std::function<void(bool, const QString &,
+                                     const QString &)> &done);
 
     // Plugin table and risset queries
     void showLoadingUi(const QString &message);
@@ -108,6 +126,7 @@ private:
     QPushButton *m_reloadButton = nullptr;
     QPushButton *m_updateRissetButton = nullptr;
     QPushButton *m_updateDocsButton = nullptr;
+    QPushButton *m_diagnosticsButton = nullptr;
     QTableWidget *m_table = nullptr;
     QDialogButtonBox *m_buttons = nullptr;
     QProgressBar *m_progress = nullptr;
@@ -118,6 +137,11 @@ private:
     QProcess *m_infoProcess = nullptr;
     QString m_uvInstallerPath;
     QString m_uvPath;
+    QString m_selectedPython;
+    QString m_pythonVersion;
+    QString m_selectedPythonCtypesError;
+    QString m_pythonProbeError;
+    QString m_lastInstallError;
     QString m_infoFilePath;
     QString m_infoExecutable;
     QJsonObject m_pluginInfo;
@@ -134,6 +158,8 @@ private:
     int m_infoRequest = 0;
     bool m_installing = false;
     bool m_installationFinished = false;
+    bool m_usingSystemPython = false;
+    bool m_selectedPythonCtypesOk = false;
     bool m_loadingInfo = false;
     bool m_infoLoaded = false;
     bool m_infoFallbackTried = false;

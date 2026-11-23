@@ -456,7 +456,15 @@ jobs:
       # Besides a manual workflow_dispatch, the test runs on a normal push when
       # the pushed head commit message contains [risset-ci], e.g.
       #   git commit -m "try risset fix [risset-ci]"
-      # That avoids cancelling the push-triggered run and dispatching manually.
+      #
+      # To run the tests for a commit that is already pushed, dispatch this
+      # workflow on the same branch instead of amending the commit:
+      #   branch=$(git branch --show-current)
+      #   git push
+      #   gh workflow run testbuild-qt6.yml \
+      #     -f run_risset_install_test=true --ref "$branch"
+      # The workflow's concurrency group cancels the push-triggered run
+      # automatically; dispatch on the same branch so both runs share it.
       - name: Risset end-to-end tests (opt-in network test)
         if: |
           (github.event_name == 'workflow_dispatch' && github.event.inputs.run_risset_install_test == 'true') ||

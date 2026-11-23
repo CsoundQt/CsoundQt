@@ -2,6 +2,10 @@
 #include <QString>
 #include <QProcess>
 #include <QDebug>
+#include <QCoreApplication>
+#include <QSslSocket>
+#include <QStandardPaths>
+#include <QTextStream>
 #include <QJsonDocument>
 
 #include <QJsonDocument>
@@ -111,6 +115,76 @@ QString Risset::localRissetExecutable()
     return pluginBinDir().filePath(u"risset"_s + executableSuffix());
 }
 
+QProcessEnvironment Risset::processEnvironment()
+{
+    QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
+    environment.remove(u"PYTHONHOME"_s);
+    environment.remove(u"PYTHONPATH"_s);
+
+    // risset 4.1.3+ uses this instead of locating libcsound and querying it
+    // through ctypes. That keeps risset working when the interpreter cannot
+    // load libffi, and it makes risset use the same Csound as CsoundQt even
+    // when several installations are present.
+    const int version = csoundGetVersion();
+    if (version >= 7000) {
+        const int major = version / 1000;
+        const int minor = (version % 1000) / 10;
+        const int patch = version % 10;
+        QString versionString =
+                QString::number(major) + u"."_s + QString::number(minor);
+        if (patch > 0)
+            versionString += u"."_s + QString::number(patch);
+        environment.insert(u"LIBCSOUND_VERSION"_s, versionString);
+    }
+    return environment;
+}
+
+QString Risset::networkDiagnostics()
+{
+    const auto valueOr = [](const QString &value, const QString &fallback) {
+        return value.isEmpty() ? fallback : value;
+    };
+
+    QStringList availableBackends = QSslSocket::availableBackends();
+    availableBackends.removeDuplicates();
+
+    QString text;
+    QTextStream out(&text);
+    out << "Qt TLS: supportsSsl="
+        << (QSslSocket::supportsSsl() ? "true" : "false") << "\n";
+    out << "  active backend: "
+        << valueOr(QSslSocket::activeBackend(), u"(none)"_s) << "\n";
+    out << "  available backends: "
+        << valueOr(availableBackends.join(u", "_s), u"(none)"_s) << "\n";
+    out << "  build SSL: "
+        << valueOr(QSslSocket::sslLibraryBuildVersionString(),
+                   u"(unknown)"_s) << "\n";
+    out << "  runtime SSL: "
+        << valueOr(QSslSocket::sslLibraryVersionString(),
+                   u"(unknown)"_s) << "\n";
+    out << "  library paths: "
+        << QCoreApplication::libraryPaths().join(u", "_s) << "\n";
+
+    QStringList tlsPlugins;
+    for (const QString &path : QCoreApplication::libraryPaths()) {
+        const QDir tlsDir(QDir(path).filePath(u"tls"_s));
+        if (!tlsDir.exists())
+            continue;
+        const QStringList entries = tlsDir.entryList(QDir::Files, QDir::Name);
+        for (const QString &entry : entries)
+            tlsPlugins.append(tlsDir.filePath(entry));
+    }
+    tlsPlugins.removeDuplicates();
+    out << "  TLS plugins: "
+        << valueOr(tlsPlugins.join(u", "_s), u"(none found)"_s) << "\n";
+
+    const QString curl = QStandardPaths::findExecutable(u"curl"_s);
+    const QString wget = QStandardPaths::findExecutable(u"wget"_s);
+    out << "  curl: " << valueOr(curl, u"(not found)"_s) << "\n";
+    out << "  wget: " << valueOr(wget, u"(not found)"_s) << "\n";
+    return text;
+}
+
 Risset::Risset()
 {
     opcodeIndexDone = false;
@@ -132,6 +206,7 @@ Risset::Risset()
 
     QStringList args = {"info", "--full"};
     QProcess proc;
+    proc.setProcessEnvironment(processEnvironment());
     proc.start(rissetScriptPath, args);
     auto finishok = proc.waitForFinished();
     if (!finishok) {
@@ -476,6 +551,7 @@ RissetError Risset::generateOpcodesXml() {
         QProcess proc;
         QDEBUG << "Calling risset to generate opcodes.xml. exec: " << m_rissetPath
                << ", args: " << args;
+        proc.setProcessEnvironment(processEnvironment());
         proc.start(m_rissetPath, args);
         proc.waitForFinished();
         const QString standardError =
@@ -505,6 +581,7 @@ RissetError Risset::generateDocumentation(std::function<void(int)> callback) {
 
     if(callback == nullptr) {
         QProcess proc;
+        proc.setProcessEnvironment(processEnvironment());
         proc.start(executable, args);
         proc.waitForFinished();
         if(proc.exitCode() != 0) {
@@ -522,6 +599,7 @@ RissetError Risset::generateDocumentation(std::function<void(int)> callback) {
     }
     else {
         QProcess *proc = new QProcess();
+        proc->setProcessEnvironment(processEnvironment());
         proc->start(executable, args);
         runningProcesses.append(proc);
         QObject::connect(proc, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),

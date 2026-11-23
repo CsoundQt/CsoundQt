@@ -575,6 +575,16 @@ EOF
         die "PipeWire libraries were bundled; use the host's PipeWire stack"
     fi
 
+    # Qt Network loads TLS through a plugin and OpenSSL at runtime. If either
+    # is missing, every HTTPS request fails with "TLS initialization failed",
+    # for example when installing the uv helper for risset.
+    test -f "$APPDIR/usr/plugins/tls/libqopensslbackend.so" \
+        || die "Qt OpenSSL TLS backend missing from the AppImage"
+    test -f "$APPDIR/usr/lib/libssl.so.3" \
+        || die "libssl.so.3 missing from the AppImage"
+    test -f "$APPDIR/usr/lib/libcrypto.so.3" \
+        || die "libcrypto.so.3 missing from the AppImage"
+
     log "Creating final AppImage"
     export ARCH="x86_64"
     (

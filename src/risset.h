@@ -6,6 +6,7 @@
 #include <QJsonDocument>
 #include <QDir>
 #include <QProcess>
+#include <QProcessEnvironment>
 #include "opentryparser.h"
 
 enum class RissetError { Ok, Error, HtmlError, RissetNotInstalled };
@@ -25,6 +26,17 @@ public:
     static QDir pluginPythonDir();
     static QString localRissetExecutable();
     static QString executableSuffix();
+
+    // Qt's TLS configuration and the external download tools available for the
+    // uv installer fallback. Used by the Plugins window and the self-test
+    // report so that a broken Qt TLS backend can be diagnosed from a report.
+    static QString networkDiagnostics();
+
+    // Environment for risset child processes. It removes user-wide Python
+    // variables and communicates CsoundQt's Csound version through
+    // LIBCSOUND_VERSION, so risset does not have to locate libcsound or use
+    // ctypes just to query its version.
+    static QProcessEnvironment processEnvironment();
 
     QString htmlManpage(QString opcodeName);
     RissetError generateDocumentation(std::function<void(int)> callback=nullptr);

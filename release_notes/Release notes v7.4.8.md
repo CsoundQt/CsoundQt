@@ -185,14 +185,22 @@ The source and binaries can be downloaded from:
 
 ### Plugin manager
 
-* On Linux, risset installation now prefers the distribution Python instead of
-  a uv-managed Python. Managed Python builds can be linked against an older
-  libffi than the distribution provides (`libffi.so.7` versus `libffi.so.8`),
-  which made risset fail on import. The tool environment is recreated so an
-  earlier broken installation is replaced.
-* If Qt's network backend cannot download the uv installer, for example because
-  TLS initialization fails in a packaged Qt build, CsoundQt retries the
-  download with `curl`, then `wget`.
+* risset runs in a uv-managed Python by default. CsoundQt now passes its
+  Csound version to risset through `LIBCSOUND_VERSION`. From risset 4.1.3 this
+  lets risset determine the Csound version without loading `libcsound` through
+  `ctypes`, so a missing or mismatched `libffi` no longer prevents risset from
+  starting. The interpreter is probed before installing, and the `ctypes`
+  result is reported for diagnostics. If the interpreter itself cannot start,
+  CsoundQt falls back once to the system `python3` and reports the exact
+  errors. It does not scan through Python versions, and a working existing
+  risset environment is kept instead of being recreated.
+* The Plugins window now has a **Diagnostics** action that reports Qt TLS, uv,
+  Python and risset status. The same information is included in the risset
+  self-test reports, making installation problems easier to diagnose.
+* If Qt's TLS backend cannot download the uv installer, for example because
+  TLS initialization fails in a packaged Qt build, CsoundQt reports the TLS
+  diagnostics and retries the download with `curl`, then `wget`. The AppImage
+  bundles the Qt TLS backend and OpenSSL.
 
 ### Application and legacy scripting
 

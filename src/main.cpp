@@ -380,6 +380,11 @@ QJsonObject RissetSelfTest::buildReport(bool success, const QString &error) cons
         report.insert(u"installed"_s, false);
     }
 
+    report.insert(u"networkDiagnostics"_s, Risset::networkDiagnostics());
+    if (m_dialog != nullptr)
+        report.insert(u"pluginManagerDiagnostics"_s,
+                      m_dialog->diagnosticsText());
+
     if (!error.isEmpty())
         report.insert(u"error"_s, error);
     return report;
@@ -943,6 +948,11 @@ QJsonObject RissetDependencySelfTest::buildReport(
         messages.append(message);
     report.insert(u"messages"_s, messages);
     report.insert(u"errorLines"_s, QJsonArray::fromStringList(m_errorLines));
+
+    report.insert(u"networkDiagnostics"_s, Risset::networkDiagnostics());
+    if (m_pluginsDialog != nullptr)
+        report.insert(u"pluginManagerDiagnostics"_s,
+                      m_pluginsDialog->diagnosticsText());
 
     if (!error.isEmpty())
         report.insert(u"error"_s, error);
